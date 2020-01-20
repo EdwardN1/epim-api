@@ -24,7 +24,7 @@ adminJQ = jQuery.noConflict();
 adminJQ(function ($) {
 
     let debug = false;
-    let cMax = 1;
+    let cMax = 10;
 
     function _o(text) {
         $('#ePimResult').prepend(text + '<br>');
@@ -110,15 +110,15 @@ adminJQ(function ($) {
     });
 
     let updateAllProducts = new ts_execute_queue('#ePimResult', function () {
-        processProductImages.reset();
+        /*processProductImages.reset();
         processProductImages.queue(ajaxurl,{action: 'get_product_images'});
-        processProductImages.process();
+        processProductImages.process();*/
     }, function (action, request, data) {
         _o('Action Completed: ' + action);
         _o('Request: ' + request);
         _o('<br>Data: ' + data);
         if(action==='sort_categories') {
-            updateAllProducts.queue(ajaxurl,{action: 'cat_image_link'});
+            //updateAllProducts.queue(ajaxurl,{action: 'cat_image_link'});
         }
         if(action==='cat_image_link') {
             updateAllProducts.queue(ajaxurl,{action: 'get_all_products'});
@@ -284,7 +284,7 @@ adminJQ(function ($) {
             });
         }
 
-        if (action === 'create_category') {
+        /*if (action === 'create_category') {
             let r = decodeURIComponent(request);
             let ro = QueryStringToJSON('?' + r);
             let id = ro.ID;
@@ -308,7 +308,7 @@ adminJQ(function ($) {
                 })
 
             }
-        }
+        }*/
     });
 
     $('#CreateCategories').on('click',function () {
