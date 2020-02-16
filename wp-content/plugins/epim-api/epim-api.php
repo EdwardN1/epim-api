@@ -13,6 +13,7 @@ Author URI: https://www.technicks.com
 */
 
 define('ea_FUNCTIONSPATH', plugin_dir_path( __FILE__ ) . '/includes/');
+define('ea_PLUGINPATH', plugin_dir_path( __FILE__ ) );
 foreach (glob(ea_FUNCTIONSPATH.'autoinc-*.php') as $filename)
 {
     require_once ($filename);

@@ -91,3 +91,87 @@ function epim_save_taxonomy_custom_meta($term_id) {
 
 add_action('edited_product_cat', 'epim_save_taxonomy_custom_meta', 10, 1);
 add_action('create_product_cat', 'epim_save_taxonomy_custom_meta', 10, 1);
+
+/**
+ * add the fields into REST API
+ */
+
+add_action( 'rest_api_init', function () {
+	register_rest_field( 'product_cat', 'epim_api_id', array(
+		'get_callback' => function( $post_arr ) {
+			return get_term_meta( $post_arr['id'], 'epim_api_id', true );
+		},
+	) );
+	register_rest_field( 'product_cat', 'epim_api_parent_id', array(
+		'get_callback' => function( $post_arr ) {
+			return get_term_meta( $post_arr['id'], 'epim_api_parent_id', true );
+		},
+	) );
+	register_rest_field( 'product_cat', 'epim_api_picture_ids', array(
+		'get_callback' => function( $post_arr ) {
+			return get_term_meta( $post_arr['id'], 'epim_api_picture_ids', true );
+		},
+	) );
+	register_rest_field( 'product_cat', 'epim_api_picture_link', array(
+		'get_callback' => function( $post_arr ) {
+			return get_term_meta( $post_arr['id'], 'epim_api_picture_link', true );
+		},
+	) );
+} );
+
+
+add_filter( 'woocommerce_product_data_tabs', 'add_epim_product_data_tab' , 99 , 1 );
+function add_epim_product_data_tab( $product_data_tabs ) {
+	$product_data_tabs['epim-tab'] = array(
+		'label' => __( 'ePim', 'my_text_domain' ),
+		'target' => 'epim_product_data',
+	);
+	return $product_data_tabs;
+}
+
+add_action( 'woocommerce_product_data_panels', 'add_epim_product_data_fields' );
+function add_epim_product_data_fields() {
+	global $woocommerce, $post;
+	?>
+    <!-- id below must match target registered in above add_epim_product_data_tab function -->
+    <div id="epim_product_data" class="panel woocommerce_options_panel">
+		<?php
+		woocommerce_wp_text_input( array(
+			'id'            => 'epim_API_ID',
+			'wrapper_class' => 'show_if_simple',
+			'label'         => __( 'API ID', 'my_text_domain' ),
+			'description'   => __( 'ePim Product Group ID', 'my_text_domain' ),
+			'default'       => '',
+			'desc_tip'      => false,
+		) );
+		woocommerce_wp_text_input( array(
+			'id'            => 'epim_product_group_name',
+			'wrapper_class' => 'show_if_simple',
+			'label'         => __( 'Product Group Name', 'my_text_domain' ),
+			'description'   => __( 'ePim Product Group Name', 'my_text_domain' ),
+			'default'       => '',
+			'desc_tip'      => false,
+		) );
+		woocommerce_wp_text_input( array(
+			'id'            => 'epim_variation_ID',
+			'wrapper_class' => 'show_if_simple',
+			'label'         => __( 'Variation ID', 'my_text_domain' ),
+			'description'   => __( 'ePim variation ID', 'my_text_domain' ),
+			'default'       => '',
+			'desc_tip'      => false,
+		) );
+		?>
+    </div>
+	<?php
+}
+
+add_action( 'woocommerce_process_product_meta', 'woocommerce_process_product_meta_fields_save' );
+function woocommerce_process_product_meta_fields_save( $post_id ){
+	// This is the case to save custom field data of checkbox. You have to do it as per your custom fields
+	$epim_API_ID =  $_POST['epim_API_ID'];
+	update_post_meta( $post_id, 'epim_API_ID', $epim_API_ID );
+	$epim_product_group_name =  $_POST['epim_product_group_name'];
+	update_post_meta( $post_id, 'epim_product_group_name', $epim_product_group_name );
+	$epim_variation_ID =  $_POST['epim_variation_ID'];
+	update_post_meta( $post_id, 'epim_variation_ID', $epim_variation_ID );
+}

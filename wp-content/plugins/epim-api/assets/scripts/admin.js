@@ -24,7 +24,7 @@ adminJQ = jQuery.noConflict();
 adminJQ(function ($) {
 
     let debug = false;
-    let cMax = 10;
+    let cMax = 1;
 
     function _o(text) {
         $('#ePimResult').prepend(text + '<br>');
@@ -103,22 +103,22 @@ adminJQ(function ($) {
                 let pictures = JSON.parse(data);
                 let obj = this;
                 $(pictures).each(function (index, picture) {
-                    obj.queue(ajaxurl,{action: 'import_picture', ID: picture.Id, weblink: picture.WebPath});
+                    obj.queue(ajaxurl,{action: 'import_picture', ID: picture.Id, weblink: picture.Path});
                 })
             }
         }
     });
 
     let updateAllProducts = new ts_execute_queue('#ePimResult', function () {
-        /*processProductImages.reset();
+        processProductImages.reset();
         processProductImages.queue(ajaxurl,{action: 'get_product_images'});
-        processProductImages.process();*/
+        processProductImages.process();
     }, function (action, request, data) {
         _o('Action Completed: ' + action);
         _o('Request: ' + request);
         _o('<br>Data: ' + data);
         if(action==='sort_categories') {
-            //updateAllProducts.queue(ajaxurl,{action: 'cat_image_link'});
+            updateAllProducts.queue(ajaxurl,{action: 'cat_image_link'});
         }
         if(action==='cat_image_link') {
             updateAllProducts.queue(ajaxurl,{action: 'get_all_products'});
@@ -209,7 +209,7 @@ adminJQ(function ($) {
         }
     });
 
-    let updateSinceQueue = new ts_execute_queue('#ePimResult', function () {
+    /*let updateSinceQueue = new ts_execute_queue('#ePimResult', function () {
         _o('Category Data Imported');
         updateSinceProducts.reset();
         updateSinceProducts.queue(ajaxurl,{action: 'sort_categories'});
@@ -253,12 +253,12 @@ adminJQ(function ($) {
                 let pictures = JSON.parse(data);
                 let obj = this;
                 $(pictures).each(function (index, picture) {
-                    obj.queue(ajaxurl,{action: 'import_picture', ID: picture.Id, weblink: picture.WebPath});
+                    obj.queue(ajaxurl,{action: 'import_picture', ID: picture.Id, weblink: picture.Path});
                 })
 
             }
         }
-    });
+    });*/
 
     let updateAllQueue = new ts_execute_queue('#ePimResult', function () {
         _o('Category Data Imported');
@@ -284,7 +284,7 @@ adminJQ(function ($) {
             });
         }
 
-        /*if (action === 'create_category') {
+        if (action === 'create_category') {
             let r = decodeURIComponent(request);
             let ro = QueryStringToJSON('?' + r);
             let id = ro.ID;
@@ -304,17 +304,87 @@ adminJQ(function ($) {
                 let pictures = JSON.parse(data);
                 let obj = this;
                 $(pictures).each(function (index, picture) {
-                    obj.queue(ajaxurl,{action: 'import_picture', ID: picture.Id, weblink: picture.WebPath});
+                    obj.queue(ajaxurl,{action: 'import_picture', ID: picture.Id, weblink: picture.Path});
                 })
 
             }
-        }*/
+        }
     });
 
-    $('#CreateCategories').on('click',function () {
+    let updateCatDetailsQueue = new ts_execute_queue('#ePimResult', function () {
+        _o('Category Data Imported - Finished.');
+    }, function (action, request, data) {
+        _o('Action Completed: ' + action);
+        _o('Request: ' + request);
+        _o('<br>Data: ' + data);
+        if(action==='sort_categories') {
+            updateCatDetailsQueue.queue(ajaxurl,{action: 'cat_image_link'});
+        }
+
+    });
+
+    let updateCategoriesQueue = new ts_execute_queue('#ePimResult', function () {
+        _o('Sorting Categories and Linking Images');
+        updateCatDetailsQueue.reset();
+        updateCatDetailsQueue.queue(ajaxurl,{action: 'sort_categories'});
+        updateCatDetailsQueue.process();
+    }, function (action, request, data) {
+        _o('Action Completed: ' + action);
+        _o('Request: ' + request);
+        _o('<br>Data: ' + data);
+        if(action==='get_all_categories') {
+            let categories = JSON.parse(data);
+            let obj = this;
+            let c = 0;
+            $(categories).each(function (index, record) {
+                obj.queue(ajaxurl,{action: 'create_category', ID: record.Id, name: record.Name, ParentID: record.ParentId, picture_ids: record.PictureIds});
+                if(debug) {
+                    c++;
+                    if (c >= cMax) {
+                        return false;
+                    }
+                }
+            });
+        }
+
+        if (action === 'create_category') {
+            let r = decodeURIComponent(request);
+            let ro = QueryStringToJSON('?' + r);
+            let id = ro.ID;
+            this.queue(ajaxurl,{action: 'get_category_images', ID: id});
+        }
+        if (action === 'get_category_images') {
+            if ($.trim(data)) {
+                let pictures = JSON.parse(data);
+                let obj = this;
+                $(pictures).each(function (index, picture) {
+                    obj.queue(ajaxurl,{action: 'get_picture_web_link', ID: picture});
+                })
+            }
+        }
+        if (action === 'get_picture_web_link') {
+            if ($.trim(data)) {
+                let pictures = JSON.parse(data);
+                let obj = this;
+                $(pictures).each(function (index, picture) {
+
+                    obj.queue(ajaxurl,{action: 'import_picture', ID: picture.Id, weblink: picture.Path});
+                })
+
+            }
+        }
+    });
+
+    $('#CreateAll').on('click',function () {
         updateAllQueue.reset();
         updateAllQueue.queue(ajaxurl,{action: 'get_all_categories'});
         updateAllQueue.process();
+    });
+
+    $('#CreateCategories').on('click',function () {
+        updateCategoriesQueue.reset();
+        updateCategoriesQueue.queue(ajaxurl,{action: 'get_all_categories'});
+        updateCategoriesQueue.process();
     });
 
     $('#UpdateCode').on('click',function () {
@@ -326,9 +396,9 @@ adminJQ(function ($) {
     $('#UpdateSince').on('click',function () {
 
         /** Check Categories First
-        updateSinceQueue.reset();
-        updateSinceQueue.queue(ajaxurl,{action: 'get_all_categories'});
-        updateSinceQueue.process();
+         updateSinceQueue.reset();
+         updateSinceQueue.queue(ajaxurl,{action: 'get_all_categories'});
+         updateSinceQueue.process();
          **/
 
         /** Do not check categories **/
