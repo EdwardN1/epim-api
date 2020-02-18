@@ -5,7 +5,7 @@ function uploadMedia($image_url){
 	require_once(ABSPATH.'wp-admin/includes/image.php');
 	require_once(ABSPATH.'wp-admin/includes/file.php');
 	require_once(ABSPATH.'wp-admin/includes/media.php');
-	error_log('Downloading - '.$image_url);
+	//error_log('Downloading - '.$image_url);
 	try {
 		$tmp  = download_url( $image_url );
 		$file = array(

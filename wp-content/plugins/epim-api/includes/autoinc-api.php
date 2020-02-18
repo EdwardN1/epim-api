@@ -254,37 +254,6 @@ function get_api_all_products()
 
 function importPicture($id, $webpath)
 {
-    /*$res = 'Picture Import Error';
-    if (!imageImported($id)) {
-
-
-        $uploaddir = wp_upload_dir();
-        $filename = $id . '-' . uniqid() . '.jpg';
-        $uploadfile = $uploaddir['path'] . '/' . $filename;
-        $contents = get_image_file($webpath);
-        if ($contents) {
-            $savefile = fopen($uploadfile, 'w');
-            fwrite($savefile, $contents);
-            fclose($savefile);
-            $wp_filetype = wp_check_filetype(basename($filename), null);
-            $attachment = array(
-                'post_mime_type' => $wp_filetype['type'],
-                'post_title' => $filename,
-                'post_content' => '',
-                'post_status' => 'inherit'
-            );
-            $attach_id = wp_insert_attachment($attachment, $uploadfile);
-            $imagenew = get_post($attach_id);
-            $fullsizepath = get_attached_file($imagenew->ID);
-            $attach_data = wp_generate_attachment_metadata($attach_id, $fullsizepath);
-            wp_update_attachment_metadata($attach_id, $attach_data);
-            update_field('epim_api_id', $id, $attach_id);
-            $res = 'Image Imported Sucessfully';
-        }
-    } else {
-        $res = 'Image Already Imported';
-    }
-    return $res;*/
 
 	$res = 'Picture Import Error';
 	if (!imageImported($id)) {
@@ -315,12 +284,6 @@ function imageImported($id)
     $loop = new WP_Query($args);
 
     return $loop->have_posts();
-    /*$loop = get_posts($args);
-    if (empty($loop)) {
-        return false;
-    } else {
-        return true;
-    }*/
 
 }
 
