@@ -149,3 +149,192 @@ function sort_categories()
         }
     }
 }
+
+function getCategoryImages($id)
+{
+    $term = getCategoryFromId($id);
+    $res = array();
+    if ($term) {
+        $term_id =$term->term_id;
+        $api_picture_ids = get_term_meta($term_id, 'epim_api_picture_ids', true);
+        $res = str_getcsv($api_picture_ids);
+        //error_log($term->name.': picture IDS - '.print_r($res,true));
+    } else {
+        //error_log('Term not found for ID: '.$id);
+    }
+    return json_encode($res);
+}
+
+function getCategoryFromId($id)
+{
+    $res = false;
+    $terms = get_terms(array(
+        'taxonomy' => 'product_cat',
+        'hide_empty' => false,
+    ));
+    foreach ($terms as $term) {
+        $term_id =$term->term_id;
+        $api_id = get_term_meta($term_id, 'epim_api_id', true);
+        if ($api_id == $id) {
+            return $term;
+        }
+    }
+    return $res;
+}
+
+function get_api_picture($id)
+{
+    $res = make_api_call('Pictures/' . $id);
+    if($id == '64746') {
+        //error_log($res);
+    }
+    return $res;
+}
+
+function linkCategoryImages()
+{
+    //error_log('Link Category Images Started');
+    $terms = get_terms(array(
+        'taxonomy' => 'product_cat',
+        'hide_empty' => false,
+    ));
+    foreach ($terms as $term) {
+        $term_id =$term->term_id;
+        $api_id = get_term_meta($term_id, 'epim_api_picture_ids', true);
+        $attachmentID = imageIDfromAPIID($api_id);
+        if ($attachmentID) {
+            //error_log('linking image to '.$term->name);
+            update_term_meta( $term_id, 'thumbnail_id', absint( $attachmentID ) );
+            //update_field('image', $attachmentID, $term);
+        }
+    }
+    //error_log('Link Category Images Ended');
+}
+
+function imageIDfromAPIID($id)
+{
+    $res = false;
+    $args = array(
+        'post_type' => 'attachment',
+        'post_mime_type' => 'image',
+        'orderby' => 'post_date',
+        'order' => 'desc',
+        'posts_per_page' => '-1',
+        'post_status' => 'inherit',
+        'meta_key' => 'epim_api_id',
+        'meta_value' => $id
+    );
+    $loop = new WP_Query($args);
+    if ($loop->have_posts()) :
+        while ($loop->have_posts()) : $loop->the_post();
+            $res = get_the_ID();
+            break;
+        endwhile;
+    endif;
+
+    /*$loop = get_posts($args);
+
+    foreach ($loop as $post): setup_postdata($post);
+        $res = get_the_ID();
+        break;
+    endforeach;*/
+
+    wp_reset_postdata();
+    return $res;
+}
+
+function get_api_all_products()
+{
+    $apiCall = make_api_call('Products/');
+    $allProducts = json_decode($apiCall);
+    $TotalResults = $allProducts->TotalResults;
+
+    return make_api_call('Products/?limit=' . $TotalResults);
+}
+
+function importPicture($id, $webpath)
+{
+    $res = 'Picture Import Error';
+    if (!imageImported($id)) {
+
+        /* $attach_id = insert_attachment_from_url($webpath);
+         if ($attach_id) {
+             update_field('api_id', $id, $attach_id);
+             $res = 'Product Images Imported via WP_HTTP Object';
+         } else {
+             $res = 'Product Images Import WP_HTTP Object Error for - ' . $webpath;
+         }*/
+
+        $uploaddir = wp_upload_dir();
+        $filename = $id . '-' . uniqid() . '.jpg';
+        $uploadfile = $uploaddir['path'] . '/' . $filename;
+        $contents = get_image_file($webpath);
+        if ($contents) {
+            $savefile = fopen($uploadfile, 'w');
+            fwrite($savefile, $contents);
+            fclose($savefile);
+            $wp_filetype = wp_check_filetype(basename($filename), null);
+            $attachment = array(
+                'post_mime_type' => $wp_filetype['type'],
+                'post_title' => $filename,
+                'post_content' => '',
+                'post_status' => 'inherit'
+            );
+            $attach_id = wp_insert_attachment($attachment, $uploadfile);
+            $imagenew = get_post($attach_id);
+            $fullsizepath = get_attached_file($imagenew->ID);
+            $attach_data = wp_generate_attachment_metadata($attach_id, $fullsizepath);
+            wp_update_attachment_metadata($attach_id, $attach_data);
+            update_field('epim_api_id', $id, $attach_id);
+            $res = 'Image Imported Sucessfully';
+        }
+    } else {
+        $res = 'Image Already Imported';
+    }
+    return $res;
+}
+
+function imageImported($id)
+{
+    $args = array(
+        'post_type' => 'attachment',
+        'post_mime_type' => 'image',
+        'orderby' => 'post_date',
+        'order' => 'desc',
+        'posts_per_page' => '-1',
+        'post_status' => 'inherit',
+        'meta_key' => 'epim_api_id',
+        'meta_value' => $id
+    );
+    $loop = new WP_Query($args);
+
+    return $loop->have_posts();
+    /*$loop = get_posts($args);
+    if (empty($loop)) {
+        return false;
+    } else {
+        return true;
+    }*/
+
+}
+
+function get_image_file($url)
+{
+
+    $method = get_option('epim_api_retrieval_method');
+    //error_log('get_image_file method: ' . $method);
+    if ($method == 'cUrl') {
+        //error_log('Getting Remote File using cUrl - ' . $url);
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
+        $apiCall = curl_exec($ch);
+        curl_close($ch);
+        return $apiCall;
+    } else {
+        //error_log('Getting Remote File using file_get_contents - ' . $url);
+        return file_get_contents($url);
+    }
+}
