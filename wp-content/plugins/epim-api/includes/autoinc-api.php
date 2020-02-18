@@ -254,16 +254,9 @@ function get_api_all_products()
 
 function importPicture($id, $webpath)
 {
-    $res = 'Picture Import Error';
+    /*$res = 'Picture Import Error';
     if (!imageImported($id)) {
 
-        /* $attach_id = insert_attachment_from_url($webpath);
-         if ($attach_id) {
-             update_field('api_id', $id, $attach_id);
-             $res = 'Product Images Imported via WP_HTTP Object';
-         } else {
-             $res = 'Product Images Import WP_HTTP Object Error for - ' . $webpath;
-         }*/
 
         $uploaddir = wp_upload_dir();
         $filename = $id . '-' . uniqid() . '.jpg';
@@ -291,7 +284,20 @@ function importPicture($id, $webpath)
     } else {
         $res = 'Image Already Imported';
     }
-    return $res;
+    return $res;*/
+
+	$res = 'Picture Import Error';
+	if (!imageImported($id)) {
+		$attachment_ID = uploadMedia( $webpath );
+		if($attachment_ID) {
+			error_log( '$attachment_ID: ' . $attachment_ID );
+			update_post_meta( $attachment_ID, 'epim_api_id', $id );
+			$res = 'Image Imported Sucessfully';
+		}
+	} else {
+		$res = 'Image Already Imported';
+	}
+	return $res;
 }
 
 function imageImported($id)

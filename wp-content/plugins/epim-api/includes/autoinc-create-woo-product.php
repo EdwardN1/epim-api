@@ -2,18 +2,36 @@
 
 // Takes an image url as an argument and upload image to wordpress and returns the media id, later we will use this id to assign the image to product.
 function uploadMedia($image_url){
-	require_once('wp-admin/includes/image.php');
-	require_once('wp-admin/includes/file.php');
-	require_once('wp-admin/includes/media.php');
-	$media = media_sideload_image($image_url,0);
-	$attachments = get_posts(array(
-		'post_type' => 'attachment',
-		'post_status' => null,
-		'post_parent' => 0,
-		'orderby' => 'post_date',
-		'order' => 'DESC'
-	));
-	return $attachments[0]->ID;
+	require_once(ABSPATH.'wp-admin/includes/image.php');
+	require_once(ABSPATH.'wp-admin/includes/file.php');
+	require_once(ABSPATH.'wp-admin/includes/media.php');
+	error_log('Downloading - '.$image_url);
+	try {
+		$tmp  = download_url( $image_url );
+		$file = array(
+			'name'     => basename( $image_url ),
+			'tmp_name' => $tmp
+		);
+
+		if ( is_wp_error( $tmp ) ) {
+			$error_string = $tmp->get_error_message();
+			@unlink( $file['tmp_name'] );
+			error_log( $image_url . ' | ' . $error_string );
+			return false;
+		} else {
+			$media = media_handle_sideload( $file, 0 );
+			if ( is_wp_error( $media ) ) {
+				$error_string = $media->get_error_message();
+				@unlink($file['tmp_name']);
+				error_log( $image_url . ' | ' . $error_string );
+			} else {
+				return $media;
+			}
+		}
+	} catch (Exception $exception) {
+		error_log($exception->getMessage());
+	}
+	return false;
 }
 
 function ep_wooCreateProduct($productArray){

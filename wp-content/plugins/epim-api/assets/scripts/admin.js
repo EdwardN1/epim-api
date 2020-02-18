@@ -24,7 +24,7 @@ adminJQ = jQuery.noConflict();
 adminJQ(function ($) {
 
     let debug = true;
-    let cMax = 5;
+    let cMax = 20;
 
     function _o(text) {
         $('#ePimResult').prepend(text + '<br>');
@@ -304,7 +304,7 @@ adminJQ(function ($) {
                 let pictures = JSON.parse(data);
                 let obj = this;
                 $(pictures).each(function (index, picture) {
-                    obj.queue(ajaxurl,{action: 'import_picture', ID: picture.Id, weblink: picture.Path});
+                    obj.queue(ajaxurl,{action: 'import_picture', ID: picture.Id, weblink: picture.WebPath});
                 })
 
             }
