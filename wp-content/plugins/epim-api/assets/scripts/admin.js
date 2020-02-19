@@ -368,7 +368,7 @@ adminJQ(function ($) {
                 let obj = this;
                 $(pictures).each(function (index, picture) {
 
-                    obj.queue(ajaxurl,{action: 'import_picture', ID: picture.Id, weblink: picture.Path});
+                    obj.queue(ajaxurl,{action: 'import_picture', ID: picture.Id, weblink: picture.WebPath});
                 })
 
             }

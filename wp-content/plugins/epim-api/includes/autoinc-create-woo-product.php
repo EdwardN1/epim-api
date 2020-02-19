@@ -16,14 +16,14 @@ function uploadMedia($image_url){
 		if ( is_wp_error( $tmp ) ) {
 			$error_string = $tmp->get_error_message();
 			@unlink( $file['tmp_name'] );
-			error_log( $image_url . ' | ' . $error_string );
+			//error_log( $image_url . ' | ' . $error_string );
 			return false;
 		} else {
 			$media = media_handle_sideload( $file, 0 );
 			if ( is_wp_error( $media ) ) {
 				$error_string = $media->get_error_message();
 				@unlink($file['tmp_name']);
-				error_log( $image_url . ' | ' . $error_string );
+				//error_log( $image_url . ' | ' . $error_string );
 			} else {
 				return $media;
 			}
