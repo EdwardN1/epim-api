@@ -101,6 +101,38 @@ function get_api_all_attributes()
  *
  */
 
+function getCategoryImages($id)
+{
+	$term = getCategoryFromId($id);
+	$res = array();
+	if ($term) {
+		$term_id = $term->term_id;
+		$api_picture_ids = get_term_meta($term_id, 'epim_api_picture_ids', true);
+		$res = str_getcsv($api_picture_ids);
+		//error_log($term->name.': picture IDS - '.print_r($res,true));
+	} else {
+		//error_log('Term not found for ID: '.$id);
+	}
+	return json_encode($res);
+}
+
+function getCategoryFromId($id)
+{
+	$res = false;
+	$terms = get_terms(array(
+		'taxonomy' => 'product_cat',
+		'hide_empty' => false,
+	));
+	foreach ($terms as $term) {
+		$term_id = $term->term_id;
+		$api_id = get_term_meta($term_id, 'epim_api_id', true);
+		if ($api_id == $id) {
+			return $term;
+		}
+	}
+	return $res;
+}
+
 function getTermFromID($id, $terms)
 {
     $res = false;
@@ -116,6 +148,113 @@ function getTermFromID($id, $terms)
     return $res;
 }
 
+function getAttributeNameFromID($id, $attributes)
+{
+	$res = 'Name Not Found';
+	foreach ($attributes as $attribute) {
+		if ($attribute->Id == $id) {
+			$res = $attribute->Name;
+			break;
+		}
+	}
+
+	return $res;
+}
+
+function imageIDfromAPIID($id)
+{
+	$res = false;
+
+	if ($id != ''):
+		$args = array(
+			'post_type' => 'attachment',
+			'post_mime_type' => 'image',
+			'orderby' => 'post_date',
+			'order' => 'desc',
+			'posts_per_page' => '-1',
+			'post_status' => 'inherit',
+			'meta_key' => 'epim_api_id',
+			'meta_value' => $id
+		);
+		$loop = new WP_Query($args);
+		if ($loop->have_posts()) :
+			while ($loop->have_posts()) : $loop->the_post();
+				$res = get_the_ID();
+				break;
+			endwhile;
+		endif;
+
+		wp_reset_postdata();
+	endif;
+	return $res;
+}
+
+function imageImported($id)
+{
+	$args = array(
+		'post_type' => 'attachment',
+		'post_mime_type' => 'image',
+		'orderby' => 'post_date',
+		'order' => 'desc',
+		'posts_per_page' => '-1',
+		'post_status' => 'inherit',
+		'meta_key' => 'epim_api_id',
+		'meta_value' => $id
+	);
+	$loop = new WP_Query($args);
+
+	return $loop->have_posts();
+
+}
+
+function getProductFromID($productID, $variationID)
+{
+	$res = false;
+
+	$args = array(
+		'posts_per_page' => -1,
+		'post_type' => 'product',
+		'meta_key' => 'epim_API_ID',
+		'meta_value' => $productID
+	);
+
+	$args = array('post_type' => 'product', 'posts_per_page' => -1);
+
+	$loop = new WP_Query($args);
+	if ($loop->have_posts()):
+		while ($loop->have_posts()) : $loop->the_post();
+			$variation_id = get_post_meta(get_the_ID(),'epim_variation_ID');
+			if ($variation_id == $variationID) {
+				$res = get_the_ID();
+				break;
+			}
+		endwhile;
+	endif;
+
+	wp_reset_postdata();
+
+	return $res;
+}
+
+/**
+ *
+ *
+ *==============================Core Functions=================================
+ *
+ */
+
+/**
+ * @param $id
+ * @param $name
+ * @param $ParentID
+ * @param $picture_webpath
+ * @param $picture_ids
+ *
+ * @return string
+ *
+ * Create a Category
+ *
+ */
 function create_category($id, $name, $ParentID, $picture_webpath, $picture_ids)
 {
     $terms = get_terms([
@@ -162,6 +301,11 @@ function create_category($id, $name, $ParentID, $picture_webpath, $picture_ids)
     return $response;
 }
 
+/**
+ *
+ * Sort Categories
+ *
+ */
 function sort_categories()
 {
     $terms = get_terms([
@@ -191,39 +335,11 @@ function sort_categories()
     }
 }
 
-function getCategoryImages($id)
-{
-    $term = getCategoryFromId($id);
-    $res = array();
-    if ($term) {
-        $term_id = $term->term_id;
-        $api_picture_ids = get_term_meta($term_id, 'epim_api_picture_ids', true);
-        $res = str_getcsv($api_picture_ids);
-        //error_log($term->name.': picture IDS - '.print_r($res,true));
-    } else {
-        //error_log('Term not found for ID: '.$id);
-    }
-    return json_encode($res);
-}
-
-function getCategoryFromId($id)
-{
-    $res = false;
-    $terms = get_terms(array(
-        'taxonomy' => 'product_cat',
-        'hide_empty' => false,
-    ));
-    foreach ($terms as $term) {
-        $term_id = $term->term_id;
-        $api_id = get_term_meta($term_id, 'epim_api_id', true);
-        if ($api_id == $id) {
-            return $term;
-        }
-    }
-    return $res;
-}
-
-
+/**
+ *
+ * Link Categories to Images
+ *
+ */
 
 function linkCategoryImages()
 {
@@ -245,324 +361,186 @@ function linkCategoryImages()
     //error_log('Link Category Images Ended');
 }
 
-function imageIDfromAPIID($id)
-{
-    $res = false;
-
-    if ($id != ''):
-        $args = array(
-            'post_type' => 'attachment',
-            'post_mime_type' => 'image',
-            'orderby' => 'post_date',
-            'order' => 'desc',
-            'posts_per_page' => '-1',
-            'post_status' => 'inherit',
-            'meta_key' => 'epim_api_id',
-            'meta_value' => $id
-        );
-        $loop = new WP_Query($args);
-        if ($loop->have_posts()) :
-            while ($loop->have_posts()) : $loop->the_post();
-                $res = get_the_ID();
-                break;
-            endwhile;
-        endif;
-
-        wp_reset_postdata();
-    endif;
-    return $res;
-}
-
+/**
+ * @param $id
+ * @param $webpath
+ *
+ * @return string
+ *
+ * Import a picture
+ *
+ */
 function importPicture($id, $webpath)
 {
 
-    $res = 'Picture Import Error';
+    $res = 'Image: '.$id.' - Import Error';
     if (!imageImported($id)) {
         $attachment_ID = uploadMedia($webpath);
         if ($attachment_ID) {
             //error_log('$attachment_ID: ' . $attachment_ID);
             update_post_meta($attachment_ID, 'epim_api_id', $id);
-            $res = 'Image Imported Sucessfully';
+            $res = 'Image: '.$id.' - Imported Successfully';
         }
     } else {
-        $res = 'Image Already Imported';
+        $res = 'Image: '.$id.' - Already Imported';
     }
     return $res;
 }
 
-function imageImported($id)
-{
-    $args = array(
-        'post_type' => 'attachment',
-        'post_mime_type' => 'image',
-        'orderby' => 'post_date',
-        'order' => 'desc',
-        'posts_per_page' => '-1',
-        'post_status' => 'inherit',
-        'meta_key' => 'epim_api_id',
-        'meta_value' => $id
-    );
-    $loop = new WP_Query($args);
 
-    return $loop->have_posts();
 
-}
 
-function getProductFromID($productID, $variationID)
-{
-    $res = false;
+/**
+ * @param $productID
+ * @param $variationID
+ * @param $productBulletText
+ * @param $productName
+ * @param $categoryIds
+ * @param $pictureIds
+ *
+ * @return string
+ *
+ * Create a Product
+ */
 
-    $args = array(
-        'posts_per_page' => -1,
-        'post_type' => 'product',
-        'meta_key' => 'epim_API_ID',
-        'meta_value' => $productID
-    );
+function create_product($productID, $variationID, $productBulletText, $productName, $categoryIds, $pictureIds) {
+	$res = '';
+	/*
+	 * Get Variation Details
+	 */
+	$productArray = array();
+	$jsonVariation = get_api_variation($variationID);
+	$variation = json_decode($jsonVariation);
+	$jsonAttributes = get_api_all_attributes();
+	$attributes = json_decode($jsonAttributes);
 
-    $args = array('post_type' => 'product', 'posts_per_page' => -1);
+	/*
+	 *
+	 *Check Attributes
+	 *
+	 */
 
-    $loop = new WP_Query($args);
-    if ($loop->have_posts()):
-        while ($loop->have_posts()) : $loop->the_post();
-            $variation_id = get_post_meta(get_the_ID(),'epim_variation_ID');
-            if ($variation_id == $variationID) {
-                $res = get_the_ID();
-                break;
-            }
-        endwhile;
-    endif;
+	$attribute_taxonomies = wc_get_attribute_taxonomies();
 
-    wp_reset_postdata();
+	$currentAttributes = array();
 
-    return $res;
-}
+	foreach ($attribute_taxonomies as $attribute_taxonomy) {
+		delete_product_attribute($attribute_taxonomy->id);
+		//if(!in_array($attribute_taxonomy->attribute_name,$currentAttributes)) $currentAttributes[]=$attribute_taxonomy->attribute_name;
+	}
 
-function getAttributeNameFromID($id, $attributes)
-{
-    $res = 'Name Not Found';
-    foreach ($attributes as $attribute) {
-        if ($attribute->Id == $id) {
-            $res = $attribute->Name;
-            break;
-        }
-    }
+	/*foreach ($attributes as $attribute) {
+		if(!wc_check_if_attribute_name_is_reserved($attribute->Name)) {
+			if(!in_array($attribute->Name,$currentAttributes)) {
+				$attribute_id = wc_create_attribute(
+					array(
+						'name'         => $attribute->Name,
+					)
+				);
 
-    return $res;
-}
+				if(is_wp_error($attribute_id)) {
+					$error_string = $attribute_id->get_error_message();
+					error_log($error_string);
+				}
 
-function create_product($productID, $variationID, $productBulletText, $productName, $categoryIds, $pictureIds)
-{
-    $res = 'An Error has occurred for this product: ' . $productName;
-    $jsonVariation = get_api_variation($variationID);
-    $variation = json_decode($jsonVariation);
-    if ($variation) {
-        $id = getProductFromID($productID, $variation->Id);
-        $newPost = false;
-        $jsonAttributes = get_api_all_attributes();
-        $attributes = json_decode($jsonAttributes);
-        $terms = get_terms([
-            'taxonomy' => 'grahamscat',
-            'hide_empty' => false,
-        ]);
-        //$catEx = explode(',',$categoryIds);
-        $catEx = $categoryIds;
-        $catIds = array();
-        foreach ($catEx as $category_id) {
-            $realCatID = getTermFromID($category_id, $terms);
-            if ($realCatID) {
-                $catIds[] = $realCatID->term_id;
-            }
-        }
-        //$pictureEx = explode(',',$pictureIds);
-        $pictureEx = $pictureIds;
-        if ($id) {
-            $thePost = array(
-                'ID' => $id,
-                'post_title' => $variation->Name,
-                'post_content' => 'Imported',
-                'post_status' => 'publish',
-            );
-            if ($thePost) {
-                $newPost = wp_update_post($thePost);
-                if ($newPost) {
-                    wp_set_object_terms($newPost, $catIds, 'grahamscat');
-                    update_field('api_id', $productID, $newPost);
-                    update_field('variation_id', $variation->Id, $newPost);
-                    update_field('description', $productBulletText, $newPost);
-                    update_field('code', $variation->SKU, $newPost);
-                    update_field('product_group', $productName, $newPost);
-                    update_field('price', $variation->Qty_Price_1, $newPost);
-                    update_field('summary', $variation->Table_Heading, $newPost);
-                    if ($pictureEx) {
-                        foreach ($pictureEx as $pictureId) {
-                            $jsonPicture = get_api_picture($pictureId);
-                            $picture = json_decode($jsonPicture);
-                            if ($picture) {
-                                if (have_rows('product_images', $newPost)):
-                                    $pictureUpdate = false;
-                                    while (have_rows('product_images', $newPost)): the_row();
-                                        $api_image_id = get_sub_field('api_image_id');
-                                        if ($api_image_id == $picture->Id) {
-                                            $pictureUpdate = true;
-                                            update_sub_field('api_link', $picture->WebPath);
-                                            break;
-                                        }
-                                    endwhile;
-                                    if (!$pictureUpdate) {
-                                        $row = array(
-                                            'api_link' => $picture->WebPath,
-                                            'api_image_id' => $picture->Id
-                                        );
+			}
+		}
+	}*/
 
-                                        add_row('product_images', $row, $newPost);
-                                    };
-                                else:
-                                    $row = array(
-                                        'api_link' => $picture->WebPath,
-                                        'api_image_id' => $picture->Id
-                                    );
 
-                                    add_row('product_images', $row, $newPost);
-                                endif;
-                            }
-                        }
-                    }
-                    foreach ($variation->PictureIds as $picture_id) {
-                        $jsonPicture = get_api_picture($picture_id);
-                        $picture = json_decode($jsonPicture);
-                        if ($picture) {
-                            if (have_rows('variation_images', $newPost)):
-                                $pictureUpdate = false;
-                                while (have_rows('variation_images', $newPost)): the_row();
-                                    $api_image_id = get_sub_field('api_image_id');
-                                    if ($api_image_id == $picture->Id) {
-                                        $pictureUpdate = true;
-                                        update_sub_field('api_link', $picture->WebPath);
-                                        break;
-                                    }
-                                endwhile;
-                                if (!$pictureUpdate) {
-                                    $row = array(
-                                        'api_link' => $picture->WebPath,
-                                        'api_image_id' => $picture->Id
-                                    );
 
-                                    add_row('variation_images', $row, $newPost);
-                                };
-                            else:
-                                $row = array(
-                                    'api_link' => $picture->WebPath,
-                                    'api_image_id' => $picture->Id
-                                );
+	/*
+	 * Get Woo Categories
+	 */
+	$terms = get_terms([
+		'taxonomy' => 'product_cat',
+		'hide_empty' => false,
+	]);
+	$catIds = array();
+	foreach ($categoryIds as $category_id) {
+		$realCatID = getTermFromID($category_id, $terms);
+		if ($realCatID) {
+			$catIds[] = $realCatID->term_id;
+		}
+	}
+	$productArray['categoryIDS'] = $catIds;
 
-                                add_row('variation_images', $row, $newPost);
-                            endif;
-                        }
-                    }
-                    $attributeText = '';
-                    foreach ($variation->AttributeValues as $attribute_value) {
-                        $aName = getAttributeNameFromID($attribute_value->AttributeId, $attributes);
-                        if ($aName != '0 ( )') {
-                            $attributeText .= $aName . ': ' . $attribute_value->Value . '<br>';
-                        }
-                    }
-                    update_field('specifications', $attributeText, $newPost);
-                }
-            }
-            $res = $productName . ' (' . $variation->SKU . ') product updated';
-        } else {
-            $thePost = array(
-                'post_title' => $variation->Name,
-                'post_type' => 'grahams_product',
-                'post_content' => 'Imported',
-                'post_status' => 'publish',
-            );
-            if ($thePost) {
-                $newPost = wp_insert_post($thePost);
-                if ($newPost) {
-                    wp_set_object_terms($newPost, $catIds, 'grahamscat');
-                    update_field('api_id', $productID, $newPost);
-                    update_field('variation_id', $variation->Id, $newPost);
-                    update_field('description', $productBulletText, $newPost);
-                    update_field('code', $variation->SKU, $newPost);
-                    update_field('product_group', $productName, $newPost);
-                    update_field('price', $variation->Qty_Price_1, $newPost);
-                    update_field('summary', $variation->Table_Heading, $newPost);
-                    if ($pictureEx) {
-                        foreach ($pictureEx as $pictureId) {
-                            $jsonPicture = get_api_picture($pictureId);
-                            $picture = json_decode($jsonPicture);
-                            if (have_rows('product_images', $newPost)):
-                                $pictureUpdate = false;
-                                while (have_rows('product_images', $newPost)): the_row();
-                                    $api_image_id = get_sub_field('api_image_id');
-                                    if ($api_image_id == $picture->Id) {
-                                        $pictureUpdate = true;
-                                        update_sub_field('api_link', $picture->WebPath);
-                                        break;
-                                    }
-                                endwhile;
-                                if (!$pictureUpdate) {
-                                    $row = array(
-                                        'api_link' => $picture->WebPath,
-                                        'api_image_id' => $picture->Id
-                                    );
+	/*
+	 * Set the product Meta Data
+	 */
+	$epim_API_ID = array("meta_key"=>"epim_API_ID","meta_data"=>$productID);
+	$epim_product_group_name = array("meta_key"=>"epim_product_group_name","meta_data"=>$productName);
+	$epim_variation_ID = array("meta_key"=>"epim_variation_ID","meta_data"=>$variationID);
+	$productArray['metaData'] = array($epim_API_ID,$epim_product_group_name,$epim_variation_ID);
 
-                                    add_row('product_images', $row, $newPost);
-                                };
-                            else:
-                                $row = array(
-                                    'api_link' => $picture->WebPath,
-                                    'api_image_id' => $picture->Id
-                                );
+	/*
+	 * Other product Fields
+	 */
+	$productArray['productTitle'] = $variation->Name;
+	$productArray['productSKU'] = $variation->SKU;
+	$productArray['price'] = $variation->Qty_Price_1;
+	$productArray['productDescription'] = $variation->Table_Heading;
+	$productArray['productShortDescription'] = $productBulletText;
 
-                                add_row('product_images', $row, $newPost);
-                            endif;
-                        }
-                    }
-                    foreach ($variation->PictureIds as $picture_id) {
-                        $jsonPicture = get_api_picture($picture_id);
-                        $picture = json_decode($jsonPicture);
-                        if (have_rows('variation_images', $newPost)):
-                            $pictureUpdate = false;
-                            while (have_rows('variation_images', $newPost)): the_row();
-                                $api_image_id = get_sub_field('api_image_id');
-                                if ($api_image_id == $picture->Id) {
-                                    $pictureUpdate = true;
-                                    update_sub_field('api_link', $picture->WebPath);
-                                    break;
-                                }
-                            endwhile;
-                            if (!$pictureUpdate) {
-                                $row = array(
-                                    'api_link' => $picture->WebPath,
-                                    'api_image_id' => $picture->Id
-                                );
+	/*
+	 * Attributes
+	 */
+	$aCounter = 1;
+	$productAttributes = array();
+	foreach ($variation->AttributeValues as $attribute_value) {
+		$aName = getAttributeNameFromID($attribute_value->AttributeId, $attributes);
+		if ($aName != '0 ( )') {
+			$productAttributes[] = array("name"=>$aName,"options"=>array($attribute_value->Value),"position"=>$aCounter,"visible"=>1,"variation"=>1);
+			$aCounter++;
+		}
+	}
+	$productArray['attributes'] = $productAttributes;
 
-                                add_row('variation_images', $row, $newPost);
-                            };
-                        else:
-                            $row = array(
-                                'api_link' => $picture->WebPath,
-                                'api_image_id' => $picture->Id
-                            );
+	/*
+	 * Image processing
+	 */
 
-                            add_row('variation_images', $row, $newPost);
-                        endif;
-                    }
-                    $attributeText = '';
-                    foreach ($variation->AttributeValues as $attribute_value) {
-                        $aName = getAttributeNameFromID($attribute_value->AttributeId, $attributes);
-                        if ($aName != '0 ( )') {
-                            $attributeText .= $aName . ': ' . $attribute_value->Value . '<br>';
-                        }
-                    }
-                    update_field('specifications', $attributeText, $newPost);
-                }
+	$imageAttachmentIDS = array();
 
-            }
-            $res = $productName . ' (' . $variation->SKU . ') Product Created';
-        }
-    }
-    return $res;
+	if ($variation->PictureIds) {
+		foreach ( $variation->PictureIds as $pictureId ) {
+			$jsonPicture = get_api_picture( $pictureId );
+			$picture     = json_decode( $jsonPicture );
+			$res .= importPicture($picture->Id,$picture->WebPath).'<br>';
+			$attachmentID = imageIDfromAPIID($picture->Id);
+			if($attachmentID) {
+				if(!in_array($attachmentID,$imageAttachmentIDS)) $imageAttachmentIDS[]=$attachmentID;
+			}
+		}
+	}
+
+	if ($pictureIds) {
+		foreach ( $pictureIds as $pictureId ) {
+			$jsonPicture = get_api_picture( $pictureId );
+			$picture     = json_decode( $jsonPicture );
+			$res .= importPicture($picture->Id,$picture->WebPath).'<br>';
+			$attachmentID = imageIDfromAPIID($picture->Id);
+			if($attachmentID) {
+				if(!in_array($attachmentID,$imageAttachmentIDS)) $imageAttachmentIDS[]=$attachmentID;
+			}
+		}
+	}
+
+	$productArray['imageAttachmentIDS'] = $imageAttachmentIDS;
+
+	$id = getProductFromID($productID, $variation->Id);
+
+	if(!$id) {
+
+		if ( ep_wooCreateProduct( $productArray ) ) {
+			$res .= $variation->Name . ' (' . $variation->SKU . ') Created<br>';
+		} else {
+			$res .= 'There was a problem creating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
+		}
+	} else {
+		$res .= 'There was a problem creating productID: ' . $productID . ' variationID: ' . $variationID . ' as it already exists<br>';
+	}
+
+	return $res;
+
 }

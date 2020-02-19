@@ -54,16 +54,18 @@ function ep_wooCreateProduct($productArray){
 	if(array_key_exists('catalogueVisibility',$productArray)) {$catalogueVisibility=$productArray['catalogueVisibility'];}else {$catalogueVisibility = 'visible';}
 	if(array_key_exists('isVariable',$productArray)) {$isVariable=$productArray['isVariable'];}else {$isVariable = false;}
 	if(array_key_exists('productDescription',$productArray)) {$productDescription=$productArray['productDescription'];}else {$productDescription = '';}
+	if(array_key_exists('productShortDescription',$productArray)) {$productShortDescription=$productArray['productShortDescription'];}else {$productShortDescription = '';}
 	if(array_key_exists('productSKU',$productArray)) {$productSKU=$productArray['productSKU'];}else {$productSKU = '';}
 	if(array_key_exists('price',$productArray)) {$price=$productArray['price'];}else {$price = 1;}
-	if(array_key_exists('regularPrice',$productArray)) {$regularPrice=$productArray['regularPrice'];}else {$regularPrice = 1;}
-	if(array_key_exists('manageStock',$productArray)) {$manageStock=$productArray['manageStock'];}else {$manageStock = true;}
+	if(array_key_exists('regularPrice',$productArray)) {$regularPrice=$productArray['regularPrice'];}else {$regularPrice = $price;}
+	if(array_key_exists('manageStock',$productArray)) {$manageStock=$productArray['manageStock'];}else {$manageStock = false;}
 	if(array_key_exists('stockQuantity',$productArray)) {$stockQuantity=$productArray['stockQuantity'];}else {$stockQuantity = 1;}
 	if(array_key_exists('stockStatus',$productArray)) {$stockStatus=$productArray['stockStatus'];}else {$stockStatus = 'instock';}
 	if(array_key_exists('backorders',$productArray)) {$backorders=$productArray['backorders'];}else {$backorders = 'no';}
 	if(array_key_exists('reviewsAllowed',$productArray)) {$reviewsAllowed=$productArray['reviewsAllowed'];}else {$reviewsAllowed = true;}
 	if(array_key_exists('soldIndividually',$productArray)) {$soldIndividually=$productArray['soldIndividually'];}else {$soldIndividually = false;}
 	if(array_key_exists('images',$productArray)) {$images=$productArray['images'];} else {$images = array();}
+	if(array_key_exists('imageAttachmentIDS',$productArray)) {$imageAttachmentIDS=$productArray['imageAttachmentIDS'];} else {$imageAttachmentIDS = array();}
 	if(array_key_exists('attributes',$productArray)) {$attributes=$productArray['attributes'];} else {$attributes = array();}
 	if(array_key_exists('variations',$productArray)) {$variations=$productArray['variations'];} else {$variations = array();}
 	if(array_key_exists('metaData',$productArray)) {$metaData=$productArray['metaData'];} else {$metaData = array();}
@@ -124,6 +126,7 @@ function ep_wooCreateProduct($productArray){
 	$objProduct->set_status($status);  // can be publish,draft or any wordpress post status
 	$objProduct->set_catalog_visibility($catalogueVisibility); // add the product visibility status
 	$objProduct->set_description($productDescription);
+	$objProduct->set_short_description($productShortDescription);
 	$objProduct->set_sku($productSKU); //can be blank in case you don't have sku, but You can't add duplicate sku's
 	$objProduct->set_price($price); // set product price
 	$objProduct->set_regular_price($regularPrice); // set product regular price
@@ -137,10 +140,14 @@ function ep_wooCreateProduct($productArray){
 
 	$productImagesIDs = array(); // define an array to store the media ids.
 	//$images = array("image1 url","image2 url","image3 url"); // images url array of product
+	foreach ($imageAttachmentIDS as $image_attachment_ID) {
+		$productImagesIDs[] = $image_attachment_ID;
+	}
 	foreach($images as $image){
 		$mediaID = uploadMedia($image); // calling the uploadMedia function and passing image url to get the uploaded media id
 		if($mediaID) $productImagesIDs[] = $mediaID; // storing media ids in a array.
 	}
+
 	if($productImagesIDs){
 		$objProduct->set_image_id($productImagesIDs[0]); // set the first image as primary image of the product
 
@@ -153,12 +160,14 @@ function ep_wooCreateProduct($productArray){
 	$product_id = $objProduct->save(); // it will save the product and return the generated product id
 
 	if($attributes){
+		error_log('Setting Attributes for '.$productTitle);
 		$productAttributes=array();
 		foreach($attributes as $attribute){
 			$attr = wc_sanitize_taxonomy_name(stripslashes($attribute["name"])); // remove any unwanted chars and return the valid string for taxonomy name
 			$attr = 'pa_'.$attr; // woocommerce prepend pa_ to each attribute name
 			if($attribute["options"]){
 				foreach($attribute["options"] as $option){
+					//error_log('Attribute = '.$attr.' | Option = '.$option);
 					wp_set_object_terms($product_id,$option,$attr,true); // save the possible option value for the attribute which will be used for variation later
 				}
 			}

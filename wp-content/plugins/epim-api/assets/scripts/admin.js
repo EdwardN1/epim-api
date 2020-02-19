@@ -24,7 +24,7 @@ adminJQ = jQuery.noConflict();
 adminJQ(function ($) {
 
     let debug = true;
-    let cMax = 20;
+    let cMax = 5;
 
     function _o(text) {
         $('#ePimResult').prepend(text + '<br>');
