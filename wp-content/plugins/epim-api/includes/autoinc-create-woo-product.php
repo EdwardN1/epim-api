@@ -160,7 +160,7 @@ function ep_wooCreateProduct($productArray){
 	$product_id = $objProduct->save(); // it will save the product and return the generated product id
 
 	if($attributes){
-		error_log('Setting Attributes for '.$productTitle);
+		//error_log('Setting Attributes for '.$productTitle);
 		$productAttributes=array();
 		foreach($attributes as $attribute){
 			$attr = wc_sanitize_taxonomy_name(stripslashes($attribute["name"])); // remove any unwanted chars and return the valid string for taxonomy name

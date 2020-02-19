@@ -425,27 +425,36 @@ function create_product($productID, $variationID, $productBulletText, $productNa
 	$currentAttributes = array();
 
 	foreach ($attribute_taxonomies as $attribute_taxonomy) {
-		delete_product_attribute($attribute_taxonomy->id);
-		//if(!in_array($attribute_taxonomy->attribute_name,$currentAttributes)) $currentAttributes[]=$attribute_taxonomy->attribute_name;
+		/*$taxID = wc_attribute_taxonomy_id_by_name($attribute_taxonomy->attribute_name);
+		wc_delete_attribute($taxID);*/
+		$atName = $attribute_taxonomy->attribute_name;
+		if(!in_array($atName,$currentAttributes)) $currentAttributes[]= $atName;
 	}
 
-	/*foreach ($attributes as $attribute) {
-		if(!wc_check_if_attribute_name_is_reserved($attribute->Name)) {
-			if(!in_array($attribute->Name,$currentAttributes)) {
-				$attribute_id = wc_create_attribute(
-					array(
-						'name'         => $attribute->Name,
-					)
-				);
+	foreach ($attributes as $attribute) {
+		$atName = wc_sanitize_taxonomy_name(stripslashes($attribute->Name));
+		if(!wc_check_if_attribute_name_is_reserved($atName)) {
+			if(!in_array($atName,$currentAttributes)) {
+				$attribute_id = wc_attribute_taxonomy_id_by_name( $atName );
+				if(!$attribute_id) {
+					if($atName!='') {
+						$attribute_id = wc_create_attribute(
+							array(
+								'name' => $atName,
+								'slug' => substr($atName,0,27)
+							)
+						);
 
-				if(is_wp_error($attribute_id)) {
-					$error_string = $attribute_id->get_error_message();
-					error_log($error_string);
+						if ( is_wp_error( $attribute_id ) ) {
+							$error_string = $attribute_id->get_error_message();
+							error_log( $error_string );
+						}
+					}
 				}
 
 			}
 		}
-	}*/
+	}
 
 
 
