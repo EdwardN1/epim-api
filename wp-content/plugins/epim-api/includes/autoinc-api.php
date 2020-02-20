@@ -214,20 +214,25 @@ function getProductFromID($productID, $variationID)
 	$args = array(
 		'posts_per_page' => -1,
 		'post_type' => 'product',
-		'meta_key' => 'epim_API_ID',
-		'meta_value' => $productID
+		'meta_query' => array(
+			'relation' => 'AND',
+			array(
+				'key'=> 'epim_API_ID',
+				'value' => $productID
+			),
+			array(
+				'key' => 'epim_variation_ID',
+				'value' => $variationID
+			)
+		)
 	);
-
-	$args = array('post_type' => 'product', 'posts_per_page' => -1);
 
 	$loop = new WP_Query($args);
 	if ($loop->have_posts()):
 		while ($loop->have_posts()) : $loop->the_post();
-			$variation_id = get_post_meta(get_the_ID(),'epim_variation_ID');
-			if ($variation_id == $variationID) {
 				$res = get_the_ID();
+				//error_log('post ID for '.$productID. ' / '.$variationID. ' is '.$res);
 				break;
-			}
 		endwhile;
 	endif;
 
@@ -539,6 +544,8 @@ function create_product($productID, $variationID, $productBulletText, $productNa
 
 	$id = getProductFromID($productID, $variation->Id);
 
+	//error_log('$id = '.$id);
+
 	if(!$id) {
 
 		if ( ep_wooCreateProduct( $productArray ) ) {
@@ -548,6 +555,7 @@ function create_product($productID, $variationID, $productBulletText, $productNa
 		}
 	} else {
 		$res .= 'There was a problem creating productID: ' . $productID . ' variationID: ' . $variationID . ' as it already exists<br>';
+		//error_log('There was a problem creating productID: ' . $productID . ' variationID: ' . $variationID . ' as it already exists');
 	}
 
 	return $res;
