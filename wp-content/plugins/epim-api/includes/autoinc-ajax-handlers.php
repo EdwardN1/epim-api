@@ -37,6 +37,14 @@ add_action( 'wp_ajax_product_ID_code', 'ajax_product_ID_from_code' );
 add_action( 'wp_ajax_get_single_product_images', 'ajax_get_single_product_images' );
 add_action( 'wp_ajax_import_single_product_images', 'ajax_import_single_product_images' );
 add_action( 'wp_ajax_image_imported', 'ajax_image_imported' );
+add_action( 'wp_ajax_delete_attributes', 'ajax_delete_attributes' );
+
+function ajax_delete_attributes() {
+    checkSecure();
+    delete_attributes();
+    echo 'All attributes removed';
+    exit;
+}
 
 
 function ajax_image_imported() {
