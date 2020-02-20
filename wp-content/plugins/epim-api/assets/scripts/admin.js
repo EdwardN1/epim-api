@@ -23,7 +23,7 @@ adminJQ = jQuery.noConflict();
 
 adminJQ(function ($) {
 
-    let debug = false;
+    let debug = true;
     let cMax = 5;
 
     function _o(text) {
@@ -114,6 +114,8 @@ adminJQ(function ($) {
         processProductImages.queue(ajaxurl,{action: 'get_product_images'});
         processProductImages.process();*/
         _o('<strong>All Finished</strong>');
+        $('.modal.CreateAll').removeClass('active');
+        $('.modal.CreateAllProducts').removeClass('active');
     }, function (action, request, data) {
         _o('Action Completed: ' + action);
         _o('Request: ' + request);
@@ -317,6 +319,7 @@ adminJQ(function ($) {
 
     let updateCatDetailsQueue = new ts_execute_queue('#ePimResult', function () {
         _o('Category Data Imported - Finished.');
+        $('.modal.CreateCategories').removeClass('active');
     }, function (action, request, data) {
         _o('Action Completed: ' + action);
         _o('Request: ' + request);
@@ -380,6 +383,7 @@ adminJQ(function ($) {
 
     let customQueue = new ts_execute_queue('#ePimResult', function () {
         _o('finished');
+        $('.modal.deleteAttributes').removeClass('active');
     }, function (action, request, data) {
         _o('Action Completed: ' + action);
         _o('Request: ' + request);
@@ -388,13 +392,15 @@ adminJQ(function ($) {
 
     $('#CreateAll').on('click',function () {
         _o('Getting Category Data from ePim...');
+        $('.modal.CreateAll').addClass('active');
         updateAllQueue.reset();
         updateAllQueue.queue(ajaxurl,{action: 'get_all_categories'});
         updateAllQueue.process();
     });
 
     $('#CreateAllProducts').on('click',function () {
-        _o('Getting all products from ePim. Please wait...')
+        _o('Getting all products from ePim. Please wait...');
+        $('.modal.CreateAllProducts').addClass('active');
         updateAllProducts.reset();
         updateAllProducts.queue(ajaxurl,{action: 'get_all_products'});
         updateAllProducts.process();
@@ -402,6 +408,7 @@ adminJQ(function ($) {
 
     $('#CreateCategories').on('click',function () {
         _o('Getting Category Data from ePim...');
+        $('.modal.CreateCategories').addClass('active');
         updateCategoriesQueue.reset();
         updateCategoriesQueue.queue(ajaxurl,{action: 'get_all_categories'});
         updateCategoriesQueue.process();
@@ -432,7 +439,8 @@ adminJQ(function ($) {
     });
 
     $('#deleteAttributes').on('click',function(){
-        _o('Deleting Attributes..')
+        _o('Deleting Attributes..');
+        $('.modal.deleteAttributes').addClass('active');
         customQueue.reset();
         customQueue.queue(ajaxurl, {action: 'delete_attributes'});
         customQueue.process();
