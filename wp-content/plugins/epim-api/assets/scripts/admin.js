@@ -42,8 +42,9 @@ adminJQ(function ($) {
     });
 
     let oneProductQueue = new ts_execute_queue('#ePimResult', function () {
-        oneProductLinkImages.queue(ajaxurl, {action: 'product_ID_code', CODE: $('#pCode').val()});
-        oneProductLinkImages.process();
+        $('.modal.UpdateCode').removeClass('active');
+        _o('Finished');
+
     }, function (action, request, data) {
         _o('Action Completed: ' + action);
         _o('Request: ' + request);
@@ -66,53 +67,9 @@ adminJQ(function ($) {
                 });
             });
         }
-        if (action === 'create_product') {
-            let r = decodeURIComponent(request);
-            let ro = QueryStringToJSON('?' + r);
-            this.queue(ajaxurl,{action: 'import_single_product_images', productID: ro.productID, variationID: ro.variationID});
-        }
     });
 
-
-    /*let linkProductImages = new ts_execute_queue('#ePimResult', function () {
-        _o('<strong>All Finished</strong>');
-    },function (action,request,data ) {
-        _o('Action Completed: ' + action);
-        _o('Request: ' + request);
-        _o('<br>Data: ' + data);
-    });*/
-
-    /*let processProductImages = new ts_execute_queue('#ePimResult', function(){
-        _o('Checking and linking product image data - this may take a while.....');
-        linkProductImages.reset();
-        linkProductImages.queue(ajaxurl,{action: 'product_image_link'});
-        linkProductImages.process();
-    }, function (action, request, data) {
-        _o('Action Completed: ' + action);
-        _o('Request: ' + request);
-        _o('<br>Data: ' + data);
-        if(action==='get_product_images') {
-            if ($.trim(data)) {
-                $(data).each(function (index, productsImageID) {
-                    processProductImages.queue(ajaxurl,{action: 'get_picture_web_link', ID: productsImageID.id});
-                });
-            }
-        }
-        if (action === 'get_picture_web_link') {
-            if ($.trim(data)) {
-                let pictures = JSON.parse(data);
-                let obj = this;
-                $(pictures).each(function (index, picture) {
-                    obj.queue(ajaxurl,{action: 'import_picture', ID: picture.Id, weblink: picture.Path});
-                })
-            }
-        }
-    });*/
-
     let updateAllProducts = new ts_execute_queue('#ePimResult', function () {
-        /*processProductImages.reset();
-        processProductImages.queue(ajaxurl,{action: 'get_product_images'});
-        processProductImages.process();*/
         _o('<strong>All Finished</strong>');
         $('.modal.CreateAll').removeClass('active');
         $('.modal.CreateAllProducts').removeClass('active');
@@ -152,7 +109,6 @@ adminJQ(function ($) {
                     }
                 });
             }
-            //updateAllProducts.queue(ajaxurl,{action: 'get_all_products'});
         }
     });
 
@@ -289,32 +245,6 @@ adminJQ(function ($) {
                 }
             });
         }
-
-        /*if (action === 'create_category') {
-            let r = decodeURIComponent(request);
-            let ro = QueryStringToJSON('?' + r);
-            let id = ro.ID;
-            this.queue(ajaxurl,{action: 'get_category_images', ID: id});
-        }
-        if (action === 'get_category_images') {
-            if ($.trim(data)) {
-                let pictures = JSON.parse(data);
-                let obj = this;
-                $(pictures).each(function (index, picture) {
-                    obj.queue(ajaxurl,{action: 'get_picture_web_link', ID: picture});
-                })
-            }
-        }
-        if (action === 'get_picture_web_link') {
-            if ($.trim(data)) {
-                let pictures = JSON.parse(data);
-                let obj = this;
-                $(pictures).each(function (index, picture) {
-                    obj.queue(ajaxurl,{action: 'import_picture', ID: picture.Id, weblink: picture.WebPath});
-                })
-
-            }
-        }*/
     });
 
     let updateCatDetailsQueue = new ts_execute_queue('#ePimResult', function () {
@@ -324,10 +254,6 @@ adminJQ(function ($) {
         _o('Action Completed: ' + action);
         _o('Request: ' + request);
         _o('<br>Data: ' + data);
-        if(action==='sort_categories') {
-            //updateCatDetailsQueue.queue(ajaxurl,{action: 'cat_image_link'});
-        }
-
     });
 
     let updateCategoriesQueue = new ts_execute_queue('#ePimResult', function () {
@@ -415,20 +341,14 @@ adminJQ(function ($) {
     });
 
     $('#UpdateCode').on('click',function () {
+        _o('Getting Product Data from ePim...');
+        $('.modal.UpdateCode').addClass('active');
         oneProductQueue.reset();
         oneProductQueue.queue(ajaxurl, {action: 'product_ID_code', CODE: $('#pCode').val()});
         oneProductQueue.process();
     });
 
     $('#UpdateSince').on('click',function () {
-
-        /** Check Categories First
-         updateSinceQueue.reset();
-         updateSinceQueue.queue(ajaxurl,{action: 'get_all_categories'});
-         updateSinceQueue.process();
-         **/
-
-        /** Do not check categories **/
         updateSinceProducts.reset();
         let dpDate = $('.custom_date').datepicker('getDate');
         let dateUtc = localAsUtc(dpDate);

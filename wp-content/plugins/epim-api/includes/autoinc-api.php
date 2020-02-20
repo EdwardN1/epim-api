@@ -95,11 +95,30 @@ function get_api_all_attributes()
     return make_api_call('Attributes');
 }
 
+function get_api_product($id)
+{
+	return make_api_call('Products/' . $id);
+}
+
 /**
  *
  * *****************************Helpers*********************************************
  *
  */
+
+function getAPIIDFromCode($code)
+{
+	$res = false;
+
+	$productID = wc_get_product_id_by_sku($code);
+
+	if($productID) {
+		$APIID = get_post_meta($productID,'epim_API_ID',true);
+		if($APIID) return $APIID;
+	}
+
+	return $res;
+}
 
 function getCategoryImages($id)
 {
