@@ -113,18 +113,13 @@ adminJQ(function ($) {
     });
 
     let updateSinceProducts = new ts_execute_queue('#ePimResult', function () {
-        if(updateSinceProducts.processFinished) {
-            processProductImages.reset();
-            processProductImages.queue(ajaxurl, {action: 'get_product_images'});
-            processProductImages.process();
-        } else {
-            _o('All Finished');
-        }
+        _o('<strong>All Finished</strong>');
+        $('.modal.UpdateSince').removeClass('active');
     }, function (action, request, data) {
         _o('Action Completed: ' + action);
         _o('Request: ' + request);
         _o('<br>Data: ' + data);
-        if(action==='sort_categories') {
+        /*if(action==='sort_categories') {
             updateSinceProducts.queue(ajaxurl,{action: 'cat_image_link'});
         }
         if(action==='cat_image_link') {
@@ -132,7 +127,7 @@ adminJQ(function ($) {
             let dateUtc = localAsUtc(dpDate);
             let iso = dateUtc.toISOString();
             updateSinceProducts.queue(ajaxurl,{action: 'get_all_changed_products_since', timeCode: iso});
-        }
+        }*/
         if(action==='get_all_changed_products_since') {
             if( data!='[]' ) {
                 //window.console.log(data);
@@ -353,6 +348,7 @@ adminJQ(function ($) {
         let dpDate = $('.custom_date').datepicker('getDate');
         let dateUtc = localAsUtc(dpDate);
         let iso = dateUtc.toISOString();
+        $('.modal.UpdateSince').addClass('active');
         updateSinceProducts.queue(ajaxurl,{action: 'get_all_changed_products_since', timeCode: iso});
         updateSinceProducts.process();
 
