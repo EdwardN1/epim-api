@@ -23,7 +23,7 @@ adminJQ = jQuery.noConflict();
 
 adminJQ(function ($) {
 
-    let debug = true;
+    let debug = false;
     let cMax = 5;
 
     function _o(text) {

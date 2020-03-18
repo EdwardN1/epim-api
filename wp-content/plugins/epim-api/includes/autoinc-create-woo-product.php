@@ -183,15 +183,15 @@ function ep_wooCreateProduct_ex($pid, $productArray) {
         if (array_key_exists('categoryIDS', $productArray)) {
             $categoryIDS = $productArray['categoryIDS'];
             if (!is_array($categoryIDS)) {
-                error_log('ep_wooCreatProduct - No Category IDS supplied');
+                error_log('ep_wooCreatProduct - Category IDS in unexpected format for '.$pid);
                 return $product_id;
             }
             if (count($categoryIDS) == 0) {
-                error_log('ep_wooCreatProduct - No Category IDS supplied');
+                error_log('ep_wooCreatProduct - No Category IDS for '.$pid);
                 return $product_id;
             }
         } else {
-            error_log('ep_wooCreatProduct - No Category IDS supplied');
+            error_log('ep_wooCreatProduct - No Category IDS supplied for '.$pid);
             return $product_id;
         }
 
@@ -322,7 +322,7 @@ function ep_wooCreateProduct_ex($pid, $productArray) {
             }
         }
     } catch (Exception $e) {
-        error_log($e->getMessage());
+        error_log($e->getMessage().' for '.$pid);
     }
 
     return $product_id;

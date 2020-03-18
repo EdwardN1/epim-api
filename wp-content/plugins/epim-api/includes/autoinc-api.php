@@ -511,10 +511,10 @@ function create_product($productID, $variationID, $productBulletText, $productNa
                         );
 
                         if (is_wp_error($attribute_id)) {
-                            $error_string = $attribute_id->get_error_message();
+                            /*$error_string = $attribute_id->get_error_message();
                             error_log($error_string);
                             error_log('name = ' . $atName);
-                            error_log('slug = ' . substr($atName, 0, 27));
+                            error_log('slug = ' . substr($atName, 0, 27));*/
                         }
                     }
                 }
