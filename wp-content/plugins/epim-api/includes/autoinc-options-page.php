@@ -63,11 +63,20 @@ function epim_options_page()
         <?php if ($active_tab == 'epim_management'): ?>
         <style>
             .modal {
-                display:    none;
+                display: none;
             }
 
             .modal.active {
                 display: inline-block;
+            }
+
+            .modal img {
+                max-height: 25px;
+                width: auto;
+            }
+
+            input[type=text] {
+                vertical-align: bottom;
             }
 
         </style>
