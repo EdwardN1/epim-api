@@ -533,21 +533,47 @@ function create_product($productID, $variationID, $productBulletText, $productNa
     $productArray['categoryIDS'] = $catIds;
 
     /*
-     * Set the product Meta Data
-     */
-    $epim_API_ID = array("meta_key" => "epim_API_ID", "meta_data" => $productID);
-    $epim_product_group_name = array("meta_key" => "epim_product_group_name", "meta_data" => $productName);
-    $epim_variation_ID = array("meta_key" => "epim_variation_ID", "meta_data" => $variationID);
-    $productArray['metaData'] = array($epim_API_ID, $epim_product_group_name, $epim_variation_ID);
-
-    /*
      * Other product Fields
      */
     $productArray['productTitle'] = $variation->Name;
     $productArray['productSKU'] = $variation->SKU;
-    $productArray['price'] = $variation->Qty_Price_1;
+    $productArray['price'] = $variation->Price;
+	$Qty_Price_1 = $variation->Qty_Price_1;
+	$Qty_Price_2 = $variation->Qty_Price_2;
+	$Qty_Price_3 = $variation->Qty_Price_3;
+	$Qty_Break_1 = $variation->Qty_Break_1;
+	$Qty_Break_2 = $variation->Qty_Break_2;
+	$Qty_Break_3 = $variation->Qty_Break_3;
     $productArray['productDescription'] = $variation->Table_Heading;
     $productArray['productShortDescription'] = $productBulletText;
+
+    if(($productArray['price'] == '')||($productArray['price']==0)) {
+	    $productArray['price'] = $Qty_Price_1;
+    }
+
+	if(($productArray['price'] == '')||($productArray['price']==0)) {
+		$productArray['price'] = $Qty_Price_2;
+	}
+
+	if(($productArray['price'] == '')||($productArray['price']==0)) {
+		$productArray['price'] = $Qty_Price_3;
+	}
+
+	/*
+	* Set the product Meta Data
+	*/
+	$epim_API_ID = array("meta_key" => "epim_API_ID", "meta_data" => $productID);
+	$epim_product_group_name = array("meta_key" => "epim_product_group_name", "meta_data" => $productName);
+	$epim_variation_ID = array("meta_key" => "epim_variation_ID", "meta_data" => $variationID);
+	$epim_Qty_Break_1 = array("meta_key" => "epim_Qty_Break_1", "meta_data" => $Qty_Break_1);
+	$epim_Qty_Break_2 = array("meta_key" => "epim_Qty_Break_2", "meta_data" => $Qty_Break_2);
+	$epim_Qty_Break_3 = array("meta_key" => "epim_Qty_Break_3", "meta_data" => $Qty_Break_3);
+	$epim_Qty_Price_1 = array("meta_key" => "epim_Qty_Price_1", "meta_data" => $Qty_Price_1);
+	$epim_Qty_Price_2 = array("meta_key" => "epim_Qty_Price_2", "meta_data" => $Qty_Price_2);
+	$epim_Qty_Price_3 = array("meta_key" => "epim_Qty_Price_3", "meta_data" => $Qty_Price_3);
+
+	$productArray['metaData'] = array($epim_API_ID, $epim_product_group_name, $epim_variation_ID, $epim_Qty_Break_1, $epim_Qty_Break_2, $epim_Qty_Break_3, $epim_Qty_Price_1, $epim_Qty_Price_2, $epim_Qty_Price_3);
+
 
     /*
      * Attributes

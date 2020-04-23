@@ -21,6 +21,31 @@ function epim_taxonomy_add_new_meta_field() {
         <label for="epim_api_picture_link"><?php _e('API PICTURE LINK', 'epim'); ?></label>
         <input type="text" name="epim_api_picture_link" id="epim_api_picture_link">
         <p class="description"><?php _e('Enter API PICTURE LINK', 'epim'); ?></p>
+
+        <!--<label for="epim_api_Qty_Break_1"><?php /*_e('Qty_Break_1', 'epim'); */?></label>
+        <input type="text" name="epim_api_Qty_Break_1" id="epim_api_Qty_Break_1">
+        <p class="description"><?php /*_e('Enter API Qty_Break_1', 'epim'); */?></p>
+
+        <label for="epim_api_Qty_Break_2"><?php /*_e('Qty_Break_2', 'epim'); */?></label>
+        <input type="text" name="epim_api_Qty_Break_2" id="epim_api_Qty_Break_2">
+        <p class="description"><?php /*_e('Enter API Qty_Break_2', 'epim'); */?></p>
+
+        <label for="epim_api_Qty_Break_3"><?php /*_e('Qty_Break_3', 'epim'); */?></label>
+        <input type="text" name="epim_api_Qty_Break_3" id="epim_api_Qty_Break_3">
+        <p class="description"><?php /*_e('Enter API Qty_Break_3', 'epim'); */?></p>
+
+        <label for="epim_api_Qty_Price_1"><?php /*_e('Qty_Price_1', 'epim'); */?></label>
+        <input type="text" name="epim_api_Qty_Price_1" id="epim_api_Qty_Price_1">
+        <p class="description"><?php /*_e('Enter API Qty_Price_1', 'epim'); */?></p>
+
+        <label for="epim_api_Qty_Price_2"><?php /*_e('Qty_Price_2', 'epim'); */?></label>
+        <input type="text" name="epim_api_Qty_Price_2" id="epim_api_Qty_Price_2">
+        <p class="description"><?php /*_e('Enter API Qty_Price_2', 'epim'); */?></p>
+
+        <label for="epim_api_Qty_Price_3"><?php /*_e('Qty_Price_3', 'epim'); */?></label>
+        <input type="text" name="epim_api_Qty_Price_3" id="epim_api_Qty_Price_3">
+        <p class="description"><?php /*_e('Enter API Qty_Price_3', 'epim'); */?></p>-->
+
     </div>
     <?php
 }
@@ -160,6 +185,54 @@ function add_epim_product_data_fields() {
 			'default'       => '',
 			'desc_tip'      => false,
 		) );
+		woocommerce_wp_text_input( array(
+			'id'            => 'epim_Qty_Break_1',
+			'wrapper_class' => 'show_if_simple',
+			'label'         => __( 'Qty_Break_1', 'my_text_domain' ),
+			'description'   => __( 'ePim Qty_Break_1', 'my_text_domain' ),
+			'default'       => '',
+			'desc_tip'      => false,
+		) );
+		woocommerce_wp_text_input( array(
+			'id'            => 'epim_Qty_Price_1',
+			'wrapper_class' => 'show_if_simple',
+			'label'         => __( 'Qty_Price_1', 'my_text_domain' ),
+			'description'   => __( 'ePim Qty_Price_1', 'my_text_domain' ),
+			'default'       => '',
+			'desc_tip'      => false,
+		) );
+		woocommerce_wp_text_input( array(
+			'id'            => 'epim_Qty_Break_2',
+			'wrapper_class' => 'show_if_simple',
+			'label'         => __( 'Qty_Break_2', 'my_text_domain' ),
+			'description'   => __( 'ePim Qty_Break_2', 'my_text_domain' ),
+			'default'       => '',
+			'desc_tip'      => false,
+		) );
+		woocommerce_wp_text_input( array(
+			'id'            => 'epim_Qty_Price_2',
+			'wrapper_class' => 'show_if_simple',
+			'label'         => __( 'Qty_Price_2', 'my_text_domain' ),
+			'description'   => __( 'ePim Qty_Price_2', 'my_text_domain' ),
+			'default'       => '',
+			'desc_tip'      => false,
+		) );
+		woocommerce_wp_text_input( array(
+			'id'            => 'epim_Qty_Break_3',
+			'wrapper_class' => 'show_if_simple',
+			'label'         => __( 'Qty_Break_3', 'my_text_domain' ),
+			'description'   => __( 'ePim Qty_Break_3', 'my_text_domain' ),
+			'default'       => '',
+			'desc_tip'      => false,
+		) );
+		woocommerce_wp_text_input( array(
+			'id'            => 'epim_Qty_Price_3',
+			'wrapper_class' => 'show_if_simple',
+			'label'         => __( 'Qty_Price_3', 'my_text_domain' ),
+			'description'   => __( 'ePim Qty_Price_3', 'my_text_domain' ),
+			'default'       => '',
+			'desc_tip'      => false,
+		) );
 		?>
     </div>
 	<?php
@@ -174,4 +247,16 @@ function woocommerce_process_product_meta_fields_save( $post_id ){
 	update_post_meta( $post_id, 'epim_product_group_name', $epim_product_group_name );
 	$epim_variation_ID =  $_POST['epim_variation_ID'];
 	update_post_meta( $post_id, 'epim_variation_ID', $epim_variation_ID );
+	$epim_Qty_Break_1 =  $_POST['epim_Qty_Break_1'];
+	update_post_meta( $post_id, 'epim_Qty_Break_1', $epim_Qty_Break_1 );
+	$epim_Qty_Price_1 =  $_POST['epim_Qty_Price_1'];
+	update_post_meta( $post_id, 'epim_Qty_Price_1', $epim_Qty_Price_1 );
+	$epim_Qty_Break_2 =  $_POST['epim_Qty_Break_2'];
+	update_post_meta( $post_id, 'epim_Qty_Break_2', $epim_Qty_Break_2 );
+	$epim_Qty_Price_2 =  $_POST['epim_Qty_Price_2'];
+	update_post_meta( $post_id, 'epim_Qty_Price_2', $epim_Qty_Price_2 );
+	$epim_Qty_Break_3 =  $_POST['epim_Qty_Break_3'];
+	update_post_meta( $post_id, 'epim_Qty_Break_3', $epim_Qty_Break_3 );
+	$epim_Qty_Price_3 =  $_POST['epim_Qty_Price_3'];
+	update_post_meta( $post_id, 'epim_Qty_Price_3', $epim_Qty_Price_3 );
 }
