@@ -14,6 +14,9 @@ function epim_quantity_based_pricing( $cart ) {
     $discount2 = 0.1; // Reduce unit price by 10%
 
     foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
+        $id = $cart_item['data']->get_id();
+        $threshold1 = get_post_meta($id,'epim_Qty_Break_1',true);
+
         if ( $cart_item['quantity'] >= $threshold1 && $cart_item['quantity'] < $threshold2 ) {
             $price = round( $cart_item['data']->get_price() * ( 1 - $discount1 ), 2 );
             $cart_item['data']->set_price( $price );
