@@ -462,6 +462,10 @@ function delete_attributes()
     }
 }
 
+function delete_variation($variationID) {
+
+}
+
 function create_product($productID, $variationID, $productBulletText, $productName, $categoryIds, $pictureIds)
 {
     $res = '';
@@ -473,6 +477,14 @@ function create_product($productID, $variationID, $productBulletText, $productNa
     $variation = json_decode($jsonVariation);
     $jsonAttributes = get_api_all_attributes();
     $attributes = json_decode($jsonAttributes);
+
+    $IsArchived = $variation->IsArchived;
+
+    if($IsArchived) {
+        $res = $variationID.' '.$productName.' is achived removing product from WooCommerce';
+        delete_variation($variationID);
+        return $res;
+    }
 
     /*
      *
