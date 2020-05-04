@@ -91,7 +91,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
                  * This function is used to calculate the shipping cost. Within this function we can check for weights, dimensions and other parameters.
                  *
                  * @access public
-                 * @param mixed $package
+                 * @param mixed $package, $woocommerce
                  * @return void
                  */
                 public function calculate_shipping($package = array())
@@ -99,7 +99,17 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 
                     // We will add the cost, rate and logics in here
 
+                    global $woocommerce;
+
                     $cost = $this->settings['collectcharge'];
+                    $cartValue = $woocommerce->cart->cart_contents_total;
+                    $mincartTotal = $this->settings['mincarttotal'];
+
+                    error_log('$cartTotal = '.$cartValue);
+
+                    if($cartValue >= $mincartTotal) {
+                        $cost = 0;
+                    }
 
                     foreach ($package['contents'] as $item_id => $values) {
                         $_product = $values['data'];
@@ -175,34 +185,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
         }
     }
 
-    add_action('woocommerce_after_shipping_calculator', 'cac_store_row_layout');
-    add_action('woocommerce_review_order_after_shipping', 'cac_store_row_layout');
 
-    /**
-     ** Add selected store to billing details, admin page
-     **/
-    function cac_show_store_in_admin($order) {
-        $order_id = $order->get_id();
-        $store = (!empty(get_post_meta($order_id, 'cac_branchID', true))) ? get_post_meta($order_id, 'cac_branchID', true) : '';
-
-        if(!empty($store)) :
-            ?>
-            <p>
-                <strong class="title"><?php echo __('Pickup Store', WPS_TEXTDOMAIN) . ':' ?></strong>
-                <span class="data"><?= $store ?></span>
-            </p>
-        <?php
-        endif;
-    }
-    add_action('woocommerce_admin_order_data_after_billing_address', 'cac_show_store_in_admin');
-
-    add_action( 'woocommerce_checkout_create_order_line_item', 'cac_checkout_create_order_line_item', 20, 4 );
-    function cac_checkout_create_order_line_item( $item, $cart_item_key, $values, $order ) {
-        if( ! isset( $values['cac_branchID'] ) ) return;
-
-        if( ! empty( $values['cac_branchID'] ) )
-            $item->update_meta_data( 'Collect From', $values['cac_branchID'] );
-
-    }
 }
 
