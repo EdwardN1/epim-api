@@ -147,6 +147,7 @@ add_action( 'rest_api_init', function () {
 
 add_filter( 'woocommerce_product_data_tabs', 'add_epim_product_data_tab' , 99 , 1 );
 function add_epim_product_data_tab( $product_data_tabs ) {
+
 	$product_data_tabs['epim-tab'] = array(
 		'label' => __( 'ePim', 'my_text_domain' ),
 		'target' => 'epim_product_data',

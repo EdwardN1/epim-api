@@ -105,7 +105,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
                     $cartValue = $woocommerce->cart->cart_contents_total;
                     $mincartTotal = $this->settings['mincarttotal'];
 
-                    error_log('$cartTotal = '.$cartValue);
+                    //error_log('$cartTotal = '.$cartValue);
 
                     if($cartValue >= $mincartTotal) {
                         $cost = 0;
