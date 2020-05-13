@@ -20,7 +20,7 @@ function jeroensormani_add_checkout_fields( $fields ) {
     while ($branches->have_posts()) : $branches->the_post();
         $id = get_the_ID();
         $branchName = get_the_title();
-        $fieldOptions[$branchName] = $branchName;
+        $fieldOptions[$id] = $branchName;
     endwhile;
 
     wp_reset_postdata();
@@ -29,7 +29,7 @@ function jeroensormani_add_checkout_fields( $fields ) {
         'label'        => __( 'Collection Branch' ),
         'type'        => 'select',
         'options' => $fieldOptions,
-        'class'        => array( 'form-row-wide' ),
+        'class'        => array( 'form-row-wide', 'update_totals_on_change' ),
         'priority'     => 155,
         'required'     => true,
     );
@@ -43,24 +43,28 @@ function js_woocommerce_admin_shipping_fields( $fields ) {
 
     $fields['COLLECTION_BRANCH'] = array(
         'label' => __( 'Collection Branch' ),
-        'show' => true,
+        'show' => false,
     );
 
     return $fields;
 }
 add_filter( 'woocommerce_admin_shipping_fields', 'js_woocommerce_admin_shipping_fields' );
 
-/* To use:
-1. Add this snippet to your theme's functions.php file
-2. Change the meta key names in the snippet
-3. Create a custom field in the order post - e.g. key = "Tracking Code" value = abcdefg
-4. When next updating the status, or during any other event which emails the user, they will see this field in their email
-*/
-add_filter('woocommerce_email_order_meta_keys', 'my_custom_order_meta_keys');
+function js_save_custom_field_order_meta( $order, $data ) {
+    if ( isset($_POST['shipping_COLLECTION_BRANCH']) ) {
+        $branch = get_the_title($_POST['shipping_COLLECTION_BRANCH']);
+        $order->update_meta_data( '_COLLECTION_BRANCH_NAME', $branch ); // Save
+    }
+}
+add_action('woocommerce_checkout_create_order', 'js_save_custom_field_order_meta', 22, 2 );
 
-function my_custom_order_meta_keys( $keys ) {
-    $keys[] = 'shipping_COLLECTION_BRANCH'; // This will look for a custom field called 'Tracking Code' and add it to emails
-    return $keys;
+add_action( 'woocommerce_admin_order_data_after_shipping_address', 'display_custom_meta_data_in_backend_orders', 10, 1 );
+function display_custom_meta_data_in_backend_orders( $order ){
+    $domain = 'clickcollect';
+
+    $collection_branch = $order->get_meta('_COLLECTION_BRANCH_NAME');
+    if( ! empty( $collection_branch ) )
+        echo '<p><strong>'.__('Collection Branch', $domain).': </strong> ' . $collection_branch . '</p>';
 }
 
 

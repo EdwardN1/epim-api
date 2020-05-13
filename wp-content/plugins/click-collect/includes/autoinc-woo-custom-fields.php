@@ -22,7 +22,7 @@ function add_cac_product_data_fields()
             'wrapper_class' => 'show_if_simple',
             'label' => __('Enable Branch Stock', 'clickandcollect'),
             'description' => __('Use branch stock levels for click and collect purchase of this product', 'clickandcollect'),
-            'cbvalue' => 'no',
+            'cbvalue' => 'yes',
             'desc_tip' => false,
         ));
 

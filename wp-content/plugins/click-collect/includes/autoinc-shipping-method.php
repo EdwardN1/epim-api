@@ -91,7 +91,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
                  * This function is used to calculate the shipping cost. Within this function we can check for weights, dimensions and other parameters.
                  *
                  * @access public
-                 * @param mixed $package, $woocommerce
+                 * @param mixed $package , $woocommerce
                  * @return void
                  */
                 public function calculate_shipping($package = array())
@@ -107,7 +107,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 
                     //error_log('$cartTotal = '.$cartValue);
 
-                    if($cartValue >= $mincartTotal) {
+                    if ($cartValue >= $mincartTotal) {
                         $cost = 0;
                     }
 
@@ -138,6 +138,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 
     add_filter('woocommerce_shipping_methods', 'add_click_collect_method');
 
+    //This function is unused: cac_store_row_layout()
     function cac_store_row_layout()
     {
         $packages = WC()->shipping->get_packages();
@@ -185,6 +186,62 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
         }
     }
 
+    function cac_validate_order($posted)
+    {
+        $packages = WC()->shipping()->get_packages();
+
+        $chosen_methods = WC()->session->get('chosen_shipping_methods');
+
+        if (is_array($chosen_methods) && in_array('clickcollect', $chosen_methods)) {
+            foreach ($packages as $i => $package) {
+                if ($chosen_methods[$i] != 'clickcollect') {
+                    continue;
+                }
+
+
+                $frmData = array();
+                parse_str(urldecode($_POST['post_data']), $frmData);
+                $shipping_COLLECTION_BRANCH = $frmData['shipping_COLLECTION_BRANCH'];
+
+                if($shipping_COLLECTION_BRANCH) {
+
+                    foreach ($package['contents'] as $item_id => $values) {
+                        $_product = $values['data'];
+                        $cac_USE_BRANCH_STOCK = get_post_meta($_product->get_id(), 'cac_USE_BRANCH_STOCK');
+                        if ($cac_USE_BRANCH_STOCK && ($cac_USE_BRANCH_STOCK[0] === 'yes')) {
+
+                            $branchStockLevelMETA = get_post_meta($_product->get_id(), 'cac_BRANCH_STOCK_' . $shipping_COLLECTION_BRANCH);
+                            $branchStockLevel = $branchStockLevelMETA[0];
+
+                            //error_log('$branchStockLevel = ' . print_r($branchStockLevel, true) . ' For BranchID = ' . $shipping_COLLECTION_BRANCH);
+
+                            if (!($branchStockLevel) || ($branchStockLevel < 1)) {
+
+                                $message = sprintf(__('Sorry,  %s has no stock in your selected collection branch. Please choose a different branch or update your basket', 'clickcollect'), $_product->get_title());
+
+                                $messageType = "error";
+
+                                if (!wc_has_notice($message, $messageType)) {
+
+                                    wc_add_notice($message, $messageType);
+
+                                }
+                            }
+                        } else {
+                            //error_log('not branch stock selected');
+                        }
+                    }
+                } else {
+                    //error_log('no branch found');
+                }
+
+            }
+        }
+    }
+
+    add_action('woocommerce_review_order_before_cart_contents', 'cac_validate_order', 10);
+    add_action('woocommerce_after_checkout_validation', 'cac_validate_order', 10);
 
 }
+
 
