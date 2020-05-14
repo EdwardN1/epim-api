@@ -314,16 +314,21 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
     }
     add_filter('woocommerce_order_button_html', 'inactive_order_button_html' );
 
-    //Adjusts Branch Stock
-    add_action( 'woocommerce_thankyou', 'cac_update_frm_entry_after_wc_order_completed' );
+	/**
+	 * @param $order_id
+     *
+     * Update Stock Levels
+     * Action: cac_update_stock_level
+	 */
     function cac_update_frm_entry_after_wc_order_completed( $order_id ) {
         if ( ! $order_id ) return;
         $order = new WC_Order( $order_id );
+
         $ship_array =$order->get_items( 'shipping' );
         $shipping = reset( $ship_array )->get_method_id();
         if($shipping==='clickcollect') {
-            $collectionBranch = get_post_meta($order_id,'_COLLECTION_BRANCH_NAME',true);
-            error_log('_COLLECTION_BRANCH = '.print_r($collectionBranch,true));
+            $collectionBranch = get_post_meta($order_id,'_shipping_COLLECTION_BRANCH',true);
+            //error_log(print_r($collectionBranch,true));
             foreach ( $order->get_items() as $item_id => $item ) {
 
                 if( $item['variation_id'] > 0 ){
@@ -332,34 +337,36 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
                     $product_id = $item['product_id']; // simple product
                 }
 
-                // Get the product object
-                $product = wc_get_product( $product_id );
+                $currentStock = (int)get_post_meta($product_id,'cac_BRANCH_STOCK_'.$collectionBranch, true);
+                $numberOrdered = (int)$item['quantity'];
+                $newStock = $currentStock-$numberOrdered;
 
-                $args = array(
-                    'post_type' => 'branches',
-                    'post_status' => 'publish',
-                    'posts_per_page' => -1,
-                    'orderby' => 'title',
-                    'order' => 'ASC',
-                );
+                update_post_meta($product_id,'cac_BRANCH_STOCK_'.$collectionBranch,$newStock);
 
-                $branches = new WP_Query($args);
-                while ($branches->have_posts()) : $branches->the_post();
-                    $id = get_the_ID();
-                    $branchName = get_the_title();
+                do_action('cac_update_stock_level',$product_id,$currentStock,$numberOrdered,$newStock);
 
-
-                endwhile;
-
-                wp_reset_postdata();
 
             }
         }
-
-
     }
+	add_action( 'woocommerce_thankyou', 'cac_update_frm_entry_after_wc_order_completed' );
 
+    /**
+     * Add a custom field (in an order) to the emails
+     */
+    add_filter( 'woocommerce_email_order_meta_fields', 'cac_woocommerce_email_order_meta_fields', 10, 3 );
 
+    function cac_woocommerce_email_order_meta_fields( $fields, $sent_to_admin, $order ) {
+        $ship_array =$order->get_items( 'shipping' );
+        $shipping = reset( $ship_array )->get_method_id();
+        if($shipping==='clickcollect') {
+            $fields['meta_key'] = array(
+                'label' => __('Collection Branch'),
+                'value' => get_post_meta($order->id, '_COLLECTION_BRANCH_NAME', true),
+            );
+        }
+        return $fields;
+    }
 
 }
 
