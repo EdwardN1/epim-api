@@ -337,13 +337,18 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
                     $product_id = $item['product_id']; // simple product
                 }
 
-                $currentStock = (int)get_post_meta($product_id,'cac_BRANCH_STOCK_'.$collectionBranch, true);
-                $numberOrdered = (int)$item['quantity'];
-                $newStock = $currentStock-$numberOrdered;
+                $useBranchStock = get_post_meta($product_id,'cac_USE_BRANCH_STOCK',true);
 
-                update_post_meta($product_id,'cac_BRANCH_STOCK_'.$collectionBranch,$newStock);
+                if($useBranchStock==='yes') {
 
-                do_action('cac_update_stock_level',$product_id,$currentStock,$numberOrdered,$newStock);
+                    $currentStock = (int)get_post_meta($product_id, 'cac_BRANCH_STOCK_' . $collectionBranch, true);
+                    $numberOrdered = (int)$item['quantity'];
+                    $newStock = $currentStock - $numberOrdered;
+
+                    update_post_meta($product_id, 'cac_BRANCH_STOCK_' . $collectionBranch, $newStock);
+
+                    do_action('cac_update_stock_level', $product_id, $currentStock, $numberOrdered, $newStock);
+                }
 
 
             }
