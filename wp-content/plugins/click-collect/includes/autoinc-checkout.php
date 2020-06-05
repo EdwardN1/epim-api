@@ -30,7 +30,7 @@ function jeroensormani_add_checkout_fields( $fields ) {
         'type'        => 'select',
         'options' => $fieldOptions,
         'class'        => array( 'form-row-wide', 'update_totals_on_change' ),
-        'priority'     => 155,
+        'priority'     => 1,
         'required'     => true,
     );
 
