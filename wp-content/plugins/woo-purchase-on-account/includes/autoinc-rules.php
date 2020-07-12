@@ -19,6 +19,10 @@ add_filter( 'woocommerce_available_payment_gateways', 'payment_gateway_disable_o
 function payment_gateway_validate_account( $available_gateways ) {
     global $woocommerce;
 
+    if(is_null($woocommerce->cart)) {
+        return $available_gateways;
+    }
+
     // Get current user & details
     $user = wp_get_current_user();
     $user_id = $user->ID;
