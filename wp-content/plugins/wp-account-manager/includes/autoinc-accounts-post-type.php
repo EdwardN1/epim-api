@@ -302,7 +302,7 @@ function wpam_unique_username($username) {
 
 function wpam_unique_email($email) {
 	$args = array(
-		'meta_key' => 'wpam_accounts_email',
+		'meta_key' => '_wpam_accounts_email',
 		'meta_value' => $email,
 		'post_type' => 'wpam_accounts',
 		'post_status' => 'any',
