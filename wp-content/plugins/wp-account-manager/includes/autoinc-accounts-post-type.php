@@ -350,3 +350,4 @@ function wpam_error($slug,$err){
 	);
 	set_transient('settings_errors', get_settings_errors(), 30);
 }
+

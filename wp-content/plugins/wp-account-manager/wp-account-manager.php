@@ -14,6 +14,7 @@ Author URI: https://www.technicks.com
 
 define('wpam_FUNCTIONSPATH', plugin_dir_path( __FILE__ ) . '/includes/');
 define('wpam_PLUGINPATH', plugin_dir_path( __FILE__ ) );
+define('wpam_PLUGINURI',plugin_dir_url(__FILE__));
 foreach (glob(wpam_FUNCTIONSPATH.'autoinc-*.php') as $filename)
 {
 	require_once ($filename);
