@@ -20,8 +20,14 @@ function create_wpam_posttype() {
                 'not_found_in_trash' => __('Nothing found in Trash', 'wpamaccounts'), /* This displays if there is nothing in the trash */
             ),
             'menu_icon' => 'dashicons-groups',
-            'public' => true,
-            'has_archive' => true,
+            'public' => false,
+            'has_archive' => false,
+            'publicly_queryable' => false,
+            'exclude_from_search' => true,
+            'show_in_nav_menus'   => false,
+            'show_ui'             => true,
+            'show_in_menu'        => true,
+            'show_in_admin_bar'   => true,
             'rewrite' => array('slug' => 'wpam_accounts'),
             'show_in_rest' => true,
 
@@ -134,7 +140,7 @@ add_action( 'save_post', 'save_wpam_accounts_username_meta_box_data' );
 
 function wpam_accounts_password_meta_box() {
 	add_meta_box(
-		'wpam_accounts_password',
+		'wpam_accounts_password_container',
 		__( 'Password', 'wpamaccounts' ),
 		'wpam_accounts_password_meta_box_callback',
 		'wpam_accounts'
@@ -212,7 +218,7 @@ add_action( 'save_post', 'save_wpam_accounts_password_meta_box_data' );
 
 function wpam_accounts_email_meta_box() {
     add_meta_box(
-        'wpam_accounts_email',
+        'wpam_accounts_email_container',
         __( 'Account Email Address', 'wpamaccounts' ),
         'wpam_accounts_email_meta_box_callback',
         'wpam_accounts'
@@ -274,33 +280,47 @@ function save_wpam_accounts_email_meta_box_data( $post_id ) {
     $my_data = sanitize_text_field( $_POST['wpam_accounts_email'] );
 
     // Update the meta field in the database.
-	if(wpam_unique_email($my_data)) {
+    update_post_meta( $post_id, '_wpam_accounts_email', $my_data );
+	/*if(wpam_unique_email($my_data)) {
 		update_post_meta( $post_id, '_wpam_accounts_email', $my_data );
 	} else {
 		wpam_error('duplicate_email',$my_data.' email address already in use.');
-	}
+	}*/
 
 }
 
 add_action( 'save_post', 'save_wpam_accounts_email_meta_box_data' );
 
-function wpam_unique_username($username) {
+function wpam_unique_username($username,$exclude) {
 	$args = array(
-		'meta_key' => 'wpam_accounts_username',
-		'meta_value' => $username,
+		'title' => $username,
 		'post_type' => 'wpam_accounts',
 		'post_status' => 'any',
 		'posts_per_page' => -1
 	);
 	$this_query = new WP_Query($args);
 	if($this_query->have_posts()) {
-		return false;
+	    if($exclude != '') {
+	        $count = $this_query->found_posts;
+	        if($count==1) {
+	            $post_title = $this_query->posts[0]->post_title;
+	            if($post_title==$exclude) {
+                    return true;
+                } else {
+	                return false;
+                }
+            } else {
+	            return false;
+            }
+        } else {
+            return false;
+        }
 	} else {
 		return true;
 	}
 }
 
-function wpam_unique_email($email) {
+function wpam_unique_email($email,$exclude) {
 	$args = array(
 		'meta_key' => '_wpam_accounts_email',
 		'meta_value' => $email,
@@ -308,22 +328,40 @@ function wpam_unique_email($email) {
 		'post_status' => 'any',
 		'posts_per_page' => -1
 	);
-	$this_query = new WP_Query($args);
-	if($this_query->have_posts()) {
-		return false;
-	} else {
-		return true;
-	}
+    $this_query = new WP_Query($args);
+    if($this_query->have_posts()) {
+        if($exclude != '') {
+            $count = $this_query->found_posts;
+
+            if($count==1) {
+                $post_ID = $this_query->posts[0]->ID;
+                $post_email = get_post_meta($post_ID,'_wpam_accounts_email',true);
+                if($post_email==$exclude) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    } else {
+        return true;
+    }
 }
 
-//Next we need two simple error handling functions:
-//Error handling function for use with save_car_data function below it:
-add_action('admin_notices', 'handle_wpam_errors');
+/**
+ * Next we need two simple error handling functions:
+ * Error handling function for use with save_car_data function below it:
+ * /
+
 /**
  * Writes an error message to the screen if error is thrown in save_car_data function
  *
  */
-function handle_wpam_errors() {
+/*function handle_wpam_errors() {
 	//If there are no errors, then exit the function
 	if(!( $errors = get_transient('settings_errors'))) {
 		return;
@@ -350,4 +388,15 @@ function wpam_error($slug,$err){
 	);
 	set_transient('settings_errors', get_settings_errors(), 30);
 }
+add_action('admin_notices', 'handle_wpam_errors');
+*/
 
+/**
+ * Stop this post type autosaving:
+ */
+
+add_action( 'admin_enqueue_scripts', 'wpam_admin_enqueue_scripts' );
+function wpam_admin_enqueue_scripts() {
+    if ( 'wpam_accounts' == get_post_type() )
+        wp_dequeue_script( 'autosave' );
+}
