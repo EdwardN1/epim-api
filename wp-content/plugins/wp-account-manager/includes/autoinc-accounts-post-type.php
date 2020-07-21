@@ -62,6 +62,16 @@ function wpam_change_title_text( $title ){
 add_filter( 'enter_title_here', 'wpam_change_title_text' );
 
 /**
+ * Stop this post type autosaving:
+ */
+
+add_action( 'admin_enqueue_scripts', 'wpam_admin_enqueue_scripts' );
+function wpam_admin_enqueue_scripts() {
+    if ( 'wpam_accounts' == get_post_type() )
+        wp_dequeue_script( 'autosave' );
+}
+
+/**
  *======================================= Account Username =====================================
  */
 
@@ -558,12 +568,3 @@ function wpam_error($slug,$err){
 add_action('admin_notices', 'handle_wpam_errors');
 */
 
-/**
- * Stop this post type autosaving:
- */
-
-add_action( 'admin_enqueue_scripts', 'wpam_admin_enqueue_scripts' );
-function wpam_admin_enqueue_scripts() {
-    if ( 'wpam_accounts' == get_post_type() )
-        wp_dequeue_script( 'autosave' );
-}
