@@ -311,11 +311,13 @@ class Account
 
         /* Check if the user name is valid. If not, return FALSE meaning the authentication failed */
         if (!$this->isNameValid($name)) {
+            error_log('Login: Invalid username: '.$name);
             return FALSE;
         }
 
         /* Check if the password is valid. If not, return FALSE meaning the authentication failed */
         if (!$this->isPasswdValid($passwd)) {
+            error_log('Login: Invalid Password: '.$passwd);
             return FALSE;
         }
 
@@ -324,12 +326,14 @@ class Account
         $postID = $this->getIdFromName($name);
 
         if (!$postID) {
+            error_log('Login: Cannot find record for: '.$name);
             return FALSE;
         }
 
         $isEnabled = (get_post_meta($postID, '_wpam_accounts_account_enabled', true) == 'yes');
 
         if (!$isEnabled) {
+            error_log('Login: Account not enabled for: '.$name);
             return FALSE;
         }
 
@@ -348,39 +352,8 @@ class Account
             return TRUE;
         }
 
-        //$query = 'SELECT * FROM myschema.accounts WHERE (account_name = :name) AND (account_enabled = 1)';
-
-        /* Values array for PDO */
-        //$values = array(':name' => $name);
-
-        /* Execute the query */
-        /*try {
-            $res = $pdo->prepare($query);
-            $res->execute($values);
-        } catch (PDOException $e) {*/
-        /* If there is a PDO exception, throw a standard exception */
-        /*throw new Exception('Database query error');
-    }*/
-
-        //$row = $res->fetch(PDO::FETCH_ASSOC);
-
-        /* If there is a result, we must check if the password matches using password_verify() */
-        /*if (is_array($row)) {
-            if (password_verify($passwd, $row['account_passwd'])) {*/
-        /* Authentication succeeded. Set the class properties (id and name) */
-        /*$this->id = intval($row['account_id'], 10);
-        $this->name = $name;
-        $this->authenticated = TRUE;*/
-
-        /* Register the current Sessions on the database */
-        //$this->registerLoginSession();
-
-        /* Finally, Return TRUE */
-        //return TRUE;
-        /*}
-    }*/
-
         /* If we are here, it means the authentication failed: return FALSE */
+        error_log('Login: Password not verified: '.$passwd.' for User: '.$name);
         return FALSE;
     }
 
@@ -646,7 +619,7 @@ class Account
                     'post_status' => 'publish'
                 );
                 $newSessionID = wp_insert_post($newSession);
-                update_post_meta($newSessionID, '_wpam_sessions_account_id');
+                update_post_meta($newSessionID, '_wpam_sessions_account_id',$this->id);
                 update_post_meta($newSessionID,'_wpam_sessions_login_time',date(DATE_RFC2822));
             } else {
                 update_post_meta($postID,'_wpam_sessions_account_id',$this->id);
