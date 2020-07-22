@@ -322,7 +322,7 @@ function wpam_accounts_account_enabled_meta_box_callback( $post ) {
 	$value = get_post_meta( $post->ID, '_wpam_accounts_account_enabled', true );
 
 	echo '<label for="wpam_accounts_account_enabled"><input type="checkbox" id="wpam_accounts_account_enabled" name="wpam_accounts_account_enabled" value="yes" ';
-	if(isset($value)) checked($value.'yes');
+	if($value=='yes') echo ' checked';
 	echo ' /> Account Enabled</label>';
 }
 
@@ -363,11 +363,12 @@ function save_wpam_accounts_account_enabled_meta_box_data( $post_id ) {
 	/* OK, it's safe for us to save the data now. */
 
 	// Make sure that it is set.
-	if ( ! isset( $_POST['wpam_accounts_account_enabled'] ) ) {
+	/*if ( ! isset( $_POST['wpam_accounts_account_enabled'] ) ) {
 		return;
-	}
+	}*/
 
 	// Sanitize user input.
+	//error_log('wpam_accounts_account_enabled = '.$_POST['wpam_accounts_account_enabled']);
 	if(isset($_POST['wpam_accounts_account_enabled'])) {
 		update_post_meta( $post_id, '_wpam_accounts_account_enabled', 'yes' );
 	} else {
