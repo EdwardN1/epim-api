@@ -466,12 +466,15 @@ class Account
         /* Global $pdo object */
         //global $pdo;
 
+
         //error_log('logging out');
 
         /* If there is no logged in user, do nothing */
         if (is_null($this->id)) {
             return;
         }
+
+        //error_log('continuing logout');
 
         /* Reset the account-related properties */
         $this->id = NULL;
@@ -482,6 +485,8 @@ class Account
         if (session_status() == PHP_SESSION_ACTIVE) {
 
             $sID = session_id();
+
+            //error_log('$sID = '.$sID);
 
             $args = array(
                 'title' => $sID,
@@ -499,6 +504,7 @@ class Account
             }
             wp_reset_postdata();
             foreach ($query_IDS as $query_ID) {
+                error_log('deleteing post');
                 wp_delete_post($query_ID);
             }
         }
