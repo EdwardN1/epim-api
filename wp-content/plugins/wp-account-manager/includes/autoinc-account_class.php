@@ -466,6 +466,8 @@ class Account
         /* Global $pdo object */
         //global $pdo;
 
+        //error_log('logging out');
+
         /* If there is no logged in user, do nothing */
         if (is_null($this->id)) {
             return;
@@ -597,6 +599,7 @@ class Account
                 - insert a new row with the session id, if it doesn't exist, or...
                 - update the row having the session id, if it does exist.
             */
+            //error_log('PHP_SESSION_ACTIVE');
             $sID = session_id();
 
             $args = array(
@@ -614,11 +617,14 @@ class Account
             }
 
             if(is_null($postID)) {
+                //error_log('Adding new session');
                 $newSession = array(
+                    'post_type' => 'wpam_sessions',
                     'post_title' => $sID,
                     'post_status' => 'publish'
                 );
                 $newSessionID = wp_insert_post($newSession);
+                //error_log('$newSessionID = '.$newSessionID);
                 update_post_meta($newSessionID, '_wpam_sessions_account_id',$this->id);
                 update_post_meta($newSessionID,'_wpam_sessions_login_time',date(DATE_RFC2822));
             } else {
