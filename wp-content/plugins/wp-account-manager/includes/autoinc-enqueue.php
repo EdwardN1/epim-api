@@ -16,3 +16,25 @@ function add_wpam_js()
         );
     }
 }
+
+add_action('wp_enqueue_scripts','add_wpam_scripts');
+function add_wpam_scripts() {
+    wp_register_script( 'wpam-recapture-js', 'https://www.google.com/recaptcha/api.js' , '', '', true );
+}
+
+// add async and defer attributes to enqueued scripts
+function wpam_recapture_script_loader_tag($tag, $handle) {
+
+    if ($handle === 'wpam-recapture-ja') {
+        if (false === stripos($tag, 'async')) {
+            $tag = str_replace(' src', ' async="async" src', $tag);
+        }
+        if (false === stripos($tag, 'defer')) {
+            $tag = str_replace('<script ', '<script defer ', $tag);
+        }
+    }
+
+    return $tag;
+
+}
+add_filter('script_loader_tag', 'wpam_recapture_script_loader_tag', 10, 2);

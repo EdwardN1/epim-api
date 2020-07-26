@@ -504,7 +504,7 @@ class Account
             }
             wp_reset_postdata();
             foreach ($query_IDS as $query_ID) {
-                error_log('deleteing post');
+                //error_log('deleteing post');
                 wp_delete_post($query_ID);
             }
         }

@@ -26,9 +26,9 @@ function create_wpam_sessions_posttype() {
             'publicly_queryable' => false,
             'exclude_from_search' => true,
             'show_in_nav_menus'   => false,
-            'show_ui'             => is_super_admin(),
-            'show_in_menu'        => is_super_admin(),
-            'show_in_admin_bar'   => is_super_admin(),
+            'show_ui'             => false,
+            'show_in_menu'        => false,
+            'show_in_admin_bar'   => false,
             'rewrite' => array('slug' => 'wpam_sessions'),
             'show_in_rest' => true,
 

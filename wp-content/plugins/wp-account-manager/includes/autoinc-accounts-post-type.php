@@ -459,6 +459,33 @@ function save_wpam_accounts_registered_time_meta_box_data( $post_id, $post, $upd
 
 add_action( 'save_post', 'save_wpam_accounts_registered_time_meta_box_data', 10, 3 );
 
+/**
+ *  =========================== Account Reset Token ==================================
+ */
+
+function wpam_accounts_reset_token_meta_box() {
+    add_meta_box(
+        'wpam_accounts_reset_token_container',
+        __( 'Account Reset Token', 'wpamaccounts' ),
+        'wpam_accounts_reset_token_meta_box_callback',
+        'wpam_accounts'
+    );
+}
+
+function wpam_accounts_reset_token_meta_box_callback( $post ) {
+
+    // Add a nonce field so we can check for it later.
+    wp_nonce_field( 'wpam_accounts_reset_token_nonce', 'wpam_accounts_reset_token_nonce' );
+
+    $value = get_post_meta( $post->ID, '_wpam_accounts_reset_token', true );
+
+    echo '<p style="width:100%" id="wpam_accounts_reset_token">' . esc_attr( $value ).'</p>';
+}
+
+add_action( 'add_meta_boxes', 'wpam_accounts_reset_token_meta_box' );
+
+
+
 
 /**
  * @param $username
@@ -530,42 +557,5 @@ function wpam_unique_email($email,$exclude) {
     }
 }
 
-/**
- * Next we need two simple error handling functions:
- * Error handling function for use with save_car_data function below it:
- * /
 
-/**
- * Writes an error message to the screen if error is thrown in save_car_data function
- *
- */
-/*function handle_wpam_errors() {
-	//If there are no errors, then exit the function
-	if(!( $errors = get_transient('settings_errors'))) {
-		return;
-	}
-	//Otherwise, build the list of errors that exist in the settings errors
-	$message = '<div id="wpam-message" class="error below-h2"><p><ul>';
-  foreach($errors as $error) {
-	  $message .= '<li>' . $error['message'] . '</li>';
-  }
-  $message .= '</ul></p></div><!– #error –>';
-  //Write error messages to the screen
-  echo $message;
-  //Clear and the transient and unhook any other notices so we don’t see duplicate messages
-  delete_transient('settings_errors');
-  remove_action('admin_notices', 'handle_wpam_errors');
-}
-
-function wpam_error($slug,$err){
-	add_settings_error(
-		$slug,
-		$slug,
-		$err,
-		'error'
-	);
-	set_transient('settings_errors', get_settings_errors(), 30);
-}
-add_action('admin_notices', 'handle_wpam_errors');
-*/
 
