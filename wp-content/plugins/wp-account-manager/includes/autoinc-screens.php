@@ -29,7 +29,7 @@ function reset_form($recapture, $stage)
         if ('2' == $stage) {
             $postID = false;
             if(isset($_POST['username'])) {
-                $token = bin2hex(random_bytes(56));
+                $token = sanitize_text_field(bin2hex(random_bytes(56)));
                 $account = new Account;
                 $postID = $account->getIdFromName($_POST['username']);
                 if(!$postID) {
@@ -45,6 +45,26 @@ function reset_form($recapture, $stage)
                      *
                      *
                      */
+                    update_post_meta($postID,'_wpam_accounts_reset_token',$token);
+                    $to = get_post_meta($postID,'_wpam_accounts_email',true);
+                    $subject = 'Reset Password Requested For: '.get_bloginfo( 'name' );
+	                if (isset($_SERVER['HTTPS']) &&
+	                    ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) ||
+	                    isset($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
+	                    $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+		                $protocol = 'https://';
+	                }
+	                else {
+		                $protocol = 'http://';
+	                }
+	                $message = 'Reset your login password here: '. $protocol . $_SERVER['HTTP_HOST'] . strtok($_SERVER['REQUEST_URI'], '?').'?lostpassword=3&z='.$postID.'&token='.$token;
+	                if(wp_mail( $to, $subject, $message )) {
+		                echo '<div>Your password reset request has been sent. Please check your inbox.</div>';
+		                echo '<div><a href="' . strtok($_SERVER['REQUEST_URI'], '?') . '">Return to Login</a></div>';
+	                } else {
+		                echo '<div style="color: red">Email has not been processed. Please contact the site admin.</div>';
+		                echo '<div><a href="' . strtok($_SERVER['REQUEST_URI'], '?') . '">Return to Login</a></div>';
+	                }
                 }
             } else {
                 wp_redirect(strtok($_SERVER['REQUEST_URI'], '?') . '?lostpassword=1');
@@ -53,9 +73,72 @@ function reset_form($recapture, $stage)
             if ('3' == $stage) {
                 /**
                  *
-                 * ======================== Token Conformation section
+                 * ======================== Token Confirmation section
                  *
                  */
+                if(isset($_GET['z'])) {
+                	if(isset($_GET['token'])) {
+                		$postID = sanitize_text_field($_GET['z']);
+                		$token = sanitize_text_field($_GET['token']);
+                		$savedToken = get_post_meta($postID,'_wpam_accounts_reset_token',true);
+                		if($token==$savedToken) {
+			                echo '<div><form action="' . strtok($_SERVER['REQUEST_URI'], '?') . '?lostpassword=4" method="post"></div>';
+			                echo '<input type="hidden" name="token" value="'.$token.'"/>';
+			                echo '<input type="hidden" name="z" value="'.$postID.'"/>';
+			                echo '<div><label for="passwd1">Enter your new password:<br><input type="password" id="passwd1" name="passwrd1"></label></div>';
+			                echo '<div><label for="passwd2">R-enter your new password:<br><input type="password" id="passwd2" name="passwrd2"></label></div>';
+			                if ('' != $recapture) echo $recapture;
+			                echo '<div><input type="submit"></div>';
+			                echo '</form></div>';
+		                } else {
+			                echo '<div style="color: red">Sorry this link has expired.</div>';
+			                echo '<div><a href="' . strtok($_SERVER['REQUEST_URI'], '?') . '">Return to Login</a></div>';
+		                }
+	                } else {
+		                echo '<div style="color: red">Account not found</div>';
+		                echo '<div><a href="' . strtok($_SERVER['REQUEST_URI'], '?') . '">Return to Login</a></div>';
+	                }
+                } else {
+	                echo '<div style="color: red">Account not found</div>';
+	                echo '<div><a href="' . strtok($_SERVER['REQUEST_URI'], '?') . '">Return to Login</a></div>';
+                }
+            } else {
+            	if('4'==$stage) {
+		            $postID = sanitize_text_field($_POST['z']);
+		            $token = sanitize_text_field($_POST['token']);
+		            $pass1 = sanitize_text_field($_POST['passwrd1']);
+		            $pass2 = sanitize_text_field($_POST['passwrd2']);
+		            $savedToken = get_post_meta($postID,'_wpam_accounts_reset_token',true);
+		            if($pass1!=$pass2) {
+		            	if($savedToken==$token) {
+				            update_post_meta($postID,'_wpam_accounts_reset_token','');
+			            }
+			            echo '<div style="color: red">Your passwords do not match. Password has not been updated.</div>';
+			            echo '<div><a href="' . strtok($_SERVER['REQUEST_URI'], '?') . '">Return to Login</a></div>';
+		            } else {
+			            if($token==$savedToken) {
+			            	$account = new Account;
+				            $hash = password_hash($pass1, PASSWORD_DEFAULT);
+				            $account = new Account;
+				            if($account->isPasswdValid($pass1)) {
+					            update_post_meta($postID, '_wpam_accounts_password', $hash);
+					            update_post_meta($postID,'_wpam_accounts_reset_token','');
+					            echo '<div>Your password has been reset</div>';
+					            echo '<div><a href="' . strtok($_SERVER['REQUEST_URI'], '?') . '">Please Login</a></div>';
+				            } else {
+					            if($savedToken==$token) {
+						            update_post_meta($postID,'_wpam_accounts_reset_token','');
+					            }
+					            echo '<div style="color: red">Sorry this password is invalid. Please make sure it is between 8 and 16 characters long.</div>';
+					            echo '<div><a href="' . strtok($_SERVER['REQUEST_URI'], '?') . '">Return to Login</a></div>';
+				            }
+			            } else {
+				            echo '<div style="color: red">Sorry this link has expired.</div>';
+				            echo '<div><a href="' . strtok($_SERVER['REQUEST_URI'], '?') . '">Return to Login</a></div>';
+			            }
+		            }
+
+	            }
             }
         }
     }
@@ -122,7 +205,16 @@ function login_shortcode($params = array())
             if ($recaptured) {
                 reset_form($recapture, $_GET['lostpassword']);
             } else {
-                reset_form($recapture, 1);
+            	if($_GET['lostpassword']==3){
+		            reset_form($recapture, 3);
+	            } else {
+            		if($_GET['lostpassword']==4) {
+			            reset_form( $recapture, 4 );
+		            } else {
+			            reset_form($recapture, 1);
+		            }
+
+	            }
             }
 
             return;
