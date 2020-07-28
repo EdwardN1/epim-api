@@ -177,6 +177,7 @@ function login_shortcode($params = array())
             if (array_key_exists("g-recaptcha-response", $_POST)) {
                 $response = $_POST["g-recaptcha-response"];
                 $url = 'https://www.google.com/recaptcha/api/siteverify';
+                $proxy = 'tcp://proxyout.cly.dtc3.cf.saint-gobain.net:3128';
                 $data = array(
                     'secret' => get_option('wpam_recapture_secret_key'),
                     'response' => $_POST["g-recaptcha-response"]
@@ -184,6 +185,8 @@ function login_shortcode($params = array())
                 $options = array(
                     'http' => array(
                         'method' => 'POST',
+                        'proxy' => $proxy,
+                        'request_fulluri' => True,
                         'content' => http_build_query($data),
                         'header' =>
                             "Content-Type: application/x-www-form-urlencoded\r\n",
@@ -191,6 +194,25 @@ function login_shortcode($params = array())
                 );
                 $context = stream_context_create($options);
                 $verify = file_get_contents($url, false, $context);
+
+                /*$headers = array();
+	            $headers[] = "Content-Type: application/x-www-form-urlencoded\r\n";
+
+	            $ch = curl_init();
+
+	            curl_setopt($ch, CURLOPT_URL, $url);
+
+	            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	            curl_setopt($ch, CURLOPT_POST, true);
+	            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+	            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+	            $verify = curl_exec($ch);
+
+	            curl_close($ch);
+
+	            error_log(print_r($verify,true));*/
+
                 $captcha_success = json_decode($verify);
                 if (($captcha_success->success == false) && (array_key_exists("g-recaptcha-response", $_POST))) {
                     echo '<div style="color: red">Please confirm you are not a robot</div>';
