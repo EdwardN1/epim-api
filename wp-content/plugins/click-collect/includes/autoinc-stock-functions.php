@@ -14,7 +14,7 @@ function getProductBranchStock( $productID ) {
 
 	$res  = array();
 	$args = array(
-		'post_type'      => 'branches',
+		'post_type'      => 'cac_branches',
 		'post_status'    => 'publish',
 		'posts_per_page' => - 1,
 		'orderby'        => 'title',

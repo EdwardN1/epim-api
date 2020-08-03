@@ -185,8 +185,8 @@ function login_shortcode($params = array())
                 $options = array(
                     'http' => array(
                         'method' => 'POST',
-                        'proxy' => $proxy,
-                        'request_fulluri' => True,
+                        /*'proxy' => $proxy,
+                        'request_fulluri' => True,*/
                         'content' => http_build_query($data),
                         'header' =>
                             "Content-Type: application/x-www-form-urlencoded\r\n",

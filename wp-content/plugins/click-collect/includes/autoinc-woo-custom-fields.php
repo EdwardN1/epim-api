@@ -48,7 +48,7 @@ function add_cac_product_data_fields()
                 </tr>
                 <?php
                 $args = array(
-                    'post_type' => 'branches',
+                    'post_type' => 'cac_branches',
                     'post_status' => 'publish',
                     'posts_per_page' => -1,
                     'orderby' => 'title',

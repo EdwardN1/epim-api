@@ -2,7 +2,7 @@
 // Our custom post type function
 function create_posttype() {
 
-    register_post_type( 'branches',
+    register_post_type( 'cac_branches',
         // CPT Options
         array(
             'labels' => array(
@@ -22,7 +22,7 @@ function create_posttype() {
             'menu_icon' => 'dashicons-admin-multisite',
             'public' => true,
             'has_archive' => true,
-            'rewrite' => array('slug' => 'branches'),
+            'rewrite' => array('slug' => 'cac_branches'),
             'show_in_rest' => true,
 
         )
@@ -35,12 +35,12 @@ add_filter('use_block_editor_for_post_type', 'prefix_disable_gutenberg', 10, 2);
 function prefix_disable_gutenberg($current_status, $post_type)
 {
     // Use your post type key instead of 'product'
-    if ($post_type === 'branches') return false;
+    if ($post_type === 'cac_branches') return false;
     return $current_status;
 }
 
 add_action( 'init', function() {
-    remove_post_type_support( 'branches', 'editor' );
+    remove_post_type_support( 'cac_branches', 'editor' );
 }, 99);
 
 //branch address
@@ -50,7 +50,7 @@ function branch_address_meta_box() {
         'branch_address',
         __( 'Branch Address', 'clickcollect' ),
         'branch_address_meta_box_callback',
-        'branches'
+        'cac_branches'
     );
 }
 
@@ -121,7 +121,7 @@ function branch_phone_meta_box() {
         'branch_phone',
         __( 'Branch Phone', 'clickcollect' ),
         'branch_phone_meta_box_callback',
-        'branches'
+        'cac_branches'
     );
 }
 
@@ -192,7 +192,7 @@ function branch_email_meta_box() {
         'branch_email',
         __( 'Branch Email Address', 'clickcollect' ),
         'branch_email_meta_box_callback',
-        'branches'
+        'cac_branches'
     );
 }
 
@@ -255,3 +255,26 @@ function save_branch_email_meta_box_data( $post_id ) {
 }
 
 add_action( 'save_post', 'save_branch_email_meta_box_data' );
+
+//branch EPIM ID
+
+function branch_epim_id_meta_box() {
+	add_meta_box(
+		'branch_epim_id',
+		__( 'Branch ePim ID', 'clickcollect' ),
+		'branch_epim_id_meta_box_callback',
+		'cac_branches'
+	);
+}
+
+function branch_epim_id_meta_box_callback( $post ) {
+
+	// Add a nonce field so we can check for it later.
+	wp_nonce_field( 'branch_epim_id_nonce', 'branch_epim_id_nonce' );
+
+	$value = get_post_meta( $post->ID, '_branch_epim_id', true );
+
+	echo '<p>' . esc_attr( $value ).'</p>';
+}
+
+add_action( 'add_meta_boxes', 'branch_epim_id_meta_box' );

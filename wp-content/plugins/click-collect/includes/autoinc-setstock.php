@@ -26,7 +26,7 @@ function setProductBranchStockLvl( $productID, $branchID, $lvl ) {
 
 function setDummyStockLvls() {
 	$args = array(
-		'post_type'      => 'branches',
+		'post_type'      => 'cac_branches',
 		'post_status'    => 'publish',
 		'posts_per_page' => - 1,
 		'orderby'        => 'title',

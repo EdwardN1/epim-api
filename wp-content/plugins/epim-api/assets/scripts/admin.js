@@ -311,6 +311,23 @@ adminJQ(function ($) {
         _o('<br>Data: ' + data);
     });
 
+    let branchesQueue = new ts_execute_queue('#ePimResult', function () {
+        _o('finished');
+        $('.modal.CreateBranches').removeClass('active');
+    }, function (action, request, data) {
+        _o('Action Completed: ' + action);
+        _o('Request: ' + request);
+        _o('<br>Data: ' + data);
+    });
+
+    $('#CreateBranches').on('click',function () {
+        _o('Getting Branch Data from ePim...');
+        $('.modal.CreateBranches').addClass('active');
+        branchesQueue.reset();
+        branchesQueue.queue(ajaxurl,{action: 'get_all_branches'});
+        branchesQueue.process();
+    });
+
     $('#CreateAll').on('click',function () {
         _o('Getting Category Data from ePim...');
         $('.modal.CreateAll').addClass('active');

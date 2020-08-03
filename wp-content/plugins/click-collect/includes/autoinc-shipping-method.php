@@ -167,7 +167,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
                             <select name="cac_branchID" id="cac_breanchID">
                                 <?php
                                 $args = array(
-                                    'post_type' => 'branches',
+                                    'post_type' => 'cac_branches',
                                     'post_status' => 'publish',
                                     'posts_per_page' => -1,
                                     'orderby' => 'title',

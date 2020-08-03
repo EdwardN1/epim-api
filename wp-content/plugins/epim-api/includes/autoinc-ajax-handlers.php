@@ -16,6 +16,7 @@ $log = true;
 
 
 add_action( 'wp_ajax_get_all_categories', 'ajax_get_api_all_categories' );
+add_action( 'wp_ajax_get_all_branches', 'ajax_get_api_all_branches' );
 add_action( 'wp_ajax_get_all_attributes', 'ajax_get_api_all_attributes' );
 add_action( 'wp_ajax_get_all_products', 'ajax_get_api_all_products' );
 add_action( 'wp_ajax_get_all_changed_products_since', 'ajax_get_api_all_changed_products_since' );
@@ -214,6 +215,15 @@ function ajax_get_api_all_categories() {
     header( "Content-Type: application/json" );
     echo json_encode( $response );
     exit;
+}
+
+function ajax_get_api_all_branches() {
+	checkSecure();
+	$jsonResponse = get_api_all_branches();
+	$response     = $jsonResponse;
+	header( "Content-Type: application/json" );
+	echo json_encode( $response );
+	exit;
 }
 
 function ajax_get_api_all_attributes() {

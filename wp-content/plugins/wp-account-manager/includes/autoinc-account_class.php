@@ -108,6 +108,7 @@ class Account
         $post_id = wp_insert_post(array(
             'post_type' => 'wpam_accounts',
             'post_title' => $name,
+            'post_status' => 'publish'
         ));
 
         /* Insert query template */
@@ -366,7 +367,7 @@ class Account
         /* Example check: the length must be between 8 and 16 chars */
         $len = mb_strlen($name);
 
-        if (($len < 8) || ($len > 16)) {
+        if (($len < 6) || ($len > 16)) {
             $valid = FALSE;
         }
 
@@ -555,7 +556,7 @@ class Account
     /* Returns the account id having $name as name, or false if it's not found */
     public function getIdFromName($name)
     {
-        $id = false;
+        $id = null;
 
         $args = array(
             'title' => $name,
@@ -574,7 +575,7 @@ class Account
     /* Returns the account id having $email as email, or false if it's not found */
     public function getIdFromEmail($email)
     {
-        $id = false;
+        $id = null;
 
         $args = array(
             'meta_key' => '_wpam_accounts_email',

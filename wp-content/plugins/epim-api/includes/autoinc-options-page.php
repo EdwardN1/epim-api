@@ -130,7 +130,7 @@ function epim_options_page()
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <button id="CreateAll" class="button">Create and Update all</button>&nbsp; &nbsp;<span class="modal CreateAll"><img src="http://i.stack.imgur.com/FhHRx.gif"></span>
+                            <button id="CreateAll" class="button">Create and Update all Categories and Products</button>&nbsp; &nbsp;<span class="modal CreateAll"><img src="http://i.stack.imgur.com/FhHRx.gif"></span>
                         </td>
                     </tr>
                     <tr>
@@ -138,6 +138,32 @@ function epim_options_page()
                             <hr>
                         </td>
                     </tr>
+                    <?php
+                    if(is_plugin_active('click-collect/click-collect.php')) {
+	                    ?>
+                        <tr>
+                            <td colspan="2">
+                                <button id="CreateBranches" class="button">Create and Update Branches</button>&nbsp; &nbsp;<span class="modal CreateBranches"><img src="http://i.stack.imgur.com/FhHRx.gif"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="padding-left: 0; padding-top: 0;">Updates and creates all Branches.
+                                <hr>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button id="UpdateBrancheStock" class="button">Update Branch Stock Levels</button>&nbsp; &nbsp;<span class="modal UpdateBranchStock"><img src="http://i.stack.imgur.com/FhHRx.gif"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="padding-left: 0; padding-top: 0;">Updates Branch Stock Levels - Only updates imported product stock levels - does not import products.
+                                <hr>
+                            </td>
+                        </tr>
+	                    <?php
+                    }
+                    ?>
                     <?php
                     $current_user = wp_get_current_user();
                     $email = (string)$current_user->user_email;

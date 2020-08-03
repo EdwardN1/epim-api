@@ -67,6 +67,11 @@ function get_api_all_categories()
     return make_api_call('Categories');
 }
 
+function get_api_all_branches()
+{
+	return make_api_call('Branches');
+}
+
 function get_api_picture($id)
 {
     $res = make_api_call('Pictures/' . $id);
