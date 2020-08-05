@@ -318,6 +318,34 @@ adminJQ(function ($) {
         _o('Action Completed: ' + action);
         _o('Request: ' + request);
         _o('<br>Data: ' + data);
+        window.console.log(action);
+        if(action==='get_all_branches') {
+            let branches = JSON.parse(data);
+            let obj = this;
+            let c = 0;
+            $(branches).each(function (index, record) {
+                let Address1 = record.Address1;
+                let Address2 = record.Address2;
+                let City = record.City;
+                let County = record.County;
+                let Postcode = record.Postcode;
+
+                let address = '';
+                if(Address1 != '') address += Address1 + '<br>';
+                if(Address2 != '') address += Address2 + '<br>';
+                if(City != '') address += City + '<br>';
+                if(County != '') address += County + '<br>';
+                if(Postcode != '') address += Postcode;
+
+                obj.queue(ajaxurl,{action: 'create_branch', ID: record.Id, name: record.Name, Telephone: record.Telephone, Email: record.Email, Address: address});
+                if(debug) {
+                    c++;
+                    if (c >= cMax) {
+                        return false;
+                    }
+                }
+            });
+        }
     });
 
     $('#CreateBranches').on('click',function () {

@@ -25,6 +25,7 @@ add_action( 'wp_ajax_get_category', 'ajax_get_api_category' );
 add_action( 'wp_ajax_get_picture', 'ajax_get_api_picture' );
 add_action( 'wp_ajax_get_variation', 'ajax_get_api_variation' );
 add_action( 'wp_ajax_create_category', 'ajax_create_category' );
+add_action( 'wp_ajax_create_branch', 'ajax_create_branch' );
 add_action( 'wp_ajax_get_category_images', 'ajax_get_category_images' );
 add_action( 'wp_ajax_get_picture_web_link', 'ajax_get_picture_web_link' );
 add_action( 'wp_ajax_import_picture', 'ajax_import_picture' );
@@ -312,6 +313,18 @@ function ajax_create_category() {
                 $Picture_ids= $_POST['picture_ids'];
             }
             $response = create_category( $_POST['ID'], $_POST['name'], $_POST['ParentID'], $WebPath, $Picture_ids );
+        }
+    }
+    echo $response;
+    exit;
+}
+
+function ajax_create_branch() {
+	checkSecure();
+	$response = 'Nothing Happened!!';
+	if ( ! empty( $_POST['ID'] ) ) {
+        if ( ! empty( $_POST['name'] ) ) {
+	        $response = create_branch( $_POST['ID'], $_POST['name'], $_POST['Telephone'], $_POST['Email'], $_POST['Address']);
         }
     }
     echo $response;

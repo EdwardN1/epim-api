@@ -87,7 +87,7 @@ function epim_options_page()
                     <tr>
                         <th><label for="pCode">Update by product code (SKU):</label></th>
                         <td>
-                            <input type="text" id="pCode" class="regular-text">&nbsp;<button id="UpdateCode" class="button">Update</button>&nbsp; &nbsp;<span class="modal UpdateCode"><img src="http://i.stack.imgur.com/FhHRx.gif"></span>
+                            <input type="text" id="pCode" class="regular-text">&nbsp;<button id="UpdateCode" class="button">Update</button>&nbsp; &nbsp;<span class="modal UpdateCode"><img src="<?php echo ea_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
                     <tr>
@@ -98,7 +98,7 @@ function epim_options_page()
                     </tr>
                     <tr>
                         <th style="width: 250px;"><label for="start_date">Update by product changed since:</label></th>
-                        <td><input type="text" class="custom_date" name="start_date" id="start_date" value=""/>&nbsp;<button id="UpdateSince" class="button">Update</button>&nbsp; &nbsp;<span class="modal UpdateSince"><img src="http://i.stack.imgur.com/FhHRx.gif"></span>
+                        <td><input type="text" class="custom_date" name="start_date" id="start_date" value=""/>&nbsp;<button id="UpdateSince" class="button">Update</button>&nbsp; &nbsp;<span class="modal UpdateSince"><img src="<?php echo ea_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
                     <tr>
@@ -108,7 +108,7 @@ function epim_options_page()
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <button id="CreateCategories" class="button">Create and Update Categories</button>&nbsp; &nbsp;<span class="modal CreateCategories"><img src="http://i.stack.imgur.com/FhHRx.gif"></span>
+                            <button id="CreateCategories" class="button">Create and Update Categories</button>&nbsp; &nbsp;<span class="modal CreateCategories"><img src="<?php echo ea_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
                     <tr>
@@ -119,7 +119,7 @@ function epim_options_page()
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <button id="CreateAllProducts" class="button">Create and Update all Products</button>&nbsp; &nbsp;<span class="modal CreateAllProducts"><img src="http://i.stack.imgur.com/FhHRx.gif"></span>
+                            <button id="CreateAllProducts" class="button">Create and Update all Products</button>&nbsp; &nbsp;<span class="modal CreateAllProducts"><img src="<?php echo ea_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
                     <tr>
@@ -130,7 +130,7 @@ function epim_options_page()
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <button id="CreateAll" class="button">Create and Update all Categories and Products</button>&nbsp; &nbsp;<span class="modal CreateAll"><img src="http://i.stack.imgur.com/FhHRx.gif"></span>
+                            <button id="CreateAll" class="button">Create and Update all Categories and Products</button>&nbsp; &nbsp;<span class="modal CreateAll"><img src="<?php echo ea_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
                     <tr>
@@ -143,7 +143,7 @@ function epim_options_page()
 	                    ?>
                         <tr>
                             <td colspan="2">
-                                <button id="CreateBranches" class="button">Create and Update Branches</button>&nbsp; &nbsp;<span class="modal CreateBranches"><img src="http://i.stack.imgur.com/FhHRx.gif"></span>
+                                <button id="CreateBranches" class="button">Create and Update Branches</button>&nbsp; &nbsp;<span class="modal CreateBranches"><img src="<?php echo ea_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                             </td>
                         </tr>
                         <tr>
@@ -153,7 +153,7 @@ function epim_options_page()
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <button id="UpdateBrancheStock" class="button">Update Branch Stock Levels</button>&nbsp; &nbsp;<span class="modal UpdateBranchStock"><img src="http://i.stack.imgur.com/FhHRx.gif"></span>
+                                <button id="UpdateBrancheStock" class="button">Update Branch Stock Levels</button>&nbsp; &nbsp;<span class="modal UpdateBranchStock"><img src="<?php echo ea_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                             </td>
                         </tr>
                         <tr>
@@ -171,7 +171,7 @@ function epim_options_page()
                         ?>
                         <tr>
                             <td colspan="2">
-                                <button id="deleteAttributes" class="button">Delete All Attributes</button> &nbsp;<span class="modal deleteAttributes"><img src="http://i.stack.imgur.com/FhHRx.gif"></span>
+                                <button id="deleteAttributes" class="button">Delete All Attributes</button> &nbsp;<span class="modal deleteAttributes"><img src="<?php echo ea_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                             </td>
                         </tr>
                     <?php
