@@ -348,6 +348,58 @@ adminJQ(function ($) {
         }
     });
 
+    let updateBranchesQueue = new ts_execute_queue('#ePimResult', function () {
+        _o('finished');
+        $('.modal.UpdateBranchStock').removeClass('active');
+    }, function (action, request, data) {
+        _o('Action Completed: ' + action);
+        _o('Request: ' + request);
+        _o('<br>Data: ' + data);
+        window.console.log(action);
+        if(action==='get_all_branches') {
+            let branches = JSON.parse(data);
+            let obj = this;
+            let c = 0;
+            $(branches).each(function (index, record) {
+
+                obj.queue(ajaxurl,{action: 'get_branch_stock', ID: record.Id});
+                if(debug) {
+                    c++;
+                    if (c >= cMax) {
+                        return false;
+                    }
+                }
+            });
+        }
+
+        if(action==='get_branch_stock') {
+            let stock = JSON.parse(data);
+            let obj = this;
+            let c = 0;
+            let r = decodeURIComponent(request);
+            let ro = QueryStringToJSON('?' + r);
+            let branch_id = ro.ID;
+            $(stock).each(function (index, record) {
+
+                obj.queue(ajaxurl,{action: 'update_branch_stock', ID: branch_id, VariationId: record.VariationId, Stock: record.Stock});
+                if(debug) {
+                    c++;
+                    if (c >= cMax) {
+                        return false;
+                    }
+                }
+            });
+        }
+    });
+
+    $('#UpdateBranchStock').on('click',function () {
+        _o('Getting Branch Data from ePim...');
+        $('.modal.UpdateBranchStock').addClass('active');
+        updateBranchesQueue.reset();
+        updateBranchesQueue.queue(ajaxurl,{action: 'get_all_branches'});
+        updateBranchesQueue.process();
+    });
+
     $('#CreateBranches').on('click',function () {
         _o('Getting Branch Data from ePim...');
         $('.modal.CreateBranches').addClass('active');

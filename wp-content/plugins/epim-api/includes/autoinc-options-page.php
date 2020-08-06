@@ -153,7 +153,7 @@ function epim_options_page()
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <button id="UpdateBrancheStock" class="button">Update Branch Stock Levels</button>&nbsp; &nbsp;<span class="modal UpdateBranchStock"><img src="<?php echo ea_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                                <button id="UpdateBranchStock" class="button">Update Branch Stock Levels</button>&nbsp; &nbsp;<span class="modal UpdateBranchStock"><img src="<?php echo ea_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                             </td>
                         </tr>
                         <tr>

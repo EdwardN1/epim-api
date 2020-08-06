@@ -17,6 +17,8 @@ $log = true;
 
 add_action( 'wp_ajax_get_all_categories', 'ajax_get_api_all_categories' );
 add_action( 'wp_ajax_get_all_branches', 'ajax_get_api_all_branches' );
+add_action( 'wp_ajax_update_branch_stock', 'ajax_update_api_branch_stock' );
+add_action( 'wp_ajax_get_branch_stock', 'ajax_get_api_branch_stock' );
 add_action( 'wp_ajax_get_all_attributes', 'ajax_get_api_all_attributes' );
 add_action( 'wp_ajax_get_all_products', 'ajax_get_api_all_products' );
 add_action( 'wp_ajax_get_all_changed_products_since', 'ajax_get_api_all_changed_products_since' );
@@ -72,6 +74,15 @@ function ajax_import_single_product_images() {
         }
     } else {
         echo 'error no productID supplied';
+    }
+    exit;
+}
+
+function ajax_get_api_branch_stock() {
+    checkSecure();
+    if( ! empty( $_POST['ID'] ) ) {
+        $response = get_api_branch_stock(  $_POST['ID'] );
+        echo $response;
     }
     exit;
 }
@@ -155,6 +166,18 @@ function ajax_create_product() {
         exit;
     }
 
+}
+
+function ajax_update_api_branch_stock() {
+    checkSecure();
+    if ( ! empty( $_POST['ID'] ) ) {
+        if ( ! empty( $_POST['VariationId'] ) ) {
+            if ( ! empty( $_POST['Stock'] ) ) {
+                echo update_branch_stock($_POST['ID'],$_POST['VariationId'],$_POST['Stock']);
+            }
+        }
+    }
+    exit;
 }
 
 function ajax_cat_image_link() {
