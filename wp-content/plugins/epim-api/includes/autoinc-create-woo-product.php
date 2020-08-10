@@ -205,6 +205,8 @@ function ep_wooCreateProduct_ex($pid, $productArray) {
         if($pid>0) {
 
             $objProduct = wc_get_product($pid);
+            $objProduct->set_image_id(null);
+            $objProduct->set_gallery_image_ids(null);
         } else {
             if ($isVariable) {
                 $objProduct = new WC_Product_Variable();
