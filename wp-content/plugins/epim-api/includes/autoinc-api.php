@@ -322,6 +322,7 @@ function update_branch_stock($id, $variation_id, $stock_level)
         $productID = getProductFromVariationID($variation_id);
         if ($productID) {
             if (update_post_meta($productID, 'cac_BRANCH_STOCK_' . $branchID, $stock_level)) {
+                update_post_meta($productID,'cac_USE_BRANCH_STOCK','yes');
                 $res = '$id: ' . $id . ' | ' . ' $variation_id: ' . $variation_id . ' update stock level succeeded';
             }
         }
