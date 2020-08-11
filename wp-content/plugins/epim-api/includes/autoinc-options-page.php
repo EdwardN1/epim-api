@@ -161,6 +161,16 @@ function epim_options_page()
                                 <hr>
                             </td>
                         </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button id="DeletedStock" class="button">Check for Deleted Stock</button>&nbsp; &nbsp;<span class="modal DeletedStock"><img src="<?php echo ea_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="padding-left: 0; padding-top: 0;">Checks for Deleted Products and removes them from WooCommerce.
+                                <hr>
+                            </td>
+                        </tr>
 	                    <?php
                     }
                     ?>

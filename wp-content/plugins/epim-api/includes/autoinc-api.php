@@ -76,6 +76,41 @@ function get_api_branch_stock($id) {
     return make_api_call('StockForBranch/'.$id);
 }
 
+function get_deleted_entities_count() {
+    $apiCall = make_api_call('DeletedEntities?limit=0');
+    $deleted_entities_count = json_decode($apiCall);
+    $TotalResults = $deleted_entities_count->TotalResults;
+    return $TotalResults;
+}
+
+function get_deleted_entities_variations($limit) {
+    $apiCall = make_api_call('DeletedEntities?limit='.$limit);
+    $allEntities = json_decode($apiCall);
+    $results = $allEntities->Results;
+    $res = array();
+    foreach ($results as $result) {
+        if($results->EntityType=='SKU_Asset_Mapping') {
+            $ele = array();
+            $ele['variationID'] = $result->EntityId;
+            $res[] = $ele;
+        }
+    }
+    return json_encode($res);
+}
+
+function delete_variation($variationID) {
+    $productID = getProductFromVariationID($variationID);
+    if($productID) {
+        if(wp_delete_post($productID)){
+            echo 'Variation Deleted: '.$variationID;
+        } else {
+            echo 'Variation cannot be deleted: '.$variationID;
+        }
+    } else {
+        echo 'Variation not found: '.$variationID;
+    }
+}
+
 function get_api_picture($id)
 {
     $res = make_api_call('Pictures/' . $id);
@@ -598,11 +633,6 @@ function delete_attributes()
         $taxID = wc_attribute_taxonomy_id_by_name($attribute_taxonomy->attribute_name);
         wc_delete_attribute($taxID);
     }
-}
-
-function delete_variation($variationID)
-{
-
 }
 
 function create_product($productID, $variationID, $productBulletText, $productName, $categoryIds, $pictureIds)

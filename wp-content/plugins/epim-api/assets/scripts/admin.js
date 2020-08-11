@@ -392,6 +392,55 @@ adminJQ(function ($) {
         }
     });
 
+    let deletedEntitiesQueue = new ts_execute_queue('#ePimResult', function () {
+        _o('finished');
+        $('.modal.CreateBranches').removeClass('active');
+    }, function (action, request, data) {
+        _o('Action Completed: ' + action);
+        _o('Request: ' + request);
+        _o('<br>Data: ' + data);
+        window.console.log(action);
+        if(action==='get_deleted_entities_count') {
+            let deletedEntitiesCount = JSON.parse(data);
+            let obj = this;
+            let c = 0;
+            $(deletedEntitiesCount).each(function (index, record) {
+
+                obj.queue(ajaxurl,{action: 'get_deleted_entities_variations', TotalResults: record.TotalResults});
+                if(debug) {
+                    c++;
+                    if (c >= cMax) {
+                        return false;
+                    }
+                }
+            });
+        }
+        if(action==='get_deleted_entities_variations') {
+            let variations = JSON.parse(data);
+            let obj = this;
+            let c = 0;
+            $(variations).each(function (index, record) {
+
+                obj.queue(ajaxurl,{action: 'delete_variation', variationID: record.variationID});
+                if(debug) {
+                    c++;
+                    if (c >= cMax) {
+                        return false;
+                    }
+                }
+            });
+        }
+    });
+
+
+    $('#DeletedStock').on('click',function () {
+        _o('Getting Deleted Stock Data from ePim...');
+        $('.modal.DeletedStock').addClass('active');
+        deletedEntitiesQueue.reset();
+        deletedEntitiesQueue.queue(ajaxurl,{action: 'get_deleted_entities_count'});
+        deletedEntitiesQueue.process();
+    });
+
     $('#UpdateBranchStock').on('click',function () {
         _o('Getting Branch Data from ePim...');
         $('.modal.UpdateBranchStock').addClass('active');

@@ -42,6 +42,34 @@ add_action( 'wp_ajax_get_single_product_images', 'ajax_get_single_product_images
 add_action( 'wp_ajax_import_single_product_images', 'ajax_import_single_product_images' );
 add_action( 'wp_ajax_image_imported', 'ajax_image_imported' );
 add_action( 'wp_ajax_delete_attributes', 'ajax_delete_attributes' );
+add_action( 'wp_ajax_get_deleted_entities_count', 'ajax_get_deleted_entities_count' );
+add_action( 'wp_ajax_get_deleted_entities_variations', 'ajax_get_deleted_entities_variations' );
+add_action( 'wp_ajax_delete_variation', 'ajax_delete_variation' );
+
+function ajax_get_deleted_entities_count() {
+    checkSecure();
+    echo get_deleted_entities_count();
+    exit;
+}
+
+function ajax_get_deleted_entities_variations() {
+    checkSecure();
+    if (! empty($_POST['TotalResults'])) {
+        echo get_deleted_entities_variations($_POST['TotalResults']);
+    } else {
+        echo 'Need a Limit Please...';
+    }
+
+}
+
+function ajax_delete_variation() {
+    checkSecure();
+    if (! empty($_POST['variationID'])) {
+        echo delete_variation($_POST['variationID']);
+    } else {
+        echo 'No Variation Supplied...';
+    }
+}
 
 function ajax_delete_attributes() {
     checkSecure();
