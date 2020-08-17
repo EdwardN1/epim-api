@@ -318,7 +318,7 @@ adminJQ(function ($) {
         _o('Action Completed: ' + action);
         _o('Request: ' + request);
         _o('<br>Data: ' + data);
-        window.console.log(action);
+
         if(action==='get_all_branches') {
             let branches = JSON.parse(data);
             let obj = this;
@@ -394,29 +394,27 @@ adminJQ(function ($) {
 
     let deletedEntitiesQueue = new ts_execute_queue('#ePimResult', function () {
         _o('finished');
-        $('.modal.CreateBranches').removeClass('active');
+        $('.modal.DeletedStock').removeClass('active');
     }, function (action, request, data) {
         _o('Action Completed: ' + action);
         _o('Request: ' + request);
         _o('<br>Data: ' + data);
-        window.console.log(action);
         if(action==='get_deleted_entities_count') {
-            let deletedEntitiesCount = JSON.parse(data);
             let obj = this;
-            let c = 0;
-            $(deletedEntitiesCount).each(function (index, record) {
-
-                obj.queue(ajaxurl,{action: 'get_deleted_entities_variations', TotalResults: record.TotalResults});
-                if(debug) {
-                    c++;
-                    if (c >= cMax) {
-                        return false;
-                    }
-                }
-            });
+            obj.queue(ajaxurl,{action: 'get_deleted_entities_variations', TotalResults: data});
         }
         if(action==='get_deleted_entities_variations') {
-            let variations = JSON.parse(data);
+            let jdata= data;
+            if(jdata.slice(-1)!=']') {
+                jdata = jdata.slice(0,-1);
+            }
+            if(jdata.slice(-1)!=']') {
+                jdata = jdata.slice(0,-1);
+            }
+            if(jdata.slice(-1)!=']') {
+                jdata = jdata.slice(0,-1);
+            }
+            let variations = JSON.parse(jdata);
             let obj = this;
             let c = 0;
             $(variations).each(function (index, record) {

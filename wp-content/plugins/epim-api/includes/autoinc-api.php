@@ -89,7 +89,7 @@ function get_deleted_entities_variations($limit) {
     $results = $allEntities->Results;
     $res = array();
     foreach ($results as $result) {
-        if($results->EntityType=='SKU_Asset_Mapping') {
+        if($result->EntityType=='SKU_Product_Mapping') {
             $ele = array();
             $ele['variationID'] = $result->EntityId;
             $res[] = $ele;
