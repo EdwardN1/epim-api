@@ -598,15 +598,19 @@ function importPicture($id, $webpath)
 {
 
     $res = 'Image: ' . $id . ' - Import Error';
-    if (!imageImported($id)) {
-        $attachment_ID = uploadMedia($webpath);
-        if ($attachment_ID) {
-            //error_log('$attachment_ID: ' . $attachment_ID);
-            update_post_meta($attachment_ID, 'epim_api_id', $id);
-            $res = 'Image: ' . $id . ' - Imported Successfully';
+    try {
+        if (!imageImported($id)) {
+            $attachment_ID = uploadMedia($webpath);
+            if ($attachment_ID) {
+                //error_log('$attachment_ID: ' . $attachment_ID);
+                update_post_meta($attachment_ID, 'epim_api_id', $id);
+                $res = 'Image: ' . $id . ' - Imported Successfully';
+            }
+        } else {
+            $res = 'Image: ' . $id . ' - Already Imported';
         }
-    } else {
-        $res = 'Image: ' . $id . ' - Already Imported';
+    } catch (Exception $e) {
+        $res = $e->getMessage();
     }
 
     return $res;

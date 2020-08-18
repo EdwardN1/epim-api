@@ -17,6 +17,7 @@ function uploadMedia($image_url){
 			$error_string = $tmp->get_error_message();
 			@unlink( $file['tmp_name'] );
 			//error_log( $image_url . ' | ' . $error_string );
+            throw new Exception($error_string);
 			return false;
 		} else {
 			$media = media_handle_sideload( $file, 0 );
@@ -24,6 +25,7 @@ function uploadMedia($image_url){
 				$error_string = $media->get_error_message();
 				@unlink($file['tmp_name']);
 				//error_log( $image_url . ' | ' . $error_string );
+                throw new Exception($error_string);
 			} else {
 				return $media;
 			}
