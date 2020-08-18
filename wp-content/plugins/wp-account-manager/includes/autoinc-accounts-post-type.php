@@ -449,7 +449,7 @@ function save_wpam_accounts_registered_time_meta_box_data( $post_id, $post, $upd
 	// Sanitize user input.
 	$my_data = date(DATE_RFC2822);
 
-	error_log('Date is: '.$my_data);
+	//error_log('Date is: '.$my_data);
 
 	// Update the meta field in the database.
 	update_post_meta( $post_id, '_wpam_accounts_registered_time', $my_data );
