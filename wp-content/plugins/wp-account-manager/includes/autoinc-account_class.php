@@ -453,8 +453,12 @@ class Account
                 $this->authenticated = TRUE;
 
                 return TRUE;
+            } else {
+            	error_log('No Sessions Found');
             }
 
+        } else {
+        	error_log('no php session');
         }
 
         /* If we are here, the authentication failed */
