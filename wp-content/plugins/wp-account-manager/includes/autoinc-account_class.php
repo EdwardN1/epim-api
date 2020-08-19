@@ -451,10 +451,22 @@ class Account
                 $accountPost = get_post($this->id);
                 $this->name = $accountPost->post_title;
                 $this->authenticated = TRUE;
-
+	            error_log($sID.' logged in');
                 return TRUE;
             } else {
-            	error_log('No Sessions Found');
+            	$secound_query = new WP_Query(($args));
+	            if ($secound_query->have_posts()) {
+		            $spID = $secound_query->posts[0]->ID;
+		            $this->id = get_post_meta($spID, '_wpam_sessions_account_id', true);
+		            $accountPost = get_post($this->id);
+		            $this->name = $accountPost->post_title;
+		            $this->authenticated = TRUE;
+		            error_log($sID.' logged in on second attempt');
+		            return TRUE;
+	            } else {
+		            error_log('No Session Posts Found for - '.$sID);
+	            }
+
             }
 
         } else {
