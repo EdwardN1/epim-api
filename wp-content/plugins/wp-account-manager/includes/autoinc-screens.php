@@ -11,7 +11,7 @@ function login_form($recapture)
     echo '<div><label for="username">Username:<br><input type="text" id="username" name="username" value="' . $username . '"/></label><br>';
     echo '<label for="password">Password:<br><input type="password" id="password" name="password" value="' . $password, '"/></label></div>';
     if ('' != $recapture) echo $recapture;
-    echo '<div><input type="submit"></div>';
+    echo '<div><input type="submit" class="button" value="Log In"></div>';
     echo '</form></div>';
     echo '<div><a href="' . strtok($_SERVER['REQUEST_URI'], '?') . '?lostpassword=1">Lost your password?</a></div>';
 }
@@ -22,7 +22,7 @@ function reset_form($recapture, $stage)
         echo '<div class="wpam-login-form"><h4>Reset your password</h4><form action="' . strtok($_SERVER['REQUEST_URI'], '?') . '?lostpassword=2" method="post">';
         echo '<div><label for="username">Enter your username or email address:<br><input type="text" id="username" name="username" value=""/></label><br>';
         if ('' != $recapture) echo $recapture;
-        echo '<div><input type="submit"></div>';
+        echo '<div><input type="submit" class="button" value="Reset"></div>';
         echo '</form></div>';
         echo '<div><a href="' . strtok($_SERVER['REQUEST_URI'], '?') . '">Return to Login</a></div>';
     } else {
@@ -88,7 +88,7 @@ function reset_form($recapture, $stage)
 			                echo '<div><label for="passwd1">Enter your new password:<br><input type="password" id="passwd1" name="passwrd1"></label></div>';
 			                echo '<div><label for="passwd2">R-enter your new password:<br><input type="password" id="passwd2" name="passwrd2"></label></div>';
 			                if ('' != $recapture) echo $recapture;
-			                echo '<div><input type="submit"></div>';
+			                echo '<div><input type="submit" class="button" value="Update"></div>';
 			                echo '</form></div>';
 		                } else {
 			                echo '<div style="color: red">Sorry this link has expired.</div>';
@@ -163,12 +163,16 @@ function login_shortcode($params = array())
     if ($account->sessionLogin()) {
         if (isset($_GET['logout'])) {
             $account->logout();
+            do_action('wpam_before_logout_success');
             echo '<div>You are logged out</div>';
             login_form($recapture);
             echo '</form></div>';
+	        do_action('wpam_after_logout_success');
         } else {
+	        do_action('wpam_before_logged_in_success');
             echo '<div>Logged in as ' . $account->getName() . '</div>';
             echo '<div>Not ' . $account->getName() . '? <a href="' . strtok($_SERVER['REQUEST_URI'], '?') . '?logout=1">Logout</a> </div>';
+	        do_action('wpam_after_logged_in_success');
         }
     } else {
         $loggedin = false;
@@ -194,25 +198,6 @@ function login_shortcode($params = array())
                 );
                 $context = stream_context_create($options);
                 $verify = file_get_contents($url, false, $context);
-
-                /*$headers = array();
-	            $headers[] = "Content-Type: application/x-www-form-urlencoded\r\n";
-
-	            $ch = curl_init();
-
-	            curl_setopt($ch, CURLOPT_URL, $url);
-
-	            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-	            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	            curl_setopt($ch, CURLOPT_POST, true);
-	            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
-	            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-	            $verify = curl_exec($ch);
-
-	            curl_close($ch);
-
-	            error_log(print_r($verify,true));*/
-
                 $captcha_success = json_decode($verify);
                 if (($captcha_success->success == false) && (array_key_exists("g-recaptcha-response", $_POST))) {
                     echo '<div style="color: red">Please confirm you are not a robot</div>';
@@ -248,10 +233,14 @@ function login_shortcode($params = array())
             }
         }
         if ($loggedin) {
+	        do_action('wpam_before_logged_in_success');
             echo '<div>Logged in as ' . $account->getName() . '</div>';
             echo '<div>Not ' . $account->getName() . '? <a href="' . strtok($_SERVER['REQUEST_URI'], '?') . '?logout=1">Logout</a> </div>';
+	        do_action('wpam_after_logged_in_success');
         } else {
+	        do_action('wpam_before_log_in_form');
             login_form($recapture);
+	        do_action('wpam_after_log_in_form');
         }
     }
 
