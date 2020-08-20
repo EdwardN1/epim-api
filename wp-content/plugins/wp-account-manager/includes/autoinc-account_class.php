@@ -312,13 +312,13 @@ class Account
 
         /* Check if the user name is valid. If not, return FALSE meaning the authentication failed */
         if (!$this->isNameValid($name)) {
-            error_log('Login: Invalid username: '.$name);
+            //error_log('Login: Invalid username: ' . $name);
             return FALSE;
         }
 
         /* Check if the password is valid. If not, return FALSE meaning the authentication failed */
         if (!$this->isPasswdValid($passwd)) {
-            error_log('Login: Invalid Password: '.$passwd);
+            //error_log('Login: Invalid Password: ' . $passwd);
             return FALSE;
         }
 
@@ -327,14 +327,14 @@ class Account
         $postID = $this->getIdFromName($name);
 
         if (!$postID) {
-            error_log('Login: Cannot find record for: '.$name);
+            //error_log('Login: Cannot find record for: ' . $name);
             return FALSE;
         }
 
         $isEnabled = (get_post_meta($postID, '_wpam_accounts_account_enabled', true) == 'yes');
 
         if (!$isEnabled) {
-            error_log('Login: Account not enabled for: '.$name);
+            //error_log('Login: Account not enabled for: ' . $name);
             return FALSE;
         }
 
@@ -350,11 +350,12 @@ class Account
             $this->registerLoginSession();
 
             /* Finally, Return TRUE */
+            do_action('wpam_logged_in');
             return TRUE;
         }
 
         /* If we are here, it means the authentication failed: return FALSE */
-        error_log('Login: Password not verified: '.$passwd.' for User: '.$name);
+        //error_log('Login: Password not verified: '.$passwd.' for User: '.$name);
         return FALSE;
     }
 
@@ -451,26 +452,12 @@ class Account
                 $accountPost = get_post($this->id);
                 $this->name = $accountPost->post_title;
                 $this->authenticated = TRUE;
-	            error_log($sID.' logged in');
+                //error_log($sID.' logged in');
+                do_action('wpam_logged_in');
                 return TRUE;
-            } else {
-            	$secound_query = new WP_Query(($args));
-	            if ($secound_query->have_posts()) {
-		            $spID = $secound_query->posts[0]->ID;
-		            $this->id = get_post_meta($spID, '_wpam_sessions_account_id', true);
-		            $accountPost = get_post($this->id);
-		            $this->name = $accountPost->post_title;
-		            $this->authenticated = TRUE;
-		            error_log($sID.' logged in on second attempt');
-		            return TRUE;
-	            } else {
-		            error_log('No Session Posts Found for - '.$sID);
-	            }
-
             }
-
         } else {
-        	error_log('no php session');
+            error_log('no php session');
         }
 
         /* If we are here, the authentication failed */
@@ -525,6 +512,7 @@ class Account
                 wp_delete_post($query_ID);
             }
         }
+        do_action('wpam_logout');
     }
 
     /* Close all account Sessions except for the current one (aka: "logout from other devices") */
@@ -639,7 +627,7 @@ class Account
                 $postID = $this_query->posts[0]->ID;
             }
 
-            if(is_null($postID)) {
+            if (is_null($postID)) {
                 //error_log('Adding new session');
                 $newSession = array(
                     'post_type' => 'wpam_sessions',
@@ -648,11 +636,11 @@ class Account
                 );
                 $newSessionID = wp_insert_post($newSession);
                 //error_log('$newSessionID = '.$newSessionID);
-                update_post_meta($newSessionID, '_wpam_sessions_account_id',$this->id);
-                update_post_meta($newSessionID,'_wpam_sessions_login_time',date(DATE_RFC2822));
+                update_post_meta($newSessionID, '_wpam_sessions_account_id', $this->id);
+                update_post_meta($newSessionID, '_wpam_sessions_login_time', date(DATE_RFC2822));
             } else {
-                update_post_meta($postID,'_wpam_sessions_account_id',$this->id);
-                update_post_meta($postID,'_wpam_sessions_login_time',date(DATE_RFC2822));
+                update_post_meta($postID, '_wpam_sessions_account_id', $this->id);
+                update_post_meta($postID, '_wpam_sessions_login_time', date(DATE_RFC2822));
             }
 
 
