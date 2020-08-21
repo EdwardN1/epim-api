@@ -291,11 +291,13 @@ function getBranchID($id)
     $args = array(
         'post_type' => 'cac_branches',
         'posts_per_page' => '-1',
-        'post_status' => 'publish'
+        'post_status' => 'publish',
+	    /*'meta_key' => '_branch_epim_id',
+	    'meta_value' => $id*/
     );
     $loop = new WP_Query($args);
 
-    if ($loop->have_posts()): $loop->the_post();
+    if ($loop->have_posts()):
 
         while ($loop->have_posts()) : $loop->the_post();
             $ePim_ID = get_post_meta(get_the_ID(), '_branch_epim_id', true);
@@ -316,7 +318,7 @@ function create_branch($id, $name, $telephone, $email, $address)
 {
     $response = '';
     $postID = getBranchID($id);
-    //error_log('$id = '.$id.' $postID = '.$postID);
+    //error_log('$id = '.$id.' $postID = '.$postID. ' $name = '. $name.' $email = '.$email);
     if ($postID) {
         $post_update = array(
             'ID' => $postID,
