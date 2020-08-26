@@ -5,7 +5,12 @@ add_shortcode('poa_woocommerce_my_account','wpamvc_my_account');
 
 function wpamvc_my_account($atts) {
 
-	echo do_shortcode('[wpam recapture="true"]');
+	if(!is_user_logged_in()) {
+		echo do_shortcode('[wpam recapture="true"]');
+	} else {
+		echo do_shortcode('[woocommerce_my_account]');
+	}
+
 
 }
 
