@@ -58,7 +58,9 @@ function wpamvc_my_account_sub_user_accounts_endpoint_content() {
 	if ( $update->have_posts() ):
 		while ( $update->have_posts() ) :$update->the_post();
 			if ( isset( $_POST[ 'wpamvc_verify_' . get_the_ID() ] ) ) {
-				if ( wp_verify_nonce( $_POST[ 'update_user_details_' . get_the_ID() ], 'wpamvc_verify_' . get_the_ID() ) ) {
+			    error_log('wpamvc_verify_'.get_the_ID().' is set value='.$_POST[ 'wpamvc_verify_' . get_the_ID() ]);
+				if ( wp_verify_nonce( $_POST[ 'wpamvc_verify_' . get_the_ID() ], 'update_user_details_' . get_the_ID() ) ) {
+				    error_log('update_user_details_' . get_the_ID().' verified');
 					$postArray = array(
 						'ID'         => get_the_ID(),
 						'post_title' => $_POST[ 'wpam_name_' . get_the_ID() ],
