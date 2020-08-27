@@ -1,5 +1,8 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
 /**
  * Creating an Options Page
  */

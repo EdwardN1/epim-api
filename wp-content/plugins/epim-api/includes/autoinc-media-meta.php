@@ -1,4 +1,8 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
 add_filter("attachment_fields_to_edit", "epim_add_image_attachment_fields_to_edit", null, 2);
 add_filter("attachment_fields_to_save", "epim_add_image_attachment_fields_to_save", null , 2);
 

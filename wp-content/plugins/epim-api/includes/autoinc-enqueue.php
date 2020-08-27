@@ -1,4 +1,8 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
 add_action('admin_enqueue_scripts', 'epim_admin_enqueue');
 function epim_admin_enqueue($hook) {
     if ('toplevel_page_epim' !== $hook) {

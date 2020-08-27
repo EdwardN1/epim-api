@@ -1,5 +1,8 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
 // Takes an image url as an argument and upload image to wordpress and returns the media id, later we will use this id to assign the image to product.
 function uploadMedia($image_url){
 	require_once(ABSPATH.'wp-admin/includes/image.php');

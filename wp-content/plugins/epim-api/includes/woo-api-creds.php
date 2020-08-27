@@ -1,5 +1,9 @@
 <?php
-global $ep_WooCommerce;
+
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
+/*global $ep_WooCommerce;
 
 $wc_api_php = ea_PLUGINPATH .'/assets/wc-api-php/src';
 
@@ -24,4 +28,4 @@ $ep_WooCommerce = new Client(
 		'version' => 'wc/v3',
 		'query_string_auth' => true
 	]
-);
+);*/

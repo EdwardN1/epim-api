@@ -1,5 +1,8 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
 function checkSecure() {
     if ( ! check_ajax_referer( 'epim-security-nonce', 'security' ) ) {
         wp_send_json_error( 'Invalid security token sent.' );

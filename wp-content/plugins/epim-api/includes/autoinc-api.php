@@ -1,20 +1,6 @@
 <?php
-/*function displayJSON($apiCall)
-{
-    $allAttributes = new RecursiveIteratorIterator(new RecursiveArrayIterator(json_decode($apiCall, true)), RecursiveIteratorIterator::SELF_FIRST);
-    echo '<div style="padding-bottom: 10px; padding-top: 10px; border-bottom: 1px solid black">';
-    echo '<p>';
-    //$indent = 1;
-    foreach ($allAttributes as $key => $val) {
-        if (is_array($val)) {
-            echo "</p><p>$key:<br>";
-        } else {
-            echo "<span style='padding-left: 1em;'> $key => $val</span><br>";
-        }
-    }
-    echo '</p>';
-    echo '</div>';
-}*/
+if ( ! defined( 'ABSPATH' ) )
+	exit;
 
 /**
  *

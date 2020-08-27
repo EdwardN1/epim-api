@@ -1,4 +1,8 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
 add_action( 'woocommerce_before_calculate_totals', 'epim_quantity_based_pricing', 9999 );
 
 function epim_quantity_based_pricing( $cart ) {

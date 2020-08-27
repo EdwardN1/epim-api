@@ -1,5 +1,8 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) )
+	exit;
+
 //Product Cat Create page
 function epim_taxonomy_add_new_meta_field() {
     ?>
