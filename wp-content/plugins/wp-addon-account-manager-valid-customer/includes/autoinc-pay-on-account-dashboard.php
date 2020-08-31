@@ -71,6 +71,11 @@ function wpamvc_my_account_sub_user_accounts_endpoint_content() {
 						}
 					} else {
 						update_post_meta( get_the_ID(), '_wpam_accounts_email', $_POST[ 'wpam_email_' . get_the_ID() ] );
+						if(isset($_POST['wpam_enabled_'.get_the_ID()])) {
+                            update_post_meta( get_the_ID(), '_wpam_accounts_account_enabled', 'yes' );
+                        } else {
+                            update_post_meta( get_the_ID(), '_wpam_accounts_account_enabled', 'no' );
+                        }
 					}
 				}
 			}
@@ -95,7 +100,6 @@ function wpamvc_my_account_sub_user_accounts_endpoint_content() {
                     <th class="woocommerce table my_account_orders">Name</th>
                     <th class="woocommerce table my_account_orders">Email Address</th>
                     <th class="woocommerce table my_account_orders">Account Enabled</th>
-                    <th class="woocommerce table my_account_orders">Delete</th>
                 </tr>
 				<?php
 				while ( $loop->have_posts() ) : $loop->the_post();
@@ -104,12 +108,18 @@ function wpamvc_my_account_sub_user_accounts_endpoint_content() {
 					?>
 
                     <tr>
-
+                        <?php
+                        $account_enabled = get_post_meta( get_the_ID(), '_wpam_accounts_account_enabled', true );
+                        $checked = '';
+                        if($account_enabled=='yes') {
+                            $checked = ' checked';
+                        }
+                        ?>
 
                         <td><?php wp_nonce_field( 'update_user_details_'. get_the_ID(), 'wpamvc_verify_' . get_the_ID() ); ?><input type="text" value="<?php echo get_the_title(); ?>" name="wpam_name_<?php echo get_the_ID(); ?>"/></td>
                         <td><input type="email" value="<?php echo get_post_meta( get_the_ID(), '_wpam_accounts_email', true ); ?>" name="wpam_email_<?php echo get_the_ID(); ?>"/></td>
-                        <td><?php echo get_post_meta( get_the_ID(), '_wpam_accounts_account_enabled', true ); ?></td>
-                        <td>?</td>
+                        <td><input type="checkbox" name="wpam_enabled_<?php echo get_the_ID(); ?>" value="yes" <?php echo $checked?>></td>
+
 
                     </tr>
 
