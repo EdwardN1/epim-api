@@ -9,7 +9,7 @@ function epim_admin_enqueue($hook) {
         return;
     }
     wp_enqueue_script('jquery-ui-datepicker');
-    wp_register_style('jquery-ui', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+    wp_register_style('jquery-ui', plugins_url('assets/css/jquery-ui-1-8-2.css',__DIR__));
     wp_enqueue_style('jquery-ui');
     wp_enqueue_script('epim_process_queue_script', plugins_url('assets/scripts/processQueue.js',__DIR__));
     wp_enqueue_script('epim_admin_scripts', plugins_url('assets/scripts/admin.js',__DIR__),'epim_process_queue_script');

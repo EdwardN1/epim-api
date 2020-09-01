@@ -245,22 +245,22 @@ function add_epim_product_data_fields() {
 add_action( 'woocommerce_process_product_meta', 'woocommerce_process_product_meta_fields_save' );
 function woocommerce_process_product_meta_fields_save( $post_id ){
 	// This is the case to save custom field data of checkbox. You have to do it as per your custom fields
-	$epim_API_ID =  $_POST['epim_API_ID'];
+	$epim_API_ID =  sanitize_text_field($_POST['epim_API_ID']);
 	update_post_meta( $post_id, 'epim_API_ID', $epim_API_ID );
-	$epim_product_group_name =  $_POST['epim_product_group_name'];
+	$epim_product_group_name =  sanitize_text_field($_POST['epim_product_group_name']);
 	update_post_meta( $post_id, 'epim_product_group_name', $epim_product_group_name );
-	$epim_variation_ID =  $_POST['epim_variation_ID'];
+	$epim_variation_ID =  sanitize_text_field($_POST['epim_variation_ID']);
 	update_post_meta( $post_id, 'epim_variation_ID', $epim_variation_ID );
-	$epim_Qty_Break_1 =  $_POST['epim_Qty_Break_1'];
+	$epim_Qty_Break_1 =  sanitize_text_field($_POST['epim_Qty_Break_1']);
 	update_post_meta( $post_id, 'epim_Qty_Break_1', $epim_Qty_Break_1 );
-	$epim_Qty_Price_1 =  $_POST['epim_Qty_Price_1'];
+	$epim_Qty_Price_1 =  sanitize_text_field($_POST['epim_Qty_Price_1']);
 	update_post_meta( $post_id, 'epim_Qty_Price_1', $epim_Qty_Price_1 );
-	$epim_Qty_Break_2 =  $_POST['epim_Qty_Break_2'];
+	$epim_Qty_Break_2 =  sanitize_text_field($_POST['epim_Qty_Break_2']);
 	update_post_meta( $post_id, 'epim_Qty_Break_2', $epim_Qty_Break_2 );
-	$epim_Qty_Price_2 =  $_POST['epim_Qty_Price_2'];
+	$epim_Qty_Price_2 =  sanitize_text_field($_POST['epim_Qty_Price_2']);
 	update_post_meta( $post_id, 'epim_Qty_Price_2', $epim_Qty_Price_2 );
-	$epim_Qty_Break_3 =  $_POST['epim_Qty_Break_3'];
+	$epim_Qty_Break_3 =  sanitize_text_field($_POST['epim_Qty_Break_3']);
 	update_post_meta( $post_id, 'epim_Qty_Break_3', $epim_Qty_Break_3 );
-	$epim_Qty_Price_3 =  $_POST['epim_Qty_Price_3'];
+	$epim_Qty_Price_3 =  sanitize_text_field($_POST['epim_Qty_Price_3']);
 	update_post_meta( $post_id, 'epim_Qty_Price_3', $epim_Qty_Price_3 );
 }

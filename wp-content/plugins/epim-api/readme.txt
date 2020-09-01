@@ -9,5 +9,5 @@ Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin requires you to have an account at https://epim.online and an activated epim api. You wil then be able to import your product data straight into WooCommerce for an instant online shop.
+This plugin requires you to have an account at https://epim.online for ePim and an activated ePim api. More info on ePim here: https://www.e-pim.co.uk/. You will then be able to import your product data straight into WooCommerce for an instant online shop.
 

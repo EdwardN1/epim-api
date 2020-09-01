@@ -39,25 +39,25 @@ function uploadMedia($image_url){
 	return false;
 }
 
-function ep_wooUpdateProduct($pid, $productArray){
-    return ep_wooCreateProduct_ex($pid,$productArray);
+function epimaapi_wooUpdateProduct($pid, $productArray){
+    return epimaapi_wooCreateProduct_ex($pid,$productArray);
 }
 
-function ep_wooCreateProduct($productArray){
-	return ep_wooCreateProduct_ex(0,$productArray);
+function epimaapi_wooCreateProduct($productArray){
+	return epimaapi_wooCreateProduct_ex(0,$productArray);
 }
 
-function ep_wooCreateProduct_ex($pid, $productArray) {
+function epimaapi_wooCreateProduct_ex($pid, $productArray) {
     $product_id = false;
     try {
         if (array_key_exists('productTitle', $productArray)) {
             $productTitle = $productArray['productTitle'];
             if ($productTitle == '') {
-                error_log('ep_wooCreatProduct - blank product title');
+                error_log('epimaapi_wooCreatProduct - blank product title');
                 return $product_id;
             }
         } else {
-            error_log('ep_wooCreatProduct - blank product title');
+            error_log('epimaapi_wooCreatProduct - blank product title');
             return $product_id;
         }
 
@@ -188,15 +188,15 @@ function ep_wooCreateProduct_ex($pid, $productArray) {
         if (array_key_exists('categoryIDS', $productArray)) {
             $categoryIDS = $productArray['categoryIDS'];
             if (!is_array($categoryIDS)) {
-                error_log('ep_wooCreatProduct - Category IDS in unexpected format for '.$pid);
+                error_log('epimaapi_wooCreatProduct - Category IDS in unexpected format for '.$pid);
                 return $product_id;
             }
             if (count($categoryIDS) == 0) {
-                error_log('ep_wooCreatProduct - No Category IDS for '.$pid);
+                error_log('epimaapi_wooCreatProduct - No Category IDS for '.$pid);
                 return $product_id;
             }
         } else {
-            error_log('ep_wooCreatProduct - No Category IDS supplied for '.$pid);
+            error_log('epimaapi_wooCreatProduct - No Category IDS supplied for '.$pid);
             return $product_id;
         }
 
