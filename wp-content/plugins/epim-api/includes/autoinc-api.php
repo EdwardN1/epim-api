@@ -12,24 +12,46 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 function epimaapi_make_curl_call($url) {
 
-	$ch = curl_init();
+	if(function_exists('curl_init')) {
+        $ch = curl_init();
 
-	curl_setopt( $ch, CURLOPT_URL, $url );
+        curl_setopt( $ch, CURLOPT_URL, $url );
 
-	$headers   = array();
-	$headers[] = "Ocp-Apim-Subscription-Key: " . get_option( 'epim_key' );
+        $headers   = array();
+        $headers[] = "Ocp-Apim-Subscription-Key: " . get_option( 'epim_key' );
 
-	curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
-	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
 
-	$apiCall = curl_exec( $ch );
+        $apiCall = curl_exec( $ch );
 
-	curl_close( $ch );
+        curl_close( $ch );
 
-	return $apiCall;
+        return $apiCall;
+    } else {
+        $opts = array(
+            'http' => array(
+                'method' => "GET",
+                'header' => "Ocp-Apim-Subscription-Key: " . get_option('epim_key')
+            )
+        );
+        $context = stream_context_create($opts);
+        $apiCall = file_get_contents($url, false, $context);
+
+        return $apiCall;
+    }
+
 }
 
+// Setting a custom timeout value for cURL. Using a high value for priority to ensure the function runs after any other added to the same action hook.
+/*add_action('http_api_curl', 'epimaapi_custom_curl_timeout', 9999, 1);
+function epimaapi_custom_curl_timeout( $handle ){
+    curl_setopt( $handle, CURLOPT_CONNECTTIMEOUT, 30 ); // 30 seconds.
+    curl_setopt( $handle, CURLOPT_TIMEOUT, 30 ); // 30 seconds.
+}*/
+
 function epimaapi_make_api_call( $url ) {
+    $response = null;
 	$method   = get_option( 'epim_api_retrieval_method' );
 	$epim_url = get_option( 'epim_url' );
 	if ( substr( $epim_url, - 1 != '/' ) ) {
@@ -48,13 +70,14 @@ function epimaapi_make_api_call( $url ) {
 			)
 		);
 
-		$response = wp_remote_get($epim_url . $url,$args);
+		$response = wp_safe_remote_get($epim_url . $url,$args);
 
 		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
 			$apiCall = $response['body'];
 		} else {
 			if(is_wp_error( $response )) {
 				//error_log($response->get_error_message());
+				//error_log('URL called: '.$epim_url . $url);
 				$apiCall = epimaapi_make_curl_call($epim_url.$url);
 			}
 		}

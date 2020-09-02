@@ -15,7 +15,7 @@ Author URI: https://www.technicks.com
 
 define('epimaapi_FUNCTIONSPATH', plugin_dir_path( __FILE__ ) . '/includes/');
 define('epimaapi_PLUGINPATH', plugin_dir_path( __FILE__ ) );
-define('epimaapi_PLUGINURI', plugins_url().'/epim-api');
+define('epimaapi_PLUGINURI', plugin_dir_url(__FILE__));
 $active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
 if ( in_array( 'woocommerce/woocommerce.php', $active_plugins ) ) {
 	foreach (glob(epimaapi_FUNCTIONSPATH.'autoinc-*.php') as $filename)

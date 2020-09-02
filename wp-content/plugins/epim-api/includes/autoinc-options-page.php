@@ -1,7 +1,7 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) )
-	exit;
+if (!defined('ABSPATH'))
+    exit;
 
 /**
  * Creating an Options Page
@@ -54,35 +54,38 @@ function epim_options_page()
         <?php screen_icon(); ?>
         <?php
         if (isset($_GET['tab'])) {
-            $active_tab = $_GET['tab'];
+            $active_tab = sanitize_text_field($_GET['tab']);
         } else {
             $active_tab = 'epim_management';
         }
         ?>
         <h2 class="nav-tab-wrapper">
-            <a href="?page=epim&tab=epim_management" class="nav-tab <?php echo $active_tab == 'epim_management' ? 'nav-tab-active' : ''; ?>">ePim Management</a>
-            <a href="?page=epim&tab=epim_settings" class="nav-tab <?php echo $active_tab == 'epim_settings' ? 'nav-tab-active' : ''; ?>">ePim Settings</a>
+            <a href="?page=epim&tab=epim_management"
+               class="nav-tab <?php echo $active_tab == 'epim_management' ? 'nav-tab-active' : ''; ?>">ePim
+                Management</a>
+            <a href="?page=epim&tab=epim_settings"
+               class="nav-tab <?php echo $active_tab == 'epim_settings' ? 'nav-tab-active' : ''; ?>">ePim Settings</a>
         </h2>
         <?php if ($active_tab == 'epim_management'): ?>
-        <style>
-            .modal {
-                display: none;
-            }
+            <style>
+                .modal {
+                    display: none;
+                }
 
-            .modal.active {
-                display: inline-block;
-            }
+                .modal.active {
+                    display: inline-block;
+                }
 
-            .modal img {
-                max-height: 25px;
-                width: auto;
-            }
+                .modal img {
+                    max-height: 25px;
+                    width: auto;
+                }
 
-            input[type=text] {
-                vertical-align: bottom;
-            }
+                input[type=text] {
+                    vertical-align: bottom;
+                }
 
-        </style>
+            </style>
             <div class="wrap">
                 <h1>ePim Management</h1>
 
@@ -90,63 +93,83 @@ function epim_options_page()
                     <tr>
                         <th><label for="pCode">Update by product code (SKU):</label></th>
                         <td>
-                            <input type="text" id="pCode" class="regular-text">&nbsp;<button id="UpdateCode" class="button">Update</button>&nbsp; &nbsp;<span class="modal UpdateCode"><img src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                            <input type="text" id="pCode" class="regular-text">&nbsp;<button id="UpdateCode"
+                                                                                             class="button">Update
+                            </button>&nbsp; &nbsp;<span class="modal UpdateCode"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="padding-left: 0; padding-top: 0;">This will only update existing products. If you have added new products in ePim then you need to Create them using either of the
+                        <td colspan="2" style="padding-left: 0; padding-top: 0;">This will only update existing
+                            products. If you have added new products in ePim then you need to Create them using either
+                            of the
                             two options below first.
                             <hr>
                         </td>
                     </tr>
                     <tr>
                         <th style="width: 250px;"><label for="start_date">Update by product changed since:</label></th>
-                        <td><input type="text" class="custom_date" name="start_date" id="start_date" value=""/>&nbsp;<button id="UpdateSince" class="button">Update</button>&nbsp; &nbsp;<span class="modal UpdateSince"><img src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        <td><input type="text" class="custom_date" name="start_date" id="start_date" value=""/>&nbsp;<button
+                                    id="UpdateSince" class="button">Update
+                            </button>&nbsp; &nbsp;<span class="modal UpdateSince"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="padding-left: 0; padding-top: 0;">NB if you have added new Categories in ePim, Create and Update those first as per below.
+                        <td colspan="2" style="padding-left: 0; padding-top: 0;">NB if you have added new Categories in
+                            ePim, Create and Update those first as per below.
                             <hr>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <button id="CreateCategories" class="button">Create and Update Categories</button>&nbsp; &nbsp;<span class="modal CreateCategories"><img src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                            <button id="CreateCategories" class="button">Create and Update Categories</button>&nbsp;
+                            &nbsp;<span class="modal CreateCategories"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="padding-left: 0; padding-top: 0;">Creates and Updates All Categories. You should run this before the above 2 options if you have added or updated any category
+                        <td colspan="2" style="padding-left: 0; padding-top: 0;">Creates and Updates All Categories. You
+                            should run this before the above 2 options if you have added or updated any category
                             information.
                             <hr>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <button id="CreateAllProducts" class="button">Create and Update all Products</button>&nbsp; &nbsp;<span class="modal CreateAllProducts"><img src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                            <button id="CreateAllProducts" class="button">Create and Update all Products</button>&nbsp;
+                            &nbsp;<span class="modal CreateAllProducts"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="padding-left: 0; padding-top: 0;">NB if you have added new Categories in ePim, Create and Update those first as per above. Updates and creates all products. If you
+                        <td colspan="2" style="padding-left: 0; padding-top: 0;">NB if you have added new Categories in
+                            ePim, Create and Update those first as per above. Updates and creates all products. If you
                             have a lot of products this will take a long time to complete.
                             <hr>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <button id="CreateAll" class="button">Create and Update all Categories and Products</button>&nbsp; &nbsp;<span class="modal CreateAll"><img src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                            <button id="CreateAll" class="button">Create and Update all Categories and Products</button>&nbsp;
+                            &nbsp;<span class="modal CreateAll"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="padding-left: 0; padding-top: 0;">Updates and creates all categories and all products. If you have a lot of products this will take a long time to complete.
+                        <td colspan="2" style="padding-left: 0; padding-top: 0;">Updates and creates all categories and
+                            all products. If you have a lot of products this will take a long time to complete.
                             <hr>
                         </td>
                     </tr>
                     <?php
-                    if(is_plugin_active('click-collect/click-collect.php')) {
-	                    ?>
+                    if (is_plugin_active('click-collect/click-collect.php')) {
+                        ?>
                         <tr>
                             <td colspan="2">
-                                <button id="CreateBranches" class="button">Create and Update Branches</button>&nbsp; &nbsp;<span class="modal CreateBranches"><img src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                                <button id="CreateBranches" class="button">Create and Update Branches</button>&nbsp;
+                                &nbsp;<span class="modal CreateBranches"><img
+                                            src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                             </td>
                         </tr>
                         <tr>
@@ -156,25 +179,31 @@ function epim_options_page()
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <button id="UpdateBranchStock" class="button">Update Branch Stock Levels</button>&nbsp; &nbsp;<span class="modal UpdateBranchStock"><img src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                                <button id="UpdateBranchStock" class="button">Update Branch Stock Levels</button>&nbsp;
+                                &nbsp;<span class="modal UpdateBranchStock"><img
+                                            src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="padding-left: 0; padding-top: 0;">Updates Branch Stock Levels - Only updates imported product stock levels - does not import products.
+                            <td colspan="2" style="padding-left: 0; padding-top: 0;">Updates Branch Stock Levels - Only
+                                updates imported product stock levels - does not import products.
                                 <hr>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2">
-                                <button id="DeletedStock" class="button">Check for Deleted Stock</button>&nbsp; &nbsp;<span class="modal DeletedStock"><img src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                                <button id="DeletedStock" class="button">Check for Deleted Stock</button>&nbsp;
+                                &nbsp;<span class="modal DeletedStock"><img
+                                            src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="2" style="padding-left: 0; padding-top: 0;">Checks for Deleted Products and removes them from WooCommerce.
+                            <td colspan="2" style="padding-left: 0; padding-top: 0;">Checks for Deleted Products and
+                                removes them from WooCommerce.
                                 <hr>
                             </td>
                         </tr>
-	                    <?php
+                        <?php
                     }
                     ?>
                     <?php
@@ -184,7 +213,9 @@ function epim_options_page()
                         ?>
                         <tr>
                             <td colspan="2">
-                                <button id="deleteAttributes" class="button">Delete All Attributes</button> &nbsp;<span class="modal deleteAttributes"><img src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                                <button id="deleteAttributes" class="button">Delete All Attributes</button> &nbsp;<span
+                                        class="modal deleteAttributes"><img
+                                            src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                             </td>
                         </tr>
                     <?php
@@ -204,24 +235,28 @@ function epim_options_page()
                 <table class="form-table">
                     <tr>
                         <th scope="row"><label for="epim_url">base URL</label></th>
-                        <td><input type="text" id="epim_url" name="epim_url" value="<?php echo get_option('epim_url'); ?>" class="regular-text"/></td>
+                        <td><input type="text" id="epim_url" name="epim_url"
+                                   value="<?php echo get_option('epim_url'); ?>" class="regular-text"/></td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="epim_key">Subscription Key</label></th>
-                        <td><input type="text" id="epim_key" name="epim_key" value="<?php echo get_option('epim_key'); ?>" class="regular-text"/></td>
+                        <td><input type="text" id="epim_key" name="epim_key"
+                                   value="<?php echo get_option('epim_key'); ?>" class="regular-text"/></td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="epim_api_retrieval_method">API Retrieval Method</label></th>
                         <td>
                             <select name="epim_api_retrieval_method" id="epim_api_retrieval_method">
                                 <option value="file_get_contents" <?php if (get_option('epim_api_retrieval_method') == 'file_get_contents') {
-		                            echo 'selected';
-	                            } ?>>wp_remote_get
-                                </option>
-                                <option value="curl" <?php if (get_option('epim_api_retrieval_method') == 'curl') {
                                     echo 'selected';
-                                } ?>>cUrl
+                                } ?>>wp_remote_get
                                 </option>
+                                <?php if (function_exists('curl_init')): ?>
+                                    <option value="curl" <?php if (get_option('epim_api_retrieval_method') == 'curl') {
+                                        echo 'selected';
+                                    } ?>>cUrl
+                                    </option>
+                                <?php endif; ?>
 
                             </select>
 
