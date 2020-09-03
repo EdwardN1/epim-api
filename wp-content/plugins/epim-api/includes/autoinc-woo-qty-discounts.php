@@ -20,9 +20,9 @@ function epim_quantity_based_pricing( $cart ) {
     foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
         $id = $cart_item['data']->get_id();
 
-        $epim_threshold1 = isInteger(get_post_meta($id,'epim_Qty_Break_1',true));
-        $epim_threshold2 = isInteger(get_post_meta($id,'epim_Qty_Break_2',true));
-        $epim_threshold3 = isInteger(get_post_meta($id,'epim_Qty_Break_3',true));
+        $epim_threshold1 = epimaapi_isInteger(get_post_meta($id,'epim_Qty_Break_1',true));
+        $epim_threshold2 = epimaapi_isInteger(get_post_meta($id,'epim_Qty_Break_2',true));
+        $epim_threshold3 = epimaapi_isInteger(get_post_meta($id,'epim_Qty_Break_3',true));
 
         $epim_price1 = get_post_meta($id,'epim_Qty_Price_1',true);
         $epim_price2 = get_post_meta($id,'epim_Qty_Price_2',true);
@@ -54,7 +54,7 @@ function epim_quantity_based_pricing( $cart ) {
 
 }
 
-function isInteger($value) {
+function epimaapi_isInteger($value) {
     if(!$value) {
         return false;
     }
