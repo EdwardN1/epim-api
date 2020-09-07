@@ -367,7 +367,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
         if($shipping==='clickcollect') {
             $fields['meta_key'] = array(
                 'label' => __('Collection Branch'),
-                'value' => get_post_meta($order->id, '_COLLECTION_BRANCH_NAME', true),
+                'value' => get_post_meta($order->get_id(), '_COLLECTION_BRANCH_NAME', true),
             );
         }
         return $fields;
