@@ -192,11 +192,11 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray) {
                 return $product_id;
             }
             if (count($categoryIDS) == 0) {
-                error_log('epimaapi_wooCreatProduct - No Category IDS for '.$pid);
+                //error_log('epimaapi_wooCreatProduct - No Category IDS for '.$pid);
                 return $product_id;
             }
         } else {
-            error_log('epimaapi_wooCreatProduct - No Category IDS supplied for '.$pid);
+            //error_log('epimaapi_wooCreatProduct - No Category IDS supplied for '.$pid);
             return $product_id;
         }
 

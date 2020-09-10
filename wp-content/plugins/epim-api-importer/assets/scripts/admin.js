@@ -305,6 +305,9 @@ adminJQ(function ($) {
     let customQueue = new ts_execute_queue('#ePimResult', function () {
         _o('finished');
         $('.modal.deleteAttributes').removeClass('active');
+        $('.modal.deleteCategories').removeClass('active');
+        $('.modal.deleteImages').removeClass('active');
+        $('.modal.deleteProducts').removeClass('active');
     }, function (action, request, data) {
         _o('Action Completed: ' + action);
         _o('Request: ' + request);
@@ -503,6 +506,30 @@ adminJQ(function ($) {
         $('.modal.deleteAttributes').addClass('active');
         customQueue.reset();
         customQueue.queue(ajaxurl, {action: 'delete_attributes'});
+        customQueue.process();
+    });
+
+    $('#deleteCategories').on('click',function(){
+        _o('Deleting Categories..');
+        $('.modal.deleteCategories').addClass('active');
+        customQueue.reset();
+        customQueue.queue(ajaxurl, {action: 'delete_categories'});
+        customQueue.process();
+    });
+
+    $('#deleteImages').on('click',function(){
+        _o('Deleting Images..');
+        $('.modal.deleteImages').addClass('active');
+        customQueue.reset();
+        customQueue.queue(ajaxurl, {action: 'delete_epim_images'});
+        customQueue.process();
+    });
+
+    $('#deleteProducts').on('click',function(){
+        _o('Deleting Products..');
+        $('.modal.deleteProducts').addClass('active');
+        customQueue.reset();
+        customQueue.queue(ajaxurl, {action: 'delete_products'});
         customQueue.process();
     });
 

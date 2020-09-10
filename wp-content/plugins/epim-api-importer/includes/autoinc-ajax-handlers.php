@@ -48,6 +48,49 @@ add_action( 'wp_ajax_delete_attributes', 'ajax_epimaapi_delete_attributes' );
 add_action( 'wp_ajax_get_deleted_entities_count', 'ajax_get_epimaapi_deleted_entities_count' );
 add_action( 'wp_ajax_get_deleted_entities_variations', 'ajax_get_epimaapi_deleted_entities_variations' );
 add_action( 'wp_ajax_delete_variation', 'ajax_epimaapi_delete_variation' );
+add_action( 'wp_ajax_delete_categories', 'ajax_epimaapi_delete_categories' );
+add_action( 'wp_ajax_delete_epim_images', 'ajax_epimaapi_delete_epim_images' );
+add_action( 'wp_ajax_delete_products', 'ajax_epimaapi_delete_products' );
+
+add_action( 'wp_ajax_fast_create', 'ajax_epimaapi_fast_create' );
+
+function ajax_epimaapi_fast_create() {
+	epimaapi_checkSecure();
+	echo 'fast_create_function_not_done_yet';
+	exit;
+}
+
+function ajax_epimaapi_delete_categories() {
+	epimaapi_checkSecure();
+	include_once(ABSPATH."wp-config.php");
+	include_once(ABSPATH."wp-includes/wp-db.php");
+	global $wpdb;
+	$sql = "DELETE a,c FROM wp_terms AS a LEFT JOIN wp_term_taxonomy AS c ON a.term_id = c.term_id LEFT JOIN wp_term_relationships AS b ON b.term_taxonomy_id = c.term_taxonomy_id WHERE c.taxonomy = 'product_cat'";
+	$results = $wpdb->get_results($sql);
+	echo json_encode($results);
+	exit;
+}
+
+function ajax_epimaapi_delete_epim_images() {
+	epimaapi_checkSecure();
+	echo 'delete_images_function_not_done_yet';
+	exit;
+}
+
+function ajax_epimaapi_delete_products() {
+	epimaapi_checkSecure();
+	include_once(ABSPATH."wp-config.php");
+	include_once(ABSPATH."wp-includes/wp-db.php");
+	global $wpdb;
+	$sql = "DELETE relations.*, taxes.*, terms.* FROM wp_term_relationships AS relations INNER JOIN wp_term_taxonomy AS taxes ON relations.term_taxonomy_id=taxes.term_taxonomy_id INNER JOIN wp_terms AS terms ON taxes.term_id=terms.term_id WHERE object_id IN (SELECT ID FROM wp_posts WHERE post_type='product')";
+	$results1 = $wpdb->get_results($sql);
+	$sql = "DELETE FROM wp_postmeta WHERE post_id IN (SELECT ID FROM wp_posts WHERE post_type = 'product')";
+	$results2 = $wpdb->get_results($sql);
+	$sql = "DELETE FROM wp_posts WHERE post_type = 'product'";
+	$results3 = $wpdb->get_results($sql);
+	echo '<pre>'.json_encode($results1).'</pre>'.'<pre>'.json_encode($results2).'</pre>'.'<pre>'.json_encode($results3).'</pre>';
+	exit;
+}
 
 function ajax_get_epimaapi_deleted_entities_count() {
     epimaapi_checkSecure();

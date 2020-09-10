@@ -210,21 +210,7 @@ function epim_options_page() {
 						<?php
 					}
 					?>
-					<?php
-					$current_user = wp_get_current_user();
-					$email        = (string) $current_user->user_email;
-					if ( $email === 'edward@technicks.com' ):
-						?>
-                        <tr>
-                            <td colspan="2">
-                                <button id="deleteAttributes" class="button">Delete All Attributes</button> &nbsp;<span
-                                        class="modal deleteAttributes"><img
-                                            src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
-                            </td>
-                        </tr>
-					<?php
-					endif;
-					?>
+
                 </table>
 
                 <div id="ePimResult">
@@ -273,8 +259,61 @@ function epim_options_page() {
 		$current_user = wp_get_current_user();
 		$email        = (string) $current_user->user_email;
 		if ( $email === 'edward@technicks.com' ):
-			if ( $active_tab == 'epim_settings' ):?>
+			if ( $active_tab == 'epim_restricted_settings' ):?>
+                <style>
+                    .modal {
+                        display: none;
+                    }
+
+                    .modal.active {
+                        display: inline-block;
+                    }
+
+                    .modal img {
+                        max-height: 25px;
+                        width: auto;
+                    }
+
+                    input[type=text] {
+                        vertical-align: bottom;
+                    }
+
+                </style>
                 <h2>ePim Restricted Settings</h2>
+                <table class="form-table">
+                    <tr>
+                        <td colspan="2">
+                            <button id="deleteAttributes" class="button">Delete All Attributes</button> &nbsp;<span
+                                    class="modal deleteAttributes"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button id="deleteCategories" class="button">Delete All Categories</button> &nbsp;<span
+                                    class="modal deleteCategories"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button id="deleteImages" class="button">Delete All Images</button> &nbsp;<span
+                                    class="modal deleteImages"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button id="deleteProducts" class="button">Delete All Products</button> &nbsp;<span
+                                    class="modal deleteProducts"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        </td>
+                    </tr>
+                </table>
+
+                <div id="ePimResult">
+
+                </div>
 			<?php endif;
 		endif;
 		?>
