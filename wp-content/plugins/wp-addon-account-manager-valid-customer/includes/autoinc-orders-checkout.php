@@ -36,14 +36,16 @@ function wpamvc_woocommerce_order_status_processing( $order_id ) {
 	error_log( "============================== Order processing for order ============================".$order_id);
 }*/
 
-add_filter( 'woocommerce_checkout_create_order', 'wpamvc_filter_order', 10, 1 );
+add_filter( 'woocommerce_checkout_customer_id', 'wpamvc_filter_order_customer_id' );
 
-function wpamvc_filter_order($order) {
+function wpamvc_filter_order_customer_id($userid) {
 	$account = new Account;
 	if ($account->sessionLogin()) {
-		error_log( print_r( $order, true ) );
+		//error_log( print_r( $order, true ) );
+		$user_ID = get_post_meta($account->getId(),'_wpam_accounts_useraccount',true);
+		$userid = $user_ID;
 	}
-	return $order;
+	return $userid;
 }
 
 
