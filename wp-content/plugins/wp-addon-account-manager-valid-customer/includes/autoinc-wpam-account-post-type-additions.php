@@ -362,16 +362,16 @@ function wpam_accounts_repeater_billing_meta_box_callback() {
 	global $post;
 
 	$repeatable_fields = get_post_meta( $post->ID, '_wpam_billing_repeater_fields', true );
-	$countries           = wpam_get_country_options();
+	$countries         = wpam_get_country_options();
 
 	wp_nonce_field( 'wpam_repeatable_billing_meta_box_nonce', 'wpam_repeatable_billing_meta_box_nonce' );
 	?>
     <script type="text/javascript">
         jQuery(document).ready(function ($) {
             $('#billing-add-row').on('click', function () {
-                var row = $('.empty-row.screen-reader-text').clone(true);
-                row.removeClass('empty-row screen-reader-text');
-                row.insertBefore('#billing-repeatable-fieldset-one tbody>tr:last');
+                var row = $('.billing-blank-row .repeater-row').clone(true);
+                $('#billing-repeatable-fieldset-one').append(row);
+                $('#billing-repeatable-fieldset-one *').prop("disabled", false);
                 return false;
             });
 
@@ -382,6 +382,18 @@ function wpam_accounts_repeater_billing_meta_box_callback() {
         });
     </script>
 
+    <style>
+        .repeater-row table {
+            border-spacing: 0;
+        }
+
+        .repeater-row .remove-row, .repeater-row select, .repeater-row input.top-pad {
+            margin-top: 0.5em;
+        }
+
+    </style>
+
+
     <table id="billing-repeatable-fieldset-one" width="100%">
 
         <tbody>
@@ -391,7 +403,7 @@ function wpam_accounts_repeater_billing_meta_box_callback() {
 
 			foreach ( $repeatable_fields as $field ) {
 				?>
-                <tr>
+                <tr class="repeater-row">
                     <td>
                         <table>
                             <tr>
@@ -427,117 +439,190 @@ function wpam_accounts_repeater_billing_meta_box_callback() {
                             </tr>
                             <tr>
                                 <td>
-                                    <select name="select[]">
+                                    <select name="billing-country[]">
 										<?php foreach ( $countries as $label => $value ) : ?>
-                                            <option value="<?php echo $value; ?>"<?php selected( $field['select'], $value ); ?>><?php echo $label; ?></option>
+                                            <option value="<?php echo $value; ?>"<?php selected( $field['billing-country'], $value ); ?>><?php echo $label; ?></option>
 										<?php endforeach; ?>
                                     </select>
                                 </td>
                             </tr>
-	                        <tr>
-		                        <td><a class="button remove-row" href="#">Remove</a></td>
-	                        </tr>
+                            <tr>
+                                <td>
+                                    <label for="billing-street-address-1[]">Street Address:
+                                        <input type="text" class="widefat" name="billing-street-address-1[]" value="<?php if ( $field['billing-Street-Address-1'] != '' ) {
+					                        echo esc_attr( $field['billing-street-address-1'] );
+				                        } ?>"/><br>
+                                        <input type="text" class="widefat" name="billing-street-address-2[]" value="<?php if ( $field['billing-street-address-2'] != '' ) {
+		                                    echo esc_attr( $field['billing-street-address-1'] );
+	                                    } ?>" class="top-pad"/>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="billing-town-city[]">Town / City:
+                                        <input type="text" class="widefat" name="billing-town-city[]" value="<?php if ( $field['billing-town-city'] != '' ) {
+					                        echo esc_attr( $field['billing-town-city'] );
+				                        } ?>"/>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="billing-county[]">County:
+                                        <input type="text" class="widefat" name="billing-county[]" value="<?php if ( $field['billing-county'] != '' ) {
+					                        echo esc_attr( $field['billing-county'] );
+				                        } ?>"/>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="billing-postcode[]">Postcode:
+                                        <input type="text" class="widefat" name="billing-postcode[]" value="<?php if ( $field['billing-postcode'] != '' ) {
+					                        echo esc_attr( $field['billing-postcode'] );
+				                        } ?>"/>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="billing-phone[]">Phone:
+                                        <input type="text" class="widefat" name="billing-phone[]" value="<?php if ( $field['billing-phone'] != '' ) {
+					                        echo esc_attr( $field['billing-phone'] );
+				                        } ?>"/>
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <label for="billing-email[]">Email address:
+                                        <input type="email" class="widefat" name="billing-email[]" value="<?php if ( $field['billing-email'] != '' ) {
+					                        echo esc_attr( $field['billing-email'] );
+				                        } ?>"/>
+                                    </label>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><a class="button remove-row" href="#">Remove Address</a></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <hr>
+                                </td>
+                            </tr>
                         </table>
                     </td>
                 </tr>
 				<?php
 			}
-		else :
-			// show a blank one
-			?>
-			<tr>
-				<td>
-					<table>
-						<tr>
-							<td>
-								<table>
-									<tr>
-										<td>
-											<label for="billing-first-name[]">First Name:
-												<input type="text" class="widefat" name="billing-first-name[]" value=""/>
-											</label>
-										</td>
-										<td>
-											<label for="billing-last-name[]">Last Name:
-												<input type="text" class="widefat" name="billing-last-name[]" value=""/>
-											</label>
-										</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<label for="billing-company-name[]">Company Name:
-									<input type="text" class="widefat" name="billing-company-name[]" value=""/>
-								</label>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<select name="select[]">
-									<?php foreach ( $countries as $label => $value ) : ?>
-										<option value="<?php echo $value; ?>" <?php if($value=='GB') {echo ' selected';}?>><?php echo $label; ?></option>
-									<?php endforeach; ?>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<td><a class="button remove-row" href="#">Remove</a></td>
-						</tr>
-					</table>
-				</td>
-			</tr>
-		<?php endif; ?>
 
-        <!-- empty hidden one for jQuery -->
-        <tr class="empty-row screen-reader-text">
-	        <td>
-		        <table>
-			        <tr>
-				        <td>
-					        <table>
-						        <tr>
-							        <td>
-								        <label for="billing-first-name[]">First Name:
-									        <input type="text" class="widefat" name="billing-first-name[]" value=""/>
-								        </label>
-							        </td>
-							        <td>
-								        <label for="billing-last-name[]">Last Name:
-									        <input type="text" class="widefat" name="billing-last-name[]" value=""/>
-								        </label>
-							        </td>
-						        </tr>
-					        </table>
-				        </td>
-			        </tr>
-			        <tr>
-				        <td>
-					        <label for="billing-company-name[]">Company Name:
-						        <input type="text" class="widefat" name="billing-company-name[]" value=""/>
-					        </label>
-				        </td>
-			        </tr>
-			        <tr>
-				        <td>
-					        <select name="billing-country[]">
-						        <?php foreach ( $countries as $label => $value ) : ?>
-							        <option value="<?php echo $value; ?>" <?php if($value=='GB') {echo ' selected';}?>><?php echo $label; ?></option>
-						        <?php endforeach; ?>
-					        </select>
-				        </td>
-			        </tr>
-			        <tr>
-				        <td><a class="button remove-row" href="#">Remove</a></td>
-			        </tr>
-		        </table>
-	        </td>
-        </tr>
+		endif; ?>
+
+
         </tbody>
     </table>
 
-    <p><a id="add-row" class="button" href="#">Add another</a></p>
+    <!-- empty hidden one for jQuery -->
+    <table class="billing-blank-row" style="display: none;">
+        <tr class="repeater-row">
+            <td>
+                <table>
+                    <tr>
+                        <td>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <label for="billing-first-name[]">First Name:
+                                            <input disabled type="text" class="widefat" name="billing-first-name[]" value=""/>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label for="billing-last-name[]">Last Name:
+                                            <input disabled type="text" class="widefat" name="billing-last-name[]" value=""/>
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="billing-company-name[]">Company Name:
+                                <input disabled type="text" class="widefat" name="billing-company-name[]" value=""/>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select disabled name="billing-country[]">
+								<?php foreach ( $countries as $label => $value ) : ?>
+                                    <option value="<?php echo $value; ?>" <?php if ( $value == 'GB' ) {
+										echo ' selected';
+									} ?>><?php echo $label; ?></option>
+								<?php endforeach; ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="billing-street-address-1[]">Street Address:
+                                <input disabled type="text" class="widefat" name="billing-street-address-1[]" value=""/><br>
+                                <input disabled type="text" class="widefat" name="billing-street-address-2[]" value="" class="top-pad"/>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="billing-town-city[]">Town / City:
+                                <input disabled type="text" class="widefat" name="billing-town-city[]" value=""/>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="billing-county[]">County:
+                                <input disabled type="text" class="widefat" name="billing-county[]" value=""/>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="billing-postcode[]">Postcode:
+                                <input disabled type="text" class="widefat" name="billing-postcode[]" value=""/>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="billing-phone[]">Phone:
+                                <input disabled type="text" class="widefat" name="billing-phone[]" value=""/>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label for="billing-email[]">Email address:
+                                <input disabled type="email" class="widefat" name="billing-email[]" value=""/>
+                            </label>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td><a class="button remove-row" href="#">Remove Address</a></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <hr>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <p><a id="billing-add-row" class="button" href="#">Add Address</a></p>
 	<?php
 }
 
@@ -563,9 +648,9 @@ function wpam_accounts_billing_repeatable_meta_box_save( $post_id ) {
 
 
 	$billing_first_names   = isset( $_POST['billing-first-name'] ) ? (array) $_POST['billing-first-name'] : array();
-	$billing_last_names = isset( $_POST['billing-last-name'] ) ? (array) $_POST['billing-last-name'] : array();
+	$billing_last_names    = isset( $_POST['billing-last-name'] ) ? (array) $_POST['billing-last-name'] : array();
 	$billing_company_names = isset( $_POST['billing-company-name'] ) ? (array) $_POST['billing-company-name'] : array();
-	$billing_countries = isset( $_POST['billing-country'] ) ? (array) $_POST['billing-country'] : array();
+	$billing_countries     = isset( $_POST['billing-country'] ) ? (array) $_POST['billing-country'] : array();
 
 	$count = count( $billing_first_names );
 
