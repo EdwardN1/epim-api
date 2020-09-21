@@ -1,33 +1,46 @@
 <?php
 function get_accounts( $data ) {
-    $accountargs = array(
-        'post_type'      => 'wpam_accounts',
-        'posts_per_page' => - 1,
-    ) ;
+	$accountargs = array(
+		'post_type'      => 'wpam_accounts',
+		'posts_per_page' => - 1,
+	);
 
-    $accounts = get_posts($accountargs);
+	//$accounts = new WP_Query( $accountargs );
 
-    $response = array();
+	$accounts = get_posts($accountargs);
 
-    //$controller = new WP_REST_Posts_Controller('wpam_accounts');
+	$response = array();
 
-    //$raccounts = array();
+	//$controller = new WP_REST_Posts_Controller('wpam_accounts');
 
-    foreach ($accounts as $account) {
-        $raccount = array();
-        $raccount['ID'] = $account->get_the_id();
-        $raccount['post_title'] = $account->get_the_title();
-        $raccount['meta_data'] = get_post_meta($account->get_the_id());
-        $response[] = $raccount;
-    }
+	//$raccounts = array();
 
-    return new WP_REST_Response($response,200);
+	/*if ( have_posts( $accounts ) ):
+		while ( have_posts( $accounts ) ): the_post();
+			$raccount               = array();
+			$raccount['ID']         = get_the_id();
+			$raccount['post_title'] = get_the_title();
+			$raccount['meta_data']  = get_post_meta( get_the_id() );
+			$response[]             = $raccount;
+		endwhile;
+
+		wp_reset_postdata();
+	endif;*/
+
+	foreach ( $accounts as $account ) {
+		$raccount               = (array) $account;
+		$meta_data = get_post_meta($account->ID);
+		$raccount['meta_data'] = $meta_data;
+		$response[]             = $raccount;
+	}
+
+	return new WP_REST_Response($response,200);
 
 }
 
 add_action( 'rest_api_init', function () {
-    register_rest_route( 'wc/v3', 'accounts', array(
-        'methods' => 'GET',
-        'callback' => 'get_accounts',
-    ));
-});
+	register_rest_route( 'wc/v3', 'accounts', array(
+		'methods'  => 'GET',
+		'callback' => 'get_accounts',
+	) );
+} );
