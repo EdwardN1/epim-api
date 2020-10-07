@@ -43,13 +43,6 @@ function epimaapi_make_curl_call($url) {
 
 }
 
-// Setting a custom timeout value for cURL. Using a high value for priority to ensure the function runs after any other added to the same action hook.
-/*add_action('http_api_curl', 'epimaapi_custom_curl_timeout', 9999, 1);
-function epimaapi_custom_curl_timeout( $handle ){
-    curl_setopt( $handle, CURLOPT_CONNECTTIMEOUT, 30 ); // 30 seconds.
-    curl_setopt( $handle, CURLOPT_TIMEOUT, 30 ); // 30 seconds.
-}*/
-
 function epimaapi_make_api_call( $url ) {
     $response = null;
 	$method   = get_option( 'epim_api_retrieval_method' );
