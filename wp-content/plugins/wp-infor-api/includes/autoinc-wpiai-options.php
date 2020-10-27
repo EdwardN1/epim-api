@@ -30,6 +30,8 @@ function wpiai_register_settings() {
 	register_setting( 'wpiai_options_group', 'wpiai_client_id' );
 	add_option( 'wpiai_client_secret', 'The Client Secret for your INFOR API' );
 	register_setting( 'wpiai_options_group', 'wpiai_client_secret' );
+	add_option( 'wpiai_message_test_url', 'Message URL' );
+	register_setting( 'wpiai_test_group', 'wpiai_message_test_url' );
 	add_option( 'wpiai_message_test_parameters', 'Message Parameters' );
 	register_setting( 'wpiai_test_group', 'wpiai_message_test_parameters' );
 	add_option( 'wpiai_message_test_xml', 'Message XML' );
@@ -50,150 +52,176 @@ function wpiai_options_page() {
 	}
 	?>
     <div class="wrap">
-        <h2 class="nav-tab-wrapper">
-            <a href="?page=infor-options&tab=wpiai_security"
-               class="nav-tab <?php echo $active_tab == 'wpiai_security' ? 'nav-tab-active' : ''; ?>">Security</a>
-            <a href="?page=infor-options&tab=wpiai_message_test"
-               class="nav-tab <?php echo $active_tab == 'wpiai_message_test' ? 'nav-tab-active' : ''; ?>">Message Test</a>
-            <a href="?page=infor-options&tab=wpiai_settings"
-            class="nav-tab <?php echo $active_tab == 'wpiai_settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
-			<?php
-			$current_user = wp_get_current_user();
-			$email        = (string) $current_user->user_email;
-			if ( $email === 'edward@technicks.com' ):?>
-                <a href="?page=infor-options&tab=wpiai_restricted_settings"
-                   class="nav-tab <?php echo $active_tab == 'wpiai_restricted_settings' ? 'nav-tab-active' : ''; ?>">Infor Restricted Settings</a>
-			<?php endif; ?>
-        </h2>
+    <h2 class="nav-tab-wrapper">
+        <a href="?page=infor-options&tab=wpiai_security"
+           class="nav-tab <?php echo $active_tab == 'wpiai_security' ? 'nav-tab-active' : ''; ?>">Security</a>
+        <a href="?page=infor-options&tab=wpiai_message_test"
+           class="nav-tab <?php echo $active_tab == 'wpiai_message_test' ? 'nav-tab-active' : ''; ?>">Message Test</a>
+        <a href="?page=infor-options&tab=wpiai_settings"
+           class="nav-tab <?php echo $active_tab == 'wpiai_settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
 		<?php
-		if ( $active_tab == 'wpiai_security' ):
-			?>
-            <style>
-                .modal {
-                    display: none;
-                }
+		$current_user = wp_get_current_user();
+		$email        = (string) $current_user->user_email;
+		if ( $email === 'edward@technicks.com' ):?>
+            <a href="?page=infor-options&tab=wpiai_restricted_settings"
+               class="nav-tab <?php echo $active_tab == 'wpiai_restricted_settings' ? 'nav-tab-active' : ''; ?>">Infor Restricted Settings</a>
+		<?php endif; ?>
+    </h2>
+    <style>
+        .modal {
+            display: none;
+        }
 
-                .modal.active {
-                    display: inline-block;
-                }
+        .modal.active {
+            display: inline-block;
+        }
 
-                .modal img {
-                    max-height: 25px;
-                    width: auto;
-                }
+        .modal img {
+            max-height: 25px;
+            width: auto;
+        }
 
-                input[type=text] {
-                    vertical-align: bottom;
-                }
+        input[type=text] {
+            vertical-align: bottom;
+        }
 
-                pre {
-                    outline: 1px solid #ccc;
-                    padding: 5px;
-                    margin: 5px;
-                    white-space: pre-wrap;       /* css-3 */
-                    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-                    white-space: -pre-wrap;      /* Opera 4-6 */
-                    white-space: -o-pre-wrap;    /* Opera 7 */
-                    word-wrap: break-word;       /* Internet Explorer 5.5+ */
-                }
+        pre {
+            outline: 1px solid #ccc;
+            padding: 5px;
+            margin: 5px;
+            white-space: pre-wrap; /* css-3 */
+            white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+            white-space: -pre-wrap; /* Opera 4-6 */
+            white-space: -o-pre-wrap; /* Opera 7 */
+            word-wrap: break-word; /* Internet Explorer 5.5+ */
+        }
 
-                .string {
-                    color: green;
-                }
+        .string {
+            color: green;
+        }
 
-                .number {
-                    color: darkorange;
-                }
+        .number {
+            color: darkorange;
+        }
 
-                .boolean {
-                    color: blue;
-                }
+        .boolean {
+            color: blue;
+        }
 
-                .null {
-                    color: magenta;
-                }
+        .null {
+            color: magenta;
+        }
 
-                .key {
-                    color: red;
-                }
+        .key {
+            color: red;
+        }
 
 
-            </style>
-            <div class="wrap">
-                <h1>INFOR Security</h1>
-            </div>
-            <form method="post" action="options.php">
-				<?php settings_fields( 'wpiai_options_group' ); ?>
-                <table class="form-table">
-                    <tr>
-                        <th scope="row"><label for="wpiai_token_url">Token URL</label></th>
-                        <td><input type="text" id="wpiai_token_url" name="wpiai_token_url"
-                                   value="<?php echo get_option( 'wpiai_token_url' ); ?>" class="regular-text"/></td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><label for="wpiai_token_url">Username</label></th>
-                        <td><input type="text" id="wpiai_username" name="wpiai_username"
-                                   value="<?php echo get_option( 'wpiai_username' ); ?>" class="regular-text"/></td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><label for="wpiai_token_url">Password</label></th>
-                        <td><input type="text" id="wpiai_password" name="wpiai_password"
-                                   value="<?php echo get_option( 'wpiai_password' ); ?>" class="regular-text"/></td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><label for="wpiai_client_id">Client ID</label></th>
-                        <td><input type="text" id="wpiai_client_id" name="wpiai_client_id"
-                                   value="<?php echo get_option( 'wpiai_client_id' ); ?>" class="regular-text"/></td>
-                    </tr>
-                    <tr>
-                        <th scope="row"><label for="wpiai_client_secret">Client Secret</label></th>
-                        <td><input type="text" id="wpiai_client_secret" name="wpiai_client_secret"
-                                   value="<?php echo get_option( 'wpiai_client_secret' ); ?>" class="regular-text"/></td>
-                    </tr>
+    </style>
+	<?php
+	if ( $active_tab == 'wpiai_security' ):
+		?>
 
-                </table>
-				<?php submit_button(); ?>
-
-            </form>
+        <div class="wrap">
+            <h1>INFOR Security</h1>
+        </div>
+        <form method="post" action="options.php">
+			<?php settings_fields( 'wpiai_options_group' ); ?>
             <table class="form-table">
                 <tr>
-                    <td colspan="2">
-                        <button id="TestAuthentication" class="button">Test Authentication</button>&nbsp;
-                        &nbsp;<span class="modal TestAuthentication"><img
-                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
-                    </td>
-                </tr>
-            </table>
-            <div class="wrap">
-            <pre id="ajax-response">
-
-            </pre>
-            </div>
-		<?php
-		endif;
-		if ( $active_tab == 'wpiai_message_test' ):
-			?>
-            <div class="wrap">
-                <h1>INFOR Message Test</h1>
-            </div>
-            <form method="post" action="options.php">
-			<?php settings_fields( 'wpiai_test_group' ); ?>
-            <table class="form-table">
-                <tr>
-                    <th scope="row"><label for="wpiai_message_test_parameters">Parameters</label></th>
-                    <td><textarea id="wpiai_message_test_parameters" name="wpiai_message_test_parameters" rows="20" style="width: 100%;"><?php echo get_option( 'wpiai_message_test_parameters' ); ?></textarea>
-                        </td>
+                    <th scope="row"><label for="wpiai_token_url">Token URL</label></th>
+                    <td><input type="text" id="wpiai_token_url" name="wpiai_token_url"
+                               value="<?php echo get_option( 'wpiai_token_url' ); ?>" class="regular-text"/></td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="wpiai_message_test_xml">XML</label></th>
-                    <td><textarea id="wpiai_message_test_xml" name="wpiai_message_test_xml" rows="60" style="width: 100%;"><?php echo get_option( 'wpiai_message_test_xml' ); ?></textarea>
-                    </td>
+                    <th scope="row"><label for="wpiai_token_url">Username</label></th>
+                    <td><input type="text" id="wpiai_username" name="wpiai_username"
+                               value="<?php echo get_option( 'wpiai_username' ); ?>" class="regular-text"/></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="wpiai_token_url">Password</label></th>
+                    <td><input type="text" id="wpiai_password" name="wpiai_password"
+                               value="<?php echo get_option( 'wpiai_password' ); ?>" class="regular-text"/></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="wpiai_client_id">Client ID</label></th>
+                    <td><input type="text" id="wpiai_client_id" name="wpiai_client_id"
+                               value="<?php echo get_option( 'wpiai_client_id' ); ?>" class="regular-text"/></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="wpiai_client_secret">Client Secret</label></th>
+                    <td><input type="text" id="wpiai_client_secret" name="wpiai_client_secret"
+                               value="<?php echo get_option( 'wpiai_client_secret' ); ?>" class="regular-text"/></td>
                 </tr>
 
             </table>
 			<?php submit_button(); ?>
 
-            </form>
+        </form>
+        <table class="form-table">
+            <tr>
+                <td colspan="2">
+                    <button id="TestAuthentication" class="button">Test Authentication</button>&nbsp;
+                    &nbsp;<span class="modal TestAuthentication"><img
+                                src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                </td>
+            </tr>
+        </table>
+        <div class="wrap">
+            <pre id="ajax-response">
+
+            </pre>
+        </div>
+	<?php
+	endif;
+	if ( $active_tab == 'wpiai_message_test' ):
+	?>
+    <div class="wrap">
+        <h1>INFOR Message Test</h1>
+    </div>
+    <form method="post" action="options.php">
+		<?php settings_fields( 'wpiai_test_group' ); ?>
+        <table class="form-table">
+            <tr>
+                <th scope="row"><label for="wpiai_message_test_url">URL</label></th>
+                <td><input type="text" id="wpiai_message_test_url" name="wpiai_message_test_url" value="<?php echo get_option( 'wpiai_message_test_url' ); ?>" class="regular-text" style="width: 100%;"/>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="wpiai_message_test_parameters">Parameters</label></th>
+                <td><textarea id="wpiai_message_test_parameters" name="wpiai_message_test_parameters" rows="20" style="width: 100%;"><?php echo get_option( 'wpiai_message_test_parameters' ); ?></textarea>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="wpiai_message_test_xml">XML</label></th>
+                <td><textarea id="wpiai_message_test_xml" name="wpiai_message_test_xml" rows="40" style="width: 100%;"><?php echo get_option( 'wpiai_message_test_xml' ); ?></textarea>
+                </td>
+            </tr>
+
+        </table>
+		<?php submit_button(); ?>
+
+    </form>
+    <table class="form-table">
+        <tr>
+            <td>
+                <button id="TestResponse" class="button">Test Response</button>&nbsp;
+                &nbsp;<span class="modal TestResponse"><img
+                            src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                <button id="PingInfor" class="button">Ping Infor</button>&nbsp;
+                &nbsp;<span class="modal PingInfor"><img
+                            src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+            </td>
+            <td>
+
+            </td>
+        </tr>
+    </table>
+    <div class="wrap">
+            <pre id="ajax-response">
+
+            </pre>
+    </div>
 		<?php
 		endif;
 		if ( $active_tab == 'wpiai_settings' ):
