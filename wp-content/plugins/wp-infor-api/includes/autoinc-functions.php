@@ -57,79 +57,72 @@ function wpiai_get_access_token_value() {
 
 function wpiai_get_infor_message_multipart_message($url,$paramters,$xml) {
 	$access_token = wpiai_get_access_token_value();
-	$eol = '/r/n';
-	$mime_boundary = md5(time());
-	/*$data = '';
 
+	$ch = curl_init();
 
-	$data .= '--'.$mime_boundary.$eol;
-	$data .= 'Content-Disposition: form-data; name="ParameterRequest"; filename="parameters.json'.$eol;
-	$data .= 'Content-Type: text/plain' . $eol;
-	$data .= 'Content-Transfer-Encoding: base64' . $eol . $eol;
-	$data .= chunk_split(base64_encode($paramters)) . $eol;
-	$data .= "--" . $mime_boundary . "--" . $eol;
-	$data .= 'Content-Disposition: form-data; name="MessagePayload"; filename="xml.bin'.$eol;
-	$data .= 'Content-Type: text/plain' . $eol;
-	$data .= 'Content-Transfer-Encoding: base64' . $eol . $eol;
-	$data .= chunk_split(base64_encode($xml)) . $eol;
-	$data .= "--" . $mime_boundary . "--" . $eol . $eol; // finish with two eol's!!*/
+	curl_setopt($ch, CURLOPT_URL, $url);
 
-	$files = array();
-	$files['parameters.json'] = 'data:application/octet-stream;base64,'.base64_encode($paramters);
-	$files['xml.bin'] = 'data:application/octet-stream;base64,'.base64_encode($xml);
+	curl_setopt($ch, CURLOPT_POST, true);
 
-	$body = array(
-		'args' => array(),
-		'data' => array(),
-		'files' => $files,
-		'form' => ''
+	$delimiter = '-------------' . uniqid();
+
+	$p = 'ew0KImRvY3VtZW50TmFtZSIgOiAiUHJvY2Vzcy5Xb29DdXN0b21lciIsDQoibWVzc2FnZUlkIiA6ICIxIiwNCiJmcm9tTG9naWNhbElkIiA6ICJsaWQ6Ly9pbmZvci5pbXMud29vY29tbWVyY2VpbiIsDQoidG9Mb2dpY2FsSWQiIDogImxpZDovL2RlZmF1bHQiLA0KImVuY29kaW5nIiA6ICJOT05FIiwNCiJjaGFyYWN0ZXJTZXQiIDogIlVURi04IiwNCiJhY2NvdW50aW5nRW50aXR5IiA6ICIxIiwNCiJsb2NhdGlvbiIgOiAiMSIsDQoiZG9jdW1lbnRJZCIgOiAiMSIsDQoidmFyaWF0aW9uSWQiIDogMSwNCiJyZXZpc2lvbklkIiA6ICIxMjMiLA0KImJhdGNoSWQiIDogIjEiLA0KImJhdGNoU2VxdWVuY2UiIDogMSwNCiJiYXRjaFNpemUiIDogMSwNCiJiYXRjaFJldmlzaW9uIiA6IDEsDQoiYmF0Y2hBYm9ydEluZGljYXRvciIgOiB0cnVlLA0KImluc3RhbmNlcyIgOiAiMSIsDQoic291cmNlIiA6ICJXb29Db21tZXJjZSINCn0NCg==';
+	$x = 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxQcm9jZXNzV29vQ3VzdG9tZXIgcmVsZWFzZUlEPSI5LjIiIHZlcnNpb25JRD0iMi4xMi4wIiB4bWxucz0iaHR0cDovL3NjaGVtYS5pbmZvci5jb20vSW5mb3JPQUdJUy8yIiB4bWxuczp4c2Q9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hIj4NCgk8QXBwbGljYXRpb25BcmVhPg0KCQk8U2VuZGVyPg0KCQkJPExvZ2ljYWxJRD5saWQ6Ly9pbmZvci53b29jb21tZXJjZS50ZXN0PC9Mb2dpY2FsSUQ+IDwhLS0gVG8gYmUgZGV0ZXJtaW5lZCB3aGVuIHRoZSBDb25uZWN0aW9uIFBvaW50IGlzIHNldCB1cCAtLT4NCgkJPC9TZW5kZXI+DQoJCTxDcmVhdGlvbkRhdGVUaW1lPjIwMjAtMDgtMDRUMTE6NDY6MzAuNDQxWjwvQ3JlYXRpb25EYXRlVGltZT4gIDwhLS0gRGF0ZS9UaW1lIHRoZSBCT0Qgd2FzIGNyZWF0ZWQgLS0+DQoJCTxCT0RJRD5BS1hXN0EwMDA2TTc6UUtYVzdBMDA4WlpSPC9CT0RJRD4gIDwhLS0gQSB1bmlxdWUgSUQgLS0+DQoJPC9BcHBsaWNhdGlvbkFyZWE+DQoJPERhdGFBcmVhPg0KCQk8UHJvY2Vzcz4NCgkJCTxUZW5hbnRJRD5FUkZFTEVDVFJJQ19UUk48L1RlbmFudElEPiA8IS0tIFRlbmFudCwgaS5lLiBTeXN0ZW0gVFJOL1BSRCBldGMuIC0tPg0KCQkJPEFjY291bnRpbmdFbnRpdHlJRD4xPC9BY2NvdW50aW5nRW50aXR5SUQ+IDwhLS0gQ29tcGFueSBudW1iZXIgLS0+DQoJCQk8QWN0aW9uQ3JpdGVyaWE+DQoJCQkJPEFjdGlvbkV4cHJlc3Npb24gYWN0aW9uQ29kZT0iQ2hhbmdlIj5DaGFuZ2U8L0FjdGlvbkV4cHJlc3Npb24+ICA8IS0tIEFkZCBvciBDaGFuZ2UgLS0+DQoJCQk8L0FjdGlvbkNyaXRlcmlhPg0KCQk8L1Byb2Nlc3M+DQoJCTxXb29DdXN0b21lcj4NCgkJCTxDdXN0b21lcklEPjwvQ3VzdG9tZXJJRD4NCgkJCTwhLS0gVGhlIFNoaXBUbyBCT0Qgd291bGQgbG9vayBhbG1vc3QgaWRlbnRpY2FsIGJ1dCBoYXZlIGEgU2hpcFRvSUQgbm9kZSBhcyB3ZWxsIC0tPg0KCQkJPE5hbWU+QUJDPC9OYW1lPg0KCQkJPEFkZHJlc3NMaW5lMT5Ib3VzZSBOYW1lPC9BZGRyZXNzTGluZTE+DQoJCQk8QWRkcmVzc0xpbmUyPlN0cmVldDwvQWRkcmVzc0xpbmUyPg0KCQkJPEFkZHJlc3NMaW5lMz5Ub3duPC9BZGRyZXNzTGluZTM+DQoJCQk8Q2l0eT5DaXR5PC9DaXR5Pg0KCQkJPENvdW50eT5Db3VudHk8L0NvdW50eT4gPCEtLSBvciBTdGF0ZSwgUmVnaW9uIGV0Yy4gLS0+DQoJCQk8Q291bnRyeT5VSzwvQ291bnRyeT4gPCEtLSBhcyBpbiBDU0QgLSB0cmFuc2xhdGlvbiBuZWVkZWQ/IC0tPg0KCQkJPFBvc3RDb2RlPkEwMSAyQkI8L1Bvc3RDb2RlPg0KCQkJPFBob25lPjU1NS0xMjM0NTY3PC9QaG9uZT4NCgkJCTxGYXg+NTU1LTEyMzQ1Njg8L0ZheD4NCgkJCTxFbWFpbD50ZXN0QGluZm9yLmNvbTwvRW1haWw+DQoJCQk8IS0tIENvbnRhY3Q/IFdvdWxkIG5lZWQgdG8gZXhpc3QgaW4gQ1NEIC0tPg0KCQkJPCEtLSBXYXJlaG91c2UgPyAtLT4NCgkJCTwhLS0gUGF5bWVudCBUZXJtcyA/IC0tPg0KCQk8L1dvb0N1c3RvbWVyPg0KCTwvRGF0YUFyZWE+DQo8L1Byb2Nlc3NXb29DdXN0b21lcj4NCg==';
+
+	/*$files = array();
+	$files['parameters.json'] = array(
+		'type' => 'application/octet-stream;base64',
+		'content' => $paramters,
+		//'content' => base64_encode($paramters),
 	);
+	$files['xml.bin'] = array(
+		'type' => 'application/octet-stream;base64',
+		'content' => $xml,
+		//'content' => base64_encode(),
+	);*/
 
-	/*$boundary = wp_generate_password( 24 );
+	$fields = array();
+
+	$fields['ParameterRequest'] = $paramters;
+	$fields['MessagePayload'] = $xml;
 
 	$data = '';
-	$data .= '--'.$boundary;
-	$data .= $eol;
-	$data .= 'Content-Disposition: form-data; name="ParameterRequest"'.$eol.$eol;
-	$data .= 'parameters.json';
-	$data .= $eol;
 
-	$data .= '--'.$boundary;
-	$data .= $eol;
-	$data .= 'Content-Disposition: form-data; name="MessagePayload"'.$eol.$eol;
-	$data .= 'xml.bin';
-	$data .= $eol;
+	foreach ($fields as $name => $content) {
+		$data .= "--" . $delimiter . "\r\n";
+		$data .= 'Content-Disposition: form-data; name="' . $name . '"';
+		// note: double endline
+		$data .= "\r\n\r\n";
+		$data .= $content;
+		$data .= "\r\n";
+	}
 
-	$data .= '--'.$boundary;
-	$data .= "\r\n";
-	$data .= 'Content-Disposition: form-data; name="' . 'ParameterRequest' . '"; filename="parameters.json"' . "\r\n";
-	//        $payload .= 'Content-Type: image/jpeg' . "\r\n";
-	$data .= "\r\n";
-	$data .= base64_encode($paramters);
-	$data .= "\r\n";
+	/*foreach ($files as $name => $file) {
+		$data .= "--" . $delimiter . "\r\n";
+		$data .= 'Content-Disposition: form-data; name="' . $name . '";' .
+		         ' filename="' . $name . '"' . "\r\n";
+		$data .= 'Content-Type: ' . $file['type'] . "\r\n";
+		$data .= "\r\n";
+		$data .= $file['content'] . "\r\n";
+	}*/
 
-	$data .= '--'.$boundary;
-	$data .= "\r\n";
-	$data .= 'Content-Disposition: form-data; name="' . 'MessagePayload' . '"; filename="xml.bin"' . "\r\n";
-	//        $payload .= 'Content-Type: image/jpeg' . "\r\n";
-	$data .= "\r\n";
-	$data .= base64_encode($xml);
-	$data .= "\r\n";
+	$data .= "--" . $delimiter . "--\r\n";
 
-	$data .= '--' . $boundary . '--';*/
+	$headers   = array();
+	$headers[] = 'Content-Length: ' . strlen($data);
+	$headers[] ='Content-Type: multipart/form-data; boundary=' . $delimiter;
+	$headers[] ='accept: application/json';
+	$headers[] = "Authorization: Bearer " . $access_token;
 
-	$args = array(
-		'method' => 'POST',
-		'headers' => array(
-			'Content-Type: multipart/form-data; boundary=' . $mime_boundary,
-			'Authorization: Bearer '.$access_token,
-		),
-		'body' => $body,
-	);
 
-	//_er(print_r($data,true));
 
-	$apicall = wp_safe_remote_post($url,$args);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
+	curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
+	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+
+	$apicall = curl_exec($ch);
+	curl_close($ch);
 	return $apicall;
 }
 

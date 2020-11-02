@@ -86,16 +86,18 @@ adminJQ(function ($) {
             data: {action: 'wpiai_get_infor_ping', security: security},
             success: function (data) {
                 try {
-                    let resp = JSON.parse(data);
+                    let resp = JSON.parse(data.body);
                     let rstr = JSON.stringify(resp, undefined, 4);
                     $('#ajax-response').html(syntaxHighlight(rstr));
-                    $('.modal.TestResponse').hide();
+                    $('.modal.PingInfor').hide();
                 }
                 catch (e) {
                     if(typeof data === 'object' && data !== null) {
+                        window.console.log('JSON Parse Error - Data is object but will not parse' );
                         let x = JSON.stringify(data);
                         $('#ajax-response').html(syntaxHighlight(x.replace(/\\(.)/mg, "")));
                     } else {
+                        window.console.log('JSON Parse Error - not an object or NULL');
                         $('#ajax-response').html(syntaxHighlight(data));
                     }
                     $('.modal.PingInfor').hide();
