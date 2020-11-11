@@ -48,6 +48,7 @@ function epimaapi_wooCreateProduct($productArray){
 }
 
 function epimaapi_wooCreateProduct_ex($pid, $productArray) {
+	//error_log('function start');
     $product_id = false;
     try {
         if (array_key_exists('productTitle', $productArray)) {
@@ -157,6 +158,8 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray) {
             $metaData = array();
         }
 
+	    //error_log('Set Properties');
+
 
         /**
          *
@@ -192,13 +195,15 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray) {
                 return $product_id;
             }
             if (count($categoryIDS) == 0) {
-                //error_log('epimaapi_wooCreatProduct - No Category IDS for '.$pid);
+                error_log('epimaapi_wooCreatProduct - No Category IDS for '.$pid);
                 return $product_id;
             }
         } else {
-            //error_log('epimaapi_wooCreatProduct - No Category IDS supplied for '.$pid);
+            error_log('epimaapi_wooCreatProduct - No Category IDS supplied for '.$pid);
             return $product_id;
         }
+
+
 
 
         /*if ($isVariable) {
@@ -265,6 +270,10 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray) {
 
         $product_id = $objProduct->save(); // it will save the product and return the generated product id
 
+	    error_log('Product saved with ID = '.$product_id);
+
+
+
         if ($attributes) {
             //error_log('Setting Attributes for '.$productTitle);
             $productAttributes = array();
@@ -313,6 +322,7 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray) {
                 }
             } catch (Exception $e) {
                 // handle exception here
+	            error_log('epimaapi_wooCreateProduct_ex error: '.$e->getMessage());
             }
         }
 
@@ -329,7 +339,7 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray) {
             }
         }
     } catch (Exception $e) {
-        error_log($e->getMessage().' for '.$pid);
+        error_log('epimaapi_wooCreateProduct_ex error: '.$e->getMessage().' for '.$pid);
     }
 
     return $product_id;

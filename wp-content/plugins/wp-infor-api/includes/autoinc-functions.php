@@ -130,6 +130,15 @@ function wpiai_get_test_response() {
 	$url = get_option( 'wpiai_message_test_url' );
 	$parameters = get_option( 'wpiai_message_test_parameters' );
 	$xml = get_option( 'wpiai_message_test_xml' );
+	$xml = trim(preg_replace('/\t+/', '', $xml));
+	return wpiai_get_infor_message_multipart_message($url,$parameters,$xml);
+}
+
+function wpiai_get_customer_response() {
+	$url = get_option( 'wpiai_customer_url' );
+	$parameters = get_option( 'wpiai_customer_parameters' );
+	$xml = get_option( 'wpiai_customer_xml' );
+	$xml = trim(preg_replace('/\t+/', '', $xml));
 	return wpiai_get_infor_message_multipart_message($url,$parameters,$xml);
 }
 
