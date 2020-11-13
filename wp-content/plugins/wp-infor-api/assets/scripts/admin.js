@@ -105,6 +105,66 @@ adminJQ(function ($) {
         });
     });
 
+    $('#testCustomerXML').on('click', function () {
+        $('#ajax-response').html('Working...');
+        $('.modal.testCustomerXML').show();
+        let security = wpiai_ajax_object.security;
+        let url = wpiai_ajax_object.ajax_url;
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {action: 'wpiai_get_customer_xml', security: security},
+            success: function (data) {
+                try {
+                    let resp = JSON.parse(data);
+                    let rstr = JSON.stringify(resp, undefined, 4);
+                    $('#ajax-response').html(syntaxHighlight(rstr));
+                    $('.modal.customerRecordResponse').hide();
+                    window.console.log('Data is JSON');
+                }
+                catch (e) {
+                    if(typeof data === 'object' && data !== null) {
+                        let x = JSON.stringify(data);
+                        $('#ajax-response').html(syntaxHighlight(x.replace(/\\(.)/mg, "")));
+                    } else {
+                        $('#ajax-response').html(syntaxHighlight(data));
+                    }
+                    $('.modal.testCustomerXML').hide();
+                }
+            }
+        });
+    });
+
+    $('#salesOrderRecordResponse').on('click', function () {
+        $('#ajax-response').html('Working...');
+        $('.modal.salesOrderRecordResponse').show();
+        let security = wpiai_ajax_object.security;
+        let url = wpiai_ajax_object.ajax_url;
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {action: 'wpiai_get_sales_order_response', security: security},
+            success: function (data) {
+                try {
+                    let resp = JSON.parse(data);
+                    let rstr = JSON.stringify(resp, undefined, 4);
+                    $('#ajax-response').html(syntaxHighlight(rstr));
+                    $('.modal.salesOrderRecordResponse').hide();
+                    window.console.log('Data is JSON');
+                }
+                catch (e) {
+                    if(typeof data === 'object' && data !== null) {
+                        let x = JSON.stringify(data);
+                        $('#ajax-response').html(syntaxHighlight(x.replace(/\\(.)/mg, "")));
+                    } else {
+                        $('#ajax-response').html(syntaxHighlight(data));
+                    }
+                    $('.modal.TestResponse').hide();
+                }
+            }
+        });
+    });
+
     $('#PingInfor').on('click', function () {
         $('#ajax-response').html('Working...');
         $('.modal.PingInfor').show();

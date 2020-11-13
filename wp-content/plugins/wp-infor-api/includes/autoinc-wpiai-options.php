@@ -44,6 +44,13 @@ function wpiai_register_settings() {
 	register_setting( 'wpiai_customer_group', 'wpiai_customer_parameters' );
 	add_option( 'wpiai_customer_xml', 'API XML' );
 	register_setting( 'wpiai_customer_group', 'wpiai_customer_xml' );
+
+	add_option( 'wpiai_sales_order_url', 'API URL' );
+	register_setting( 'wpiai_sales_order_group', 'wpiai_sales_order_url' );
+	add_option( 'wpiai_sales_order_parameters', 'API Parameters' );
+	register_setting( 'wpiai_sales_order_group', 'wpiai_sales_order_parameters' );
+	add_option( 'wpiai_sales_order_xml', 'API XML' );
+	register_setting( 'wpiai_sales_order_group', 'wpiai_sales_order_xml' );
 }
 
 add_action( 'admin_init', 'wpiai_register_settings' );
@@ -67,6 +74,8 @@ function wpiai_options_page() {
                class="nav-tab <?php echo $active_tab == 'wpiai_message_test' ? 'nav-tab-active' : ''; ?>">Message Test</a>
             <a href="?page=infor-options&tab=wpiai_customer_record"
                class="nav-tab <?php echo $active_tab == 'wpiai_customer_record' ? 'nav-tab-active' : ''; ?>">Customer Master Record</a>
+            <a href="?page=infor-options&tab=wpiai_sales_order_record"
+               class="nav-tab <?php echo $active_tab == 'wpiai_sales_order_record' ? 'nav-tab-active' : ''; ?>">Sales Order Master Record</a>
             <a href="?page=infor-options&tab=wpiai_settings"
                class="nav-tab <?php echo $active_tab == 'wpiai_settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
 			<?php
@@ -268,6 +277,60 @@ function wpiai_options_page() {
                     <td>
                         <button id="customerRecordResponse" class="button">API Response</button>&nbsp;
                         &nbsp;<span class="modal customerRecordResponse"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        <button id="PingInfor" class="button">Ping Infor</button>&nbsp;
+                        &nbsp;<span class="modal PingInfor"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        <button id="testCustomerXML" class="button">Generate XML for CustomerID4</button>&nbsp;
+                        &nbsp;<span class="modal testCustomerXML"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            </table>
+            <div class="wrap">
+            <pre id="ajax-response">
+
+            </pre>
+            </div>
+		<?php
+		endif;
+		if ( $active_tab == 'wpiai_sales_order_record' ):
+			?>
+            <div class="wrap">
+                <h1>INFOR Customer Master Record</h1>
+            </div>
+            <form method="post" action="options.php">
+				<?php settings_fields( 'wpiai_sales_order_group' ); ?>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><label for="wpiai_sales_order_url">URL</label></th>
+                        <td><input type="text" id="wpiai_sales_order_url" name="wpiai_sales_order_url" value="<?php echo get_option( 'wpiai_sales_order_url' ); ?>" class="regular-text" style="width: 100%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_sales_order_parameters">Parameters</label></th>
+                        <td><textarea id="wpiai_sales_order_parameters" name="wpiai_sales_order_parameters" rows="20"
+                                      style="width: 100%;"><?php echo get_option( 'wpiai_sales_order_parameters' ); ?></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_sales_order_xml">XML</label></th>
+                        <td><textarea id="wpiai_sales_order_xml" name="wpiai_sales_order_xml" rows="40" style="width: 100%;"><?php echo get_option( 'wpiai_sales_order_xml' ); ?></textarea>
+                        </td>
+                    </tr>
+
+                </table>
+				<?php submit_button(); ?>
+
+            </form>
+            <table class="form-table">
+                <tr>
+                    <td>
+                        <button id="salesOrderRecordResponse" class="button">API Response</button>&nbsp;
+                        &nbsp;<span class="modal salesOrderRecordResponse"><img
                                     src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         <button id="PingInfor" class="button">Ping Infor</button>&nbsp;
                         &nbsp;<span class="modal PingInfor"><img
