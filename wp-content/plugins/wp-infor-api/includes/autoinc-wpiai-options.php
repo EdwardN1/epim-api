@@ -335,12 +335,16 @@ function wpiai_options_page() {
                         <button id="PingInfor" class="button">Ping Infor</button>&nbsp;
                         &nbsp;<span class="modal PingInfor"><img
                                     src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        <button id="testSalesOrderXML" class="button">Generate XML to Add a Sales Order</button>&nbsp;
+                        &nbsp;<span class="modal testSalesOrderXML"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                     </td>
                     <td>
 
                     </td>
                 </tr>
             </table>
+
             <div class="wrap">
             <pre id="ajax-response">
 
