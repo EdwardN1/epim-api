@@ -36,8 +36,8 @@ function wpmai_options_page() {
 			$current_user = wp_get_current_user();
 			$email        = (string) $current_user->user_email;
 			if ( $email === 'edward@technicks.com' ):?>
-                <a href="?page=infor-options&tab=wppai_restricted_settings"
-                   class="nav-tab <?php echo $active_tab == 'wppai_restricted_settings' ? 'nav-tab-active' : ''; ?>">Merlin Restricted Settings</a>
+                <a href="?page=infor-options&tab=wpmai_restricted_settings"
+                   class="nav-tab <?php echo $active_tab == 'wpmai_restricted_settings' ? 'nav-tab-active' : ''; ?>">Merlin Restricted Settings</a>
 			<?php endif; ?>
         </h2>
         <style>
