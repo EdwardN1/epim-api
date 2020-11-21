@@ -32,13 +32,18 @@ function ajax_wpmai_update_product() {
     $id = wc_get_product_id_by_sku($_POST['sku']);
     if($id > 0) {
         //update_post_meta($id, '_manage_stock', 'yes');
-        $product = new WC_Product( $id );
+        $product = wc_get_product( $id );
+        $product->set_price($_POST['price']);
         $product->set_regular_price($_POST['price']);
         $product->set_manage_stock(true);
         $product->set_stock_quantity($_POST['qty']);
         $product->save();
+        update_post_meta($id, '_price', $_POST['price']);
+        update_post_meta($id, '_regular_price', $_POST['price']);
+        wc_delete_product_transients( $id );
         //wc_update_product_stock($id,$_POST['qty']);
-        echo $_POST['sku'].' updated';
+
+        echo $_POST['sku'].' updated'. ' Price = '.wc_price(wc_get_price_to_display($product));
     } else {
         echo 'sku: '.$_POST['sku'].' not found';
     }
