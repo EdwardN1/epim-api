@@ -1,6 +1,6 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if (!defined('ABSPATH')) {
+    exit;
 }
 
 /**
@@ -8,123 +8,154 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 
-function wpmai_register_options_page() {
-	add_menu_page( __( 'Merlin Options' ), __( 'Merlin Options' ), 'manage_options', 'merlin-options', 'wpmai_options_page', plugins_url( 'assets/img/merlin-logo.png', __DIR__ ), 2 );
+function wpmai_register_options_page()
+{
+    add_menu_page(__('Merlin Options'), __('Merlin Options'), 'manage_options', 'merlin-options', 'wpmai_options_page', plugins_url('assets/img/merlin-logo.png', __DIR__), 2);
 }
 
-add_action( 'admin_menu', 'wpmai_register_options_page' );
+/**
+ * Register the options for the plugin
+ */
 
-function wpiai_register_settings() {
-	add_option( 'wpmai_url', 'The base URL for your Merlin API' );
-	register_setting( 'wpmai_options_group', 'wpmai_url' );
-	}
+add_action('admin_menu', 'wpmai_register_options_page');
 
-add_action( 'admin_init', 'wpiai_register_settings' );
+function wpmai_register_settings()
+{
+    add_option('wpmai_url', 'The base URL for your Merlin API');
+    register_setting('wpmai_options_group', 'wpmai_url');
+    add_option('wpmai_datasource', 'The Datasource for your Merlin API');
+    register_setting('wpmai_options_group', 'wpmai_datasource');
+}
 
-function wpmai_options_page() {
-	if ( isset( $_GET['tab'] ) ) {
-		$active_tab = sanitize_text_field( $_GET['tab'] );
-	} else {
-		$active_tab = 'wpmai_options';
-	}
-	?>
+add_action('admin_init', 'wpmai_register_settings');
+
+/**
+ * Display the Plugin Pages
+ */
+
+function wpmai_options_page()
+{
+    if (isset($_GET['tab'])) {
+        $active_tab = sanitize_text_field($_GET['tab']);
+    } else {
+        $active_tab = 'wpmai_import';
+    }
+    ?>
     <div class="wrap">
-        <h2 class="nav-tab-wrapper">
-            <a href="?page=infor-options&tab=wpiai_security"
-               class="nav-tab <?php echo $active_tab == 'wpmai_options' ? 'nav-tab-active' : ''; ?>">Options</a>
-            <?php
-			$current_user = wp_get_current_user();
-			$email        = (string) $current_user->user_email;
-			if ( $email === 'edward@technicks.com' ):?>
-                <a href="?page=infor-options&tab=wpmai_restricted_settings"
-                   class="nav-tab <?php echo $active_tab == 'wpmai_restricted_settings' ? 'nav-tab-active' : ''; ?>">Merlin Restricted Settings</a>
-			<?php endif; ?>
-        </h2>
-        <style>
-            .modal {
-                display: none;
-            }
+    <h2 class="nav-tab-wrapper">
+        <a href="?page=merlin-options&tab=wpmai_import"
+           class="nav-tab <?php echo $active_tab == 'wpmai_import' ? 'nav-tab-active' : ''; ?>">Import</a>
+        <a href="?page=merlin-options&tab=wpmai_settings"
+           class="nav-tab <?php echo $active_tab == 'wpmai_settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
+    </h2>
+    <style>
+        .modal {
+            display: none;
+        }
 
-            .modal.active {
-                display: inline-block;
-            }
+        .modal.active {
+            display: inline-block;
+        }
 
-            .modal img {
-                max-height: 25px;
-                width: auto;
-            }
+        .modal img {
+            max-height: 25px;
+            width: auto;
+        }
 
-            input[type=text] {
-                vertical-align: bottom;
-            }
+        input[type=text] {
+            vertical-align: bottom;
+        }
 
-            pre {
-                outline: 1px solid #ccc;
-                padding: 5px;
-                margin: 5px;
-                white-space: pre-wrap; /* css-3 */
-                white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
-                white-space: -o-pre-wrap; /* Opera 7 */
-                word-wrap: break-word; /* Internet Explorer 5.5+ */
-            }
+        pre {
+            outline: 1px solid #ccc;
+            padding: 5px;
+            margin: 5px;
+            white-space: pre-wrap; /* css-3 */
+            white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+            white-space: -o-pre-wrap; /* Opera 7 */
+            word-wrap: break-word; /* Internet Explorer 5.5+ */
+        }
 
-            .string {
-                color: green;
-            }
+        .string {
+            color: green;
+        }
 
-            .number {
-                color: darkorange;
-            }
+        .number {
+            color: darkorange;
+        }
 
-            .boolean {
-                color: blue;
-            }
+        .boolean {
+            color: blue;
+        }
 
-            .null {
-                color: magenta;
-            }
+        .null {
+            color: magenta;
+        }
 
-            .key {
-                color: red;
-            }
+        .key {
+            color: red;
+        }
 
 
-        </style>
-		<?php
-		if ( $active_tab == 'wpiai_security' ):
-			?>
-
-			<div class="wrap">
-				<h1>INFOR Security</h1>
-			</div>
-			<form method="post" action="options.php">
-				<?php settings_fields( 'wpmai_options_group' ); ?>
-				<table class="form-table">
-					<tr>
-						<th scope="row"><label for="wpiai_token_url">Token URL</label></th>
-						<td><input type="text" id="wpiai_token_url" name="wpiai_token_url"
-						           value="<?php echo get_option( 'wpiai_token_url' ); ?>" class="regular-text"/></td>
-					</tr>
-
-
-				</table>
-				<?php submit_button(); ?>
-
-			</form>
-			<table class="form-table">
-				<tr>
-					<td colspan="2">
-						<button id="TestAuthentication" class="button">Test Authentication</button>&nbsp;
-						&nbsp;<span class="modal TestAuthentication"><img
-								src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
-					</td>
-				</tr>
-			</table>
-			<div class="wrap">
-            <pre id="ajax-response">
+    </style>
+    <?php
+    if ($active_tab == 'wpmai_import'):
+        ?>
+        <div class="wrap">
+            <h1>Merlin Import</h1>
+        </div>
+        <table class="form-table">
+            <tr>
+                <td colspan="2">
+                    <button id="MerlinImport" class="button">Import Stock Prices and Quantities</button>&nbsp;
+                    &nbsp;<span class="modal MerlinImport"><img
+                                src="<?php echo wpmai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                </td>
+            </tr>
+        </table>
+        <div class="wrap">
+            <pre id="ajax-response" lang="xml">
 
             </pre>
-			</div>
-		<?php
-		endif;
+        </div>
+    <?php
+    endif;
+    if ($active_tab == 'wpmai_settings'):
+        ?>
+
+        <div class="wrap">
+            <h1>Merlin Settings</h1>
+        </div>
+        <form method="post" action="options.php">
+            <?php settings_fields('wpmai_options_group'); ?>
+            <table class="form-table">
+                <tr>
+                    <th scope="row"><label for="wpmai_url">Merlin Base URL</label></th>
+                    <td><input type="text" id="wpmai_url" name="wpmai_url"
+                               value="<?php echo get_option('wpmai_url'); ?>" class="regular-text"/></td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="wpmai_datasource">Merlin Datasource</label></th>
+                    <td><input type="text" id="wpmai_datasource" name="wpmai_datasource"
+                               value="<?php echo get_option('wpmai_datasource'); ?>" class="regular-text"/></td>
+                </tr>
+            </table>
+            <?php submit_button(); ?>
+
+        </form>
+        <table class="form-table">
+            <tr>
+                <td colspan="2">
+                    <button id="CheckStatus" class="button">Check Status</button>&nbsp;
+                    &nbsp;<span class="modal CheckStatus"><img
+                                src="<?php echo wpmai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                </td>
+            </tr>
+        </table>
+        <div class="wrap">
+            <textarea id="ajax-response" class="widefat" cols="80" rows="40"></textarea>
+        </div>
+    <?php
+    endif;
 }
+
