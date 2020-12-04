@@ -20,13 +20,6 @@ function wpoa_user_profile_fields( $user ) { ?>
                 <span class="description"><?php _e("Please enter an account balance."); ?></span>
             </td>
         </tr>
-        <tr>
-            <th><label for="CSD_ID"><?php _e("CSD ID"); ?></label></th>
-            <td>
-                <input type="text" name="CSD_ID" id="CSD_ID" value="<?php echo esc_attr( get_the_author_meta( 'CSD_ID', $user->ID ) ); ?>" class="regular-text" /><br />
-                <span class="description"><?php _e("Please enter the CSD ID."); ?></span>
-            </td>
-        </tr>
     </table>
 <?php }
 
@@ -39,5 +32,4 @@ function save_wpoa_user_profile_fields( $user_id ) {
     }
     update_user_meta( $user_id, 'credit_limit', $_POST['credit_limit'] );
     update_user_meta( $user_id, 'account_balance', $_POST['account_balance'] );
-	update_user_meta( $user_id, 'CSD_ID', $_POST['CSD_ID'] );
 }
