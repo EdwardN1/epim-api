@@ -239,15 +239,19 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray) {
         $objProduct->set_description($productDescription);
         $objProduct->set_short_description($productShortDescription);
         $objProduct->set_sku($productSKU); //can be blank in case you don't have sku, but You can't add duplicate sku's
-        $objProduct->set_price($price); // set product price
-        $objProduct->set_regular_price($regularPrice); // set product regular price
         $objProduct->set_manage_stock($manageStock); // true or false
-        $objProduct->set_stock_quantity($stockQuantity);
         $objProduct->set_stock_status($status); // in stock or out of stock value
         $objProduct->set_backorders($backorders);
         $objProduct->set_reviews_allowed($reviewsAllowed);
         $objProduct->set_sold_individually($soldIndividually);
         $objProduct->set_category_ids($categoryIDS); // array of category ids, You can get category id from WooCommerce Product Category Section of Wordpress Admin
+
+	    $import_options = get_option( 'epim_no_price_or_stocks' );
+	    if($import_options['checkbox_value']!=1) {
+		    $objProduct->set_price($price); // set product price
+		    $objProduct->set_regular_price($regularPrice); // set product regular price
+		    $objProduct->set_stock_quantity($stockQuantity);
+	    }
 
         $productImagesIDs = array(); // define an array to store the media ids.
         //$images = array("image1 url","image2 url","image3 url"); // images url array of product

@@ -11,7 +11,7 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 	$user = get_userdata($user_id);
 	if ($user) {
 		$xmlRequest = get_customer_XML_record($user_id);
-		$updated = wpiai_get_infor_message_multipart_message($url,$parameters,$xmlRequest);
-		error_log(print_r($updated,true));
+		//$updated = wpiai_get_infor_message_multipart_message($url,$parameters,$xmlRequest);
+		//error_log(print_r($updated,true));
 	}
 }

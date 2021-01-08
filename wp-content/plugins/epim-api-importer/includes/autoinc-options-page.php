@@ -36,6 +36,8 @@ function epim_register_settings() {
 	register_setting( 'epim_options_group', 'epim_key' );
 	add_option( 'epim_api_retrieval_method', 'API Retrieval Method' );
 	register_setting( 'epim_options_group', 'epim_api_retrieval_method' );
+	add_option( 'epim_no_price_or_stocks', '1' );
+	register_setting( 'epim_options_group', 'epim_no_price_or_stocks' );
 }
 
 add_action( 'admin_init', 'epim_register_settings' );
@@ -250,6 +252,13 @@ function epim_options_page() {
 
                             </select>
 
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="epim_no_price_or_stock">Do Not Import Branch Stock or Price</label></th>
+                        <?php $options = get_option( 'epim_no_price_or_stocks' );?>
+                        <td>
+                            <input type="checkbox" id="epim_no_price_or_stocks" name="epim_no_price_or_stocks[checkbox_value]" value="1" <?php echo checked( 1, $options['checkbox_value'], false );?>/>
+                        </td>
                     </tr>
                 </table>
 				<?php submit_button(); ?>
