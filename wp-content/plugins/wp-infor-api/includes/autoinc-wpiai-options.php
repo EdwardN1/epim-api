@@ -51,6 +51,20 @@ function wpiai_register_settings() {
 	register_setting( 'wpiai_sales_order_group', 'wpiai_sales_order_parameters' );
 	add_option( 'wpiai_sales_order_xml', 'API XML' );
 	register_setting( 'wpiai_sales_order_group', 'wpiai_sales_order_xml' );
+
+	add_option( 'wpiai_ship_to_url', 'API URL' );
+	register_setting( 'wpiai_ship_to_group', 'wpiai_ship_to_url' );
+	add_option( 'wpiai_ship_to_parameters', 'API Parameters' );
+	register_setting( 'wpiai_ship_to_group', 'wpiai_ship_to_parameters' );
+	add_option( 'wpiai_ship_to_xml', 'API XML' );
+	register_setting( 'wpiai_ship_to_group', 'wpiai_ship_to_xml' );
+
+	add_option( 'wpiai_contact_url', 'API URL' );
+	register_setting( 'wpiai_contact_group', 'wpiai_contact_url' );
+	add_option( 'wpiai_contact_parameters', 'API Parameters' );
+	register_setting( 'wpiai_contact_group', 'wpiai_contact_parameters' );
+	add_option( 'wpiai_contact_xml', 'API XML' );
+	register_setting( 'wpiai_contact_group', 'wpiai_contact_xml' );
 }
 
 add_action( 'admin_init', 'wpiai_register_settings' );
@@ -76,6 +90,10 @@ function wpiai_options_page() {
                class="nav-tab <?php echo $active_tab == 'wpiai_customer_record' ? 'nav-tab-active' : ''; ?>">Customer Master Record</a>
             <a href="?page=infor-options&tab=wpiai_sales_order_record"
                class="nav-tab <?php echo $active_tab == 'wpiai_sales_order_record' ? 'nav-tab-active' : ''; ?>">Sales Order Master Record</a>
+            <a href="?page=infor-options&tab=wpiai_ship_to_record"
+               class="nav-tab <?php echo $active_tab == 'wpiai_ship_to_record' ? 'nav-tab-active' : ''; ?>">Ship To Master Record</a>
+            <a href="?page=infor-options&tab=wpiai_contact_record"
+               class="nav-tab <?php echo $active_tab == 'wpiai_contact_record' ? 'nav-tab-active' : ''; ?>">Contact Master Record</a>
             <a href="?page=infor-options&tab=wpiai_settings"
                class="nav-tab <?php echo $active_tab == 'wpiai_settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
 			<?php
@@ -337,6 +355,116 @@ function wpiai_options_page() {
                                     src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         <button id="testSalesOrderXML" class="button">Generate XML to Add a Sales Order</button>&nbsp;
                         &nbsp;<span class="modal testSalesOrderXML"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            </table>
+
+            <div class="wrap">
+            <pre id="ajax-response">
+
+            </pre>
+            </div>
+		<?php
+		endif;
+		if ( $active_tab == 'wpiai_ship_to_record' ):
+			?>
+            <div class="wrap">
+                <h1>INFOR Ship To Master Record</h1>
+            </div>
+            <form method="post" action="options.php">
+				<?php settings_fields( 'wpiai_ship_to_group' ); ?>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><label for="wpiai_ship_to_url">URL</label></th>
+                        <td><input type="text" id="wpiai_ship_to_url" name="wpiai_ship_to_url" value="<?php echo get_option( 'wpiai_ship_to_url' ); ?>" class="regular-text" style="width: 100%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_ship_to_parameters">Parameters</label></th>
+                        <td><textarea id="wpiai_ship_to_parameters" name="wpiai_ship_to_parameters" rows="20"
+                                      style="width: 100%;"><?php echo get_option( 'wpiai_ship_to_parameters' ); ?></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_ship_to_xml">XML</label></th>
+                        <td><textarea id="wpiai_ship_to_xml" name="wpiai_ship_to_xml" rows="40" style="width: 100%;"><?php echo get_option( 'wpiai_ship_to_xml' ); ?></textarea>
+                        </td>
+                    </tr>
+
+                </table>
+				<?php submit_button(); ?>
+
+            </form>
+            <table class="form-table">
+                <tr>
+                    <td>
+                        <button id="shipToRecordResponse" class="button">API Response</button>&nbsp;
+                        &nbsp;<span class="modal shipToRecordResponse"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        <button id="PingInfor" class="button">Ping Infor</button>&nbsp;
+                        &nbsp;<span class="modal PingInfor"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        <button id="testShipToXML" class="button">Generate XML to Add a Ship To</button>&nbsp;
+                        &nbsp;<span class="modal testShipToXML"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            </table>
+
+            <div class="wrap">
+            <pre id="ajax-response">
+
+            </pre>
+            </div>
+		<?php
+		endif;
+		if ( $active_tab == 'wpiai_contact_record' ):
+			?>
+            <div class="wrap">
+                <h1>INFOR Contact Master Record</h1>
+            </div>
+            <form method="post" action="options.php">
+				<?php settings_fields( 'wpiai_contact_group' ); ?>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><label for="wpiai_contact_url">URL</label></th>
+                        <td><input type="text" id="wpiai_contact_url" name="wpiai_contact_url" value="<?php echo get_option( 'wpiai_contact_url' ); ?>" class="regular-text" style="width: 100%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_contact_parameters">Parameters</label></th>
+                        <td><textarea id="wpiai_contact_parameters" name="wpiai_contact_parameters" rows="20"
+                                      style="width: 100%;"><?php echo get_option( 'wpiai_contact_parameters' ); ?></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_contact_xml">XML</label></th>
+                        <td><textarea id="wpiai_contact_xml" name="wpiai_contact_xml" rows="40" style="width: 100%;"><?php echo get_option( 'wpiai_contact_xml' ); ?></textarea>
+                        </td>
+                    </tr>
+
+                </table>
+				<?php submit_button(); ?>
+
+            </form>
+            <table class="form-table">
+                <tr>
+                    <td>
+                        <button id="contactRecordResponse" class="button">API Response</button>&nbsp;
+                        &nbsp;<span class="modal contactRecordResponse"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        <button id="PingInfor" class="button">Ping Infor</button>&nbsp;
+                        &nbsp;<span class="modal PingInfor"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        <button id="testContactXML" class="button">Generate XML to Add a Ship To</button>&nbsp;
+                        &nbsp;<span class="modal testContactXML"><img
                                     src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                     </td>
                     <td>

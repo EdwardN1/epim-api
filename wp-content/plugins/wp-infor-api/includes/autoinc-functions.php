@@ -150,6 +150,22 @@ function wpiai_get_sales_order_response() {
 	return wpiai_get_infor_message_multipart_message($url,$parameters,$xml);
 }
 
+function wpiai_get_ship_to_response() {
+	$url = get_option( 'wpiai_ship_to_url' );
+	$parameters = get_option( 'wpiai_ship_to_parameters' );
+	$xml = get_option( 'wpiai_ship_to_xml' );
+	$xml = trim(preg_replace('/\t+/', '', $xml));
+	return wpiai_get_infor_message_multipart_message($url,$parameters,$xml);
+}
+
+function wpiai_get_contact_response() {
+	$url = get_option( 'wpiai_contact_url' );
+	$parameters = get_option( 'wpiai_contact_parameters' );
+	$xml = get_option( 'wpiai_contact_xml' );
+	$xml = trim(preg_replace('/\t+/', '', $xml));
+	return wpiai_get_infor_message_multipart_message($url,$parameters,$xml);
+}
+
 function wpiai_infor_ping() {
 	$url = 'https://mingle-ionapi.inforcloudsuite.com/ERFELECTRIC_TRN/IONSERVICES/api/ion/messaging/service/ping';
 	$access_token = 'Bearer ' . wpiai_get_access_token_value();

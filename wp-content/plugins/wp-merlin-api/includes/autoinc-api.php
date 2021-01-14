@@ -59,11 +59,22 @@ function wpmai_get_stock() {
     $stockXMLstr =  wpmai_make_api_call("select stockID,main_mpn,retail_price,qty_hand from stock where main_mpn != ''",'');
     $data = simplexml_load_string($stockXMLstr);
     //$count = $data['count'];
-    $dataArray = array();
-    foreach ($data->row as $row) {
+    $pgroupXMLstr =  wpmai_make_api_call("select * from pgroup where account = 'WEBCASH'",'');
+	$pgroupdata = simplexml_load_string($pgroupXMLstr);
+	$dataArray = array();
+	foreach ($data->row as $row) {
         $arrayRow = array();
-        $arrayRow['sku'] = (string)$row->main_mpn;
-        $arrayRow['price'] = (string)$row->retail_price;
+        $price = (string)$row->retail_price;
+        $sku = (string)$row->main_mpn;
+        foreach ($pgroupdata->row as $pRow) {
+        	$pSku = (string)$pRow->part;
+        	$pPrice = (string)$pRow->disc1;
+        	if($pSku==$sku) {
+        		$price=$pPrice;
+	        }
+        }
+        $arrayRow['sku'] = $sku;
+        $arrayRow['price'] = $price;
         $arrayRow['qty'] = (string)$row->qty_hand;
         $dataArray[] = $arrayRow;
     }
