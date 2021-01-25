@@ -302,6 +302,9 @@ function wpiai_options_page() {
                         <button id="testCustomerXML" class="button">Generate XML for CustomerID4</button>&nbsp;
                         &nbsp;<span class="modal testCustomerXML"><img
                                     src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        <button id="testCustomerParams" class="button">Generate Params</button>&nbsp;
+                        &nbsp;<span class="modal testCustomerParams"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                     </td>
                     <td>
 
