@@ -1,6 +1,7 @@
 <?php
 add_action( 'show_user_profile', 'wpiai_user_profile_fields' );
 add_action( 'edit_user_profile', 'wpiai_user_profile_fields' );
+add_action( 'user_new_form', 'wpiai_user_profile_fields' );
 
 function wpiai_user_profile_fields( $user ) { ?>
 	<h3><?php _e("Additional CSD Required Fields", "blank"); ?></h3>
@@ -87,6 +88,7 @@ function wpiai_user_profile_fields( $user ) { ?>
 
 add_action( 'personal_options_update', 'save_wpiai_user_profile_fields' );
 add_action( 'edit_user_profile_update', 'save_wpiai_user_profile_fields' );
+add_action( 'user_register', 'save_wpiai_user_profile_fields' );
 
 function save_wpiai_user_profile_fields( $user_id ) {
 	if ( !current_user_can( 'edit_user', $user_id ) ) {
