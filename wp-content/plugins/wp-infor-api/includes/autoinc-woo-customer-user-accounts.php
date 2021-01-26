@@ -128,6 +128,13 @@ function wpiai_contacts_repeater_meta_box($user) {
 										} ?>"/>
 									</label>
 								</td>
+                                <td>
+                                    <label for="contact_type[]">Contact Type:
+                                        <input type="text" class="widefat" name="contact_type[]" value="<?php if ( $field['contact_type'] != '' ) {
+											echo esc_attr( $field['contact_type'] );
+										} ?>"/>
+                                    </label>
+                                </td>
 							</tr>
 
 							<tr>
@@ -222,6 +229,13 @@ function wpiai_contacts_repeater_meta_box($user) {
 							</label>
 						</td>
 					</tr>
+                    <tr>
+                        <td>
+                            <label for="contact_type[]">Contact Type:
+                                <input disabled type="text" class="widefat" name="contact_type[]" value=""/>
+                            </label>
+                        </td>
+                    </tr>
 
 					<tr>
 						<td><a class="button remove-row" href="#">Remove Address</a></td>
@@ -258,6 +272,7 @@ function wpiai_contacts_repeatable_meta_box_save( $user_id ) {
 	$contact_postcode      = isset( $_POST['contact_postcode'] ) ? (array) $_POST['contact_postcode'] : array();
 	$contact_email      = isset( $_POST['contact_email'] ) ? (array) $_POST['contact_email'] : array();
 	$contact_phone      = isset( $_POST['contact_phone'] ) ? (array) $_POST['contact_phone'] : array();
+	$contact_type      = isset( $_POST['contact_type'] ) ? (array) $_POST['contact_type'] : array();
 
 	$count = count( $contact_email );
 
@@ -297,6 +312,10 @@ function wpiai_contacts_repeatable_meta_box_save( $user_id ) {
 
 		if ( $contact_phone[ $i ] != '' ) :
 			$new[ $i ]['contact_phone'] = sanitize_text_field( $contact_phone[ $i ] );
+		endif;
+
+		if ( $contact_type[ $i ] != '' ) :
+			$new[ $i ]['contact_type'] = sanitize_text_field( $contact_type[ $i ] );
 		endif;
 
 	}

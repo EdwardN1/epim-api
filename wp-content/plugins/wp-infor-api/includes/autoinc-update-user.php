@@ -10,16 +10,18 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 		$roles = $user->roles;
 		if(in_array('customer',$roles)) {
 			$CSD_ID = get_user_meta($user_id,'CSD_ID',true);
-			if($CSD_ID == '') {
+			$user4 = get_user_meta($user_id,'wpiai_user4',true);
+			if(($CSD_ID == '')||($user4 != $user_id)) {
 				/**
-				 * New Customer Record So Create a CSD Customer
+				 * New Customer Record So Create a CSD Customer or Sync back Woo ID to CSD required
 				 */
 				$url = get_option( 'wpiai_customer_url' );
 				$parameters = get_option( 'wpiai_customer_parameters' );
-				$pRequest = get_customer_param_record($parameters);
+				$pRequest = get_customer_param_record_x($parameters);
 				$xmlRequest = get_customer_XML_record($user_id);
 				$updated = wpiai_get_infor_message_multipart_message($url,$pRequest,$xmlRequest);
-				error_log(print_r($updated,true));
+				//error_log(print_r($updated,true));
+				//error_log('wpiai_profile_update ran');
 			} else {
 				/**
 				 *
