@@ -145,6 +145,13 @@ function wpiai_user_profile_fields( $user ) { ?>
                 <span class="description"><?php _e( "Please enter a User 4." ); ?></span>
             </td>
         </tr>
+        <tr>
+            <th><label for="wpiai_force_update"><?php _e( "Force Update Field" ); ?></label></th>
+            <td>
+                <input type="text" name="wpiai_force_update" id="wpiai_force_update" value="<?php echo esc_attr( get_the_author_meta( 'wpiai_force_update', $user->ID ) ); ?>" class="regular-text"/><br/>
+                <span class="description"><?php _e( "Please enter a Force Update." ); ?></span>
+            </td>
+        </tr>
     </table>
 <?php }
 
@@ -184,4 +191,5 @@ function save_wpiai_user_profile_fields( $user_id ) {
 	update_user_meta( $user_id, 'wpiai_pricetype', $_POST['wpiai_pricetype'] );
 	update_user_meta( $user_id, 'wpiai_selltype', $_POST['wpiai_selltype'] );
 	update_user_meta( $user_id, 'wpiai_user4', $_POST['wpiai_user4'] );
+	update_user_meta( $user_id, 'wpiai_force_update', $_POST['wpiai_force_update'] );
 }

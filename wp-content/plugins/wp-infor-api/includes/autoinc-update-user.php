@@ -8,38 +8,46 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 	error_log('Profile update registered for userID: '.$user_id);
 	$user = get_userdata($user_id);
 	if ($user) {
-		$roles = $user->roles;
-		if(in_array('customer',$roles)) {
-			$CSD_ID = get_user_meta($user_id,'CSD_ID',true);
-			$user4 = get_user_meta($user_id,'wpiai_user4',true);
-			if(($CSD_ID == '')||($user4 != $user_id)) {
-				/**
-				 * New Customer Record So Create a CSD Customer or Sync back Woo ID to CSD required
-				 */
-				$url = get_option( 'wpiai_customer_url' );
-				$parameters = get_option( 'wpiai_customer_parameters' );
-				$pRequest = get_customer_param_record_x($parameters);
-				$xmlRequest = get_customer_XML_record($user_id);
-				$updated = wpiai_get_infor_message_multipart_message($url,$pRequest,$xmlRequest);
-				//error_log(print_r($updated,true));
-				error_log('Update sent for User ID: '.$user_id,' , CSD_ID:'.$CSD_ID);
+		if(($user != $old_user_data)||(get_user_meta($user_id,'wpiai_force_update', true)!='')) {
+
+			$roles = $user->roles;
+			if ( in_array( 'customer', $roles ) ) {
+				$CSD_ID = get_user_meta( $user_id, 'CSD_ID', true );
+				$user4  = get_user_meta( $user_id, 'wpiai_user4', true );
+				if ( ( $CSD_ID == '' ) || ( $user4 != $user_id ) ) {
+					/**
+					 * New Customer Record So Create a CSD Customer or Sync back Woo ID to CSD required
+					 */
+					$url        = get_option( 'wpiai_customer_url' );
+					$parameters = get_option( 'wpiai_customer_parameters' );
+					$pRequest   = get_customer_param_record_x( $parameters );
+					$xmlRequest = get_customer_XML_record( $user_id );
+					$updated    = wpiai_get_infor_message_multipart_message( $url, $pRequest, $xmlRequest );
+					//error_log(print_r($updated,true));
+					if($updated) {
+						update_user_meta( $user_id, 'wpiai_force_update', '' );
+					}
+					error_log( 'Update sent for User ID: ' . $user_id . ' , CSD_ID:' . $CSD_ID );
+				} else {
+					/**
+					 *
+					 *
+					 * Check for other Master Record Updates Here
+					 *
+					 *
+					 *
+					 */
+				}
+
 			} else {
 				/**
 				 *
-				 *
-				 * Check for other Master Record Updates Here
-				 *
-				 *
+				 * Not a valid User?
 				 *
 				 */
 			}
-
 		} else {
-			/**
-			 *
-			 * Not a valid User?
-			 *
-			 */
+			error_log('No Data Change for userID '.$user_id);
 		}
 	}
 }
