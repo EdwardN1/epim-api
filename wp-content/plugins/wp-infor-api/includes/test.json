@@ -1,0 +1,42 @@
+{
+  "billing": {
+    "company": {
+      "IonApiRef": "SyncCustomerPartyMaster/DataArea/CustomerPartyMaster/Name"
+    },
+    "address_1": {
+      "IonApiRef": "SyncCustomerPartyMaster/DataArea/CustomerPartyMaster/Location/Address/AddressLine[@sequence=1]"
+    },
+    "address_2": {
+      "IonApiRef": "SyncCustomerPartyMaster/DataArea/CustomerPartyMaster/Location/Address/AddressLine[@sequence=2]"
+    },
+    "city": {
+      "IonApiRef": "SyncCustomerPartyMaster/DataArea/CustomerPartyMaster/Location/Address/AddressLine[@sequence=4]"
+    },
+    "postcode": {
+      "IonApiRef": "SyncCustomerPartyMaster/DataArea/CustomerPartyMaster/Location/Address/PostalCode"
+    },
+    "country": {
+      "IonApiRef": "SyncCustomerPartyMaster/DataArea/CustomerPartyMaster/Location/Address/CountryCode"
+    },
+    "email": {
+      "IonApiRef": "SyncCustomerPartyMaster/DataArea/CustomerPartyMaster/Communication[ChannelCode='EMail']/URI"
+    },
+    "phone": {
+      "IonApiRef": "SyncCustomerPartyMaster/DataArea/CustomerPartyMaster/Communication[ChannelCode='Phone']/DialNumber"
+    }
+  },
+  "meta_data": [
+    {
+      "key": "CSD_ID",
+      "value": {
+        "IonApiRef": "SyncCustomerPartyMaster/DataArea/CustomerPartyMaster/PartyIDs/ID"
+      }
+    },
+    {
+      "key": "wpiai_user4",
+      "value": {
+        "IonApiRef": "VALUE HERE"
+      }
+    }
+  ]
+}

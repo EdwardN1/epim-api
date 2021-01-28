@@ -1,10 +1,11 @@
 <?php
 
+
 add_action( 'profile_update', 'wpiai_profile_update', 10, 2 );
 
 function wpiai_profile_update( $user_id, $old_user_data ) {
 	// Do something
-	error_log('Profile update for userID: '.$user_id);
+	error_log('Profile update registered for userID: '.$user_id);
 	$user = get_userdata($user_id);
 	if ($user) {
 		$roles = $user->roles;
@@ -21,7 +22,7 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 				$xmlRequest = get_customer_XML_record($user_id);
 				$updated = wpiai_get_infor_message_multipart_message($url,$pRequest,$xmlRequest);
 				//error_log(print_r($updated,true));
-				//error_log('wpiai_profile_update ran');
+				error_log('Update sent for User ID: '.$user_id,' , CSD_ID:'.$CSD_ID);
 			} else {
 				/**
 				 *
