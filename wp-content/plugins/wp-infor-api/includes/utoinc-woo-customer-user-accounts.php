@@ -1,6 +1,4 @@
-<?php
-if ( ! defined( 'ABSPATH' ) )
-    exit;
+v<?php
 /**
 *======================================= Customer Users Repeater =====================================
  */
