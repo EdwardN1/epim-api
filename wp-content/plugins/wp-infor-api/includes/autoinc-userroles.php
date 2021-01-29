@@ -1,6 +1,7 @@
 <?php
 
-defined( 'ABSPATH' ) or exit;
+if ( ! defined( 'ABSPATH' ) )
+    exit;
 
 $customer_role_set = get_role( 'customer' )->capabilities;
 $role = 'inactive_customer';
