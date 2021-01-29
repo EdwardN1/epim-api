@@ -89,25 +89,14 @@ adminJQ(function ($) {
         ProductUpdatesQueue.reset();
         ProductUpdatesQueue.queue(ajaxurl,{action: 'wpmai_get_start_import'});
         ProductUpdatesQueue.process();
-        /*let security = wpmai_ajax_object.security;
-        let url = wpmai_ajax_object.ajax_url;
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: {action: 'wpmai_get_start_import', security: security},
-            success: function (data) {
-                try {
-                    let resp = JSON.parse(data);
-                    let rstr = JSON.stringify(resp, undefined, 4);
-                    $('#ajax-response').html(syntaxHighlight(rstr));
-                    $('.modal.MerlinImport').hide();
-                }
-                catch (e) {
-                    $('#ajax-response').html(data);
-                    $('.modal.MerlinImport').hide();
-                }
-            }
-        });*/
+    });
+
+    $('#UpdateCode').on('click',function () {
+        $('#ajax-response').html('Getting Product Price from Merlin...');
+        $('.modal.UpdateCode').show;
+        ProductUpdatesQueue.reset();
+        ProductUpdatesQueue.queue(ajaxurl, {action: 'wpmai_update_product_price', sku: $('#sku').val()});
+        ProductUpdatesQueue.process();
     });
 
 });
