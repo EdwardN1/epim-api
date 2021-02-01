@@ -266,7 +266,9 @@ function wpiai_get_selltype_name( $option ) {
 	$res = false;
 	if ( $option == 'C' ) {$res = 'Cash Sale Only';}
 	if ( $option == 'Y' ) {$res = 'Account Sales';}
+	if ( $option == 'Account' ) {$res = 'Account Sales';}
 	if ( $option == 'N' ) {$res = 'Hold - will allow cash transactions online';}
+	if ( $option == 'Cash' ) {$res = 'Cash Sale Only';}
 
 	return $res;
 

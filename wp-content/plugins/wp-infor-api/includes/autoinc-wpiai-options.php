@@ -466,7 +466,7 @@ function wpiai_options_page() {
                         <button id="PingInfor" class="button">Ping Infor</button>&nbsp;
                         &nbsp;<span class="modal PingInfor"><img
                                     src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
-                        <button id="testContactXML" class="button">Generate XML to Add a Ship To</button>&nbsp;
+                        <button id="testContactXML" class="button">Generate XML to Add a Contact</button>&nbsp;
                         &nbsp;<span class="modal testContactXML"><img
                                     src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                     </td>

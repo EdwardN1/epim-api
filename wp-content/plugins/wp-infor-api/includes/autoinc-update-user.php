@@ -61,6 +61,15 @@ function get_customer_param_record_x($parameters) {
 	}
 }
 
+function get_contact_XML_record($user_id) {
+	$res = false;
+	$user = get_userdata($user_id);
+	if ($user) {
+		$xmld = get_option( 'wpiai_customer_xml' );
+		$xml = simplexml_load_string($xmld);
+	}
+}
+
 function get_customer_XML_record($user_id) {
 	$res = false;
 	$user = get_userdata($user_id);
@@ -72,7 +81,8 @@ function get_customer_XML_record($user_id) {
 		$nowDT = new DateTime();
 		$CreationDateTime = $nowDT->format(DateTime::ATOM);
 		$ActionExpression = 'Change';
-		$Name = $user->first_name.' '.$user->last_name;
+		//$Name = $user->first_name.' '.$user->last_name;
+		$Name = get_user_meta($user_id,'billing_company',true);
 		$CSD_ID = get_user_meta($user_id,'CSD_ID',true);
 		if($CSD_ID == '') {
 			$ActionExpression = 'Add';

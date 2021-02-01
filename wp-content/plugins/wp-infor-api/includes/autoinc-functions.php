@@ -69,18 +69,6 @@ function wpiai_get_infor_message_multipart_message($url,$paramters,$xml) {
 	$p = 'ew0KImRvY3VtZW50TmFtZSIgOiAiUHJvY2Vzcy5Xb29DdXN0b21lciIsDQoibWVzc2FnZUlkIiA6ICIxIiwNCiJmcm9tTG9naWNhbElkIiA6ICJsaWQ6Ly9pbmZvci5pbXMud29vY29tbWVyY2VpbiIsDQoidG9Mb2dpY2FsSWQiIDogImxpZDovL2RlZmF1bHQiLA0KImVuY29kaW5nIiA6ICJOT05FIiwNCiJjaGFyYWN0ZXJTZXQiIDogIlVURi04IiwNCiJhY2NvdW50aW5nRW50aXR5IiA6ICIxIiwNCiJsb2NhdGlvbiIgOiAiMSIsDQoiZG9jdW1lbnRJZCIgOiAiMSIsDQoidmFyaWF0aW9uSWQiIDogMSwNCiJyZXZpc2lvbklkIiA6ICIxMjMiLA0KImJhdGNoSWQiIDogIjEiLA0KImJhdGNoU2VxdWVuY2UiIDogMSwNCiJiYXRjaFNpemUiIDogMSwNCiJiYXRjaFJldmlzaW9uIiA6IDEsDQoiYmF0Y2hBYm9ydEluZGljYXRvciIgOiB0cnVlLA0KImluc3RhbmNlcyIgOiAiMSIsDQoic291cmNlIiA6ICJXb29Db21tZXJjZSINCn0NCg==';
 	$x = 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxQcm9jZXNzV29vQ3VzdG9tZXIgcmVsZWFzZUlEPSI5LjIiIHZlcnNpb25JRD0iMi4xMi4wIiB4bWxucz0iaHR0cDovL3NjaGVtYS5pbmZvci5jb20vSW5mb3JPQUdJUy8yIiB4bWxuczp4c2Q9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hIj4NCgk8QXBwbGljYXRpb25BcmVhPg0KCQk8U2VuZGVyPg0KCQkJPExvZ2ljYWxJRD5saWQ6Ly9pbmZvci53b29jb21tZXJjZS50ZXN0PC9Mb2dpY2FsSUQ+IDwhLS0gVG8gYmUgZGV0ZXJtaW5lZCB3aGVuIHRoZSBDb25uZWN0aW9uIFBvaW50IGlzIHNldCB1cCAtLT4NCgkJPC9TZW5kZXI+DQoJCTxDcmVhdGlvbkRhdGVUaW1lPjIwMjAtMDgtMDRUMTE6NDY6MzAuNDQxWjwvQ3JlYXRpb25EYXRlVGltZT4gIDwhLS0gRGF0ZS9UaW1lIHRoZSBCT0Qgd2FzIGNyZWF0ZWQgLS0+DQoJCTxCT0RJRD5BS1hXN0EwMDA2TTc6UUtYVzdBMDA4WlpSPC9CT0RJRD4gIDwhLS0gQSB1bmlxdWUgSUQgLS0+DQoJPC9BcHBsaWNhdGlvbkFyZWE+DQoJPERhdGFBcmVhPg0KCQk8UHJvY2Vzcz4NCgkJCTxUZW5hbnRJRD5FUkZFTEVDVFJJQ19UUk48L1RlbmFudElEPiA8IS0tIFRlbmFudCwgaS5lLiBTeXN0ZW0gVFJOL1BSRCBldGMuIC0tPg0KCQkJPEFjY291bnRpbmdFbnRpdHlJRD4xPC9BY2NvdW50aW5nRW50aXR5SUQ+IDwhLS0gQ29tcGFueSBudW1iZXIgLS0+DQoJCQk8QWN0aW9uQ3JpdGVyaWE+DQoJCQkJPEFjdGlvbkV4cHJlc3Npb24gYWN0aW9uQ29kZT0iQ2hhbmdlIj5DaGFuZ2U8L0FjdGlvbkV4cHJlc3Npb24+ICA8IS0tIEFkZCBvciBDaGFuZ2UgLS0+DQoJCQk8L0FjdGlvbkNyaXRlcmlhPg0KCQk8L1Byb2Nlc3M+DQoJCTxXb29DdXN0b21lcj4NCgkJCTxDdXN0b21lcklEPjwvQ3VzdG9tZXJJRD4NCgkJCTwhLS0gVGhlIFNoaXBUbyBCT0Qgd291bGQgbG9vayBhbG1vc3QgaWRlbnRpY2FsIGJ1dCBoYXZlIGEgU2hpcFRvSUQgbm9kZSBhcyB3ZWxsIC0tPg0KCQkJPE5hbWU+QUJDPC9OYW1lPg0KCQkJPEFkZHJlc3NMaW5lMT5Ib3VzZSBOYW1lPC9BZGRyZXNzTGluZTE+DQoJCQk8QWRkcmVzc0xpbmUyPlN0cmVldDwvQWRkcmVzc0xpbmUyPg0KCQkJPEFkZHJlc3NMaW5lMz5Ub3duPC9BZGRyZXNzTGluZTM+DQoJCQk8Q2l0eT5DaXR5PC9DaXR5Pg0KCQkJPENvdW50eT5Db3VudHk8L0NvdW50eT4gPCEtLSBvciBTdGF0ZSwgUmVnaW9uIGV0Yy4gLS0+DQoJCQk8Q291bnRyeT5VSzwvQ291bnRyeT4gPCEtLSBhcyBpbiBDU0QgLSB0cmFuc2xhdGlvbiBuZWVkZWQ/IC0tPg0KCQkJPFBvc3RDb2RlPkEwMSAyQkI8L1Bvc3RDb2RlPg0KCQkJPFBob25lPjU1NS0xMjM0NTY3PC9QaG9uZT4NCgkJCTxGYXg+NTU1LTEyMzQ1Njg8L0ZheD4NCgkJCTxFbWFpbD50ZXN0QGluZm9yLmNvbTwvRW1haWw+DQoJCQk8IS0tIENvbnRhY3Q/IFdvdWxkIG5lZWQgdG8gZXhpc3QgaW4gQ1NEIC0tPg0KCQkJPCEtLSBXYXJlaG91c2UgPyAtLT4NCgkJCTwhLS0gUGF5bWVudCBUZXJtcyA/IC0tPg0KCQk8L1dvb0N1c3RvbWVyPg0KCTwvRGF0YUFyZWE+DQo8L1Byb2Nlc3NXb29DdXN0b21lcj4NCg==';
 
-	/*$files = array();
-	$files['parameters.json'] = array(
-		'type' => 'application/octet-stream;base64',
-		'content' => $paramters,
-		//'content' => base64_encode($paramters),
-	);
-	$files['xml.bin'] = array(
-		'type' => 'application/octet-stream;base64',
-		'content' => $xml,
-		//'content' => base64_encode(),
-	);*/
-
 	$fields = array();
 
 	$fields['ParameterRequest'] = $paramters;
@@ -96,15 +84,6 @@ function wpiai_get_infor_message_multipart_message($url,$paramters,$xml) {
 		$data .= $content;
 		$data .= "\r\n";
 	}
-
-	/*foreach ($files as $name => $file) {
-		$data .= "--" . $delimiter . "\r\n";
-		$data .= 'Content-Disposition: form-data; name="' . $name . '";' .
-		         ' filename="' . $name . '"' . "\r\n";
-		$data .= 'Content-Type: ' . $file['type'] . "\r\n";
-		$data .= "\r\n";
-		$data .= $file['content'] . "\r\n";
-	}*/
 
 	$data .= "--" . $delimiter . "--\r\n";
 
