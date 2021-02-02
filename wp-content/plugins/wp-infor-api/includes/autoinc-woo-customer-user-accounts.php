@@ -51,6 +51,9 @@ function wpiai_contacts_repeater_meta_box($user) {
 									<table>
 										<tr>
 											<td>
+                                                <input type="hidden" name="contact_CONTACT_ID[]" value="<?php if ( $field['contact_CONTACT_ID'] != '' ) {
+														echo esc_attr( $field['contact_CONTACT_ID'] );
+													} else {echo uniqid();}?>">
 												<label for="contact_CSD_ID[]">CSD ID:
 													<input type="text" class="widefat" name="contact_CSD_ID[]" value="<?php if ( $field['contact_CSD_ID'] != '' ) {
 														echo esc_attr( $field['contact_CSD_ID'] );
@@ -275,6 +278,7 @@ function wpiai_contacts_repeatable_meta_box_save( $user_id ) {
 	$contact_email      = isset( $_POST['contact_email'] ) ? (array) $_POST['contact_email'] : array();
 	$contact_phone      = isset( $_POST['contact_phone'] ) ? (array) $_POST['contact_phone'] : array();
 	$contact_type      = isset( $_POST['contact_type'] ) ? (array) $_POST['contact_type'] : array();
+	$contact_CONTACT_ID = isset( $_POST['contact_CONTACT_ID'] ) ? (array) $_POST['contact_CONTACT_ID'] : array();
 
 	$count = count( $contact_email );
 
@@ -319,6 +323,14 @@ function wpiai_contacts_repeatable_meta_box_save( $user_id ) {
 		if ( $contact_type[ $i ] != '' ) :
 			$new[ $i ]['contact_type'] = sanitize_text_field( $contact_type[ $i ] );
 		endif;
+
+		if ( $contact_CONTACT_ID[ $i ] != '' ) :
+			$new[ $i ]['contact_CONTACT_ID'] = sanitize_text_field( $contact_CONTACT_ID[ $i ] );
+		endif;
+
+		/*if ( $contact_CONTACT_ID[ $i ] == '' ) :
+			$new[ $i ]['contact_CONTACT_ID'] = uniqid();
+		endif;*/
 
 	}
 
