@@ -34,13 +34,13 @@ function ajax_wpmai_update_product() {
 	$id = wc_get_product_id_by_sku( $_POST['sku'] );
 	if ( $id > 0 ) {
 		//update_post_meta($id, '_manage_stock', 'yes');
-		$webPrice = wpmai_get_web_price( $_POST['sku'] );
+		//$webPrice = wpmai_get_web_price( $_POST['sku'] );
 		$price    = $_POST['price'];
 		$product  = wc_get_product( $id );
 		$product->set_price( $_POST['price'] );
-		if ( $webPrice ) {
+		/*if ( $webPrice ) {
 			$price = $webPrice;
-		}
+		}*/
 		$product->set_regular_price( $price );
 		$product->set_manage_stock( true );
 		$product->set_stock_quantity( $_POST['qty'] );

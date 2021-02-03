@@ -106,20 +106,37 @@ function wpmai_options_page()
         </div>
         <table class="form-table">
             <tr>
-               <th><label for="sku">Update a product code (SKU):</label></th>
-                   <td>
-                       <input type="text" id="sku" class="regular-text">&nbsp;<button id="UpdateCode" class="button">Update</button>
-                       &nbsp; &nbsp;<span class="modal UpdateCode"><img src="<?php echo wpmai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
-                   </td>
-               </tr>
+               <th>
+                  <label for="sku">Update a product code (SKU):</label>
+               </th>
+               <td>
+                  <input type="text" id="sku" class="regular-text">&nbsp;<button id="UpdateCode" class="button">Update</button>
+                  &nbsp; &nbsp;<span class="modal UpdateCode"><img src="<?php echo wpmai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+               </td>
+            </tr>
+            <tr>
+              <td colspan="2"><hr></td>
+            </tr>
+            <tr>
+               <th>
+                  <label for="sku">SQL Query:</label>
+               </th>
+               <td>
+                  <input type="text" id="sql" class="regular-text">&nbsp;<button id="GetSQL" class="button">Go</button>
+                  &nbsp; &nbsp;<span class="modal GetSQL"><img src="<?php echo wpmai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+               </td>
+            </tr>
+            <tr>
+              <td colspan="2"><hr></td>
+            </tr>
             <tr>
                 <td colspan="2">
-                <hr>
                     <button id="MerlinImport" class="button">Import All Stock Prices and Quantities</button>&nbsp;
                     &nbsp;<span class="modal MerlinImport"><img
                                 src="<?php echo wpmai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                 </td>
             </tr>
+
         </table>
         <div class="wrap">
             <pre id="ajax-response" lang="xml">

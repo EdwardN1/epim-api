@@ -99,4 +99,18 @@ adminJQ(function ($) {
         ProductUpdatesQueue.process();
     });
 
+    $('#GetSQL').on('click',function () {
+        ProductUpdatesQueue.reset();
+        /*ProductUpdatesQueue.queue('http://92.27.13.55:8181/Merlin.asmx/',{
+            datasource: 'mbs01post',
+            query: $('#sql').val(),
+        });*/
+        ProductUpdatesQueue.queue('https://postman-echo.com/',{
+            action: 'post',
+            datasource: 'mbs01post',
+            query: $('#sql').val(),
+        });
+        ProductUpdatesQueue.process();
+    });
+
 });
