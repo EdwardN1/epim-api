@@ -107,12 +107,8 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 				 * Create a contact from billing address as none exist
 				 */
 				$contact = array();
-				$contact['contact_name'] = get_user_meta($user_id,'first_name',true);
-				if($contact['contact_name'] == '') {
-					$contact['contact_name'] = get_user_meta($user_id,'last_name',true);
-				} else {
-					$contact['contact_name'] .= ' '.get_user_meta($user_id,'last_name',true);
-				}
+				$contact['contact_first_name'] = get_user_meta($user_id,'first_name',true);
+                $contact['contact_last_name'] = get_user_meta($user_id,'last_name',true);
 				$contact['contact_email'] = $user->user_email;
 				$contact['contact_address_1'] = get_user_meta($user_id,'billing_address_1',true);
 				$contact['contact_address_2'] = get_user_meta($user_id,'billing_address_2',true);
@@ -135,6 +131,18 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 				 * Send changes to Infor for contacts here.
 				 *
 				 */
+				foreach($contactDiff["added"] as $add_contact) {
+                    $contact_paramaters = set_messageid(get_option('wpiai_contact_parameters'));
+                    $contact_xml = get_contact_XML_record($user_id,'Add',$add_contact);
+                }
+                foreach($contactDiff["removed"] as $remove_contact) {
+                    $contact_paramaters = set_messageid(get_option('wpiai_contact_parameters'));
+                    $contact_xml = get_contact_XML_record($user_id,'Delete',$remove_contact);
+                }
+                foreach($contactDiff["changed"] as $update_contact) {
+                    $contact_paramaters = set_messageid(get_option('wpiai_contact_parameters'));
+                    $contact_xml = get_contact_XML_record($user_id,'Change',$update_contact);
+                }
 			}
 		}
 	}
@@ -151,7 +159,31 @@ function get_customer_param_record_x( $parameters ) {
 	}
 }
 
-function get_contact_XML_record( $user_id ) {
+function set_messageid( $parameters ) {
+    $json = json_decode( $parameters );
+    if ( json_last_error() == JSON_ERROR_NONE ) {
+        $json->messageId = uniqid();
+
+        return json_encode( $json );
+    } else {
+        return $parameters;
+    }
+}
+
+/**
+ *
+ * $contact['contact_email']
+ * $contact['contact_address_1']
+ * $contact['contact_address_2']
+ * $contact['contact_address_3']
+ * $contact['contact_address_4']
+ * $contact['contact_postcode']
+ * $contact['contact_phone']
+ * $contact['contact_name']
+ *
+ */
+
+function get_contact_XML_record( $user_id, $action, $record ) {
 	$res  = false;
 	$user = get_userdata( $user_id );
 	if ( $user ) {
@@ -161,7 +193,77 @@ function get_contact_XML_record( $user_id ) {
 		$nowDT            = new DateTime();
 		$CreationDateTime = $nowDT->format( DateTime::ATOM );
 		$BODID            = uniqid();
-	}
+		$LastModificationDateTime = $CreationDateTime;
+
+		$StatusCode = $record['contact_status_code'];
+		$GivenName =$record['contact_first_name '];
+		$FamilyName  = $record['contact_last_name'];
+        $name = $GivenName;
+        if($FamilyName != '') {
+            if($GivenName !='') $name .= ' ';
+            $name .= $FamilyName;
+        }
+		$JobTitle = $record['constact_job_title'];
+        $AddressLine = $record['contact_address_1'];
+        if($record['contact_address_2'] != '') {
+            $AddressLine .= ', '.$record['contact_address_2'];
+        }
+        $CityName = $record['contact_address_3'];
+        $PostalCode = $record['contact_postcode'];
+        $DialNumber = $record['contact_phone'];
+        $URI = $record['contact_email'];
+
+        $xml->registerXPathNamespace( 'x', 'http://schema.infor.com/InforOAGIS/2' );
+        if ( $xml->xpath( '//x:ApplicationArea' )[0]->CreationDateTime[0] ) {
+            $xml->xpath( '//x:ApplicationArea' )[0]->CreationDateTime[0] = $CreationDateTime;
+        } else {
+            //error_log('Cant find path');
+        }
+        if ( $xml->xpath( '//x:ApplicationArea' )[0]->BODID[0] ) {
+            $xml->xpath( '//x:ApplicationArea' )[0]->BODID[0] = $BODID;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->Process[0]->ActionCriteria[0]->ActionExpression[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->Process[0]->ActionCriteria[0]->ActionExpression[0]                             = $action;
+            $xml->xpath( '//x:DataArea' )[0]->Process[0]->ActionCriteria[0]->ActionExpression[0]->attributes()['actionCode'] = $action;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->Name[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->Name[0] = $name;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->Name[0]->Code[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->Name[0]->Code[0] = $StatusCode;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->GivenName[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->GivenName[0] = $GivenName;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->FamilyName[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->FamilyName[0] = $FamilyName;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->JobTitle[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->JobTitle[0] = $JobTitle;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->AddressLine[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->AddressLine[0] = $AddressLine;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->CityName[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->CityName[0] = $CityName;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->PostalCode[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->PostalCode[0] = $PostalCode;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[1]->DialNumber[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[1]->DialNumber[0] = $DialNumber;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[4]->DialNumber[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[4]->DialNumber[0] = $DialNumber;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[5]->URI[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[5]->URI[0] = $URI;
+        }
+        $xmld          = $xml->asXML();
+        return $xmld;
+	} else {
+	    return false;
+    }
 }
 
 function get_customer_XML_record( $user_id ) {

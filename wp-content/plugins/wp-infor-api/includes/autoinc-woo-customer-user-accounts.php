@@ -45,108 +45,146 @@ function wpiai_contacts_repeater_meta_box($user) {
 				?>
 				<tr class="repeater-row">
 					<td>
-						<table>
-							<tr>
-								<td>
-									<table>
-										<tr>
-											<td>
-                                                <input type="hidden" name="contact_CONTACT_ID[]" value="<?php if ( $field['contact_CONTACT_ID'] != '' ) {
-														echo esc_attr( $field['contact_CONTACT_ID'] );
-													} else {echo uniqid();}?>">
-												<label for="contact_CSD_ID[]">CSD ID:
-													<input type="text" class="widefat" name="contact_CSD_ID[]" value="<?php if ( $field['contact_CSD_ID'] != '' ) {
-														echo esc_attr( $field['contact_CSD_ID'] );
-													} ?>"/>
-												</label>
-											</td>
-											<td>
-												<label for="contact_name[]">Name:
-													<input type="text" class="widefat" name="contact_name[]" value="<?php if ( $field['contact_name'] != '' ) {
-														echo esc_attr( $field['contact_name'] );
-													} ?>"/>
-												</label>
-											</td>
-										</tr>
-									</table>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<label for="contact_address_1[]">Address 1:
-										<input type="text" class="widefat" name="contact_address_1[]" value="<?php if ( $field['contact_address_1'] != '' ) {
-											echo esc_attr( $field['contact_address_1'] );
-										} ?>"/>
-									</label>
-								</td>
-							</tr>
+						<table class="form-table">
                             <tr>
+                                <th>
+                                    <input type="hidden" name="contact_CONTACT_ID[]" value="<?php if ( $field['contact_CONTACT_ID'] != '' ) {
+                                        echo esc_attr( $field['contact_CONTACT_ID'] );
+                                    } else {echo uniqid();}?>">
+                                    <label for="contact_CSD_ID[]">CSD contact ID:</label>
+                                </th>
                                 <td>
-                                    <label for="contact_address_2[]">Address 2:
-                                        <input type="text" class="widefat" name="contact_address_2[]" value="<?php if ( $field['contact_address_2'] != '' ) {
-											echo esc_attr( $field['contact_address_2'] );
-										} ?>"/>
-                                    </label>
+                                    <input type="text" class="regular-text" name="contact_CSD_ID[]" value="<?php if ( $field['contact_CSD_ID'] != '' ) {
+                                        echo esc_attr( $field['contact_CSD_ID'] );
+                                    } ?>" />
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label for="contact_address_3[]">Address 3:
-                                        <input type="text" class="widefat" name="contact_address_3[]" value="<?php if ( $field['contact_address_3'] != '' ) {
-											echo esc_attr( $field['contact_address_3'] );
-										} ?>"/>
-                                    </label>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <label for="contact_address_4[]">Address 4:
-                                        <input type="text" class="widefat" name="contact_address_4[]" value="<?php if ( $field['contact_address_4'] != '' ) {
-											echo esc_attr( $field['contact_address_4'] );
-										} ?>"/>
-                                    </label>
-                                </td>
-                            </tr>
-							<tr>
-								<td>
-									<label for="contact_postcode[]">Postcode:
-										<input type="text" class="widefat" name="contact_postcode[]" value="<?php if ( $field['contact_postcode'] != '' ) {
-											echo esc_attr( $field['contact_postcode'] );
-										} ?>"/>
-									</label>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<label for="contact_phone[]">Phone:
-										<input type="text" class="widefat" name="contact_phone[]" value="<?php if ( $field['contact_phone'] != '' ) {
-											echo esc_attr( $field['contact_phone'] );
-										} ?>"/>
-									</label>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<label for="contact_email[]">Email address:
-										<input type="email" class="widefat" name="contact_email[]" value="<?php if ( $field['contact_email'] != '' ) {
-											echo esc_attr( $field['contact_email'] );
-										} ?>"/>
-									</label>
-								</td>
-                                <td>
-                                    <label for="contact_type[]">Contact Type:
-                                        <input type="text" class="widefat" name="contact_type[]" value="<?php if ( $field['contact_type'] != '' ) {
-											echo esc_attr( $field['contact_type'] );
-										} ?>"/>
-                                    </label>
-                                </td>
-							</tr>
 
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="contact_status_code[]">Status Code:</label>
+                                </th>
+                                <td>
+                                    <input type="text" class="regular-text" name="contact_status_code[]" value="<?php if ( $field['contact_status_code'] != '' ) {
+                                        echo esc_attr( $field['contact_status_code'] );
+                                    } ?>"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="contact_first_name[]">First Name:</label>
+                                </th>
+                                <td>
+                                    <input type="text" class="regular-text" name="contact_first_name[]" value="<?php if ( $field['contact_first_name'] != '' ) {
+                                        echo esc_attr( $field['contact_first_name'] );
+                                    } ?>"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="contact_last_name[]">Last Name:</label>
+                                </th>
+                                <td>
+                                    <input type="text" class="regular-text" name="contact_last_name[]" value="<?php if ( $field['contact_last_name'] != '' ) {
+                                        echo esc_attr( $field['contact_last_name'] );
+                                    } ?>"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="contact_job_title[]">Job Title:</label>
+                                </th>
+                                <td>
+                                    <input type="text" class="regular-text" name="contact_job_title[]" value="<?php if ( $field['contact_job_title'] != '' ) {
+                                        echo esc_attr( $field['contact_job_title'] );
+                                    } ?>"/>
+                                </td>
+                            </tr>
 							<tr>
-								<td><a class="button remove-row" href="#">Remove Contact</a></td>
+								<th>
+									<label for="contact_address_1[]">Address 1:</label>
+								</th>
+                                <td>
+                                    <input type="text" class="regular-text" name="contact_address_1[]" value="<?php if ( $field['contact_address_1'] != '' ) {
+                                        echo esc_attr( $field['contact_address_1'] );
+                                    } ?>"/>
+                                </td>
+							</tr>
+                            <tr>
+                                <th>
+                                    <label for="contact_address_2[]">Address 2:</label>
+                                </th>
+                                <td>
+                                    <input type="text" class="regular-text" name="contact_address_2[]" value="<?php if ( $field['contact_address_2'] != '' ) {
+                                        echo esc_attr( $field['contact_address_2'] );
+                                    } ?>"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="contact_address_3[]">Address 3:</label>
+                                </th>
+                                <td>
+                                    <input type="text" class="regular-text" name="contact_address_3[]" value="<?php if ( $field['contact_address_3'] != '' ) {
+                                        echo esc_attr( $field['contact_address_3'] );
+                                    } ?>"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="contact_address_4[]">Address 4:</label>
+                                </th>
+                                <td>
+                                    <input type="text" class="regular-text" name="contact_address_4[]" value="<?php if ( $field['contact_address_4'] != '' ) {
+                                        echo esc_attr( $field['contact_address_4'] );
+                                    } ?>"/>
+                                </td>
+                            </tr>
+							<tr>
+								<th>
+									<label for="contact_postcode[]">Postcode:</label>
+								</th>
+                                <td>
+                                    <input type="text" class="regular-text" name="contact_postcode[]" value="<?php if ( $field['contact_postcode'] != '' ) {
+                                        echo esc_attr( $field['contact_postcode'] );
+                                    } ?>"/>
+                                </td>
 							</tr>
 							<tr>
-								<td>
+								<th>
+									<label for="contact_phone[]">Phone:</label>
+								</th>
+                                <td>
+                                    <input type="text" class="regular-text" name="contact_phone[]" value="<?php if ( $field['contact_phone'] != '' ) {
+                                        echo esc_attr( $field['contact_phone'] );
+                                    } ?>"/>
+                                </td>
+							</tr>
+							<tr>
+								<th>
+									<label for="contact_email[]">Email address:</label>
+								</th>
+                                <td>
+                                    <input type="email" class="regular-text" name="contact_email[]" value="<?php if ( $field['contact_email'] != '' ) {
+                                        echo esc_attr( $field['contact_email'] );
+                                    } ?>"/>
+                                </td>
+							</tr>
+                            <tr>
+                                <th>
+                                    <label for="contact_type[]">Contact Type:</label>
+                                </th>
+                                <td>
+                                    <input type="text" class="regular-text" name="contact_type[]" value="<?php if ( $field['contact_type'] != '' ) {
+                                        echo esc_attr( $field['contact_type'] );
+                                    } ?>"/>
+                                </td>
+                            </tr>
+							<tr>
+								<td colspan="2"><br><a class="button remove-row" href="#">Remove Contact</a></td>
+							</tr>
+							<tr>
+								<td colspan="2">
 									<hr>
 								</td>
 							</tr>
@@ -166,87 +204,117 @@ function wpiai_contacts_repeater_meta_box($user) {
 	<table class="contact-blank-row" style="display: none;">
 		<tr class="repeater-row">
 			<td>
-				<table>
+				<table class="form-table">
 					<tr>
-						<td>
-							<table>
-								<tr>
-									<td>
-										<label for="contact_CSD_ID[]">CSD ID:
-											<input disabled type="text" class="widefat" name="contact_CSD_ID[]" value=""/>
-										</label>
-									</td>
-									<td>
-										<label for="contact_name[]">Name:
-											<input disabled type="text" class="widefat" name="contact_name[]" value=""/>
-										</label>
-									</td>
-								</tr>
-							</table>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label for="contact_address_1[]">Address 1:
-								<input disabled type="text" class="widefat" name="contact_address_1[]" value=""/>
-							</label>
-						</td>
+                        <th>
+                            <label for="contact_CSD_ID[]">CSD contact ID:</label>
+                        </th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="contact_CSD_ID[]" value=""/>
+                        </td>
 					</tr>
                     <tr>
+                        <th>
+                            <label for="contact_CSD_ID[]">Status Code:</label>
+                        </th>
                         <td>
-                            <label for="contact_address_2[]">Address 2:
-                                <input disabled type="text" class="widefat" name="contact_address_2[]" value=""/>
-                            </label>
+                            <input disabled type="text" class="regular-text" name="contact_status_code[]" value=""/>
                         </td>
                     </tr>
                     <tr>
+                        <th>
+                            <label for="contact_first_name[]">First Name:</label>
+                        </th>
                         <td>
-                            <label for="contact_address_3[]">Address 3:
-                                <input disabled type="text" class="widefat" name="contact_address_3[]" value=""/>
-                            </label>
+                            <input disabled type="text" class="regular-text" name="contact_first_name[]" value=""/>
                         </td>
                     </tr>
                     <tr>
+                        <th>
+                            <label for="contact_last_name[]">Last Name:</label>
+                        </th>
                         <td>
-                            <label for="contact_address_4[]">Address 4:
-                                <input disabled type="text" class="widefat" name="contact_address_4[]" value=""/>
-                            </label>
+                            <input disabled type="text" class="regular-text" name="contact_last_name[]" value=""/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="contact_job_title[]">Job Title:</label>
+                        </th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="contact_job_title[]" value=""/>
                         </td>
                     </tr>
 					<tr>
-						<td>
-							<label for="contact_postcode[]">Postcode:
-								<input disabled type="text" class="widefat" name="contact_postcode[]" value=""/>
-							</label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label for="contact_phone[]">Phone:
-								<input disabled type="text" class="widefat" name="contact_phone[]" value=""/>
-							</label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label for="contact_mail[]">Email address:
-								<input disabled type="email" class="widefat" name="contact_email[]" value=""/>
-							</label>
-						</td>
+						<th>
+							<label for="contact_address_1[]">Address 1:</label>
+						</th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="contact_address_1[]" value=""/>
+                        </td>
 					</tr>
                     <tr>
+                        <th>
+                            <label for="contact_address_2[]">Address 2:</label>
+                        </th>
                         <td>
-                            <label for="contact_type[]">Contact Type:
-                                <input disabled type="text" class="widefat" name="contact_type[]" value=""/>
-                            </label>
+                            <input disabled type="text" class="regular-text" name="contact_address_2[]" value=""/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="contact_address_3[]">Address 3:</label>
+                        </th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="contact_address_3[]" value=""/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="contact_address_4[]">Address 4:</label>
+                        </th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="contact_address_4[]" value=""/>
+                        </td>
+                    </tr>
+					<tr>
+						<th>
+							<label for="contact_postcode[]">Postcode:</label>
+						</th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="contact_postcode[]" value=""/>
+                        </td>
+					</tr>
+					<tr>
+						<th>
+							<label for="contact_phone[]">Phone:</label>
+						</th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="contact_phone[]" value=""/>
+                        </td>
+					</tr>
+					<tr>
+						<th>
+							<label for="contact_mail[]">Email address:</label>
+						</th>
+                        <td>
+                            <input disabled type="email" class="regular-text" name="contact_email[]" value=""/>
+                        </td>
+					</tr>
+                    <tr>
+                        <th>
+                            <label for="contact_type[]">Contact Type:</label>
+                        </th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="contact_type[]" value=""/>
                         </td>
                     </tr>
 
 					<tr>
-						<td><a class="button remove-row" href="#">Remove Address</a></td>
+						<td colspan="2"><a class="button remove-row" href="#">Cancel New Contact</a></td>
 					</tr>
 					<tr>
-						<td>
+						<td colspan="2">
 							<hr>
 						</td>
 					</tr>
@@ -269,7 +337,10 @@ function wpiai_contacts_repeatable_meta_box_save( $user_id ) {
 
 
 	$contact_CSD_ID      = isset( $_POST['contact_CSD_ID'] ) ? (array) $_POST['contact_CSD_ID'] : array();
-	$contact_name      = isset( $_POST['contact_name'] ) ? (array) $_POST['contact_name'] : array();
+    $contact_status_code      = isset( $_POST['contact_status_code'] ) ? (array) $_POST['contact_status_code'] : array();
+	$contact_first_name      = isset( $_POST['contact_first_name'] ) ? (array) $_POST['contact_first_name'] : array();
+    $contact_last_name      = isset( $_POST['contact_last_name'] ) ? (array) $_POST['contact_last_name'] : array();
+    $contact_job_title      = isset( $_POST['contact_job_title'] ) ? (array) $_POST['contact_job_title'] : array();
 	$contact_address_1      = isset( $_POST['contact_address_1'] ) ? (array) $_POST['contact_address_1'] : array();
 	$contact_address_2      = isset( $_POST['contact_address_2'] ) ? (array) $_POST['contact_address_2'] : array();
 	$contact_address_3      = isset( $_POST['contact_address_3'] ) ? (array) $_POST['contact_address_3'] : array();
@@ -288,9 +359,21 @@ function wpiai_contacts_repeatable_meta_box_save( $user_id ) {
 			$new[ $i ]['contact_CSD_ID'] = sanitize_text_field( $contact_CSD_ID[ $i ] );
 		endif;
 
-		if ( $contact_name[ $i ] != '' ) :
-			$new[ $i ]['contact_name'] = sanitize_text_field( $contact_name[ $i ] );
+        if ( $contact_status_code[ $i ] != '' ) :
+            $new[ $i ]['contact_status_code'] = sanitize_text_field( $contact_status_code[ $i ] );
+        endif;
+
+		if ( $contact_first_name[ $i ] != '' ) :
+			$new[ $i ]['contact_first_name'] = sanitize_text_field( $contact_first_name[ $i ] );
 		endif;
+
+        if ( $contact_last_name[ $i ] != '' ) :
+            $new[ $i ]['contact_last_name'] = sanitize_text_field( $contact_last_name[ $i ] );
+        endif;
+
+        if ( $contact_job_title[ $i ] != '' ) :
+            $new[ $i ]['contact_job_title'] = sanitize_text_field( $contact_job_title[ $i ] );
+        endif;
 
 		if ( $contact_address_1[ $i ] != '' ) :
 			$new[ $i ]['contact_address_1'] = sanitize_text_field( $contact_address_1[ $i ] );
