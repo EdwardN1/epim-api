@@ -42,39 +42,44 @@ function wpiai_accounts_delivery_repeater_meta_box($user) {
 				?>
 				<tr class="repeater-row">
 					<td>
-						<table>
+                        <input type="hidden" name="delivery_UNIQUE_ID[]" value="<?php if ( $field['delivery_UNIQUE_ID'] != '' ) {
+							echo esc_attr( $field['delivery_UNIQUE_ID'] );
+						} else {echo uniqid();}?>">
+						<table class="form-table">
+                            <tr>
+                                <th>
+                                    <label for="delivery-first-name[]">First Name:</label>
+                                </th>
+                                <td>
+                                    <input type="text" class="regular-text" name="delivery-first-name[]" value="<?php if ( $field['delivery-first-name'] != '' ) {
+		                                echo esc_attr( $field['delivery-first-name'] );
+	                                } ?>"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="delivery-last-name[]">Last Name:</label>
+                                </th>
+                                <td>
+                                    <input type="text" class="regular-text" name="delivery-last-name[]" value="<?php if ( $field['delivery-last-name'] != '' ) {
+		                                echo esc_attr( $field['delivery-last-name'] );
+	                                } ?>"/>
+                                </td>
+                            </tr>
 							<tr>
-								<td>
-									<table>
-										<tr>
-											<td>
-												<label for="delivery-first-name[]">First Name:
-													<input type="text" class="widefat" name="delivery-first-name[]" value="<?php if ( $field['delivery-first-name'] != '' ) {
-														echo esc_attr( $field['delivery-first-name'] );
-													} ?>"/>
-												</label>
-											</td>
-											<td>
-												<label for="delivery-last-name[]">Last Name:
-													<input type="text" class="widefat" name="delivery-last-name[]" value="<?php if ( $field['delivery-last-name'] != '' ) {
-														echo esc_attr( $field['delivery-last-name'] );
-													} ?>"/>
-												</label>
-											</td>
-										</tr>
-									</table>
-								</td>
+								<th>
+									<label for="delivery-company-name[]">Company Name:</label>
+								</th>
+                                <td>
+                                    <input type="text" class="regular-text" name="delivery-company-name[]" value="<?php if ( $field['delivery-company-name'] != '' ) {
+		                                echo esc_attr( $field['delivery-company-name'] );
+	                                } ?>"/>
+                                </td>
 							</tr>
 							<tr>
-								<td>
-									<label for="delivery-company-name[]">Company Name:
-										<input type="text" class="widefat" name="delivery-company-name[]" value="<?php if ( $field['delivery-company-name'] != '' ) {
-											echo esc_attr( $field['delivery-company-name'] );
-										} ?>"/>
-									</label>
-								</td>
-							</tr>
-							<tr>
+                                <th>
+                                    <label for="delivery-country[]">Country:</label>
+                                </th>
 								<td>
 									<select name="delivery-country[]">
 										<?php foreach ( $countries as $label => $value ) : ?>
@@ -84,78 +89,92 @@ function wpiai_accounts_delivery_repeater_meta_box($user) {
 								</td>
 							</tr>
 							<tr>
-								<td>
-									<label for="delivery-street-address-1[]">Street Address:
-										<input type="text" class="widefat" name="delivery-street-address-1[]" style="margin-bottom: 5px;" value="<?php if ( $field['delivery-street-address-1'] != '' ) {
-											echo esc_attr( $field['delivery-street-address-1'] );
-										} ?>"/><br>
-										<input type="text" class="widefat top-pad" name="delivery-street-address-2[]" value="<?php if ( $field['delivery-street-address-2'] != '' ) {
-											echo esc_attr( $field['delivery-street-address-2'] );
-										} ?>"/>
-									</label>
-								</td>
+								<th>
+									<label for="delivery-street-address-1[]">Street Address 1:</label>
+								</th>
+                                <td>
+                                    <input type="text" class="regular-text" name="delivery-street-address-1[]" style="margin-bottom: 5px;" value="<?php if ( $field['delivery-street-address-1'] != '' ) {
+		                                echo esc_attr( $field['delivery-street-address-1'] );
+	                                } ?>"/>
+                                </td>
+							</tr>
+                            <tr>
+                                <th>
+                                    <label for="delivery-street-address-2[]">Street Address 2:</label>
+                                </th>
+                                <td>
+                                    <input type="text" class="regular-text top-pad" name="delivery-street-address-2[]" value="<?php if ( $field['delivery-street-address-2'] != '' ) {
+		                                echo esc_attr( $field['delivery-street-address-2'] );
+	                                } ?>"/>
+                                </td>
+                            </tr>
+							<tr>
+								<th>
+									<label for="delivery-town-city[]">Town / City:</label>
+								</th>
+                                <td>
+                                    <input type="text" class="regular-text" name="delivery-town-city[]" value="<?php if ( $field['delivery-town-city'] != '' ) {
+		                                echo esc_attr( $field['delivery-town-city'] );
+	                                } ?>"/>
+                                </td>
 							</tr>
 							<tr>
-								<td>
-									<label for="delivery-town-city[]">Town / City:
-										<input type="text" class="widefat" name="delivery-town-city[]" value="<?php if ( $field['delivery-town-city'] != '' ) {
-											echo esc_attr( $field['delivery-town-city'] );
-										} ?>"/>
-									</label>
-								</td>
+								<th>
+									<label for="delivery-county[]">County:</label>
+								</th>
+                                <td>
+                                    <input type="text" class="regular-text" name="delivery-county[]" value="<?php if ( $field['delivery-county'] != '' ) {
+		                                echo esc_attr( $field['delivery-county'] );
+	                                } ?>"/>
+                                </td>
 							</tr>
 							<tr>
-								<td>
-									<label for="delivery-county[]">County:
-										<input type="text" class="widefat" name="delivery-county[]" value="<?php if ( $field['delivery-county'] != '' ) {
-											echo esc_attr( $field['delivery-county'] );
-										} ?>"/>
-									</label>
-								</td>
+								<th>
+									<label for="delivery-postcode[]">Postcode:</label>
+								</th>
+                                <td>
+                                    <input type="text" class="regular-text" name="delivery-postcode[]" value="<?php if ( $field['delivery-postcode'] != '' ) {
+		                                echo esc_attr( $field['delivery-postcode'] );
+	                                } ?>"/>
+                                </td>
 							</tr>
 							<tr>
-								<td>
-									<label for="delivery-postcode[]">Postcode:
-										<input type="text" class="widefat" name="delivery-postcode[]" value="<?php if ( $field['delivery-postcode'] != '' ) {
-											echo esc_attr( $field['delivery-postcode'] );
-										} ?>"/>
-									</label>
-								</td>
+								<th>
+									<label for="delivery-phone[]">Phone:</label>
+								</th>
+                                <td>
+                                    <input type="text" class="regular-text" name="delivery-phone[]" value="<?php if ( $field['delivery-phone'] != '' ) {
+		                                echo esc_attr( $field['delivery-phone'] );
+	                                } ?>"/>
+                                </td>
 							</tr>
 							<tr>
-								<td>
-									<label for="delivery-phone[]">Phone:
-										<input type="text" class="widefat" name="delivery-phone[]" value="<?php if ( $field['delivery-phone'] != '' ) {
-											echo esc_attr( $field['delivery-phone'] );
-										} ?>"/>
-									</label>
-								</td>
-							</tr>
-							<tr>
-								<td>
-									<label for="delivery-email[]">Email address:
-										<input type="email" class="widefat" name="delivery-email[]" value="<?php if ( $field['delivery-email'] != '' ) {
-											echo esc_attr( $field['delivery-email'] );
-										} ?>"/>
-									</label>
-								</td>
+								<th>
+									<label for="delivery-email[]">Email address:</label>
+								</th>
+                                <td>
+                                    <input type="email" class="regular-text" name="delivery-email[]" value="<?php if ( $field['delivery-email'] != '' ) {
+		                                echo esc_attr( $field['delivery-email'] );
+	                                } ?>"/>
+                                </td>
 							</tr>
 
                             <tr>
+                                <th>
+                                    <label for="delivery-CSD-ID[]">CSD ID:</label>
+                                </th>
                                 <td>
-                                    <label for="delivery-CSD-ID[]">CSD ID:
-                                        <input type="text" class="widefat" name="delivery-CSD-ID[]" value="<?php if ( $field['delivery-CSD-ID'] != '' ) {
-											echo esc_attr( $field['delivery-CSD-ID'] );
-										} ?>"/>
-                                    </label>
+                                    <input type="text" class="regular-text" name="delivery-CSD-ID[]" value="<?php if ( $field['delivery-CSD-ID'] != '' ) {
+		                                echo esc_attr( $field['delivery-CSD-ID'] );
+	                                } ?>"/>
                                 </td>
                             </tr>
 
 							<tr>
-								<td><a class="button remove-row" href="#">Remove Address</a></td>
+								<td colspan="2"><br><a class="button remove-row" href="#">Remove Address</a></td>
 							</tr>
 							<tr>
-								<td>
+								<td colspan="2">
 									<hr>
 								</td>
 							</tr>
@@ -175,33 +194,35 @@ function wpiai_accounts_delivery_repeater_meta_box($user) {
 	<table class="delivery-blank-row" style="display: none;">
 		<tr class="repeater-row">
 			<td>
-				<table>
+				<table class="form-table">
 					<tr>
-						<td>
-							<table>
-								<tr>
-									<td>
-										<label for="delivery-first-name[]">First Name:
-											<input disabled type="text" class="widefat" name="delivery-first-name[]" value=""/>
-										</label>
-									</td>
-									<td>
-										<label for="delivery-last-name[]">Last Name:
-											<input disabled type="text" class="widefat" name="delivery-last-name[]" value=""/>
-										</label>
-									</td>
-								</tr>
-							</table>
-						</td>
+                        <th>
+                            <label for="delivery-first-name[]">First Name:</label>
+                        </th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="delivery-first-name[]" value=""/>
+                        </td>
+					</tr>
+                    <tr>
+                        <th>
+                            <label for="delivery-last-name[]">Last Name:</label>
+                        </th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="delivery-last-name[]" value=""/>
+                        </td>
+                    </tr>
+					<tr>
+						<th>
+							<label for="delivery-company-name[]">Company Name:</label>
+						</th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="delivery-company-name[]" value=""/>
+                        </td>
 					</tr>
 					<tr>
-						<td>
-							<label for="delivery-company-name[]">Company Name:
-								<input disabled type="text" class="widefat" name="delivery-company-name[]" value=""/>
-							</label>
-						</td>
-					</tr>
-					<tr>
+                        <th>
+                            <label for="delivery-country[]">Country:</label>
+                        </th>
 						<td>
 							<select disabled name="delivery-country[]">
 								<?php foreach ( $countries as $label => $value ) : ?>
@@ -213,61 +234,75 @@ function wpiai_accounts_delivery_repeater_meta_box($user) {
 						</td>
 					</tr>
 					<tr>
-						<td>
-							<label for="delivery-street-address-1[]">Street Address:
-								<input disabled type="text" class="widefat" name="delivery-street-address-1[]" value=""/><br>
-								<input disabled type="text" class="widefat top-pad" name="delivery-street-address-2[]" value=""/>
-							</label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label for="delivery-town-city[]">Town / City:
-								<input disabled type="text" class="widefat" name="delivery-town-city[]" value=""/>
-							</label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label for="delivery-county[]">County:
-								<input disabled type="text" class="widefat" name="delivery-county[]" value=""/>
-							</label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label for="delivery-postcode[]">Postcode:
-								<input disabled type="text" class="widefat" name="delivery-postcode[]" value=""/>
-							</label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label for="delivery-phone[]">Phone:
-								<input disabled type="text" class="widefat" name="delivery-phone[]" value=""/>
-							</label>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<label for="delivery-email[]">Email address:
-								<input disabled type="email" class="widefat" name="delivery-email[]" value=""/>
-							</label>
-						</td>
+						<th>
+							<label for="delivery-street-address-1[]">Street Address:</label>
+						</th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="delivery-street-address-1[]" value=""/><br>
+                        </td>
 					</tr>
                     <tr>
+                        <th>
+                            <label for="delivery-street-address-2[]">Street Address:</label>
+                        </th>
                         <td>
-                            <label for="delivery-CSD-ID[]">CSD ID:
-                                <input type="text" class="widefat" name="delivery-CSD-ID[]" value=""/>
-                            </label>
+                            <input disabled type="text" class="regular-text" name="delivery-street-address-2[]" value=""/>
+                        </td>
+                    </tr>
+					<tr>
+						<th>
+							<label for="delivery-town-city[]">Town / City:</label>
+						</th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="delivery-town-city[]" value=""/>
+                        </td>
+					</tr>
+					<tr>
+						<th>
+							<label for="delivery-county[]">County:</label>
+						</th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="delivery-county[]" value=""/>
+                        </td>
+					</tr>
+					<tr>
+						<th>
+							<label for="delivery-postcode[]">Postcode:</label>
+						</th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="delivery-postcode[]" value=""/>
+                        </td>
+					</tr>
+					<tr>
+						<th>
+							<label for="delivery-phone[]">Phone:</label>
+						</th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="delivery-phone[]" value=""/>
+                        </td>
+					</tr>
+					<tr>
+						<th>
+							<label for="delivery-email[]">Email address:</label>
+						</th>
+                        <td>
+                            <input disabled type="email" class="regular-text" name="delivery-email[]" value=""/>
+                        </td>
+					</tr>
+                    <tr>
+                        <th>
+                            <label for="delivery-CSD-ID[]">CSD ID:</label>
+                        </th>
+                        <td>
+                            <input type="text" class="regular-text" name="delivery-CSD-ID[]" value=""/>
                         </td>
                     </tr>
 
 					<tr>
-						<td><a class="button remove-row" href="#">Remove Address</a></td>
+						<td colspan="2"><br><a class="button remove-row" href="#">Remove Address</a></td>
 					</tr>
 					<tr>
-						<td>
+						<td colspan="2">
 							<hr>
 						</td>
 					</tr>
@@ -289,7 +324,7 @@ function wpiai_accounts_delivery_repeatable_meta_box_save( $user_id ) {
 	$new     = array();
 	$options = wpiai_get_country_options();
 
-
+    $delivery_UNIQUE_ID = isset( $_POST['delivery_UNIQUE_ID'] ) ? (array) $_POST['delivery_UNIQUE_ID'] : array();
 	$delivery_first_names      = isset( $_POST['delivery-first-name'] ) ? (array) $_POST['delivery-first-name'] : array();
 	$delivery_last_names       = isset( $_POST['delivery-last-name'] ) ? (array) $_POST['delivery-last-name'] : array();
 	$delivery_company_names    = isset( $_POST['delivery-company-name'] ) ? (array) $_POST['delivery-company-name'] : array();
@@ -307,6 +342,10 @@ function wpiai_accounts_delivery_repeatable_meta_box_save( $user_id ) {
 	$count = count( $delivery_first_names );
 
 	for ( $i = 0; $i < $count; $i ++ ) {
+
+		if ( $delivery_UNIQUE_ID[ $i ] != '' ) :
+			$new[ $i ]['delivery_UNIQUE_ID'] = sanitize_text_field( $delivery_UNIQUE_ID[ $i ] );
+		endif;
 
 		if ( $delivery_first_names[ $i ] != '' ) :
 			$new[ $i ]['delivery-first-name'] = sanitize_text_field( $delivery_first_names[ $i ] );

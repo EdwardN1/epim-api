@@ -58,7 +58,7 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 					$parameters = get_option( 'wpiai_customer_parameters' );
 					$pRequest   = get_customer_param_record_x( $parameters );
 					$xmlRequest = get_customer_XML_record( $user_id );
-					$updated    = wpiai_get_infor_message_multipart_message( $url, $pRequest, $xmlRequest );
+					//$updated    = wpiai_get_infor_message_multipart_message( $url, $pRequest, $xmlRequest );
 					if($updated) {
 						update_user_meta( $user_id, 'wpiai_force_update', '' );
 					}
@@ -75,6 +75,56 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 		} else {
 			error_log( 'No Data Change for userID ' . $user_id );
 		}
+		/**
+		 * Ship To Processing
+		 */
+
+		if ( in_array( 'customer', $roles ) ) {
+			$oldShipTo = get_user_meta( $user_id, 'wpiai_last_delivery_addresses', true );
+			if ( ! $oldShipTo ) {
+				$oldShipTo = array();
+			}
+			if ( $oldShipTo == '' ) {
+				$oldShipTo = array();
+			}
+			$shipTo_meta = get_user_meta( $user_id, 'wpiai_delivery_addresses', true );
+
+			$shipTo      = array();
+			if(is_array($shipTo_meta)) {
+				foreach ( $shipTo_meta as $shipTo_m ) {
+					$shipTo_rec = $shipTo_m;
+					if ( ( $shipTo_rec['delivery_UNIQUE_ID'] == '' ) || ( ! array_key_exists( 'delivery_UNIQUE_ID', $shipTo_rec ) ) ) {
+						error_log( 'setting delivery_UNIQUE_ID' );
+						$shipTo_rec['delivery_UNIQUE_ID'] = uniqid();
+					}
+					$shipTo[] = $shipTo_rec;
+				}
+			}
+			update_user_meta( $user_id, 'wpiai_delivery_addresses', $shipTo );
+
+			$shipTo = get_user_meta( $user_id, 'wpiai_delivery_addresses', true );
+
+			$shipToDiff = compare_multi_Arrays( $oldShipTo, $shipTo, 'delivery_UNIQUE_ID' );
+
+			if ( ( count( $shipToDiff["added"] ) > 0 ) || ( count( $shipToDiff["removed"] ) > 0 ) || ( count( $shipToDiff["changed"] ) > 0 ) ) {
+				$shipTo_url        = get_option( 'wpiai_ship_to_url' );
+				$shipTo_paramaters = set_messageid(get_option('wpiai_ship_to_parameters'));
+				foreach($shipToDiff["added"] as $add_shipTo) {
+					$shipTo_xml = get_shipTo_XML_record($user_id,'Add',$add_shipTo);
+					//$updated    = wpiai_get_infor_message_multipart_message( $shipTo_url, $shipTo_paramaters, $shipTo_xml );
+				}
+				foreach($shipToDiff["removed"] as $remove_shipTo) {
+					$shipTo_xml = get_shipTo_XML_record($user_id,'Delete',$remove_shipTo);
+					//$updated    = wpiai_get_infor_message_multipart_message( $shipTo_url, $shipTo_paramaters, $shipTo_xml );
+				}
+				foreach($shipToDiff["changed"] as $update_shipTo) {
+					$shipTo_xml = get_shipTo_XML_record($user_id,'Change',$update_shipTo);
+					//$updated    = wpiai_get_infor_message_multipart_message( $shipTo_url, $shipTo_paramaters, $shipTo_xml );
+				}
+				update_user_meta( $user_id, 'wpiai_last_delivery_addresses', $shipTo );
+			}
+		}
+
 		/**
 		 * Contact Processing
 		 */
@@ -125,24 +175,26 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 			//error_log( print_r( $contactDiff, true ) );
 
 			if ( ( count( $contactDiff["added"] ) > 0 ) || ( count( $contactDiff["removed"] ) > 0 ) || ( count( $contactDiff["changed"] ) > 0 ) ) {
-				update_user_meta( $user_id, 'wpiai_last_contacts', $contacts );
 				/**
 				 *
 				 * Send changes to Infor for contacts here.
 				 *
 				 */
+				$contact_url        = get_option( 'wpiai_contact_url' );
+				$contact_paramaters = set_messageid(get_option('wpiai_contact_parameters'));
 				foreach($contactDiff["added"] as $add_contact) {
-                    $contact_paramaters = set_messageid(get_option('wpiai_contact_parameters'));
                     $contact_xml = get_contact_XML_record($user_id,'Add',$add_contact);
+					//$updated    = wpiai_get_infor_message_multipart_message( $contact_url, $contact_paramaters, $contact_xml );
                 }
                 foreach($contactDiff["removed"] as $remove_contact) {
-                    $contact_paramaters = set_messageid(get_option('wpiai_contact_parameters'));
                     $contact_xml = get_contact_XML_record($user_id,'Delete',$remove_contact);
+	                //$updated    = wpiai_get_infor_message_multipart_message( $contact_url, $contact_paramaters, $contact_xml );
                 }
                 foreach($contactDiff["changed"] as $update_contact) {
-                    $contact_paramaters = set_messageid(get_option('wpiai_contact_parameters'));
                     $contact_xml = get_contact_XML_record($user_id,'Change',$update_contact);
+	                //$updated    = wpiai_get_infor_message_multipart_message( $contact_url, $contact_paramaters, $contact_xml );
                 }
+				update_user_meta( $user_id, 'wpiai_last_contacts', $contacts );
 			}
 		}
 	}
@@ -183,6 +235,10 @@ function set_messageid( $parameters ) {
  *
  */
 
+function get_shipTo_XML_record( $user_id, $action, $record ) {
+
+}
+
 function get_contact_XML_record( $user_id, $action, $record ) {
 	$res  = false;
 	$user = get_userdata( $user_id );
@@ -196,7 +252,7 @@ function get_contact_XML_record( $user_id, $action, $record ) {
 		$LastModificationDateTime = $CreationDateTime;
 
 		$StatusCode = $record['contact_status_code'];
-		$GivenName =$record['contact_first_name '];
+		$GivenName =$record['contact_first_name'];
 		$FamilyName  = $record['contact_last_name'];
         $name = $GivenName;
         if($FamilyName != '') {
@@ -212,6 +268,8 @@ function get_contact_XML_record( $user_id, $action, $record ) {
         $PostalCode = $record['contact_postcode'];
         $DialNumber = $record['contact_phone'];
         $URI = $record['contact_email'];
+
+        $Customer_CSD_ID = get_user_meta( $user_id, 'CSD_ID', true );
 
         $xml->registerXPathNamespace( 'x', 'http://schema.infor.com/InforOAGIS/2' );
         if ( $xml->xpath( '//x:ApplicationArea' )[0]->CreationDateTime[0] ) {
@@ -259,6 +317,9 @@ function get_contact_XML_record( $user_id, $action, $record ) {
         if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[5]->URI[0] ) {
             $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[5]->URI[0] = $URI;
         }
+		if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->EmployerReference [0]->DocumentID[0]->ID[0] ) {
+			$xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->EmployerReference [0]->DocumentID[0]->ID[0] = $Customer_CSD_ID;
+		}
         $xmld          = $xml->asXML();
         return $xmld;
 	} else {

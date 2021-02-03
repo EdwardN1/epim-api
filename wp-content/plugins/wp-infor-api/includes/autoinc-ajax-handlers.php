@@ -54,8 +54,24 @@ function ajax_get_wpiai_get_customer_xml() {
 
 function ajax_get_wpiai_get_contact_xml() {
 	wpiai_api_checkSecure();
+	$record = array();
+	$record['contact_status_code'] = 'Status Code';
+	$record['contact_first_name'] = get_user_meta(4,'first_name',true);;
+	$record['contact_last_name'] = get_user_meta(4,'last_name',true);;;
+	$name = $record['contact_first_name'];
+	if($record['contact_first_name'] != '') {
+		if($record['contact_last_name'] !='') $name .= ' ';
+		$name .= $record['contact_first_name'];
+	}
+	$record['constact_job_title'] = 'Job Title';
+	$record['contact_address_1'] = 'Address 1';
+	$record['contact_address_2'] = 'Address 2';
+	$record['contact_address_3'] = 'City Name';
+	$record['contact_postcode'] = 'Post Code';
+	$record['contact_phone'] = '+44 1522 542520';
+	$record['contact_email'] = 'test.email@address.com';
 	header( "Content-Type: application/json" );
-	echo json_encode(get_contact_XML_record(4));
+	echo json_encode(get_contact_XML_record(4, 'change', $record));
 	exit;
 }
 
