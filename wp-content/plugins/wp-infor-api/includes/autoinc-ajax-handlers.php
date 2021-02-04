@@ -64,9 +64,9 @@ function ajax_get_wpiai_get_contact_xml() {
 		$name .= $record['contact_first_name'];
 	}
 	$record['constact_job_title'] = 'Job Title';
-	$record['contact_address_1'] = 'Address 1';
-	$record['contact_address_2'] = 'Address 2';
-	$record['contact_address_3'] = 'City Name';
+	$record['contact_addr_1'] = 'Address 1';
+	$record['contact_addr_2'] = 'Address 2';
+	$record['contact_addr_3'] = 'City Name';
 	$record['contact_postcode'] = 'Post Code';
 	$record['contact_phone'] = '+44 1522 542520';
 	$record['contact_email'] = 'test.email@address.com';

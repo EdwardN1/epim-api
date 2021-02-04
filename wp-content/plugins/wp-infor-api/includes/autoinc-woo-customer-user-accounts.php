@@ -102,41 +102,41 @@ function wpiai_contacts_repeater_meta_box($user) {
                             </tr>
 							<tr>
 								<th>
-									<label for="contact_address_1[]">Address 1:</label>
+									<label for="contact_addr_1[]">Address 1:</label>
 								</th>
                                 <td>
-                                    <input type="text" class="regular-text" name="contact_address_1[]" value="<?php if ( $field['contact_address_1'] != '' ) {
-                                        echo esc_attr( $field['contact_address_1'] );
+                                    <input type="text" class="regular-text" name="contact_addr_1[]" value="<?php if ( $field['contact_addr_1'] != '' ) {
+                                        echo esc_attr( $field['contact_addr_1'] );
                                     } ?>"/>
                                 </td>
 							</tr>
                             <tr>
                                 <th>
-                                    <label for="contact_address_2[]">Address 2:</label>
+                                    <label for="contact_addr_2[]">Address 2:</label>
                                 </th>
                                 <td>
-                                    <input type="text" class="regular-text" name="contact_address_2[]" value="<?php if ( $field['contact_address_2'] != '' ) {
-                                        echo esc_attr( $field['contact_address_2'] );
+                                    <input type="text" class="regular-text" name="contact_addr_2[]" value="<?php if ( $field['contact_addr_2'] != '' ) {
+                                        echo esc_attr( $field['contact_addr_2'] );
                                     } ?>"/>
                                 </td>
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="contact_address_3[]">Address 3:</label>
+                                    <label for="contact_addr_3[]">Address 3:</label>
                                 </th>
                                 <td>
-                                    <input type="text" class="regular-text" name="contact_address_3[]" value="<?php if ( $field['contact_address_3'] != '' ) {
-                                        echo esc_attr( $field['contact_address_3'] );
+                                    <input type="text" class="regular-text" name="contact_addr_3[]" value="<?php if ( $field['contact_addr_3'] != '' ) {
+                                        echo esc_attr( $field['contact_addr_3'] );
                                     } ?>"/>
                                 </td>
                             </tr>
                             <tr>
                                 <th>
-                                    <label for="contact_address_4[]">Address 4:</label>
+                                    <label for="contact_addr_4[]">Address 4:</label>
                                 </th>
                                 <td>
-                                    <input type="text" class="regular-text" name="contact_address_4[]" value="<?php if ( $field['contact_address_4'] != '' ) {
-                                        echo esc_attr( $field['contact_address_4'] );
+                                    <input type="text" class="regular-text" name="contact_addr_4[]" value="<?php if ( $field['contact_addr_4'] != '' ) {
+                                        echo esc_attr( $field['contact_addr_4'] );
                                     } ?>"/>
                                 </td>
                             </tr>
@@ -247,34 +247,34 @@ function wpiai_contacts_repeater_meta_box($user) {
                     </tr>
 					<tr>
 						<th>
-							<label for="contact_address_1[]">Address 1:</label>
+							<label for="contact_addr_1[]">Address 1:</label>
 						</th>
                         <td>
-                            <input disabled type="text" class="regular-text" name="contact_address_1[]" value=""/>
+                            <input disabled type="text" class="regular-text" name="contact_addr_1[]" value=""/>
                         </td>
 					</tr>
                     <tr>
                         <th>
-                            <label for="contact_address_2[]">Address 2:</label>
+                            <label for="contact_addr_2[]">Address 2:</label>
                         </th>
                         <td>
-                            <input disabled type="text" class="regular-text" name="contact_address_2[]" value=""/>
+                            <input disabled type="text" class="regular-text" name="contact_addr_2[]" value=""/>
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            <label for="contact_address_3[]">Address 3:</label>
+                            <label for="contact_addr_3[]">Address 3:</label>
                         </th>
                         <td>
-                            <input disabled type="text" class="regular-text" name="contact_address_3[]" value=""/>
+                            <input disabled type="text" class="regular-text" name="contact_addr_3[]" value=""/>
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            <label for="contact_address_4[]">Address 4:</label>
+                            <label for="contact_addr_4[]">Address 4:</label>
                         </th>
                         <td>
-                            <input disabled type="text" class="regular-text" name="contact_address_4[]" value=""/>
+                            <input disabled type="text" class="regular-text" name="contact_addr_4[]" value=""/>
                         </td>
                     </tr>
 					<tr>
@@ -341,10 +341,10 @@ function wpiai_contacts_repeatable_meta_box_save( $user_id ) {
 	$contact_first_name      = isset( $_POST['contact_first_name'] ) ? (array) $_POST['contact_first_name'] : array();
     $contact_last_name      = isset( $_POST['contact_last_name'] ) ? (array) $_POST['contact_last_name'] : array();
     $contact_job_title      = isset( $_POST['contact_job_title'] ) ? (array) $_POST['contact_job_title'] : array();
-	$contact_address_1      = isset( $_POST['contact_address_1'] ) ? (array) $_POST['contact_address_1'] : array();
-	$contact_address_2      = isset( $_POST['contact_address_2'] ) ? (array) $_POST['contact_address_2'] : array();
-	$contact_address_3      = isset( $_POST['contact_address_3'] ) ? (array) $_POST['contact_address_3'] : array();
-	$contact_address_4      = isset( $_POST['contact_address_4'] ) ? (array) $_POST['contact_address_4'] : array();
+	$contact_addr_1      = isset( $_POST['contact_addr_1'] ) ? (array) $_POST['contact_addr_1'] : array();
+	$contact_addr_2      = isset( $_POST['contact_addr_2'] ) ? (array) $_POST['contact_addr_2'] : array();
+	$contact_addr_3      = isset( $_POST['contact_addr_3'] ) ? (array) $_POST['contact_addr_3'] : array();
+	$contact_addr_4      = isset( $_POST['contact_addr_4'] ) ? (array) $_POST['contact_addr_4'] : array();
 	$contact_postcode      = isset( $_POST['contact_postcode'] ) ? (array) $_POST['contact_postcode'] : array();
 	$contact_email      = isset( $_POST['contact_email'] ) ? (array) $_POST['contact_email'] : array();
 	$contact_phone      = isset( $_POST['contact_phone'] ) ? (array) $_POST['contact_phone'] : array();
@@ -375,20 +375,20 @@ function wpiai_contacts_repeatable_meta_box_save( $user_id ) {
             $new[ $i ]['contact_job_title'] = sanitize_text_field( $contact_job_title[ $i ] );
         endif;
 
-		if ( $contact_address_1[ $i ] != '' ) :
-			$new[ $i ]['contact_address_1'] = sanitize_text_field( $contact_address_1[ $i ] );
+		if ( $contact_addr_1[ $i ] != '' ) :
+			$new[ $i ]['contact_addr_1'] = sanitize_text_field( $contact_addr_1[ $i ] );
 		endif;
 
-		if ( $contact_address_2[ $i ] != '' ) :
-			$new[ $i ]['contact_address_2'] = sanitize_text_field( $contact_address_2[ $i ] );
+		if ( $contact_addr_2[ $i ] != '' ) :
+			$new[ $i ]['contact_addr_2'] = sanitize_text_field( $contact_addr_2[ $i ] );
 		endif;
 
-		if ( $contact_address_3[ $i ] != '' ) :
-			$new[ $i ]['contact_address_3'] = sanitize_text_field( $contact_address_3[ $i ] );
+		if ( $contact_addr_3[ $i ] != '' ) :
+			$new[ $i ]['contact_addr_3'] = sanitize_text_field( $contact_addr_3[ $i ] );
 		endif;
 
-		if ( $contact_address_4[ $i ] != '' ) :
-			$new[ $i ]['contact_address_4'] = sanitize_text_field( $contact_address_4[ $i ] );
+		if ( $contact_addr_4[ $i ] != '' ) :
+			$new[ $i ]['contact_addr_4'] = sanitize_text_field( $contact_addr_4[ $i ] );
 		endif;
 
 		if ( $contact_email[ $i ] != '' ) :

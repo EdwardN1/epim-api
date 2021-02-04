@@ -58,7 +58,7 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 					$parameters = get_option( 'wpiai_customer_parameters' );
 					$pRequest   = get_customer_param_record_x( $parameters );
 					$xmlRequest = get_customer_XML_record( $user_id );
-					//$updated    = wpiai_get_infor_message_multipart_message( $url, $pRequest, $xmlRequest );
+					$updated    = wpiai_get_infor_message_multipart_message( $url, $pRequest, $xmlRequest );
 					if($updated) {
 						update_user_meta( $user_id, 'wpiai_force_update', '' );
 					}
@@ -142,7 +142,7 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 				foreach ( $contacts_meta as $contactm ) {
 					$contact_rec = $contactm;
 					if ( ( $contact_rec['contact_CONTACT_ID'] == '' ) || ( ! array_key_exists( 'contact_CONTACT_ID', $contact_rec ) ) ) {
-						error_log( 'setting contact_CONTACT_ID' );
+						error_log( 'setting contact_CONTACT_ID for user:'.$user_id );
 						$contact_rec['contact_CONTACT_ID'] = uniqid();
 					}
 					$contacts[] = $contact_rec;
@@ -160,10 +160,10 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 				$contact['contact_first_name'] = get_user_meta($user_id,'first_name',true);
                 $contact['contact_last_name'] = get_user_meta($user_id,'last_name',true);
 				$contact['contact_email'] = $user->user_email;
-				$contact['contact_address_1'] = get_user_meta($user_id,'billing_address_1',true);
-				$contact['contact_address_2'] = get_user_meta($user_id,'billing_address_2',true);
-				$contact['contact_address_3'] = get_user_meta($user_id,'billing_city',true);
-				$contact['contact_address_4'] = get_user_meta($user_id,'billing_country',true);
+				$contact['contact_addr_1'] = get_user_meta($user_id,'billing_address_1',true);
+				$contact['contact_addr_2'] = get_user_meta($user_id,'billing_address_2',true);
+				$contact['contact_addr_3'] = get_user_meta($user_id,'billing_city',true);
+				$contact['contact_addr_4'] = get_user_meta($user_id,'billing_country',true);
 				$contact['contact_postcode'] = get_user_meta($user_id,'billing_postcode',true);
 				$contact['contact_phone'] = get_user_meta($user_id,'billing_phone',true);
 				$contact['contact_CONTACT_ID'] = uniqid();
@@ -225,10 +225,10 @@ function set_messageid( $parameters ) {
 /**
  *
  * $contact['contact_email']
- * $contact['contact_address_1']
- * $contact['contact_address_2']
- * $contact['contact_address_3']
- * $contact['contact_address_4']
+ * $contact['contact_addr_1']
+ * $contact['contact_addr_2']
+ * $contact['contact_addr_3']
+ * $contact['contact_addr_4']
  * $contact['contact_postcode']
  * $contact['contact_phone']
  * $contact['contact_name']
@@ -259,12 +259,12 @@ function get_contact_XML_record( $user_id, $action, $record ) {
             if($GivenName !='') $name .= ' ';
             $name .= $FamilyName;
         }
-		$JobTitle = $record['constact_job_title'];
-        $AddressLine = $record['contact_address_1'];
-        if($record['contact_address_2'] != '') {
-            $AddressLine .= ', '.$record['contact_address_2'];
+		$JobTitle = $record['contact_job_title'];
+        $AddressLine = $record['contact_addr_1'];
+        if($record['contact_addr_2'] != '') {
+            $AddressLine .= ', '.$record['contact_addr_2'];
         }
-        $CityName = $record['contact_address_3'];
+        $CityName = $record['contact_addr_3'];
         $PostalCode = $record['contact_postcode'];
         $DialNumber = $record['contact_phone'];
         $URI = $record['contact_email'];
