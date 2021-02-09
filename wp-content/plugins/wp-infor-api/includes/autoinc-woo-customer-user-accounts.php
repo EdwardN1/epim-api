@@ -180,6 +180,38 @@ function wpiai_contacts_repeater_meta_box($user) {
                                     } ?>"/>
                                 </td>
                             </tr>
+                            <tr>
+                                <th>
+                                    <label for="contact_phone_channel[]">Communication Options Phone:</label>
+                                </th>
+                                <td>
+                                    <input type="checkbox" class="regular-text" name="contact_phone_channel[]" value="1" <?php checked(1 == $field['contact_phone_channel']);?>/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="contact_fax_channel[]">Communication Options Fax:</label>
+                                </th>
+                                <td>
+                                    <input type="checkbox" class="regular-text" name="contact_fax_channel[]" value="1" <?php checked(1 == $field['contact_fax_channel']);?>/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="contact_mail_channel[]">Communication Options Mail:</label>
+                                </th>
+                                <td>
+                                    <input type="checkbox" class="regular-text" name="contact_mail_channel[]" value="1" <?php checked(1 == $field['contact_mail_channel']);?>/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <label for="contact_email_channel[]">Communication Options Email:</label>
+                                </th>
+                                <td>
+                                    <input type="checkbox" class="regular-text" name="contact_email_channel[]" value="1" <?php checked(1 == $field['contact_email_channel']);?>/>
+                                </td>
+                            </tr>
 							<tr>
 								<td colspan="2"><br><a class="button remove-row" href="#">Remove Contact</a></td>
 							</tr>
@@ -309,6 +341,38 @@ function wpiai_contacts_repeater_meta_box($user) {
                             <input disabled type="text" class="regular-text" name="contact_type[]" value=""/>
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            <label for="contact_phone_channel[]">Communication Options Phone:</label>
+                        </th>
+                        <td>
+                            <input type="checkbox" class="regular-text" name="contact_phone_channel[]" value="1"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="contact_fax_channel[]">Communication Options Fax:</label>
+                        </th>
+                        <td>
+                            <input type="checkbox" class="regular-text" name="contact_fax_channel[]" value="1"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="contact_mail_channel[]">Communication Options Mail:</label>
+                        </th>
+                        <td>
+                            <input type="checkbox" class="regular-text" name="contact_mail_channel[]" value="1"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <label for="contact_email_channel[]">Communication Options Email:</label>
+                        </th>
+                        <td>
+                            <input type="checkbox" class="regular-text" name="contact_email_channel[]" value="1"/>
+                        </td>
+                    </tr>
 
 					<tr>
 						<td colspan="2"><a class="button remove-row" href="#">Cancel New Contact</a></td>
@@ -350,6 +414,10 @@ function wpiai_contacts_repeatable_meta_box_save( $user_id ) {
 	$contact_phone      = isset( $_POST['contact_phone'] ) ? (array) $_POST['contact_phone'] : array();
 	$contact_type      = isset( $_POST['contact_type'] ) ? (array) $_POST['contact_type'] : array();
 	$contact_CONTACT_ID = isset( $_POST['contact_CONTACT_ID'] ) ? (array) $_POST['contact_CONTACT_ID'] : array();
+	$contact_phone_channel = isset( $_POST['contact_phone_channel'] ) ? (array) $_POST['contact_phone_channel'] : array();
+	$contact_fax_channel = isset( $_POST['contact_fax_channel'] ) ? (array) $_POST['contact_fax_channel'] : array();
+	$contact_mail_channel = isset( $_POST['contact_mail_channel'] ) ? (array) $_POST['contact_mail_channel'] : array();
+	$contact_email_channel = isset( $_POST['contact_email_channel'] ) ? (array) $_POST['contact_email_channel'] : array();
 
 	$count = count( $contact_email );
 
@@ -409,6 +477,22 @@ function wpiai_contacts_repeatable_meta_box_save( $user_id ) {
 
 		if ( $contact_CONTACT_ID[ $i ] != '' ) :
 			$new[ $i ]['contact_CONTACT_ID'] = sanitize_text_field( $contact_CONTACT_ID[ $i ] );
+		endif;
+
+		if ( $contact_phone_channel[ $i ] == '1' ) :
+			$new[ $i ]['contact_phone_channel'] = sanitize_text_field( $contact_phone_channel[ $i ] );
+		endif;
+
+		if ( $contact_fax_channel[ $i ] == '1' ) :
+			$new[ $i ]['contact_fax_channel'] = sanitize_text_field( $contact_fax_channel[ $i ] );
+		endif;
+
+		if ( $contact_mail_channel[ $i ] == '1' ) :
+			$new[ $i ]['contact_mail_channel'] = sanitize_text_field( $contact_mail_channel[ $i ] );
+		endif;
+
+		if ( $contact_email_channel[ $i ] == '1' ) :
+			$new[ $i ]['contact_email_channel'] = sanitize_text_field( $contact_email_channel[ $i ] );
 		endif;
 
 		/*if ( $contact_CONTACT_ID[ $i ] == '' ) :

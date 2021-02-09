@@ -70,6 +70,9 @@ function ajax_get_wpiai_get_contact_xml() {
 	$record['contact_postcode'] = 'Post Code';
 	$record['contact_phone'] = '+44 1522 542520';
 	$record['contact_email'] = 'test.email@address.com';
+	$record['contact_phone_channel'] = '1';
+	$record['contact_fax_channel'] = '0';
+	$record['contact_email_channel'] = '0';
 	header( "Content-Type: application/json" );
 	echo json_encode(get_contact_XML_record(4, 'change', $record));
 	exit;
