@@ -198,6 +198,9 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 			}
 			update_user_meta( $user_id, 'wpiai_last_contacts', $contacts );
 		}
+
+
+
 	}
 }
 
@@ -236,12 +239,86 @@ function set_messageid( $parameters ) {
  *
  */
 
-function get_shipTo_XML_record( $user_id, $action, $record ) {
+function get_shipTo_XML_record( $user_id, $action, $record )
+{
+    $user = get_userdata($user_id);
+    if ($user) {
+        $xmld = get_option('wpiai_ship_to_xml');
+        $xml = simplexml_load_string($xmld);
 
+        $nowDT = new DateTime();
+        $CreationDateTime = $nowDT->format(DateTime::ATOM);
+        $BODID = uniqid();
+
+        $FirstName = $record['delivery-first-name'];
+        $LastName = $record['delivery-last-name'];
+        $CompanyName = $record['delivery-company-name'];
+        $AddressLine1 = $record['delivery-street-address-1'];
+        $AddressLine2 = $record['delivery-street-address-2'];
+        $AddressLine3 = $record['delivery-county'];
+        $CityName = $record['delivery-town-city'];
+        $PostalCode = $record['delivery-postcode'];
+        $DialNumber = $record['delivery-phone'];
+        $URI = $record['delivery-email'];
+
+        $delivery_UNIQUE_ID = $record['delivery_UNIQUE_ID'];
+        $ShipTo_ID = $record['delivery-CSD-ID'];
+        $Customer_CSD_ID = get_user_meta( $user_id, 'CSD_ID', true );
+
+        $xml->registerXPathNamespace( 'x', 'http://schema.infor.com/InforOAGIS/2' );
+        if ( $xml->xpath( '//x:ApplicationArea' )[0]->CreationDateTime[0] ) {
+            $xml->xpath( '//x:ApplicationArea' )[0]->CreationDateTime[0] = $CreationDateTime;
+        } else {
+            //error_log('Cant find path');
+        }
+        if ( $xml->xpath( '//x:ApplicationArea' )[0]->BODID[0] ) {
+            $xml->xpath( '//x:ApplicationArea' )[0]->BODID[0] = $BODID;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->Process[0]->ActionCriteria[0]->ActionExpression[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->Process[0]->ActionCriteria[0]->ActionExpression[0]                             = $action;
+            $xml->xpath( '//x:DataArea' )[0]->Process[0]->ActionCriteria[0]->ActionExpression[0]->attributes()['actionCode'] = $action;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->PartyIDs[0]->ID[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->PartyIDs[0]->ID[0] = $ShipTo_ID;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->Name[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->Name[0] = $CompanyName;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->Location[0]->Address[0]->AddressLine[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->Location[0]->Address[0]->AddressLine[0] = $AddressLine1;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->Location[0]->Address[0]->AddressLine[1] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->Location[0]->Address[0]->AddressLine[1] = $AddressLine2;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->Location[0]->Address[0]->AddressLine[2] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->Location[0]->Address[0]->AddressLine[2] = $AddressLine3;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->Location[0]->Address[0]->CityName[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->Location[0]->Address[0]->CityName[0] = $CityName;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->Location[0]->Address[0]->PostalCode[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->Location[0]->Address[0]->PostalCode[0] = $PostalCode;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->Communication[0]->DialNumber[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->Communication[0]->DialNumber[0] = $DialNumber;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->Communication[1]->URI[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->Communication[1]->URI[0] = $URI;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->CustomerParty[0]->PartyIDs[0]->ID[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->CustomerParty[0]->PartyIDs[0]->ID[0] = $Customer_CSD_ID;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->UserArea[0]->Property[0]->NameValue[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ShipToPartyMaster[0]->UserArea[0]->Property[0]->NameValue[0] = $delivery_UNIQUE_ID;
+        }
+        $xmld          = $xml->asXML();
+        return $xmld;
+    } else {
+        return false;
+    }
 }
 
 function get_contact_XML_record( $user_id, $action, $record ) {
-	$res  = false;
 	$user = get_userdata( $user_id );
 	if ( $user ) {
 		$xmld = get_option( 'wpiai_contact_xml' );
@@ -275,6 +352,10 @@ function get_contact_XML_record( $user_id, $action, $record ) {
         $commMail = $record['contact_mail_channel'];
         $commEmail = $record['contact_email_channel'];
 
+        $contact_CONTACT_ID = $record['contact_CONTACT_ID']; //Woo Contact ID
+        $contact_CSD_ID = $record['contact_CSD_ID']; //CSD Contact ID
+        $Customer_CSD_ID = get_user_meta( $user_id, 'CSD_ID', true ); //CSD Customer ID
+
         if($commPhone != '1') {
         	$commPhone = 'true';
         } else {
@@ -299,7 +380,7 @@ function get_contact_XML_record( $user_id, $action, $record ) {
 			$commEmail = 'false';
 		}
 
-        $Customer_CSD_ID = get_user_meta( $user_id, 'CSD_ID', true );
+
 
         $xml->registerXPathNamespace( 'x', 'http://schema.infor.com/InforOAGIS/2' );
         if ( $xml->xpath( '//x:ApplicationArea' )[0]->CreationDateTime[0] ) {
@@ -313,6 +394,9 @@ function get_contact_XML_record( $user_id, $action, $record ) {
         if ( $xml->xpath( '//x:DataArea' )[0]->Process[0]->ActionCriteria[0]->ActionExpression[0] ) {
             $xml->xpath( '//x:DataArea' )[0]->Process[0]->ActionCriteria[0]->ActionExpression[0]                             = $action;
             $xml->xpath( '//x:DataArea' )[0]->Process[0]->ActionCriteria[0]->ActionExpression[0]->attributes()['actionCode'] = $action;
+        }
+        if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->IDs[0]->ID[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->IDs[0]->ID[0] = $contact_CSD_ID;
         }
         if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->Name[0] ) {
             $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->Name[0] = $name;
@@ -359,8 +443,8 @@ function get_contact_XML_record( $user_id, $action, $record ) {
 		if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[3]->DoNotUseIndicator[0] ) {
 			$xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[3]->DoNotUseIndicator[0] = $commEmail;
 		}
-		if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->EmployerReference [0]->DocumentID[0]->ID[0] ) {
-			$xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->EmployerReference [0]->DocumentID[0]->ID[0] = $Customer_CSD_ID;
+		if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->EmployerReference[0]->DocumentID[0]->ID[0] ) {
+			$xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->EmployerReference[0]->DocumentID[0]->ID[0] = $Customer_CSD_ID;
 		}
         $xmld          = $xml->asXML();
         return $xmld;

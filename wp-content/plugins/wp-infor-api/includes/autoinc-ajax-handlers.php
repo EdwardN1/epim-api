@@ -20,6 +20,7 @@ add_action( 'wp_ajax_wpiai_get_customer_params', 'ajax_get_wpiai_get_customer_pa
 add_action( 'wp_ajax_wpiai_get_sales_order_response', 'ajax_get_wpiai_get_sales_order_response' );
 
 add_action( 'wp_ajax_wpiai_get_ship_to_response', 'ajax_get_wpiai_get_ship_to_response' );
+add_action( 'wp_ajax_wpiai_get_ship_to_xml', 'ajax_get_wpiai_get_ship_to_xml' );
 
 add_action( 'wp_ajax_wpiai_get_contact_response', 'ajax_get_wpiai_get_contact_response' );
 add_action( 'wp_ajax_wpiai_get_contact_xml', 'ajax_get_wpiai_get_contact_xml' );
@@ -73,9 +74,36 @@ function ajax_get_wpiai_get_contact_xml() {
 	$record['contact_phone_channel'] = '1';
 	$record['contact_fax_channel'] = '0';
 	$record['contact_email_channel'] = '0';
+	$record['contact_CONTACT_ID'] = '601bff8899753';
+	$record['contact_CSD_ID'] = '720055663';
+    $record['contact_status_code'] = 'A Status Code';
+    $record['contact_job_title'] = 'Job Title';
+    $record['contact_type'] = 'Account';
+
 	header( "Content-Type: application/json" );
 	echo json_encode(get_contact_XML_record(4, 'change', $record));
 	exit;
+}
+
+function ajax_get_wpiai_get_ship_to_xml() {
+    wpiai_api_checkSecure();
+    $record = array();
+    $record['delivery_UNIQUE_ID'] = '601ad2ba83d0a';
+    $record['delivery-first-name'] = 'Joe';
+    $record['delivery-last-name'] = 'Bloggs';
+    $record['delivery-company-name'] = 'Company Name';
+    $record['delivery-street-address-1'] = 'Street Address';
+    $record['delivery-street-address-2'] = 'Address 2';
+    $record['delivery-town-city'] = 'Town /City';
+    $record['delivery-county'] = 'County';
+    $record['delivery-postcode'] = 'Postcode';
+    $record['delivery-phone'] = 'Phone';
+    $record['delivery-email'] = 'edward@address.com';
+    $record['delivery-CSD-ID'] = 'CSDID';
+
+    header( "Content-Type: application/json" );
+    echo json_encode(get_shipTo_XML_record(4, 'change', $record));
+    exit;
 }
 
 function ajax_get_wpiai_get_customer_params() {
