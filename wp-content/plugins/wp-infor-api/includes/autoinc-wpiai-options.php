@@ -1,7 +1,7 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+if (!defined('ABSPATH')) {
+    exit;
 }
 
 /**
@@ -9,100 +9,117 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 
 
-function wpiai_register_options_page() {
-	add_menu_page( __( 'Infor Options' ), __( 'Infor Options' ), 'manage_options', 'infor-options', 'wpiai_options_page', plugins_url( 'assets/img/infor-logo.png', __DIR__ ), 2 );
+function wpiai_register_options_page()
+{
+    add_menu_page(__('Infor Options'), __('Infor Options'), 'manage_options', 'infor-options', 'wpiai_options_page', plugins_url('assets/img/infor-logo.png', __DIR__), 2);
 }
 
-add_action( 'admin_menu', 'wpiai_register_options_page' );
+add_action('admin_menu', 'wpiai_register_options_page');
 
 /**
  * Register Settings For Plugin
  */
 
-function wpiai_register_settings() {
-	add_option( 'wpiai_token_url', 'The base URL for your INFOR API' );
-	register_setting( 'wpiai_options_group', 'wpiai_token_url' );
-	add_option( 'wpiai_username', 'The Username for your INFOR API' );
-	register_setting( 'wpiai_options_group', 'wpiai_username' );
-	add_option( 'wpiai_password', 'The Password for your INFOR API' );
-	register_setting( 'wpiai_options_group', 'wpiai_password' );
-	add_option( 'wpiai_client_id', 'The Client ID for your INFOR API' );
-	register_setting( 'wpiai_options_group', 'wpiai_client_id' );
-	add_option( 'wpiai_client_secret', 'The Client Secret for your INFOR API' );
-	register_setting( 'wpiai_options_group', 'wpiai_client_secret' );
+function wpiai_register_settings()
+{
+    add_option('wpiai_token_url', 'The base URL for your INFOR API');
+    register_setting('wpiai_options_group', 'wpiai_token_url');
+    add_option('wpiai_username', 'The Username for your INFOR API');
+    register_setting('wpiai_options_group', 'wpiai_username');
+    add_option('wpiai_password', 'The Password for your INFOR API');
+    register_setting('wpiai_options_group', 'wpiai_password');
+    add_option('wpiai_client_id', 'The Client ID for your INFOR API');
+    register_setting('wpiai_options_group', 'wpiai_client_id');
+    add_option('wpiai_client_secret', 'The Client Secret for your INFOR API');
+    register_setting('wpiai_options_group', 'wpiai_client_secret');
 
-	add_option( 'wpiai_message_test_url', 'Message URL' );
-	register_setting( 'wpiai_test_group', 'wpiai_message_test_url' );
-	add_option( 'wpiai_message_test_parameters', 'Message Parameters' );
-	register_setting( 'wpiai_test_group', 'wpiai_message_test_parameters' );
-	add_option( 'wpiai_message_test_xml', 'Message XML' );
-	register_setting( 'wpiai_test_group', 'wpiai_message_test_xml' );
+    add_option('wpiai_message_test_url', 'Message URL');
+    register_setting('wpiai_test_group', 'wpiai_message_test_url');
+    add_option('wpiai_message_test_parameters', 'Message Parameters');
+    register_setting('wpiai_test_group', 'wpiai_message_test_parameters');
+    add_option('wpiai_message_test_xml', 'Message XML');
+    register_setting('wpiai_test_group', 'wpiai_message_test_xml');
 
-	add_option( 'wpiai_customer_url', 'API URL' );
-	register_setting( 'wpiai_customer_group', 'wpiai_customer_url' );
-	add_option( 'wpiai_customer_parameters', 'API Parameters' );
-	register_setting( 'wpiai_customer_group', 'wpiai_customer_parameters' );
-	add_option( 'wpiai_customer_xml', 'API XML' );
-	register_setting( 'wpiai_customer_group', 'wpiai_customer_xml' );
+    add_option('wpiai_customer_url', 'API URL');
+    register_setting('wpiai_customer_group', 'wpiai_customer_url');
+    add_option('wpiai_customer_parameters', 'API Parameters');
+    register_setting('wpiai_customer_group', 'wpiai_customer_parameters');
+    add_option('wpiai_customer_xml', 'API XML');
+    register_setting('wpiai_customer_group', 'wpiai_customer_xml');
 
-	add_option( 'wpiai_sales_order_url', 'API URL' );
-	register_setting( 'wpiai_sales_order_group', 'wpiai_sales_order_url' );
-	add_option( 'wpiai_sales_order_parameters', 'API Parameters' );
-	register_setting( 'wpiai_sales_order_group', 'wpiai_sales_order_parameters' );
-	add_option( 'wpiai_sales_order_xml', 'API XML' );
-	register_setting( 'wpiai_sales_order_group', 'wpiai_sales_order_xml' );
+    add_option('wpiai_sales_order_url', 'API URL');
+    register_setting('wpiai_sales_order_group', 'wpiai_sales_order_url');
+    add_option('wpiai_sales_order_parameters', 'API Parameters');
+    register_setting('wpiai_sales_order_group', 'wpiai_sales_order_parameters');
+    add_option('wpiai_sales_order_xml', 'API XML');
+    register_setting('wpiai_sales_order_group', 'wpiai_sales_order_xml');
 
-	add_option( 'wpiai_ship_to_url', 'API URL' );
-	register_setting( 'wpiai_ship_to_group', 'wpiai_ship_to_url' );
-	add_option( 'wpiai_ship_to_parameters', 'API Parameters' );
-	register_setting( 'wpiai_ship_to_group', 'wpiai_ship_to_parameters' );
-	add_option( 'wpiai_ship_to_xml', 'API XML' );
-	register_setting( 'wpiai_ship_to_group', 'wpiai_ship_to_xml' );
+    add_option('wpiai_ship_to_url', 'API URL');
+    register_setting('wpiai_ship_to_group', 'wpiai_ship_to_url');
+    add_option('wpiai_ship_to_parameters', 'API Parameters');
+    register_setting('wpiai_ship_to_group', 'wpiai_ship_to_parameters');
+    add_option('wpiai_ship_to_xml', 'API XML');
+    register_setting('wpiai_ship_to_group', 'wpiai_ship_to_xml');
 
-	add_option( 'wpiai_contact_url', 'API URL' );
-	register_setting( 'wpiai_contact_group', 'wpiai_contact_url' );
-	add_option( 'wpiai_contact_parameters', 'API Parameters' );
-	register_setting( 'wpiai_contact_group', 'wpiai_contact_parameters' );
-	add_option( 'wpiai_contact_xml', 'API XML' );
-	register_setting( 'wpiai_contact_group', 'wpiai_contact_xml' );
+    add_option('wpiai_contact_url', 'API URL');
+    register_setting('wpiai_contact_group', 'wpiai_contact_url');
+    add_option('wpiai_contact_parameters', 'API Parameters');
+    register_setting('wpiai_contact_group', 'wpiai_contact_parameters');
+    add_option('wpiai_contact_xml', 'API XML');
+    register_setting('wpiai_contact_group', 'wpiai_contact_xml');
+
+    add_option('wpiai_guest_customer_number', 'Customer Number for Guest Orders');
+    register_setting('wpiai_settings_group', 'wpiai_guest_customer_number');
+    add_option('wpiai_default_warehouse', 'Default Warehouse for Orders');
+    register_setting('wpiai_settings_group', 'wpiai_default_warehouse');
+    $default_warehouses = array();
+    add_option('wpiai_warehouses', $default_warehouses);
+    register_setting('wpiai_settings_group', 'wpiai_warehouses');
 }
 
-add_action( 'admin_init', 'wpiai_register_settings' );
+add_action('admin_init', 'wpiai_register_settings');
 
 /**
  * Display Settings on Option’s Page
  */
 
-function wpiai_options_page() {
-	if ( isset( $_GET['tab'] ) ) {
-		$active_tab = sanitize_text_field( $_GET['tab'] );
-	} else {
-		$active_tab = 'wpiai_security';
-	}
-	?>
+function wpiai_options_page()
+{
+    if (isset($_GET['tab'])) {
+        $active_tab = sanitize_text_field($_GET['tab']);
+    } else {
+        $active_tab = 'wpiai_security';
+    }
+    ?>
     <div class="wrap">
         <h2 class="nav-tab-wrapper">
             <a href="?page=infor-options&tab=wpiai_security"
                class="nav-tab <?php echo $active_tab == 'wpiai_security' ? 'nav-tab-active' : ''; ?>">Security</a>
             <a href="?page=infor-options&tab=wpiai_message_test"
-               class="nav-tab <?php echo $active_tab == 'wpiai_message_test' ? 'nav-tab-active' : ''; ?>">Message Test</a>
+               class="nav-tab <?php echo $active_tab == 'wpiai_message_test' ? 'nav-tab-active' : ''; ?>">Message
+                Test</a>
             <a href="?page=infor-options&tab=wpiai_customer_record"
-               class="nav-tab <?php echo $active_tab == 'wpiai_customer_record' ? 'nav-tab-active' : ''; ?>">Customer Master Record</a>
+               class="nav-tab <?php echo $active_tab == 'wpiai_customer_record' ? 'nav-tab-active' : ''; ?>">Customer
+                Master Record</a>
             <a href="?page=infor-options&tab=wpiai_sales_order_record"
-               class="nav-tab <?php echo $active_tab == 'wpiai_sales_order_record' ? 'nav-tab-active' : ''; ?>">Sales Order Master Record</a>
+               class="nav-tab <?php echo $active_tab == 'wpiai_sales_order_record' ? 'nav-tab-active' : ''; ?>">Sales
+                Order Master Record</a>
             <a href="?page=infor-options&tab=wpiai_ship_to_record"
-               class="nav-tab <?php echo $active_tab == 'wpiai_ship_to_record' ? 'nav-tab-active' : ''; ?>">Ship To Master Record</a>
+               class="nav-tab <?php echo $active_tab == 'wpiai_ship_to_record' ? 'nav-tab-active' : ''; ?>">Ship To
+                Master Record</a>
             <a href="?page=infor-options&tab=wpiai_contact_record"
-               class="nav-tab <?php echo $active_tab == 'wpiai_contact_record' ? 'nav-tab-active' : ''; ?>">Contact Master Record</a>
+               class="nav-tab <?php echo $active_tab == 'wpiai_contact_record' ? 'nav-tab-active' : ''; ?>">Contact
+                Master Record</a>
             <a href="?page=infor-options&tab=wpiai_settings"
                class="nav-tab <?php echo $active_tab == 'wpiai_settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
-			<?php
-			$current_user = wp_get_current_user();
-			$email        = (string) $current_user->user_email;
-			if ( $email === 'edward@technicks.com' ):?>
+            <?php
+            $current_user = wp_get_current_user();
+            $email = (string)$current_user->user_email;
+            if ($email === 'edward@technicks.com'):?>
                 <a href="?page=infor-options&tab=wpiai_restricted_settings"
-                   class="nav-tab <?php echo $active_tab == 'wpiai_restricted_settings' ? 'nav-tab-active' : ''; ?>">Infor Restricted Settings</a>
-			<?php endif; ?>
+                   class="nav-tab <?php echo $active_tab == 'wpiai_restricted_settings' ? 'nav-tab-active' : ''; ?>">Infor
+                    Restricted Settings</a>
+            <?php endif; ?>
         </h2>
         <style>
             .modal {
@@ -154,44 +171,44 @@ function wpiai_options_page() {
 
 
         </style>
-		<?php
-		if ( $active_tab == 'wpiai_security' ):
-			?>
+        <?php
+        if ($active_tab == 'wpiai_security'):
+            ?>
 
             <div class="wrap">
                 <h1>INFOR Security</h1>
             </div>
             <form method="post" action="options.php">
-				<?php settings_fields( 'wpiai_options_group' ); ?>
+                <?php settings_fields('wpiai_options_group'); ?>
                 <table class="form-table">
                     <tr>
                         <th scope="row"><label for="wpiai_token_url">Token URL</label></th>
                         <td><input type="text" id="wpiai_token_url" name="wpiai_token_url"
-                                   value="<?php echo get_option( 'wpiai_token_url' ); ?>" class="regular-text"/></td>
+                                   value="<?php echo get_option('wpiai_token_url'); ?>" class="regular-text"/></td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="wpiai_token_url">Username</label></th>
                         <td><input type="text" id="wpiai_username" name="wpiai_username"
-                                   value="<?php echo get_option( 'wpiai_username' ); ?>" class="regular-text"/></td>
+                                   value="<?php echo get_option('wpiai_username'); ?>" class="regular-text"/></td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="wpiai_token_url">Password</label></th>
                         <td><input type="text" id="wpiai_password" name="wpiai_password"
-                                   value="<?php echo get_option( 'wpiai_password' ); ?>" class="regular-text"/></td>
+                                   value="<?php echo get_option('wpiai_password'); ?>" class="regular-text"/></td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="wpiai_client_id">Client ID</label></th>
                         <td><input type="text" id="wpiai_client_id" name="wpiai_client_id"
-                                   value="<?php echo get_option( 'wpiai_client_id' ); ?>" class="regular-text"/></td>
+                                   value="<?php echo get_option('wpiai_client_id'); ?>" class="regular-text"/></td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="wpiai_client_secret">Client Secret</label></th>
                         <td><input type="text" id="wpiai_client_secret" name="wpiai_client_secret"
-                                   value="<?php echo get_option( 'wpiai_client_secret' ); ?>" class="regular-text"/></td>
+                                   value="<?php echo get_option('wpiai_client_secret'); ?>" class="regular-text"/></td>
                     </tr>
 
                 </table>
-				<?php submit_button(); ?>
+                <?php submit_button(); ?>
 
             </form>
             <table class="form-table">
@@ -208,35 +225,38 @@ function wpiai_options_page() {
 
             </pre>
             </div>
-		<?php
-		endif;
-		if ( $active_tab == 'wpiai_message_test' ):
-			?>
+        <?php
+        endif;
+        if ($active_tab == 'wpiai_message_test'):
+            ?>
             <div class="wrap">
                 <h1>INFOR Message Test</h1>
             </div>
             <form method="post" action="options.php">
-				<?php settings_fields( 'wpiai_test_group' ); ?>
+                <?php settings_fields('wpiai_test_group'); ?>
                 <table class="form-table">
                     <tr>
                         <th scope="row"><label for="wpiai_message_test_url">URL</label></th>
-                        <td><input type="text" id="wpiai_message_test_url" name="wpiai_message_test_url" value="<?php echo get_option( 'wpiai_message_test_url' ); ?>" class="regular-text" style="width: 100%;"/>
+                        <td><input type="text" id="wpiai_message_test_url" name="wpiai_message_test_url"
+                                   value="<?php echo get_option('wpiai_message_test_url'); ?>" class="regular-text"
+                                   style="width: 100%;"/>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="wpiai_message_test_parameters">Parameters</label></th>
                         <td><textarea id="wpiai_message_test_parameters" name="wpiai_message_test_parameters" rows="20"
-                                      style="width: 100%;"><?php echo get_option( 'wpiai_message_test_parameters' ); ?></textarea>
+                                      style="width: 100%;"><?php echo get_option('wpiai_message_test_parameters'); ?></textarea>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="wpiai_message_test_xml">XML</label></th>
-                        <td><textarea id="wpiai_message_test_xml" name="wpiai_message_test_xml" rows="40" style="width: 100%;"><?php echo get_option( 'wpiai_message_test_xml' ); ?></textarea>
+                        <td><textarea id="wpiai_message_test_xml" name="wpiai_message_test_xml" rows="40"
+                                      style="width: 100%;"><?php echo get_option('wpiai_message_test_xml'); ?></textarea>
                         </td>
                     </tr>
 
                 </table>
-				<?php submit_button(); ?>
+                <?php submit_button(); ?>
 
             </form>
             <table class="form-table">
@@ -259,35 +279,38 @@ function wpiai_options_page() {
 
             </pre>
             </div>
-		<?php
-		endif;
-		if ( $active_tab == 'wpiai_customer_record' ):
-			?>
+        <?php
+        endif;
+        if ($active_tab == 'wpiai_customer_record'):
+            ?>
             <div class="wrap">
                 <h1>INFOR Customer Master Record</h1>
             </div>
             <form method="post" action="options.php">
-				<?php settings_fields( 'wpiai_customer_group' ); ?>
+                <?php settings_fields('wpiai_customer_group'); ?>
                 <table class="form-table">
                     <tr>
                         <th scope="row"><label for="wpiai_customer_url">URL</label></th>
-                        <td><input type="text" id="wpiai_customer_url" name="wpiai_customer_url" value="<?php echo get_option( 'wpiai_customer_url' ); ?>" class="regular-text" style="width: 100%;"/>
+                        <td><input type="text" id="wpiai_customer_url" name="wpiai_customer_url"
+                                   value="<?php echo get_option('wpiai_customer_url'); ?>" class="regular-text"
+                                   style="width: 100%;"/>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="wpiai_customer_parameters">Parameters</label></th>
                         <td><textarea id="wpiai_customer_parameters" name="wpiai_customer_parameters" rows="20"
-                                      style="width: 100%;"><?php echo get_option( 'wpiai_customer_parameters' ); ?></textarea>
+                                      style="width: 100%;"><?php echo get_option('wpiai_customer_parameters'); ?></textarea>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="wpiai_customer_xml">XML</label></th>
-                        <td><textarea id="wpiai_customer_xml" name="wpiai_customer_xml" rows="40" style="width: 100%;"><?php echo get_option( 'wpiai_customer_xml' ); ?></textarea>
+                        <td><textarea id="wpiai_customer_xml" name="wpiai_customer_xml" rows="40"
+                                      style="width: 100%;"><?php echo get_option('wpiai_customer_xml'); ?></textarea>
                         </td>
                     </tr>
 
                 </table>
-				<?php submit_button(); ?>
+                <?php submit_button(); ?>
 
             </form>
             <table class="form-table">
@@ -316,35 +339,38 @@ function wpiai_options_page() {
 
             </pre>
             </div>
-		<?php
-		endif;
-		if ( $active_tab == 'wpiai_sales_order_record' ):
-			?>
+        <?php
+        endif;
+        if ($active_tab == 'wpiai_sales_order_record'):
+            ?>
             <div class="wrap">
                 <h1>INFOR Customer Master Record</h1>
             </div>
             <form method="post" action="options.php">
-				<?php settings_fields( 'wpiai_sales_order_group' ); ?>
+                <?php settings_fields('wpiai_sales_order_group'); ?>
                 <table class="form-table">
                     <tr>
                         <th scope="row"><label for="wpiai_sales_order_url">URL</label></th>
-                        <td><input type="text" id="wpiai_sales_order_url" name="wpiai_sales_order_url" value="<?php echo get_option( 'wpiai_sales_order_url' ); ?>" class="regular-text" style="width: 100%;"/>
+                        <td><input type="text" id="wpiai_sales_order_url" name="wpiai_sales_order_url"
+                                   value="<?php echo get_option('wpiai_sales_order_url'); ?>" class="regular-text"
+                                   style="width: 100%;"/>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="wpiai_sales_order_parameters">Parameters</label></th>
                         <td><textarea id="wpiai_sales_order_parameters" name="wpiai_sales_order_parameters" rows="20"
-                                      style="width: 100%;"><?php echo get_option( 'wpiai_sales_order_parameters' ); ?></textarea>
+                                      style="width: 100%;"><?php echo get_option('wpiai_sales_order_parameters'); ?></textarea>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="wpiai_sales_order_xml">XML</label></th>
-                        <td><textarea id="wpiai_sales_order_xml" name="wpiai_sales_order_xml" rows="40" style="width: 100%;"><?php echo get_option( 'wpiai_sales_order_xml' ); ?></textarea>
+                        <td><textarea id="wpiai_sales_order_xml" name="wpiai_sales_order_xml" rows="40"
+                                      style="width: 100%;"><?php echo get_option('wpiai_sales_order_xml'); ?></textarea>
                         </td>
                     </tr>
 
                 </table>
-				<?php submit_button(); ?>
+                <?php submit_button(); ?>
 
             </form>
             <table class="form-table">
@@ -371,35 +397,38 @@ function wpiai_options_page() {
 
             </pre>
             </div>
-		<?php
-		endif;
-		if ( $active_tab == 'wpiai_ship_to_record' ):
-			?>
+        <?php
+        endif;
+        if ($active_tab == 'wpiai_ship_to_record'):
+            ?>
             <div class="wrap">
                 <h1>INFOR Ship To Master Record</h1>
             </div>
             <form method="post" action="options.php">
-				<?php settings_fields( 'wpiai_ship_to_group' ); ?>
+                <?php settings_fields('wpiai_ship_to_group'); ?>
                 <table class="form-table">
                     <tr>
                         <th scope="row"><label for="wpiai_ship_to_url">URL</label></th>
-                        <td><input type="text" id="wpiai_ship_to_url" name="wpiai_ship_to_url" value="<?php echo get_option( 'wpiai_ship_to_url' ); ?>" class="regular-text" style="width: 100%;"/>
+                        <td><input type="text" id="wpiai_ship_to_url" name="wpiai_ship_to_url"
+                                   value="<?php echo get_option('wpiai_ship_to_url'); ?>" class="regular-text"
+                                   style="width: 100%;"/>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="wpiai_ship_to_parameters">Parameters</label></th>
                         <td><textarea id="wpiai_ship_to_parameters" name="wpiai_ship_to_parameters" rows="20"
-                                      style="width: 100%;"><?php echo get_option( 'wpiai_ship_to_parameters' ); ?></textarea>
+                                      style="width: 100%;"><?php echo get_option('wpiai_ship_to_parameters'); ?></textarea>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="wpiai_ship_to_xml">XML</label></th>
-                        <td><textarea id="wpiai_ship_to_xml" name="wpiai_ship_to_xml" rows="40" style="width: 100%;"><?php echo get_option( 'wpiai_ship_to_xml' ); ?></textarea>
+                        <td><textarea id="wpiai_ship_to_xml" name="wpiai_ship_to_xml" rows="40"
+                                      style="width: 100%;"><?php echo get_option('wpiai_ship_to_xml'); ?></textarea>
                         </td>
                     </tr>
 
                 </table>
-				<?php submit_button(); ?>
+                <?php submit_button(); ?>
 
             </form>
             <table class="form-table">
@@ -426,35 +455,38 @@ function wpiai_options_page() {
 
             </pre>
             </div>
-		<?php
-		endif;
-		if ( $active_tab == 'wpiai_contact_record' ):
-			?>
+        <?php
+        endif;
+        if ($active_tab == 'wpiai_contact_record'):
+            ?>
             <div class="wrap">
                 <h1>INFOR Contact Master Record</h1>
             </div>
             <form method="post" action="options.php">
-				<?php settings_fields( 'wpiai_contact_group' ); ?>
+                <?php settings_fields('wpiai_contact_group'); ?>
                 <table class="form-table">
                     <tr>
                         <th scope="row"><label for="wpiai_contact_url">URL</label></th>
-                        <td><input type="text" id="wpiai_contact_url" name="wpiai_contact_url" value="<?php echo get_option( 'wpiai_contact_url' ); ?>" class="regular-text" style="width: 100%;"/>
+                        <td><input type="text" id="wpiai_contact_url" name="wpiai_contact_url"
+                                   value="<?php echo get_option('wpiai_contact_url'); ?>" class="regular-text"
+                                   style="width: 100%;"/>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="wpiai_contact_parameters">Parameters</label></th>
                         <td><textarea id="wpiai_contact_parameters" name="wpiai_contact_parameters" rows="20"
-                                      style="width: 100%;"><?php echo get_option( 'wpiai_contact_parameters' ); ?></textarea>
+                                      style="width: 100%;"><?php echo get_option('wpiai_contact_parameters'); ?></textarea>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="wpiai_contact_xml">XML</label></th>
-                        <td><textarea id="wpiai_contact_xml" name="wpiai_contact_xml" rows="40" style="width: 100%;"><?php echo get_option( 'wpiai_contact_xml' ); ?></textarea>
+                        <td><textarea id="wpiai_contact_xml" name="wpiai_contact_xml" rows="40"
+                                      style="width: 100%;"><?php echo get_option('wpiai_contact_xml'); ?></textarea>
                         </td>
                     </tr>
 
                 </table>
-				<?php submit_button(); ?>
+                <?php submit_button(); ?>
 
             </form>
             <table class="form-table">
@@ -481,24 +513,200 @@ function wpiai_options_page() {
 
             </pre>
             </div>
-		<?php
-		endif;
-		if ( $active_tab == 'wpiai_settings' ):
-			?>
+        <?php
+        endif;
+        if ($active_tab == 'wpiai_settings'):
+            //wpiai_guest_customer_number
+            //wpiai_default_warehouse
+            ?>
             <div class="wrap">
                 <h1>INFOR Settings</h1>
             </div>
-		<?php
-		endif;
-		if ( $active_tab == 'wpiai_restricted_settings' ):
-			?>
+            <form method="post" action="options.php">
+                <?php settings_fields('wpiai_settings_group'); ?>
+                <table class="form-table">
+                    <tr>
+                        <th colspan="2">Sales Order Options
+                            <hr>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_guest_customer_number">Guest Customer Number</label></th>
+                        <td><input type="text" id="wpiai_guest_customer_number" name="wpiai_guest_customer_number"
+                                   value="<?php echo get_option('wpiai_guest_customer_number'); ?>"
+                                   class="regular-text"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_default_warehouse">Default Warehouse</label></th>
+                        <td><input type="text" id="wpiai_default_warehouse" name="wpiai_default_warehouse"
+                                   value="<?php echo get_option('wpiai_default_warehouse'); ?>" class="regular-text"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">
+                            <hr>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Warehouses
+                            <hr>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <?php
+                            $warehouses = get_option('wpiai_warehouses');
+                            ?>
+                            <script type="text/javascript">
+                                jQuery(document).ready(function ($) {
+                                    $('#warehouse-add-row').on('click', function () {
+                                        var row = $('.warehouse-blank-row .repeater-row').clone(true);
+                                        $('#warehouse-repeatable-fieldset-one').append(row);
+                                        $('#warehouse-repeatable-fieldset-one *').prop("disabled", false);
+                                        return false;
+                                    });
+
+                                    $('.remove-row').on('click', function () {
+                                        $(this).parents('tr').remove();
+                                        return false;
+                                    });
+
+                                    $('#submit').on('click', function () {
+                                            window.console('clicked');
+                                    });
+                                )
+                                })
+                                ;
+                            </script>
+                            <table id="warehouse-repeatable-fieldset-one" width="100%">
+
+                                <tbody>
+                                <?php
+
+                                if ($warehouses) :
+
+                                    foreach ($warehouses as $field) {
+                                        ?>
+                                        <tr class="repeater-row">
+                                            <td>
+
+                                                <table class="form-table">
+                                                    <tr>
+                                                        <th>
+                                                            <label for="warehouse-id[]">Warehouse ID:</label>
+                                                        </th>
+                                                        <td>
+                                                            <input type="text" class="regular-text"
+                                                                   name="warehouse-id[]"
+                                                                   value="<?php if ($field['warehouse-id'] != '') {
+                                                                       echo esc_attr($field['warehouse-id']);
+                                                                   } ?>"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>
+                                                            <label for="warehouse-name[]">Warehouse Name:</label>
+                                                        </th>
+                                                        <td>
+                                                            <input type="text" class="regular-text"
+                                                                   name="warehouse-name[]"
+                                                                   value="<?php if ($field['warehouse-name'] != '') {
+                                                                       echo esc_attr($field['warehouse-name']);
+                                                                   } ?>"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2"><br><a class="button remove-row" href="#">Remove
+                                                                Warehouse</a></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <hr>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                    }
+
+                                endif; ?>
+
+
+                                </tbody>
+                            </table>
+                            <!-- empty hidden one for jQuery -->
+                            <table class="warehouse-blank-row" style="display: none;">
+                                <tr class="repeater-row">
+                                    <td>
+                                        <table class="form-table">
+                                            <tr>
+                                                <th>
+                                                    <label for="warehouse-id[]">Warehouse ID:</label>
+                                                </th>
+                                                <td>
+                                                    <input disabled type="text" class="regular-text"
+                                                           name="warehouse-id[]" value=""/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    <label for="warehouse-name[]">Warehouse Name:</label>
+                                                </th>
+                                                <td>
+                                                    <input disabled type="text" class="regular-text"
+                                                           name="warehouse-name[]" value=""/>
+                                                </td>
+                                            </tr>
+
+
+                                            <tr>
+                                                <td colspan="2"><br><a class="button remove-row" href="#">Remove
+                                                        Warehouse</a></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <hr>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p><a id="warehouse-add-row" class="button" href="#">Add Warehouse</a></p>
+                        </td>
+                    </tr>
+
+                </table>
+                <?php submit_button(); ?>
+
+            </form>
+        <?php
+        endif;
+        if ($active_tab == 'wpiai_restricted_settings'):
+            ?>
             <div class="wrap">
                 <h1>INFOR Restricted</h1>
             </div>
-		<?php
-		endif;
+        <?php
+        endif;
 
-		?>
+        ?>
     </div>
-	<?php
+    <?php
 }
+
+/**
+ * Save the Warehouses
+ */
+
+function wpiai_warehousese_after_save($old_value, $new_value)
+{
+
+    error_log('Warehouses saved');
+
+}
+
+add_action('update_option_wpiai_warehouses', 'wpiai_warehousese_after_save', 10, 2);
