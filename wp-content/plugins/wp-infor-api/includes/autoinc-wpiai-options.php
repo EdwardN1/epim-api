@@ -72,9 +72,10 @@ function wpiai_register_settings()
     register_setting('wpiai_settings_group', 'wpiai_guest_customer_number');
     add_option('wpiai_default_warehouse', 'Default Warehouse for Orders');
     register_setting('wpiai_settings_group', 'wpiai_default_warehouse');
-    $default_warehouses = array();
-    add_option('wpiai_warehouses', $default_warehouses);
-    register_setting('wpiai_settings_group', 'wpiai_warehouses');
+    add_option('wpiai_warehouse_ids');
+    register_setting('wpiai_settings_group', 'wpiai_warehouse_ids');
+    add_option('wpiai_warehouse_names');
+    register_setting('wpiai_settings_group', 'wpiai_warehouse_names');
 }
 
 add_action('admin_init', 'wpiai_register_settings');
@@ -522,7 +523,7 @@ function wpiai_options_page()
             <div class="wrap">
                 <h1>INFOR Settings</h1>
             </div>
-            <form method="post" action="options.php">
+            <form method="post" action="options.php" id="inforSettinsForm">
                 <?php settings_fields('wpiai_settings_group'); ?>
                 <table class="form-table">
                     <tr>
@@ -556,7 +557,20 @@ function wpiai_options_page()
                     <tr>
                         <td colspan="2">
                             <?php
-                            $warehouses = get_option('wpiai_warehouses');
+                            $warehouseNames = get_option('wpiai_warehouse_names');
+                            $warehouseIDs = get_option('wpiai_warehouse_ids');
+                            $warehouses = array();
+                            $i = 0;
+                            if($warehouseIDs) {
+                                foreach ($warehouseIDs as $warehouseID) {
+                                    $thisWarehouse = array(
+                                        "id" => $warehouseID,
+                                        "name" => $warehouseNames[$i]
+                                    );
+                                    $warehouses[] = $thisWarehouse;
+                                    $i++;
+                                }
+                            }
                             ?>
                             <script type="text/javascript">
                                 jQuery(document).ready(function ($) {
@@ -568,16 +582,12 @@ function wpiai_options_page()
                                     });
 
                                     $('.remove-row').on('click', function () {
-                                        $(this).parents('tr').remove();
+                                        $(this).parents('tr.repeater-row').remove();
+                                        //$(this).parents('tr.repeater-row').css('outline', '1px solid red');
                                         return false;
                                     });
 
-                                    $('#submit').on('click', function () {
-                                            window.console('clicked');
-                                    });
-                                )
-                                })
-                                ;
+                                });
                             </script>
                             <table id="warehouse-repeatable-fieldset-one" width="100%">
 
@@ -594,25 +604,25 @@ function wpiai_options_page()
                                                 <table class="form-table">
                                                     <tr>
                                                         <th>
-                                                            <label for="warehouse-id[]">Warehouse ID:</label>
+                                                            <label for="wpiai_warehouse_ids[]">Warehouse ID:</label>
                                                         </th>
                                                         <td>
                                                             <input type="text" class="regular-text"
-                                                                   name="warehouse-id[]"
-                                                                   value="<?php if ($field['warehouse-id'] != '') {
-                                                                       echo esc_attr($field['warehouse-id']);
+                                                                   name="wpiai_warehouse_ids[]"
+                                                                   value="<?php if ($field['id'] != '') {
+                                                                       echo esc_attr($field['id']);
                                                                    } ?>"/>
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <th>
-                                                            <label for="warehouse-name[]">Warehouse Name:</label>
+                                                            <label for="wpiai_warehouse_names[]">Warehouse Name:</label>
                                                         </th>
                                                         <td>
                                                             <input type="text" class="regular-text"
-                                                                   name="warehouse-name[]"
-                                                                   value="<?php if ($field['warehouse-name'] != '') {
-                                                                       echo esc_attr($field['warehouse-name']);
+                                                                   name="wpiai_warehouse_names[]"
+                                                                   value="<?php if ($field['name'] != '') {
+                                                                       echo esc_attr($field['name']);
                                                                    } ?>"/>
                                                         </td>
                                                     </tr>
@@ -643,20 +653,20 @@ function wpiai_options_page()
                                         <table class="form-table">
                                             <tr>
                                                 <th>
-                                                    <label for="warehouse-id[]">Warehouse ID:</label>
+                                                    <label for="wpiai_warehouse_ids[]">Warehouse ID:</label>
                                                 </th>
                                                 <td>
                                                     <input disabled type="text" class="regular-text"
-                                                           name="warehouse-id[]" value=""/>
+                                                           name="wpiai_warehouse_ids[]" value=""/>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <th>
-                                                    <label for="warehouse-name[]">Warehouse Name:</label>
+                                                    <label for="wpiai_warehouse_names[]">Warehouse Name:</label>
                                                 </th>
                                                 <td>
                                                     <input disabled type="text" class="regular-text"
-                                                           name="warehouse-name[]" value=""/>
+                                                           name="wpiai_warehouse_names[]" value=""/>
                                                 </td>
                                             </tr>
 
