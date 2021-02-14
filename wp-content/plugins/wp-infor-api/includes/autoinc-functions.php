@@ -105,6 +105,29 @@ function wpiai_get_infor_message_multipart_message($url,$paramters,$xml) {
 	return $apicall;
 }
 
+function wpiai_get_infor_api_response($url,$data) {
+    $access_token = wpiai_get_access_token_value();
+
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $url);
+
+    curl_setopt($ch, CURLOPT_POST, true);
+
+    $delimiter = '-------------' . uniqid();
+
+    $headers[] = "Authorization: Bearer " . $access_token;
+
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
+    curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
+    curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+
+    $apicall = curl_exec($ch);
+    curl_close($ch);
+    return $apicall;
+}
+
 function wpiai_get_test_response() {
 	$url = get_option( 'wpiai_message_test_url' );
 	$parameters = get_option( 'wpiai_message_test_parameters' );

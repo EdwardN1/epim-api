@@ -76,6 +76,12 @@ function wpiai_register_settings()
     register_setting('wpiai_settings_group', 'wpiai_warehouse_ids');
     add_option('wpiai_warehouse_names');
     register_setting('wpiai_settings_group', 'wpiai_warehouse_names');
+
+    add_option('wpiai_product_api_url', 'Product URL');
+    register_setting('wpiai_products_group', 'wpiai_product_api_url');
+    add_option('wpiai_product_api_request', 'Product Request');
+    register_setting('wpiai_products_group', 'wpiai_product_api_request');
+
 }
 
 add_action('admin_init', 'wpiai_register_settings');
@@ -113,6 +119,8 @@ function wpiai_options_page()
                 Master Record</a>
             <a href="?page=infor-options&tab=wpiai_settings"
                class="nav-tab <?php echo $active_tab == 'wpiai_settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
+            <a href="?page=infor-options&tab=wpiai_products_api"
+               class="nav-tab <?php echo $active_tab == 'wpiai_products_api' ? 'nav-tab-active' : ''; ?>">Products API</a>
             <?php
             $current_user = wp_get_current_user();
             $email = (string)$current_user->user_email;
@@ -443,6 +451,50 @@ function wpiai_options_page()
                                     src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         <button id="testShipToXML" class="button">Generate XML to Add a Ship To</button>&nbsp;
                         &nbsp;<span class="modal testShipToXML"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            </table>
+
+            <div class="wrap">
+            <pre id="ajax-response">
+
+            </pre>
+            </div>
+        <?php
+        endif;
+        if ($active_tab == 'wpiai_products_api'):
+            ?>
+        <div class="wrap">
+            <h1>INFOR Products API</h1>
+        </div>
+        <form method="post" action="options.php">
+            <?php settings_fields('wpiai_products_group'); ?>
+            <table class="form-table">
+                <tr>
+                    <th scope="row"><label for="wpiai_product_api_url">URL</label></th>
+                    <td><input type="text" id="wpiai_product_api_url" name="wpiai_product_api_url"
+                               value="<?php echo get_option('wpiai_product_api_url'); ?>" class="regular-text"
+                               style="width: 100%;"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"><label for="wpiai_product_api_request">Parameters</label></th>
+                    <td><textarea id="wpiai_product_api_request" name="wpiai_product_api_request" rows="20"
+                                  style="width: 100%;"><?php echo get_option('wpiai_product_api_request'); ?></textarea>
+                    </td>
+                </tr>
+            </table>
+            <?php submit_button(); ?>
+        </form>
+            <table class="form-table">
+                <tr>
+                    <td>
+                        <button id="productAPIResponse" class="button">API Response</button>&nbsp;
+                        &nbsp;<span class="modal productAPIResponse"><img
                                     src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                     </td>
                     <td>

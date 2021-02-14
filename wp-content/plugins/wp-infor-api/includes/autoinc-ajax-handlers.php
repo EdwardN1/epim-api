@@ -25,6 +25,8 @@ add_action( 'wp_ajax_wpiai_get_ship_to_xml', 'ajax_get_wpiai_get_ship_to_xml' );
 add_action( 'wp_ajax_wpiai_get_contact_response', 'ajax_get_wpiai_get_contact_response' );
 add_action( 'wp_ajax_wpiai_get_contact_xml', 'ajax_get_wpiai_get_contact_xml' );
 
+add_action( 'wp_ajax_wpiai_get_product_api_response', 'ajax_wpiai_get_product_api_response' );
+
 function ajax_get_wpiai_get_access_token() {
 	wpiai_api_checkSecure();
 	header( "Content-Type: application/json" );
@@ -51,6 +53,15 @@ function ajax_get_wpiai_get_customer_xml() {
 	header( "Content-Type: application/json" );
 	echo json_encode(get_customer_XML_record(4));
 	exit;
+}
+
+function ajax_wpiai_get_product_api_response() {
+    wpiai_api_checkSecure();
+    header( "Content-Type: application/json" );
+    $url = get_option('wpiai_product_api_url');
+    $request = 'wpiai_product_api_request';
+    echo wpiai_get_infor_api_response($url,$request);
+    exit;
 }
 
 function ajax_get_wpiai_get_contact_xml() {
