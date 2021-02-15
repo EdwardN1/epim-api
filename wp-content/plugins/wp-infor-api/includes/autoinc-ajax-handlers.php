@@ -59,7 +59,7 @@ function ajax_wpiai_get_product_api_response() {
     wpiai_api_checkSecure();
     header( "Content-Type: application/json" );
     $url = get_option('wpiai_product_api_url');
-    $request = 'wpiai_product_api_request';
+    $request = get_option('wpiai_product_api_request');
     echo wpiai_get_infor_api_response($url,$request);
     exit;
 }

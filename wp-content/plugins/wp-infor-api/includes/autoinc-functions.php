@@ -114,8 +114,8 @@ function wpiai_get_infor_api_response($url,$data) {
 
     curl_setopt($ch, CURLOPT_POST, true);
 
-    $delimiter = '-------------' . uniqid();
-
+	$headers[] = "Content-Type: application/json";
+	$headers[]= "TenantID: ERFELECTRIC_TRN";
     $headers[] = "Authorization: Bearer " . $access_token;
 
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
