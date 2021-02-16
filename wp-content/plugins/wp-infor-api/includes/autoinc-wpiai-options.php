@@ -32,6 +32,13 @@ function wpiai_register_settings()
     register_setting('wpiai_options_group', 'wpiai_client_id');
     add_option('wpiai_client_secret', 'The Client Secret for your INFOR API');
     register_setting('wpiai_options_group', 'wpiai_client_secret');
+    add_option('wpiai_current_token', 'Current Access Token');
+    register_setting('wpiai_options_group', 'wpiai_current_token');
+    add_option('wpiai_token_refresh_period', 'Token Refresh Period');
+    register_setting('wpiai_options_group', 'wpiai_token_refresh_period');
+    add_option('wpiai_token_refresh_time', 'Token Refresh Period');
+    register_setting('wpiai_options_group', 'wpiai_token_refresh_time');
+
 
     add_option('wpiai_message_test_url', 'Message URL');
     register_setting('wpiai_test_group', 'wpiai_message_test_url');
@@ -214,6 +221,15 @@ function wpiai_options_page()
                         <th scope="row"><label for="wpiai_client_secret">Client Secret</label></th>
                         <td><input type="text" id="wpiai_client_secret" name="wpiai_client_secret"
                                    value="<?php echo get_option('wpiai_client_secret'); ?>" class="regular-text"/></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_token_refresh_period">Token Expires Every (seconds)</label></th>
+                        <td><input type="text" id="wpiai_token_refresh_period" name="wpiai_token_refresh_period"
+                                   value="<?php echo get_option('wpiai_token_refresh_period'); ?>" class="regular-text"/></td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_current_token">Current Token</label></th>
+                        <td><pre><?php echo get_option('wpiai_current_token'); ?></pre></td>
                     </tr>
 
                 </table>

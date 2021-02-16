@@ -78,15 +78,20 @@ function getBranchStockAndPrice($customer,$products) {
 }
 
 function get_infor_price($price,$product) {
-	$sku = $product->get_sku();
+    $sku = $product->get_sku();
+    $transient = get_transient('wpiai_default_product_price_'.$sku);
+    if(!empty($transient)) {
+        return $transient;
+    }
 	$prices = getDefaultProductPrices('',$sku);
 	if($prices[0]['price']) {
+        set_transient( 'wpiai_default_product_price_'.$sku, $prices[0]['price'], HOUR_IN_SECONDS );
 		return $prices[0]['price'];
 	} else {
 		return $price;
 	}
 }
 
-//add_filter('woocommerce_product_get_price', 'get_infor_price', 99, 2);
-//add_filter('woocommerce_product_get_regular_price', 'get_infor_price', 99, 2);
+add_filter('woocommerce_product_get_price', 'get_infor_price', 99, 2);
+add_filter('woocommerce_product_get_regular_price', 'get_infor_price', 99, 2);
 

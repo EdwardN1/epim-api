@@ -17,29 +17,39 @@ function wpiai_get_access_token() {
 	$password = get_option( 'wpiai_password' );
 	$client_id = get_option( 'wpiai_client_id' );
 	$client_secret = get_option( 'wpiai_client_secret' );
-	$args = array(
-		'method' => 'POST',
-		'headers' => array(
-			'Content-type: application/x-www-form-urlencoded'
-		),
-		'body' => array(
-			'grant_type' => 'password',
-			'username' => $username,
-			'password' => $password,
-			'client_id' => $client_id,
-			'client_secret' => $client_secret
-		),
-	);
-	$response = wp_safe_remote_post($url,$args);
-	$apiCall = 'Get Access Token Failed';
-	if ( is_array( $response ) && ! is_wp_error( $response ) ) {
-		$apiCall = $response['body'];
-	} else {
-		if(is_wp_error( $response )) {
-			$apiCall = $response->get_error_message();
-		}
-	}
-	return $apiCall;
+	$currentToken = get_option( 'wpiai_current_token' );
+	$refreshTime = get_option( 'wpiai_token_refresh_time' );
+	$refreshPeriod = get_option( 'wpiai_token_refresh_period' );
+	$now = time();
+	$refreshAt = $refreshTime + $refreshPeriod;
+	if($now > $refreshAt) {
+        $args = array(
+            'method' => 'POST',
+            'headers' => array(
+                'Content-type: application/x-www-form-urlencoded'
+            ),
+            'body' => array(
+                'grant_type' => 'password',
+                'username' => $username,
+                'password' => $password,
+                'client_id' => $client_id,
+                'client_secret' => $client_secret
+            ),
+        );
+        $response = wp_safe_remote_post($url,$args);
+        $apiCall = 'Get Access Token Failed';
+        if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+            $apiCall = $response['body'];
+            update_option('wpiai_current_token',$apiCall);
+            update_option('wpiai_token_refresh_time',$now);
+        } else {
+            if(is_wp_error( $response )) {
+                $apiCall = $response->get_error_message();
+            }
+        }
+        return $apiCall;
+    }
+	return $currentToken;
 }
 
 function wpiai_get_access_token_value() {
