@@ -60,7 +60,12 @@ function ajax_wpiai_get_product_api_response() {
     header( "Content-Type: application/json" );
     $url = get_option('wpiai_product_api_url');
     $request = get_option('wpiai_product_api_request');
-    echo wpiai_get_infor_api_response($url,$request);
+    $response = wpiai_get_infor_api_response($url,$request);
+    $allArray = json_decode($response,true);
+    $stkArray = $allArray['response']['tOemultprcoutV2']['t-oemultprcoutV2'];
+    $responseArray = getPricesQuantities($stkArray);
+    echo json_encode($responseArray);
+	//echo $response;
     exit;
 }
 

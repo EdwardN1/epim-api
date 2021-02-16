@@ -179,4 +179,3 @@ function wpiai_infor_ping() {
 
 	return wp_safe_remote_get($url,$args);
 }
-
