@@ -51,14 +51,62 @@ function wpiai_display_admin_order_meta($order){
 add_action( 'init', 'wpiai_register_quote_order_status' );
 // Register new status
 function wpiai_register_quote_order_status() {
-    register_post_status( 'wc-quote', array(
-        'label'                     => 'Quote',
+    register_post_status( 'wc-entered', array(
+        'label'                     => 'Entered',
         'public'                    => true,
         'exclude_from_search'       => false,
         'show_in_admin_all_list'    => true,
         'show_in_admin_status_list' => true,
-        'label_count'               => _n_noop( 'Quote (%s)', 'Quote (%s)' )
+        'label_count'               => _n_noop( 'Entered (%s)', 'Entered (%s)' )
     ) );
+	register_post_status( 'wc-ordered', array(
+		'label'                     => 'Ordered',
+		'public'                    => true,
+		'exclude_from_search'       => false,
+		'show_in_admin_all_list'    => true,
+		'show_in_admin_status_list' => true,
+		'label_count'               => _n_noop( 'Ordered (%s)', 'Ordered (%s)' )
+	) );
+	register_post_status( 'wc-picked', array(
+		'label'                     => 'Picked',
+		'public'                    => true,
+		'exclude_from_search'       => false,
+		'show_in_admin_all_list'    => true,
+		'show_in_admin_status_list' => true,
+		'label_count'               => _n_noop( 'Picked (%s)', 'Picked (%s)' )
+	) );
+	register_post_status( 'wc-shipped', array(
+		'label'                     => 'Shipped',
+		'public'                    => true,
+		'exclude_from_search'       => false,
+		'show_in_admin_all_list'    => true,
+		'show_in_admin_status_list' => true,
+		'label_count'               => _n_noop( 'Shipped (%s)', 'Shipped (%s)' )
+	) );
+	register_post_status( 'wc-invoiced', array(
+		'label'                     => 'Invoiced',
+		'public'                    => true,
+		'exclude_from_search'       => false,
+		'show_in_admin_all_list'    => true,
+		'show_in_admin_status_list' => true,
+		'label_count'               => _n_noop( 'Invoiced (%s)', 'Invoiced (%s)' )
+	) );
+	register_post_status( 'wc-paid', array(
+		'label'                     => 'Paid',
+		'public'                    => true,
+		'exclude_from_search'       => false,
+		'show_in_admin_all_list'    => true,
+		'show_in_admin_status_list' => true,
+		'label_count'               => _n_noop( 'Paid (%s)', 'Paid (%s)' )
+	) );
+	register_post_status( 'wc-cancelled', array(
+		'label'                     => 'Cancelled',
+		'public'                    => true,
+		'exclude_from_search'       => false,
+		'show_in_admin_all_list'    => true,
+		'show_in_admin_status_list' => true,
+		'label_count'               => _n_noop( 'Cancelled (%s)', 'Cancelled (%s)' )
+	) );
 }
 
 // Add to list of WC Order statuses
@@ -72,7 +120,13 @@ function wpiai_add_quotes_to_order_statuses( $order_statuses ) {
         $new_order_statuses[ $key ] = $status;
 
         if ( 'wc-processing' === $key ) {
-            $new_order_statuses['wc-quote'] = 'Quote';
+            $new_order_statuses['wc-entered'] = 'Entered';
+	        $new_order_statuses['wc-ordered'] = 'Ordered';
+	        $new_order_statuses['wc-picked'] = 'Picked';
+	        $new_order_statuses['wc-shipped'] = 'Shipped';
+	        $new_order_statuses['wc-invoiced'] = 'Invoiced';
+	        $new_order_statuses['wc-paid'] = 'Paid';
+	        $new_order_statuses['wc-cancelled'] = 'Cancelled';
         }
     }
 

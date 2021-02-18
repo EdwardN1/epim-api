@@ -1,7 +1,18 @@
 <?php
+
+/**
+ *
+ * Pricing Functions
+ *
+ */
+
 function getWarehouseName( $whse ) {
 	$warehouseNames = get_option( 'wpiai_warehouse_names' );
 	$warehouseIDs   = get_option( 'wpiai_warehouse_ids' );
+
+	if(!array_search( $whse, $warehouseIDs )) {
+		return false;
+	}
 
 	return $warehouseNames[ array_search( $whse, $warehouseIDs ) ];
 }
@@ -13,16 +24,18 @@ function getPricesQuantities( $response ) {
 		foreach ( $response as $rec ) {
 			if ( array_key_exists( 'whse', $rec ) ) {
 				$whseName = getWarehouseName( $rec['whse'] );
-				if ( array_key_exists( 'prod', $rec ) ) {
-					if ( array_key_exists( 'price', $rec ) ) {
-						if ( array_key_exists( 'netavail', $rec ) ) {
-							$resRec                  = array();
-							$resRec['warehouseID']   = $rec['whse'];
-							$resRec['warehouseName'] = $whseName;
-							$resRec['SKU']           = $rec['prod'];
-							$resRec['price']         = $rec['price'];
-							$resRec['quantity']      = $rec['netavail'];
-							$res[]                   = $resRec;
+				if($whseName) {
+					if ( array_key_exists( 'prod', $rec ) ) {
+						if ( array_key_exists( 'price', $rec ) ) {
+							if ( array_key_exists( 'netavail', $rec ) ) {
+								$resRec                  = array();
+								$resRec['warehouseID']   = $rec['whse'];
+								$resRec['warehouseName'] = $whseName;
+								$resRec['SKU']           = $rec['prod'];
+								$resRec['price']         = $rec['price'];
+								$resRec['quantity']      = $rec['netavail'];
+								$res[]                   = $resRec;
+							}
 						}
 					}
 				}
@@ -37,6 +50,8 @@ function createProductsRequest( $customer, $products ) {
 	$request = '{"request": {"companyNumber": 1,"operatorInit": "BS1",';
 	if ( $customer != '' ) {
 		$request .= '"customerNumber": ' . $customer . ',';
+	} else {
+		$request .= '"customerNumber": 9,';
 	}
 	$request .= '"getPriceBreaks": true,"useDefaultWhse": false,"sendFullQtyOnOrder": true,"checkOtherWhseInventory": true,"pricingMethod": "full","tOemultprcinV2": {"t-oemultprcinV2": [';
 	if ( is_array( $products ) ) {
@@ -95,3 +110,31 @@ function get_infor_price($price,$product) {
 add_filter('woocommerce_product_get_price', 'get_infor_price', 99, 2);
 add_filter('woocommerce_product_get_regular_price', 'get_infor_price', 99, 2);
 
+/**
+ *
+ * Stock Functions
+ *
+ */
+
+add_filter( 'woocommerce_product_tabs', 'wpiai_new_branchstock_tab' );
+function wpiai_new_branchstock_tab( $tabs ) {
+	// Add the new tab
+	$tabs['branch_stock'] = array(
+		'title'       => __( 'Branch Stock', 'text-domain' ),
+		'priority'    => 50,
+		'callback'    => 'wpiai_new_branchstock_tab_content'
+	);
+	return $tabs;
+}
+
+function wpiai_new_branchstock_tab_content() {
+	// The new tab content
+	global $product;
+	$sku = $product->get_sku();
+	$stock = getBranchStockAndPrice('',$sku);
+	echo ('<table class="infor-branch-stock-table">');
+	foreach ($stock as $item) {
+		echo '<tr><td>'.$item['warehouseName'].'</td><td>'.$item['quantity'].'</td></tr>';
+	}
+	echo('</table>');
+}
