@@ -446,6 +446,9 @@ function get_contact_XML_record( $user_id, $action, $record ) {
 		if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->EmployerReference[0]->DocumentID[0]->ID[0] ) {
 			$xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->EmployerReference[0]->DocumentID[0]->ID[0] = $Customer_CSD_ID;
 		}
+		if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->UserArea[0]->Property[0]->NameValue[0] ) {
+			$xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->UserArea[0]->Property[0]->NameValue[0] = $contact_CONTACT_ID;
+		}
         $xmld          = $xml->asXML();
         return $xmld;
 	} else {
