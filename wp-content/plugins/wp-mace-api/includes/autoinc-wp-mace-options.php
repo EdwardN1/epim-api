@@ -128,7 +128,7 @@ function wpmace_options_page()
                     <td colspan="2">
                         <button id="Test" class="button">Test</button>&nbsp;
                         &nbsp;<span class="modal Test"><img
-                                src="<?php echo wpmace_PLUGINPATH; ?>/assets/img/FhHRx.gif"></span>
+                                src="<?php echo wpmace_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                     </td>
                 </tr>
             </table>
@@ -168,9 +168,9 @@ function wpmace_options_page()
             <table class="form-table">
                 <tr>
                     <td>
-                        <button id="TestResponse" class="button">Test Response</button>&nbsp;
-                        &nbsp;<span class="modal TestResponse"><img
-                                src="<?php echo wpmace_PLUGINPATH; ?>/assets/img/FhHRx.gif"></span>
+                        <button id="TestResponseRequestProducts" class="button">Test Response</button>&nbsp;
+                        &nbsp;<span class="modal TestResponseRequestProducts"><img
+                                src="<?php echo wpmace_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                     </td>
                     <td>
 

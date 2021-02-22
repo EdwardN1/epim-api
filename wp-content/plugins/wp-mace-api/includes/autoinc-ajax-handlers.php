@@ -12,7 +12,7 @@ function wpmace_api_checkSecure() {
 add_action( 'wp_ajax_mace_get_request_products_response', 'ajax_mace_get_request_products_response' );
 
 function ajax_mace_get_request_products_response() {
-    wpiai_api_checkSecure();
+    wpmace_api_checkSecure();
     header( "Content-Type: application/json" );
     $url = get_option('wpmace_request_products_api_url');
     $data = get_option('wpmace_request_products_api_body');
