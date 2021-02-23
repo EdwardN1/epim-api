@@ -20,13 +20,13 @@
 
 // ** MySQL settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define('DB_NAME', 'c76centralstage');
+define('DB_NAME', 'c76erfstage');
 
 /** MySQL database username */
-define('DB_USER', 'c76centralstage');
+define('DB_USER', 'c76erfstage');
 
 /** MySQL database password */
-define('DB_PASSWORD', 'CE?841241ed');
+define('DB_PASSWORD', 'ER?841241ed');
 
 /** MySQL hostname */
 define('DB_HOST', '127.0.0.1');
@@ -36,6 +36,10 @@ define( 'DB_CHARSET', 'utf8mb4' );
 
 /** The Database Collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '' );
+
+/** Disable WP Cron use cron job instead */
+
+define('DISABLE_WP_CRON', true);
 
 /**#@+
  * Authentication Unique Keys and Salts.
