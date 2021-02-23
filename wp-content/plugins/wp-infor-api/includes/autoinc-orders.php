@@ -57,6 +57,8 @@ function wpiai_display_admin_order_meta($order){
 	echo '<tr><th><strong>'.__('ship_via').':</strong></th><td>' . get_post_meta( $order->get_id(), 'ship_via', true ) . '</td></tr>';
 	echo '<tr><th><strong>'.__('shipping_instructions').':</strong></th><td>' . get_post_meta( $order->get_id(), 'shipping_instructions', true ) . '</td></tr>';
 	echo '<tr><th><strong>'.__('tendered').':</strong></th><td>' . get_post_meta( $order->get_id(), 'tendered', true ) . '</td></tr>';
+	echo '<tr><th><strong>'.__('payment_term').':</strong></th><td>' . get_post_meta( $order->get_id(), 'payment_term', true ) . '</td></tr>';
+	echo '<tr><th><strong>'.__('paymentterm_duedate').':</strong></th><td>' . get_post_meta( $order->get_id(), 'paymentterm_duedate', true ) . '</td></tr>';
 	echo '</table>';
     //echo '<p><strong>'.__('Random ID').':</strong> <br/>' . uniqidReal(8) . '</p>';
 }
