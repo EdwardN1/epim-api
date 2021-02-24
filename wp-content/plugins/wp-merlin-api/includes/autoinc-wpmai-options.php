@@ -114,18 +114,18 @@ function wpmai_options_page()
                   &nbsp; &nbsp;<span class="modal UpdateCode"><img src="<?php echo wpmai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                </td>
             </tr>
-            <tr>
+            <!--<tr>
               <td colspan="2"><hr></td>
-            </tr>
-            <tr>
+            </tr>-->
+            <!--<tr>
                <th>
                   <label for="sku">SQL Query:</label>
                </th>
                <td>
                   <input type="text" id="sql" class="regular-text">&nbsp;<button id="GetSQL" class="button">Go</button>
-                  &nbsp; &nbsp;<span class="modal GetSQL"><img src="<?php echo wpmai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                  &nbsp; &nbsp;<span class="modal GetSQL"><img src="<?php /*echo wpmai_PLUGINURI; */?>/assets/img/FhHRx.gif"></span>
                </td>
-            </tr>
+            </tr>-->
             <tr>
               <td colspan="2"><hr></td>
             </tr>
