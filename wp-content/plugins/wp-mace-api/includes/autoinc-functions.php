@@ -11,7 +11,7 @@ function wpmace_get_api_response($url,$data) {
 
     curl_setopt($ch, CURLOPT_POST, true);
 
-    $headers[] = "Content-Type: application/xml";
+    $headers[] = 'Content-Type: application/soap+xml;action="http://www.macesystems.co.uk/MACEWebServices/RequestProducts"';
 
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
 
