@@ -105,6 +105,8 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 					}
 					$shipTo[] = $shipTo_rec;
 				}
+			} else {
+				error_log('No ShipTo Meta');
 			}
 			update_user_meta( $user_id, 'wpiai_delivery_addresses', $shipTo );
 
