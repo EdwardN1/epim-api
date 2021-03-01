@@ -12,7 +12,8 @@ function compare_multi_Arrays( $arrayOld, $arrayNew, $indexKey ) {
 		$found = false;
 		foreach ( $arrayOld as $subArrayOld ) {
 			if ( $subArrayNew[ $indexKey ] == $subArrayOld[ $indexKey ] ) {
-				$found = true;
+
+			    $found = true;
 			}
 		}
 		if ( ! $found ) {
@@ -93,6 +94,11 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 			if(is_array($shipTo_meta)) {
 				foreach ( $shipTo_meta as $shipTo_m ) {
 					$shipTo_rec = $shipTo_m;
+                    if ( ( $shipTo_rec['delivery-CSD-ID'] == '' ) || ( ! array_key_exists( 'delivery-CSD-ID', $shipTo_rec ) ) ) {
+                        $shipTo_rec['CREATED_BY'] = 'WOO';
+                    } else {
+                        $shipTo_rec['CREATED_BY'] = 'EXTERNAL';
+                    }
 					if ( ( $shipTo_rec['delivery_UNIQUE_ID'] == '' ) || ( ! array_key_exists( 'delivery_UNIQUE_ID', $shipTo_rec ) ) ) {
 						error_log( 'setting delivery_UNIQUE_ID' );
 						$shipTo_rec['delivery_UNIQUE_ID'] = uniqid();
@@ -111,15 +117,18 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 				$shipTo_paramaters = set_messageid(get_option('wpiai_ship_to_parameters'));
 				foreach($shipToDiff["added"] as $add_shipTo) {
 					$shipTo_xml = get_shipTo_XML_record($user_id,'Add',$add_shipTo);
-					//$updated    = wpiai_get_infor_message_multipart_message( $shipTo_url, $shipTo_paramaters, $shipTo_xml );
+					error_log('shipto Add');
+					$updated    = wpiai_get_infor_message_multipart_message( $shipTo_url, $shipTo_paramaters, $shipTo_xml );
 				}
 				foreach($shipToDiff["removed"] as $remove_shipTo) {
 					$shipTo_xml = get_shipTo_XML_record($user_id,'Delete',$remove_shipTo);
-					//$updated    = wpiai_get_infor_message_multipart_message( $shipTo_url, $shipTo_paramaters, $shipTo_xml );
+                    error_log('shipto Delete');
+					$updated    = wpiai_get_infor_message_multipart_message( $shipTo_url, $shipTo_paramaters, $shipTo_xml );
 				}
 				foreach($shipToDiff["changed"] as $update_shipTo) {
 					$shipTo_xml = get_shipTo_XML_record($user_id,'Change',$update_shipTo);
-					//$updated    = wpiai_get_infor_message_multipart_message( $shipTo_url, $shipTo_paramaters, $shipTo_xml );
+                    error_log('shipto Change');
+					$updated    = wpiai_get_infor_message_multipart_message( $shipTo_url, $shipTo_paramaters, $shipTo_xml );
 				}
 				update_user_meta( $user_id, 'wpiai_last_delivery_addresses', $shipTo );
 			}
@@ -222,6 +231,7 @@ function set_messageid( $parameters ) {
 
         return json_encode( $json );
     } else {
+        error_log('set_messageid error');
         return $parameters;
     }
 }

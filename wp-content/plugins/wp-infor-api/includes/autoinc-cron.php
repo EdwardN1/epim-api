@@ -36,3 +36,26 @@ function wpiai_add_cron_interval( $schedules ) {
 	);
     return $schedules;
 }
+
+function get_woo_skus_ids() {
+    $args = array(
+        'post_type'      => 'product',
+        'posts_per_page' => - 1
+    );
+    $loop = new WP_Query( $args );
+    $res  = array();
+    if ( $loop->have_posts() ):
+        while ( $loop->have_posts() ): $loop->the_post();
+
+            global $product;
+            $sku   = $product->get_sku();
+            $id = get_the_id();
+            $res[] = array(
+              'id' => $id,
+              'sku' => $sku
+            );
+        endwhile;
+    endif;
+    wp_reset_postdata();
+    return $res;
+}
