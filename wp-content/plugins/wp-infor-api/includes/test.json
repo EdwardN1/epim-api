@@ -5,70 +5,37 @@
       "key": "wpiai_delivery_addresses",
       "value": [
         {
-          "delivery-company-name": "TestConcat",
+          "delivery-company-name": "TestCSDSync14",
           "delivery-country": "GB",
-          "delivery-street-address-1": "Addr1",
-          "delivery-street-address-2": "Addr2",
-          "delivery-town-city": "Addr City",
-          "delivery-postcode": "NG24 1JP",
-          "delivery-phone": "0123456789",
-          "delivery-CSD-ID": "1",
-          "delivery-CSD-unique-ID": ""
-        },
-        {
-          "delivery-company-name": "TestConcat",
-          "delivery-country": "GB",
-          "delivery-street-address-1": "Addr1test",
-          "delivery-street-address-2": "Addr2",
-          "delivery-town-city": "Addr City",
-          "delivery-postcode": "NG24 1JP",
-          "delivery-phone": "0123456789",
-          "delivery-CSD-ID": "2",
-          "delivery-CSD-unique-ID": ""
-        },
-        {
-          "delivery-company-name": "nametest",
-          "delivery-country": "GB",
-          "delivery-street-address-1": "Addr1test",
-          "delivery-street-address-2": "Addr2",
-          "delivery-town-city": "Addr City",
-          "delivery-postcode": "NG24 1JP",
-          "delivery-phone": "0123456789",
-          "delivery-CSD-ID": "3",
-          "delivery-CSD-unique-ID": "123456"
-        },
-        {
-          "delivery-company-name": "usertest",
-          "delivery-country": "GB",
-          "delivery-street-address-1": "Addr1test",
-          "delivery-street-address-2": "Addr2",
-          "delivery-town-city": "Addr City",
-          "delivery-postcode": "NG24 1JP",
-          "delivery-phone": "0123456789",
-          "delivery-CSD-ID": "4",
-          "delivery-CSD-unique-ID": "123456"
+          "delivery-street-address-1": "Address 11",
+          "delivery-street-address-2": "Address 22",
+          "delivery-town-city": "City",
+          "delivery-postcode": "NG1 1NG",
+          "delivery-phone": "07454123456",
+          "delivery-CSD-ID": "1000912375-0103",
+          "delivery_UNIQUE_ID": "603cfd23a6ec1"
         },
         {
           "delivery-company-name": "TestCSDSync14",
-          "delivery-country": "GB",
-          "delivery-street-address-1": "Address 1 changed",
-          "delivery-street-address-2": "Address 2",
-          "delivery-town-city": "City",
-          "delivery-postcode": "NG1 1NG",
-          "delivery-phone": "07454111222",
-          "delivery-CSD-ID": "NameST",
-          "delivery-CSD-unique-ID": ""
-        },
-        {
-          "delivery-company-name": "TestSt2502-3",
           "delivery-country": "GB",
           "delivery-street-address-1": "Address 1",
           "delivery-street-address-2": "Address 2",
           "delivery-town-city": "City",
           "delivery-postcode": "NG1 1NG",
           "delivery-phone": "07454123456",
-          "delivery-CSD-ID": "TestST",
-          "delivery-CSD-unique-ID": ""
+          "delivery-CSD-ID": "1000912375-260221",
+          "delivery_UNIQUE_ID": "603cfd23a6ec2"
+        },
+        {
+          "delivery-company-name": "TestCSDSync14",
+          "delivery-country": "GB",
+          "delivery-street-address-1": "Address 1-1",
+          "delivery-street-address-2": "Address 2",
+          "delivery-town-city": "City",
+          "delivery-postcode": "NG1 1NG",
+          "delivery-phone": "07454123456",
+          "delivery-CSD-ID": "1000912375-Test01",
+          "delivery_UNIQUE_ID": "603cfd23a6ec3"
         }
       ]
     }

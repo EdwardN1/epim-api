@@ -43,7 +43,9 @@ function compare_multi_Arrays( $arrayOld, $arrayNew, $indexKey ) {
 
 function wpiai_profile_update( $user_id, $old_user_data ) {
 	// Do something
-	error_log( 'Profile update registered for userID: ' . $user_id );
+	//error_log( 'Profile update registered for userID: ' . $user_id );
+
+
 	$user = get_userdata( $user_id );
 	if ( $user ) {
 		$roles = $user->roles;
@@ -81,59 +83,18 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 		 */
 
 		if ( in_array( 'customer', $roles ) ) {
-			$oldShipTo = get_user_meta( $user_id, 'wpiai_last_delivery_addresses', true );
-			if ( ! $oldShipTo ) {
-				$oldShipTo = array();
-			}
-			if ( $oldShipTo == '' ) {
-				$oldShipTo = array();
-			}
-			$shipTo_meta = get_user_meta( $user_id, 'wpiai_delivery_addresses', true );
+            $users_updated = get_option('wpiai_users_updated');
+            if(!is_array($users_updated)) {
+                $users_updated = array();
+            }
+            $users_updated[] = $user_id;
+            if(!update_option('wpiai_users_updated',$users_updated)) {
+                error_log('UserID not saved: '.$user_id);
+            } else {
+                error_log($user_id . ' added to the meta update queue');
+            }
 
-			$shipTo      = array();
-			if(is_array($shipTo_meta)) {
-				foreach ( $shipTo_meta as $shipTo_m ) {
-					$shipTo_rec = $shipTo_m;
-                    if ( ( $shipTo_rec['delivery-CSD-ID'] == '' ) || ( ! array_key_exists( 'delivery-CSD-ID', $shipTo_rec ) ) ) {
-                        $shipTo_rec['CREATED_BY'] = 'WOO';
-                    } else {
-                        $shipTo_rec['CREATED_BY'] = 'EXTERNAL';
-                    }
-					if ( ( $shipTo_rec['delivery_UNIQUE_ID'] == '' ) || ( ! array_key_exists( 'delivery_UNIQUE_ID', $shipTo_rec ) ) ) {
-						error_log( 'setting delivery_UNIQUE_ID' );
-						$shipTo_rec['delivery_UNIQUE_ID'] = uniqid();
-					}
-					$shipTo[] = $shipTo_rec;
-				}
-			} else {
-				error_log('No ShipTo Meta');
-			}
-			update_user_meta( $user_id, 'wpiai_delivery_addresses', $shipTo );
 
-			$shipTo = get_user_meta( $user_id, 'wpiai_delivery_addresses', true );
-
-			$shipToDiff = compare_multi_Arrays( $oldShipTo, $shipTo, 'delivery_UNIQUE_ID' );
-
-			if ( ( count( $shipToDiff["added"] ) > 0 ) || ( count( $shipToDiff["removed"] ) > 0 ) || ( count( $shipToDiff["changed"] ) > 0 ) ) {
-				$shipTo_url        = get_option( 'wpiai_ship_to_url' );
-				$shipTo_paramaters = set_messageid(get_option('wpiai_ship_to_parameters'));
-				foreach($shipToDiff["added"] as $add_shipTo) {
-					$shipTo_xml = get_shipTo_XML_record($user_id,'Add',$add_shipTo);
-					error_log('shipto Add');
-					$updated    = wpiai_get_infor_message_multipart_message( $shipTo_url, $shipTo_paramaters, $shipTo_xml );
-				}
-				foreach($shipToDiff["removed"] as $remove_shipTo) {
-					$shipTo_xml = get_shipTo_XML_record($user_id,'Delete',$remove_shipTo);
-                    error_log('shipto Delete');
-					$updated    = wpiai_get_infor_message_multipart_message( $shipTo_url, $shipTo_paramaters, $shipTo_xml );
-				}
-				foreach($shipToDiff["changed"] as $update_shipTo) {
-					$shipTo_xml = get_shipTo_XML_record($user_id,'Change',$update_shipTo);
-                    error_log('shipto Change');
-					$updated    = wpiai_get_infor_message_multipart_message( $shipTo_url, $shipTo_paramaters, $shipTo_xml );
-				}
-				update_user_meta( $user_id, 'wpiai_last_delivery_addresses', $shipTo );
-			}
 		}
 
 		/**

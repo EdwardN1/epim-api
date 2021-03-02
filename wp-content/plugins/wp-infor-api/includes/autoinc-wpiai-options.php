@@ -89,6 +89,8 @@ function wpiai_register_settings()
     add_option('wpiai_product_api_request', 'Product Request');
     register_setting('wpiai_products_group', 'wpiai_product_api_request');
 
+    add_option('wpiai_users_updated', '');
+
 }
 
 add_action('admin_init', 'wpiai_register_settings');
