@@ -45,6 +45,9 @@ function wpiai_accounts_delivery_repeater_meta_box($user) {
                         <input type="hidden" name="delivery_UNIQUE_ID[]" value="<?php if ( $field['delivery_UNIQUE_ID'] != '' ) {
 							echo esc_attr( $field['delivery_UNIQUE_ID'] );
 						} else {echo uniqid();}?>">
+                        <input type="hidden" name="delivery-CSD-ID[]" value="<?php if ( $field['delivery-CSD-ID'] != '' ) {
+							echo esc_attr( $field['delivery-CSD-ID'] );
+						} else {echo uniqid();}?>">
 						<table class="form-table">
                             <tr>
                                 <th>
@@ -108,6 +111,16 @@ function wpiai_accounts_delivery_repeater_meta_box($user) {
 	                                } ?>"/>
                                 </td>
                             </tr>
+                            <tr>
+                                <th>
+                                    <label for="delivery-street-address-3[]">Street Address 3:</label>
+                                </th>
+                                <td>
+                                    <input type="text" class="regular-text top-pad" name="delivery-street-address-3[]" value="<?php if ( $field['delivery-street-address-3'] != '' ) {
+										echo esc_attr( $field['delivery-street-address-3'] );
+									} ?>"/>
+                                </td>
+                            </tr>
 							<tr>
 								<th>
 									<label for="delivery-town-city[]">Town / City:</label>
@@ -161,12 +174,23 @@ function wpiai_accounts_delivery_repeater_meta_box($user) {
 
                             <tr>
                                 <th>
-                                    <label for="delivery-CSD-ID[]">CSD ID:</label>
+                                    delivery-CSD-ID:
                                 </th>
                                 <td>
-                                    <input type="text" class="regular-text" name="delivery-CSD-ID[]" value="<?php if ( $field['delivery-CSD-ID'] != '' ) {
+	                                <?php if ( $field['delivery-CSD-ID'] != '' ) {
 		                                echo esc_attr( $field['delivery-CSD-ID'] );
-	                                } ?>"/>
+	                                } ?>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>
+                                    delivery_UNIQUE_ID:
+                                </th>
+                                <td>
+									<?php if ( $field['delivery_UNIQUE_ID'] != '' ) {
+										echo esc_attr( $field['delivery_UNIQUE_ID'] );
+									} ?>
                                 </td>
                             </tr>
 
@@ -249,6 +273,14 @@ function wpiai_accounts_delivery_repeater_meta_box($user) {
                             <input disabled type="text" class="regular-text" name="delivery-street-address-2[]" value=""/>
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            <label for="delivery-street-address-3[]">Street Address:</label>
+                        </th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="delivery-street-address-3[]" value=""/>
+                        </td>
+                    </tr>
 					<tr>
 						<th>
 							<label for="delivery-town-city[]">Town / City:</label>
@@ -289,14 +321,14 @@ function wpiai_accounts_delivery_repeater_meta_box($user) {
                             <input disabled type="email" class="regular-text" name="delivery-email[]" value=""/>
                         </td>
 					</tr>
-                    <tr>
+                    <!--<tr>
                         <th>
                             <label for="delivery-CSD-ID[]">CSD ID:</label>
                         </th>
                         <td>
                             <input type="text" class="regular-text" name="delivery-CSD-ID[]" value=""/>
                         </td>
-                    </tr>
+                    </tr>-->
 
 					<tr>
 						<td colspan="2"><br><a class="button remove-row" href="#">Remove Address</a></td>
@@ -331,6 +363,7 @@ function wpiai_accounts_delivery_repeatable_meta_box_save( $user_id ) {
 	$delivery_countries        = isset( $_POST['delivery-country'] ) ? (array) $_POST['delivery-country'] : array();
 	$delivery_street_addresses_1  = isset( $_POST['delivery-street-address-1'] ) ? (array) $_POST['delivery-street-address-1'] : array();
 	$delivery_street_addresses_2 = isset( $_POST['delivery-street-address-2'] ) ? (array) $_POST['delivery-street-address-2'] : array();
+	$delivery_street_addresses_3 = isset( $_POST['delivery-street-address-3'] ) ? (array) $_POST['delivery-street-address-3'] : array();
 	$delivery_town_cities        = isset( $_POST['delivery-town-city'] ) ? (array) $_POST['delivery-town-city'] : array();
 	$delivery_counties        = isset( $_POST['delivery-county'] ) ? (array) $_POST['delivery-county'] : array();
 	$delivery_postcodes        = isset( $_POST['delivery-postcode'] ) ? (array) $_POST['delivery-postcode'] : array();
@@ -371,6 +404,10 @@ function wpiai_accounts_delivery_repeatable_meta_box_save( $user_id ) {
 
 		if ( $delivery_street_addresses_2[ $i ] != '' ) :
 			$new[ $i ]['delivery-street-address-2'] = sanitize_text_field( $delivery_street_addresses_2[ $i ] );
+		endif;
+
+		if ( $delivery_street_addresses_3[ $i ] != '' ) :
+			$new[ $i ]['delivery-street-address-3'] = sanitize_text_field( $delivery_street_addresses_3[ $i ] );
 		endif;
 
 		if ( $delivery_town_cities[ $i ] != '' ) :

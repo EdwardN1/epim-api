@@ -51,14 +51,27 @@ function wpiai_contacts_repeater_meta_box($user) {
                                     <input type="hidden" name="contact_CONTACT_ID[]" value="<?php if ( $field['contact_CONTACT_ID'] != '' ) {
                                         echo esc_attr( $field['contact_CONTACT_ID'] );
                                     } else {echo uniqid();}?>">
-                                    <label for="contact_CSD_ID[]">CSD contact ID:</label>
+                                    <input type="hidden" name="contact_CSD_ID[]" value="<?php if ( $field['contact_CSD_ID'] != '' ) {
+		                                echo esc_attr( $field['contact_CSD_ID'] );
+	                                } else {echo uniqid();}?>">
+                                    contact_CSD_ID
                                 </th>
                                 <td>
-                                    <input type="text" class="regular-text" name="contact_CSD_ID[]" value="<?php if ( $field['contact_CSD_ID'] != '' ) {
+                                    <?php if ( $field['contact_CSD_ID'] != '' ) {
                                         echo esc_attr( $field['contact_CSD_ID'] );
-                                    } ?>" />
+                                    } ?>
                                 </td>
 
+                            </tr>
+                            <tr>
+                                <th>
+                                    contact_CONTACT_ID:
+                                </th>
+                                <td>
+	                                <?php if ( $field['contact_CONTACT_ID'] != '' ) {
+		                                echo esc_attr( $field['contact_CONTACT_ID'] );
+	                                } else {echo uniqid();}?>
+                                </td>
                             </tr>
                             <tr>
                                 <th>
@@ -495,9 +508,6 @@ function wpiai_contacts_repeatable_meta_box_save( $user_id ) {
 			$new[ $i ]['contact_email_channel'] = sanitize_text_field( $contact_email_channel[ $i ] );
 		endif;
 
-		/*if ( $contact_CONTACT_ID[ $i ] == '' ) :
-			$new[ $i ]['contact_CONTACT_ID'] = uniqid();
-		endif;*/
 
 	}
 

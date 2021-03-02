@@ -79,7 +79,7 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 			error_log( 'No Data Change for userID ' . $user_id );
 		}
 		/**
-		 * Ship To Processing
+		 * Add To Meta Queue Processing
 		 */
 
 		if ( in_array( 'customer', $roles ) ) {
@@ -96,82 +96,6 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 
 
 		}
-
-		/**
-		 * Contact Processing
-		 */
-		if ( in_array( 'customer', $roles ) ) {
-			$oldContacts = get_user_meta( $user_id, 'wpiai_last_contacts', true );
-			if ( ! $oldContacts ) {
-				$oldContacts = array();
-			}
-			if ( $oldContacts == '' ) {
-				$oldContacts = array();
-			}
-			$contacts_meta = get_user_meta( $user_id, 'wpiai_contacts', true );
-			$contacts      = array();
-			if(is_array($contacts_meta)) {
-				foreach ( $contacts_meta as $contactm ) {
-					$contact_rec = $contactm;
-					if ( ( $contact_rec['contact_CONTACT_ID'] == '' ) || ( ! array_key_exists( 'contact_CONTACT_ID', $contact_rec ) ) ) {
-						error_log( 'setting contact_CONTACT_ID for user:'.$user_id );
-						$contact_rec['contact_CONTACT_ID'] = uniqid();
-					}
-					$contacts[] = $contact_rec;
-				}
-			}
-			update_user_meta( $user_id, 'wpiai_contacts', $contacts );
-
-			$contacts = get_user_meta( $user_id, 'wpiai_contacts', true );
-
-			if(count($contacts)==0) {
-				/**
-				 * Create a contact from billing address as none exist
-				 */
-				$contact = array();
-				$contact['contact_first_name'] = get_user_meta($user_id,'first_name',true);
-                $contact['contact_last_name'] = get_user_meta($user_id,'last_name',true);
-				$contact['contact_email'] = $user->user_email;
-				$contact['contact_addr_1'] = get_user_meta($user_id,'billing_address_1',true);
-				$contact['contact_addr_2'] = get_user_meta($user_id,'billing_address_2',true);
-				$contact['contact_addr_3'] = get_user_meta($user_id,'billing_city',true);
-				$contact['contact_addr_4'] = get_user_meta($user_id,'billing_country',true);
-				$contact['contact_postcode'] = get_user_meta($user_id,'billing_postcode',true);
-				$contact['contact_phone'] = get_user_meta($user_id,'billing_phone',true);
-				$contact['contact_CONTACT_ID'] = uniqid();
-				$contacts[] = $contact;
-				update_user_meta( $user_id, 'wpiai_contacts', $contacts );
-			}
-
-			$contactDiff = compare_multi_Arrays( $oldContacts, $contacts, 'contact_CONTACT_ID' );
-			//error_log( print_r( $contactDiff, true ) );
-
-			if ( ( count( $contactDiff["added"] ) > 0 ) || ( count( $contactDiff["removed"] ) > 0 ) || ( count( $contactDiff["changed"] ) > 0 ) ) {
-				/**
-				 *
-				 * Send changes to Infor for contacts here.
-				 *
-				 */
-				$contact_url        = get_option( 'wpiai_contact_url' );
-				$contact_paramaters = set_messageid(get_option('wpiai_contact_parameters'));
-				foreach($contactDiff["added"] as $add_contact) {
-                    $contact_xml = get_contact_XML_record($user_id,'Add',$add_contact);
-					//$updated    = wpiai_get_infor_message_multipart_message( $contact_url, $contact_paramaters, $contact_xml );
-                }
-                foreach($contactDiff["removed"] as $remove_contact) {
-                    $contact_xml = get_contact_XML_record($user_id,'Delete',$remove_contact);
-	                //$updated    = wpiai_get_infor_message_multipart_message( $contact_url, $contact_paramaters, $contact_xml );
-                }
-                foreach($contactDiff["changed"] as $update_contact) {
-                    $contact_xml = get_contact_XML_record($user_id,'Change',$update_contact);
-	                //$updated    = wpiai_get_infor_message_multipart_message( $contact_url, $contact_paramaters, $contact_xml );
-                }
-
-			}
-			update_user_meta( $user_id, 'wpiai_last_contacts', $contacts );
-		}
-
-
 
 	}
 }
@@ -228,7 +152,7 @@ function get_shipTo_XML_record( $user_id, $action, $record )
         $CompanyName = $record['delivery-company-name'];
         $AddressLine1 = $record['delivery-street-address-1'];
         $AddressLine2 = $record['delivery-street-address-2'];
-        $AddressLine3 = $record['delivery-county'];
+        $AddressLine3 = $record['delivery-street-address-3'];
         $CityName = $record['delivery-town-city'];
         $PostalCode = $record['delivery-postcode'];
         $DialNumber = $record['delivery-phone'];
