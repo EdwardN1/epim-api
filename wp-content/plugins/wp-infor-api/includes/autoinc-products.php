@@ -10,6 +10,10 @@ function getWarehouseName( $whse ) {
 	$warehouseNames = get_option( 'wpiai_warehouse_names' );
 	$warehouseIDs   = get_option( 'wpiai_warehouse_ids' );
 
+	if(is_array($warehouseIDs)) {
+	    return false;
+    }
+
 	if(!array_search( $whse, $warehouseIDs )) {
 		return false;
 	}
@@ -47,11 +51,13 @@ function getPricesQuantities( $response ) {
 }
 
 function createProductsRequest( $customer, $products ) {
+    $wpiai_guest_customer_number = get_option('wpiai_guest_customer_number');
+    if(!is_numeric($wpiai_guest_customer_number)) $wpiai_guest_customer_number = 9;
 	$request = '{"request": {"companyNumber": 1,"operatorInit": "BS1",';
 	if ( $customer != '' ) {
 		$request .= '"customerNumber": ' . $customer . ',';
 	} else {
-		$request .= '"customerNumber": 9,';
+		$request .= '"customerNumber": '.$wpiai_guest_customer_number.',';
 	}
 	$request .= '"getPriceBreaks": true,"useDefaultWhse": false,"sendFullQtyOnOrder": true,"checkOtherWhseInventory": true,"pricingMethod": "full","tOemultprcinV2": {"t-oemultprcinV2": [';
 	if ( is_array( $products ) ) {
@@ -107,8 +113,8 @@ function get_infor_price($price,$product) {
 	}
 }
 
-add_filter('woocommerce_product_get_price', 'get_infor_price', 99, 2);
-add_filter('woocommerce_product_get_regular_price', 'get_infor_price', 99, 2);
+//add_filter('woocommerce_product_get_price', 'get_infor_price', 99, 2);
+//add_filter('woocommerce_product_get_regular_price', 'get_infor_price', 99, 2);
 
 /**
  *
