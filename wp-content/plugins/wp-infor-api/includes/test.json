@@ -1,43 +1,82 @@
 {
-  "id": "45",
-  "meta_data": [
-    {
-      "key": "wpiai_delivery_addresses",
-      "value": [
+  "request": {
+    "companyNumber": 1,
+    "operatorInit": "BS1",
+    "customerNumber": 9,
+    "getPriceBreaks": true,
+    "useDefaultWhse": false,
+    "sendFullQtyOnOrder": true,
+    "checkOtherWhseInventory": true,
+    "pricingMethod": "full",
+    "tOemultprcinV2": {
+      "t-oemultprcinV2": [
         {
-          "delivery-company-name": "TestCSDSync14",
-          "delivery-country": "GB",
-          "delivery-street-address-1": "Address 11",
-          "delivery-street-address-2": "Address 22",
-          "delivery-town-city": "City",
-          "delivery-postcode": "NG1 1NG",
-          "delivery-phone": "07454123456",
-          "delivery-CSD-ID": "1000912375-0103",
-          "delivery_UNIQUE_ID": "603cfd23a6ec1"
+          "seqno": 1,
+          "prod": "RYA2P540-13",
+          "qtyord": 1,
+          "unit": "EACH"
         },
         {
-          "delivery-company-name": "TestCSDSync14",
-          "delivery-country": "GB",
-          "delivery-street-address-1": "Address 1",
-          "delivery-street-address-2": "Address 2",
-          "delivery-town-city": "City",
-          "delivery-postcode": "NG1 1NG",
-          "delivery-phone": "07454123456",
-          "delivery-CSD-ID": "1000912375-260221",
-          "delivery_UNIQUE_ID": "603cfd23a6ec2"
+          "seqno": 1,
+          "prod": "RYA2P530-13",
+          "qtyord": 1,
+          "unit": "EACH"
         },
         {
-          "delivery-company-name": "TestCSDSync14",
-          "delivery-country": "GB",
-          "delivery-street-address-1": "Address 1-1",
-          "delivery-street-address-2": "Address 2",
-          "delivery-town-city": "City",
-          "delivery-postcode": "NG1 1NG",
-          "delivery-phone": "07454123456",
-          "delivery-CSD-ID": "1000912375-Test01",
-          "delivery_UNIQUE_ID": "603cfd23a6ec3"
+          "seqno": 1,
+          "prod": "RULTRIM-13",
+          "qtyord": 1,
+          "unit": "EACH"
+        },
+        {
+          "seqno": 1,
+          "prod": "RULTRIM-10",
+          "qtyord": 1,
+          "unit": "EACH"
+        },
+        {
+          "seqno": 1,
+          "prod": "RULTRIM-03",
+          "qtyord": 1,
+          "unit": "EACH"
+        },
+        {
+          "seqno": 1,
+          "prod": "RUL07X0-01",
+          "qtyord": 1,
+          "unit": "EACH"
+        },
+        {
+          "seqno": 1,
+          "prod": "RUL05X0-01",
+          "qtyord": 1,
+          "unit": "EACH"
+        },
+        {
+          "seqno": 1,
+          "prod": "RU360-01",
+          "qtyord": 1,
+          "unit": "EACH"
+        },
+        {
+          "seqno": 1,
+          "prod": "RSN15050DAS-04",
+          "qtyord": 1,
+          "unit": "EACH"
+        },
+        {
+          "seqno": 1,
+          "prod": "RRE5040-04",
+          "qtyord": 1,
+          "unit": "EACH"
+        },
+        {
+          "seqno": 1,
+          "prod": "RRE3040P-04",
+          "qtyord": 1,
+          "unit": "EACH"
         }
       ]
     }
-  ]
+  }
 }

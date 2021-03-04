@@ -171,6 +171,16 @@ function wpiai_accounts_delivery_repeater_meta_box($user) {
 	                                } ?>"/>
                                 </td>
 							</tr>
+                            <tr>
+                                <th>
+                                    <label for="delivery-email[]">Active:</label>
+                                </th>
+                                <td>
+                                    <input type="text" class="regular-text" name="delivery-active[]" value="<?php if ( $field['delivery-active'] != '' ) {
+										echo esc_attr( $field['delivery-active'] );
+									} ?>"/>
+                                </td>
+                            </tr>
 
                             <tr>
                                 <th>
@@ -321,6 +331,14 @@ function wpiai_accounts_delivery_repeater_meta_box($user) {
                             <input disabled type="email" class="regular-text" name="delivery-email[]" value=""/>
                         </td>
 					</tr>
+                    <tr>
+                        <th>
+                            <label for="delivery-active[]">Active:</label>
+                        </th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="delivery-active[]" value=""/>
+                        </td>
+                    </tr>
                     <!--<tr>
                         <th>
                             <label for="delivery-CSD-ID[]">CSD ID:</label>
@@ -369,6 +387,7 @@ function wpiai_accounts_delivery_repeatable_meta_box_save( $user_id ) {
 	$delivery_postcodes        = isset( $_POST['delivery-postcode'] ) ? (array) $_POST['delivery-postcode'] : array();
 	$delivery_phones        = isset( $_POST['delivery-phone'] ) ? (array) $_POST['delivery-phone'] : array();
 	$delivery_emails        = isset( $_POST['delivery-email'] ) ? (array) $_POST['delivery-email'] : array();
+	$delivery_actives       = isset( $_POST['delivery-active'] ) ? (array) $_POST['delivery-active'] : array();
 	$delivery_CSD_ID        = isset( $_POST['delivery-CSD-ID'] ) ? (array) $_POST['delivery-CSD-ID'] : array();
 
 
@@ -428,6 +447,10 @@ function wpiai_accounts_delivery_repeatable_meta_box_save( $user_id ) {
 
 		if ( $delivery_emails[ $i ] != '' ) :
 			$new[ $i ]['delivery-email'] = sanitize_text_field( $delivery_emails[ $i ] );
+		endif;
+
+		if ( $delivery_actives[ $i ] != '' ) :
+			$new[ $i ]['delivery-active'] = sanitize_text_field( $delivery_actives[ $i ] );
 		endif;
 
 		if ( $delivery_CSD_ID[ $i ] != '' ) :

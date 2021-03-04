@@ -20,6 +20,7 @@ function wpiai_do_every_minute()
     // do something every minute
     //error_log('WP Cron is working....Every Minute Event');
     wpiai_check_user_meta();
+	//wpiai_process_products(150,1200,true);
 }
 
 function wpiai_do_every_twenty_minutes()
@@ -50,13 +51,13 @@ function wpiai_get_woo_skus_ids($max, $seconds)
     );
     $loop = new WP_Query($args);
     $res = array();
-    $i = 0;
+    $i = 1;
     if ($loop->have_posts()):
         while ($loop->have_posts()): $loop->the_post();
-            global $product;
             $id = get_the_id();
+	        $product = wc_get_product($id);
             if ($max > 0) {
-                $product_price_updated = get_post_meta($id, 'product_price_updated');
+                $product_price_updated = get_post_meta($id, 'product_price_updated',true);
                 if($product_price_updated=='') {
                     $product_price_updated=0;
                 }
@@ -64,6 +65,7 @@ function wpiai_get_woo_skus_ids($max, $seconds)
                 if (is_numeric($seconds)) {
                     if (($now - $product_price_updated) > $seconds) {
                         $sku = $product->get_sku();
+                        error_log('$sku = '.$sku);
                         $res[] = array(
                             'id' => $id,
                             'sku' => $sku
@@ -71,18 +73,20 @@ function wpiai_get_woo_skus_ids($max, $seconds)
                     }
                 } else {
                     $sku = $product->get_sku();
+	                error_log('!is_numeric($seconds) $sku = '.$sku);
                     $res[] = array(
                         'id' => $id,
                         'sku' => $sku
                     );
                 }
 
-                if ($max >= $i) {
+                if ($max < $i) {
                     return $res;
                 }
                 $i++;
             } else {
                 $sku = $product->get_sku();
+	            error_log('$max !> 0, $sku = '.$sku);
                 $res[] = array(
                     'id' => $id,
                     'sku' => $sku
@@ -95,12 +99,21 @@ function wpiai_get_woo_skus_ids($max, $seconds)
     return $res;
 }
 
-function wpiai_process_products($max,$seconds) {
+function wpiai_process_products($max,$seconds,$log=false) {
+	$timeStart = microtime(true);
     $products = wpiai_get_woo_skus_ids($max,$seconds);
     $productSKUs = array();
+    $lastProduct = 'no product sku';
     foreach ($products as $product) {
+	    $lastProduct = $product['sku'];
         if($product['id'] > 0) {
             $productSKUs[] = $product['sku'];
+            $lastProduct = $product['sku'];
+	        if(!update_post_meta($product['id'], 'product_price_updated',time())) {
+		        if($log===true) {
+			        error_log('Product '.$product['sku'].' error setting or not changed product_price_updated');
+		        }
+	        }
         }
     }
     $prices = getDefaultProductPrices('',$productSKUs);
@@ -111,12 +124,27 @@ function wpiai_process_products($max,$seconds) {
         if($k) {
             $id = $products[$k]['id'];
             $wooProduct = wc_get_product($id);
+            if($log===true){
+            	$oldPrice = $wooProduct->get_price();
+            	error_log('Product $sku old price = '.$oldPrice.' new price = '.$p);
+            }
             $wooProduct->set_regular_price($p);
             $wooProduct->set_price($p);
             $wooProduct->save();
-            update_post_meta($id, 'product_price_updated',time());
+            if(!update_post_meta($id, 'product_price_updated',time())) {
+            	if($log===true) {
+            		error_log('Product '.$sku.' error setting or not changed product_price_updated');
+	            }
+            }
         }
     }
+
+    $timeEnd = microtime(true);
+    if($log===true) {
+    	$time = $timeEnd -$timeStart;
+	    error_log('wpiai_process_products took '.$time.' seconds. Last Product = '.$lastProduct);
+    }
+
 }
 
 
@@ -149,7 +177,7 @@ function wpiai_process_user_shiptos($user_id)
         error_log('No ShipTo Meta');
     }
     if (!update_user_meta($user_id, 'wpiai_delivery_addresses', $shipTo)) {
-        error_log('Ship To update_user_meta Failed for $user_id: ' . $user_id);
+        error_log('Ship To update_user_meta Failed or not changed for $user_id: ' . $user_id);
     } else {
         $shipTo_url = get_option('wpiai_ship_to_url');
         $shipTo_paramaters = set_messageid(get_option('wpiai_ship_to_parameters'));
@@ -229,7 +257,7 @@ function wpiai_process_user_contacts($user_id)
         error_log('No Contact Meta');
     }
     if (!update_user_meta($user_id, 'wpiai_contacts', $contactRec)) {
-        error_log('Contact update_user_meta Failed for $user_id: ' . $user_id);
+        error_log('Contact update_user_meta Failed or not changed for $user_id: ' . $user_id);
     } else {
         $contactRec_url = get_option('wpiai_contact_url');
         $contactRec_paramaters = set_messageid(get_option('wpiai_contact_parameters'));
