@@ -22,7 +22,9 @@ add_action('admin_menu', 'wpiai_register_options_page');
 
 function wpiai_register_settings()
 {
-    add_option('wpiai_token_url', 'The base URL for your INFOR API');
+	add_option('wpiai_api_enabled', 1);
+	register_setting('wpiai_options_group', 'wpiai_api_enabled');
+	add_option('wpiai_token_url', 'The base URL for your INFOR API');
     register_setting('wpiai_options_group', 'wpiai_token_url');
     add_option('wpiai_username', 'The Username for your INFOR API');
     register_setting('wpiai_options_group', 'wpiai_username');
@@ -199,6 +201,11 @@ function wpiai_options_page()
             <form method="post" action="options.php">
                 <?php settings_fields('wpiai_options_group'); ?>
                 <table class="form-table">
+                    <tr>
+                        <th scope="row"><label for="wpiai_api_enabled">API Enabled</label></th>
+                        <td><input type="checkbox" id="wpiai_api_enabled" name="wpiai_api_enabled"
+                                   value="1"<?php checked( 1 == get_option('wpiai_api_enabled') ); ?> class="regular-text"/></td>
+                    </tr>
                     <tr>
                         <th scope="row"><label for="wpiai_token_url">Token URL</label></th>
                         <td><input type="text" id="wpiai_token_url" name="wpiai_token_url"
