@@ -378,7 +378,7 @@ function wpiai_options_page()
         if ($active_tab == 'wpiai_sales_order_record'):
             ?>
             <div class="wrap">
-                <h1>INFOR Customer Master Record</h1>
+                <h1>INFOR Sales Order Master Record</h1>
             </div>
             <form method="post" action="options.php">
                 <?php settings_fields('wpiai_sales_order_group'); ?>
