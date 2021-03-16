@@ -242,6 +242,7 @@ function get_contact_XML_record( $user_id, $action, $record ) {
         $CityName = $record['contact_addr_3'];
         $PostalCode = $record['contact_postcode'];
         $DialNumber = $record['contact_phone'];
+		$DialNumber = $record['contact_mobile_phone'];
         $URI = $record['contact_email'];
 
         $commPhone = $record['contact_phone_channel'];
@@ -316,6 +317,9 @@ function get_contact_XML_record( $user_id, $action, $record ) {
         if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->CityName[0] ) {
             $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->CityName[0] = $CityName;
         }
+		if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->CountrySubDivisionCode[0] ) {
+			$xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->CountrySubDivisionCode[0] = $contact_CONTACT_ID;
+		}
         if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->PostalCode[0] ) {
             $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->PostalCode[0] = $PostalCode;
         }
@@ -323,7 +327,7 @@ function get_contact_XML_record( $user_id, $action, $record ) {
             $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[1]->DialNumber[0] = $DialNumber;
         }
         if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[4]->DialNumber[0] ) {
-            $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[4]->DialNumber[0] = $DialNumber;
+            $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[4]->DialNumber[0] = $MobileNumber;
         }
         if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[5]->URI[0] ) {
             $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[5]->URI[0] = $URI;
@@ -343,9 +347,9 @@ function get_contact_XML_record( $user_id, $action, $record ) {
 		if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->EmployerReference[0]->DocumentID[0]->ID[0] ) {
 			$xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->EmployerReference[0]->DocumentID[0]->ID[0] = $Customer_CSD_ID;
 		}
-		if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->UserArea[0]->Property[0]->NameValue[0] ) {
+		/*if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->UserArea[0]->Property[0]->NameValue[0] ) {
 			$xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->UserArea[0]->Property[0]->NameValue[0] = $contact_CONTACT_ID;
-		}
+		}*/
         $xmld          = $xml->asXML();
         return $xmld;
 	} else {

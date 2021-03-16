@@ -288,6 +288,7 @@ function wpiai_process_user_contacts($user_id)
                     if ($contactRec[$contactRecRecID]['contact_email'] <> $old_contact['contact_email']) $different = true;
                     if ($contactRec[$contactRecRecID]['contact_postcode'] <> $old_contact['contact_postcode']) $different = true;
                     if ($contactRec[$contactRecRecID]['contact_phone'] <> $old_contact['contact_phone']) $different = true;
+	                if ($contactRec[$contactRecRecID]['contact_mobile_phone'] <> $old_contact['contact_mobile_phone']) $different = true;
                     if ($contactRec[$contactRecRecID]['contact_type'] <> $old_contact['contact_type']) $different = true;
                     if ($contactRec[$contactRecRecID]['contact_phone_channel'] <> $old_contact['contact_phone_channel']) $different = true;
                     if ($contactRec[$contactRecRecID]['contact_fax_channel'] <> $old_contact['contact_fax_channel']) $different = true;
@@ -320,6 +321,6 @@ function wpiai_check_user_meta()
     update_option('wpiai_users_updated', array());
     foreach ($users_updated as $user_id) {
         wpiai_process_user_shiptos($user_id);
-        //wpiai_process_user_contacts($user_id);
+        wpiai_process_user_contacts($user_id);
     }
 }

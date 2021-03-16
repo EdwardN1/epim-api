@@ -173,6 +173,16 @@ function wpiai_contacts_repeater_meta_box($user) {
                                     } ?>"/>
                                 </td>
 							</tr>
+                            <tr>
+                                <th>
+                                    <label for="contact_mobile_phone[]">Mobile Phone:</label>
+                                </th>
+                                <td>
+                                    <input type="text" class="regular-text" name="contact_mobile_phone[]" value="<?php if ( $field['contact_mobile_phone'] != '' ) {
+										echo esc_attr( $field['contact_mobile_phone'] );
+									} ?>"/>
+                                </td>
+                            </tr>
 							<tr>
 								<th>
 									<label for="contact_email[]">Email address:</label>
@@ -338,6 +348,14 @@ function wpiai_contacts_repeater_meta_box($user) {
                             <input disabled type="text" class="regular-text" name="contact_phone[]" value=""/>
                         </td>
 					</tr>
+                    <tr>
+                        <th>
+                            <label for="contact_mobile_phone[]">Mobile Phone:</label>
+                        </th>
+                        <td>
+                            <input disabled type="text" class="regular-text" name="contact_mobile_phone[]" value=""/>
+                        </td>
+                    </tr>
 					<tr>
 						<th>
 							<label for="contact_mail[]">Email address:</label>
@@ -425,6 +443,7 @@ function wpiai_contacts_repeatable_meta_box_save( $user_id ) {
 	$contact_postcode      = isset( $_POST['contact_postcode'] ) ? (array) $_POST['contact_postcode'] : array();
 	$contact_email      = isset( $_POST['contact_email'] ) ? (array) $_POST['contact_email'] : array();
 	$contact_phone      = isset( $_POST['contact_phone'] ) ? (array) $_POST['contact_phone'] : array();
+	$contact_mobile_phone      = isset( $_POST['contact_mobile_phone'] ) ? (array) $_POST['contact_mobile_phone'] : array();
 	$contact_type      = isset( $_POST['contact_type'] ) ? (array) $_POST['contact_type'] : array();
 	$contact_CONTACT_ID = isset( $_POST['contact_CONTACT_ID'] ) ? (array) $_POST['contact_CONTACT_ID'] : array();
 	$contact_phone_channel = isset( $_POST['contact_phone_channel'] ) ? (array) $_POST['contact_phone_channel'] : array();
@@ -482,6 +501,10 @@ function wpiai_contacts_repeatable_meta_box_save( $user_id ) {
 
 		if ( $contact_phone[ $i ] != '' ) :
 			$new[ $i ]['contact_phone'] = sanitize_text_field( $contact_phone[ $i ] );
+		endif;
+
+		if ( $contact_mobile_phone[ $i ] != '' ) :
+			$new[ $i ]['contact_mobile_phone'] = sanitize_text_field( $contact_mobile_phone[ $i ] );
 		endif;
 
 		if ( $contact_type[ $i ] != '' ) :
