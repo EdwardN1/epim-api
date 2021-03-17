@@ -72,48 +72,8 @@ function ajax_wpiai_get_product_api_response() {
 
 function ajax_get_wpiai_get_sales_order_xml() {
 	wpiai_api_checkSecure();
-	$order = wc_get_order( 48605 );
-	$record = array();
-	$record['billing-first-name'] = $order->get_billing_first_name();
-	$record['billing-last-name'] = $order->get_billing_last_name();
-	$record['billing-company'] = $order->get_billing_company();
-	$record['billing-address-1'] = $order->get_billing_address_1();
-	$record['billing-address-2'] = $order->get_billing_address_2();
-	$record['billing-city'] = $order->get_billing_city();
-	$record['billing-state'] = $order->get_billing_state();
-	$record['billing-postcode'] = $order->get_billing_postcode();
-	$record['billing-country'] = $order->get_billing_country();
-	$record['billing-email'] = $order->get_billing_email();
-	$record['billing-phone'] = $order->get_billing_phone();
-	$record['id'] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
-	$record[''] = '';
 	header( "Content-Type: application/json" );
-	echo json_encode(get_order_XML(48605, 'change', $record));
+	echo json_encode(wpiai_get_order_XML(48605, 'change'));
 	exit;
 }
 

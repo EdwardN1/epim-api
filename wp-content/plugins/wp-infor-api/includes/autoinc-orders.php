@@ -11,7 +11,12 @@ add_action( 'woocommerce_new_order', 'wpiai_order_added' );
 function wpiai_order_added( $order_id ) {
 	$order = wc_get_order( $order_id );
 	/* Insert your code */
-	error_log( 'Order: ' . $order_id . ' Added' );
+	$url        = get_option( 'wpiai_sales_order_url' );
+	$parameters = get_option('wpiai_sales_order_parameters');
+	$pRequest = get_customer_param_record_x( $parameters );
+	$xmlRequest = wpiai_get_order_XML($order_id,'Add');
+	$updated    = wpiai_get_infor_message_multipart_message( $url, $pRequest, $xmlRequest );
+	if($updated) error_log( 'Order: ' . $order_id . ' Added' );
 }
 
 /**
@@ -23,10 +28,18 @@ function wpiai_order_added( $order_id ) {
 function wpiai_order_updated( $order_id ) {
 	$order = wc_get_order( $order_id );
 	/* Insert your code */
-	error_log( 'Order: ' . $order_id . ' Updated' );
+	if(($order->get_status() != 'draft')||($order->get_status() != 'auto-draft')) {
+		$url        = get_option( 'wpiai_sales_order_url' );
+		$parameters = get_option('wpiai_sales_order_parameters');
+		$pRequest = get_customer_param_record_x( $parameters );
+		$xmlRequest = wpiai_get_order_XML($order_id,'Add');
+		$updated    = wpiai_get_infor_message_multipart_message( $url, $pRequest, $xmlRequest );
+		if($updated) error_log( 'Order: ' . $order_id . ' Updated with Status: '. $order->get_status());
+	}
+
 }
 
-//add_action( 'woocommerce_update_order', 'wpiai_order_updated' );
+add_action( 'woocommerce_update_order', 'wpiai_order_updated' );
 
 /**
  *
@@ -172,7 +185,7 @@ add_filter( 'wc_order_statuses', 'wpiai_add_quotes_to_order_statuses' );
  *
  */
 
-function get_order_XML( $order_id, $action ) {
+function wpiai_get_order_XML( $order_id, $action ) {
 	$order = wc_get_order( $order_id );
 	if ( $order ) {
 		$xmld = get_option( 'wpiai_sales_order_xml' );
@@ -198,7 +211,7 @@ function get_order_XML( $order_id, $action ) {
 		$Reference_NameValue_1                 = $order->get_total();
 
 
-		$DocumentDateTime = $order->get_date_created();
+		$Document_DateTime = $order->get_date_created()->format( DateTime::ATOM );
 		//$OrderTypeCode = '';
 		$Status_Code                                = $order->get_status();
 		$CustomerParty_PartyIDs_ID                  = $CustomerPartyID;
@@ -243,7 +256,7 @@ function get_order_XML( $order_id, $action ) {
 		}
 
 		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->DocumentDateTime[0] ) {
-			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->DocumentDateTime[0] = $DocumentDateTime;
+			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->DocumentDateTime[0] = $Document_DateTime;
 		}
 
 		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->Status[0]->Code[0] ) {
