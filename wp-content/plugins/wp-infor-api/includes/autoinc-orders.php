@@ -6,7 +6,8 @@
  *
  */
 
-add_action( 'woocommerce_new_order', 'wpiai_order_added' );
+//add_action( 'woocommerce_new_order', 'wpiai_order_added' );
+add_action( 'woocommerce_thankyou', 'wpiai_order_added' );
 
 function wpiai_order_added( $order_id ) {
 	$order = wc_get_order( $order_id );
@@ -267,7 +268,7 @@ function wpiai_get_order_XML( $order_id, $action ) {
 		}
 
 		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->Status[0]->Code[0] ) {
-			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->Status[0]->Code[0] = $Status_Code;
+			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->Status[0]->Code[0] = 'Open';
 		}
 
 		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->CustomerParty[0]->PartyIDs[0]->ID[0] ) {
@@ -302,8 +303,12 @@ function wpiai_get_order_XML( $order_id, $action ) {
 			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->ShipToParty[0]->Location[0]->Address[0]->PostalCode[0] = $ShipToParty_Location_Address_PostalCode;
 		}
 
-		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[3]->NameValue[0] ) {
-			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[3]->NameValue[0] = $UserArea_Property_3_NameValue;
+		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[0]->NameValue[0] ) {
+			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[0]->NameValue[0] = $order_id;
+		}
+
+		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[2]->NameValue[0] ) {
+			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[2]->NameValue[0] = $CustomerPartyID;
 		}
 
 		// Get and Loop Over Order Items
@@ -329,6 +334,7 @@ function wpiai_get_order_XML( $order_id, $action ) {
 					$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderLine[ $SalesOrderLineNum ]->Item[0]->ItemID[0]->ID[0]              = $sku;
 					$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderLine[ $SalesOrderLineNum ]->Quantity[0]                            = $quantity;
 					$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderLine[ $SalesOrderLineNum ]->UserArea[0]->Property[0]->NameValue[0] = $itemID;
+					$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderLine[ $SalesOrderLineNum ]->UserArea[0]->Property[0]->NameValue[0]->addAttribute('name','SXe_user2');
 					$SalesOrderLineNum ++;
 				}
 			}
