@@ -11,12 +11,19 @@ add_action( 'woocommerce_new_order', 'wpiai_order_added' );
 function wpiai_order_added( $order_id ) {
 	$order = wc_get_order( $order_id );
 	/* Insert your code */
-	$url        = get_option( 'wpiai_sales_order_url' );
-	$parameters = get_option('wpiai_sales_order_parameters');
-	$pRequest = get_customer_param_record_x( $parameters );
-	$xmlRequest = wpiai_get_order_XML($order_id,'Add');
-	$updated    = wpiai_get_infor_message_multipart_message( $url, $pRequest, $xmlRequest );
-	if($updated) error_log( 'Order: ' . $order_id . ' Added' );
+	if($order) {
+		if($order->get_created_via()!='rest-api') {
+			$url        = get_option( 'wpiai_sales_order_url' );
+			$parameters = get_option( 'wpiai_sales_order_parameters' );
+			$pRequest   = get_customer_param_record_x( $parameters );
+			$xmlRequest = wpiai_get_order_XML( $order_id, 'Add' );
+			$updated    = wpiai_get_infor_message_multipart_message( $url, $pRequest, $xmlRequest );
+			if ( $updated ) {
+				error_log( 'Order: ' . $order_id . ' Added' );
+			}
+		}
+	}
+
 }
 
 /**
@@ -28,14 +35,14 @@ function wpiai_order_added( $order_id ) {
 function wpiai_order_updated( $order_id ) {
 	$order = wc_get_order( $order_id );
 	/* Insert your code */
-	if(($order->get_status() != 'draft')||($order->get_status() != 'auto-draft')) {
+	/*if(($order->get_status() != 'draft')||($order->get_status() != 'auto-draft')) {
 		$url        = get_option( 'wpiai_sales_order_url' );
 		$parameters = get_option('wpiai_sales_order_parameters');
 		$pRequest = get_customer_param_record_x( $parameters );
 		$xmlRequest = wpiai_get_order_XML($order_id,'Add');
 		$updated    = wpiai_get_infor_message_multipart_message( $url, $pRequest, $xmlRequest );
 		if($updated) error_log( 'Order: ' . $order_id . ' Updated with Status: '. $order->get_status());
-	}
+	}*/
 
 }
 
@@ -306,22 +313,24 @@ function wpiai_get_order_XML( $order_id, $action ) {
 			foreach ( $order->get_items() as $item_id => $item ) {
 				//$product_id       = $item->get_product_id();
 				$product = $item->get_product();
-				$sku     = $product->get_sku();
-				//$name             = $item->get_name();
-				$quantity = $item->get_quantity();
-				$itemID   = $item->get_id();
-				/*$total            = $item->get_total();
-				$line_number      = $item->get_meta( 'line_number', true );
-				$line_status      = $item->get_meta( 'line_status', true );
-				$item_notes       = $item->get_meta( 'item_notes', true );
-				$back_order       = $item->get_meta( 'back_order', true );
-				$price_paid       = $item->get_meta( 'price_paid', true );
-				$uom              = $item->get_meta( 'uom', true );
-				$quantity_shipped = $item->get_meta( 'quantity_shipped', true );*/
-				$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderLine[$SalesOrderLineNum]->Item[0]->ItemID[0]->ID[0] = $sku;
-				$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderLine[$SalesOrderLineNum]->Quantity[0] = $quantity;
-				$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderLine[$SalesOrderLineNum]->UserArea[0]->Property[0]->NameValue[0] = $itemID;
-				$SalesOrderLineNum++;
+				if($product) {
+					$sku = $product->get_sku();
+					//$name             = $item->get_name();
+					$quantity = $item->get_quantity();
+					$itemID   = $item->get_id();
+					/*$total            = $item->get_total();
+					$line_number      = $item->get_meta( 'line_number', true );
+					$line_status      = $item->get_meta( 'line_status', true );
+					$item_notes       = $item->get_meta( 'item_notes', true );
+					$back_order       = $item->get_meta( 'back_order', true );
+					$price_paid       = $item->get_meta( 'price_paid', true );
+					$uom              = $item->get_meta( 'uom', true );
+					$quantity_shipped = $item->get_meta( 'quantity_shipped', true );*/
+					$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderLine[ $SalesOrderLineNum ]->Item[0]->ItemID[0]->ID[0]              = $sku;
+					$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderLine[ $SalesOrderLineNum ]->Quantity[0]                            = $quantity;
+					$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderLine[ $SalesOrderLineNum ]->UserArea[0]->Property[0]->NameValue[0] = $itemID;
+					$SalesOrderLineNum ++;
+				}
 			}
 		}
 
