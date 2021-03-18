@@ -122,14 +122,6 @@ function epim_options_page() {
                         </td>
                     </tr>
                     <tr>
-                        <th style="width: 250px;"><label for="start_date">Update by product changed since:</label></th>
-                        <td><input type="text" class="custom_date" name="start_date" id="start_date" value=""/>&nbsp;<button
-                                    id="UpdateSince" class="button">Update
-                            </button>&nbsp; &nbsp;<span class="modal UpdateSince"><img
-                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
-                        </td>
-                    </tr>
-                    <tr>
                         <td colspan="2" style="padding-left: 0; padding-top: 0;">NB if you have added new Categories in
                             ePim, Create and Update those first as per below.
                             <hr>

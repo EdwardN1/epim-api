@@ -168,6 +168,12 @@ function get_epimaapi_all_changed_products_since( $datetime = '2002-10-02T10:00:
 	return $r;
 }
 
+function get_epimaapi_get_branch_stock_since( $branch, $datetime ) {
+	$r         = epimaapi_make_api_call( 'StockForBranchUpdatedSince/'.$branch.'?ChangedSinceUTC=' . $datetime );
+	//$r = epimaapi_make_api_call('https://epim.azure-api.net/Grahams/api/ProductsUpdatedSince?ChangedSinceUTC=' . '2020-01-06T10:00:00-00:00');
+	return $r;
+}
+
 /**
  *
  * *****************************Helpers*********************************************
