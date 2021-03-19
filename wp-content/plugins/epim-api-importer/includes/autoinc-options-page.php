@@ -257,7 +257,7 @@ function epim_options_page() {
                         <th scope="row"><label for="epim_no_price_or_stock">Do Not Import Branch Stock or Price</label></th>
                         <?php $options = get_option( 'epim_no_price_or_stocks' );?>
                         <td>
-                            <input type="checkbox" id="epim_no_price_or_stocks" name="epim_no_price_or_stocks[checkbox_value]" value="1" <?php echo checked( 1, $options['checkbox_value'], false );?>/>
+                            <input type="checkbox" id="epim_no_price_or_stocks" name="epim_no_price_or_stocks[checkbox_value]" value="1" <?php echo checked( '1', $options['checkbox_value'], false );?>/>
                         </td>
                     </tr>
                 </table>
