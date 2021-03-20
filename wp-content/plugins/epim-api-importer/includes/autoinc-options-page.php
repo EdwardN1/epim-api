@@ -38,6 +38,13 @@ function epim_register_settings() {
 	register_setting( 'epim_options_group', 'epim_api_retrieval_method' );
 	add_option( 'epim_no_price_or_stocks', '1' );
 	register_setting( 'epim_options_group', 'epim_no_price_or_stocks' );
+
+    add_option( 'epim_enable_scheduled_updates', '0' );
+    register_setting( 'epim_schedule_options_group', 'epim_enable_scheduled_updates' );
+    add_option( 'epim_update_schedule', 'daily' );
+    register_setting( 'epim_schedule_options_group', 'epim_update_schedule' );
+    add_option( 'epim_schedule_log', '' );
+    register_setting( 'epim_schedule_options_group', 'epim_schedule_log' );
 }
 
 add_action( 'admin_init', 'epim_register_settings' );
@@ -64,6 +71,8 @@ function epim_options_page() {
                 Management</a>
             <a href="?page=epim&tab=epim_settings"
                class="nav-tab <?php echo $active_tab == 'epim_settings' ? 'nav-tab-active' : ''; ?>">ePim Settings</a>
+            <a href="?page=epim&tab=epim_updates"
+               class="nav-tab <?php echo $active_tab == 'epim_updates' ? 'nav-tab-active' : ''; ?>">ePim Update Schedule</a>
 			<?php
 			$current_user = wp_get_current_user();
 			$email        = (string) $current_user->user_email;
@@ -257,13 +266,54 @@ function epim_options_page() {
                         <th scope="row"><label for="epim_no_price_or_stock">Do Not Import Branch Stock or Price</label></th>
                         <?php $options = get_option( 'epim_no_price_or_stocks' );?>
                         <td>
-                            <input type="checkbox" id="epim_no_price_or_stocks" name="epim_no_price_or_stocks[checkbox_value]" value="1" <?php echo checked( '1', $options['checkbox_value'], false );?>/>
+                            <input type="checkbox" id="epim_no_price_or_stocks" name="epim_no_price_or_stocks[checkbox_value]" value="1" <?php  if(is_array($options)) echo checked( '1', $options['checkbox_value'], false );?>/>
                         </td>
                     </tr>
                 </table>
 				<?php submit_button(); ?>
             </form>
 		<?php endif; ?>
+        <?php if ( $active_tab == 'epim_updates' ): ?>
+            <h1>ePim Schedule Settings</h1>
+            <form method="post" action="options.php">
+                <?php settings_fields( 'epim_schedule_options_group' ); ?>
+                <table class="form-table">
+                     <tr>
+                        <th scope="row"><label for="epim_update_schedule">Stock Update Schedule</label></th>
+                        <td>
+                            <select name="epim_update_schedule" id="epim_update_schedule">
+                                <option value="daily" <?php if ( get_option( 'epim_update_schedule' ) == 'daily' ) {
+                                    echo 'selected';
+                                } ?>>Daily
+                                </option>
+                                <option value="minutes" <?php if ( get_option( 'epim_update_schedule' ) == 'minutes' ) {
+                                    echo 'selected';
+                                } ?>>Every 10 minutes
+                                </option>
+
+                            </select>
+
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="epim_enable_scheduled_updates">Enable Scheduled Updates</label></th>
+                        <?php $options = get_option( 'epim_enable_scheduled_updates' ); ?>
+                        <td>
+                            <input type="checkbox" id="epim_enable_scheduled_updates" name="epim_enable_scheduled_updates[checkbox_value]" value=1 <?php if(is_array($options)) echo checked( 1, $options['checkbox_value'], false );?>/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <p>
+                                <strong>Last Update Log:</strong>
+                            </p>
+                            <hr>
+                            <p><?php echo get_option('epim_schedule_log');?></p>
+                        </td>
+                    </tr>
+                </table>
+                <?php submit_button(); ?>
+            </form>
+        <?php endif; ?>
 		<?php
 		$current_user = wp_get_current_user();
 		$email        = (string) $current_user->user_email;
