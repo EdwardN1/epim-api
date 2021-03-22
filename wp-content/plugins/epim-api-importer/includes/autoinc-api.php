@@ -313,7 +313,8 @@ function epimaapi_getBranchID( $id ) {
 
 		while ( $loop->have_posts() ) : $loop->the_post();
 			$ePim_ID = get_post_meta( get_the_ID(), '_branch_epim_id', true );
-			if ( $id === $ePim_ID ) {
+            //error_log('$id = ' . $id . ' $epim_id = ' . $ePim_ID);
+			if ( $id == $ePim_ID ) {
 				//error_log('$id = ' . $id . ' $epim_id = ' . $ePim_ID);
 				$res = get_the_ID();
 				break;
@@ -322,6 +323,10 @@ function epimaapi_getBranchID( $id ) {
 	endif;
 
 	wp_reset_postdata();
+
+	if(!$res) {
+	    error_log('could not find a branch with ePim ID of: '.$id);
+    }
 
 	return $res;
 }
