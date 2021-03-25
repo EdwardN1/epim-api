@@ -376,6 +376,7 @@ function get_customer_XML_record( $user_id ) {
 		}
 		$AddressLine1 = get_user_meta( $user_id, 'billing_address_1', true );
 		$AddressLine2 = get_user_meta( $user_id, 'billing_address_2', true );
+		$AddressLine3 = get_user_meta( $user_id, 'billing_state', true );
 		$CityName     = get_user_meta( $user_id, 'billing_city', true );
 		$PostalCode   = get_user_meta( $user_id, 'billing_postcode', true );
 		$DialNumber   = get_user_meta( $user_id, 'billing_phone', true );
@@ -407,6 +408,9 @@ function get_customer_XML_record( $user_id ) {
 		}
 		if ( $xml->xpath( '//x:DataArea' )[0]->CustomerPartyMaster[0]->Location[0]->Address[0]->AddressLine[1] ) {
 			$xml->xpath( '//x:DataArea' )[0]->CustomerPartyMaster[0]->Location[0]->Address[0]->AddressLine[1] = $AddressLine2;
+		}
+		if ( $xml->xpath( '//x:DataArea' )[0]->CustomerPartyMaster[0]->Location[0]->Address[0]->AddressLine[2] ) {
+			$xml->xpath( '//x:DataArea' )[0]->CustomerPartyMaster[0]->Location[0]->Address[0]->AddressLine[2] = $AddressLine3;
 		}
 		if ( $xml->xpath( '//x:DataArea' )[0]->CustomerPartyMaster[0]->Location[0]->Address[0]->AddressLine[2] ) {
 			$xml->xpath( '//x:DataArea' )[0]->CustomerPartyMaster[0]->Location[0]->Address[0]->AddressLine[2] = '';
