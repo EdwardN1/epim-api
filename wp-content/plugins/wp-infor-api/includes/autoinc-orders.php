@@ -12,6 +12,20 @@ add_action( 'woocommerce_thankyou', 'wpiai_order_added' );
 function wpiai_order_added( $order_id ) {
 	$order = wc_get_order( $order_id );
 	/* Insert your code */
+	/**
+	 *
+	 * Add in checks....
+	 *
+	 * If Guest Account -
+	 *    -> Create Contact
+	 *    -> Create Shipto
+	 *    -> Then Send Order
+	 *
+	 * if Customer Account -
+	 *   -> Selected ShipTo or Need to Create ShipTo
+	 *   -> Then Create Order
+	 *
+	 */
 	if($order) {
 		if($order->get_created_via()!='rest-api') {
 			$url        = get_option( 'wpiai_sales_order_url' );
@@ -215,6 +229,9 @@ function wpiai_get_order_XML( $order_id, $action ) {
 		//$SalesOrderHeader_DocumentID_ID = $CustomerPartyID;
 		$AlternateDocumentID_ID_schemeAgencyID = $CustomerPartyID;
 		$AlternateDocumentID_ID                = $order->get_meta( 'po_reference', true );
+		/**
+		 * Add in po_reference meta data field into front end;
+		 */
 		$Reference_NameValue_0                 = $order->get_meta( 'shipping_instructions', true );
 		$Reference_NameValue_1                 = $order->get_total();
 
@@ -231,7 +248,16 @@ function wpiai_get_order_XML( $order_id, $action ) {
 		//$ShipToParty_Location_Address_AddressLine_3 = $order->get_billing_address_2();
 		$ShipToParty_Location_Address_CityName   = $order->get_billing_city();
 		$ShipToParty_Location_Address_PostalCode = $order->get_billing_postcode();
-		//$TransportationMethodCode = '';
+		//$TransportationMethodCode = ''; //07 for Click and Collect 04 for Carrier delivery
+		/**
+		 * This is how the order is shipped need to check the:
+		 * shipping_lines
+		 *  -> method_id
+		 *  -> method_title
+		 *  -> total
+		 *
+		 *  Need to create a line as an order line to the order for shipping
+		 */
 		//$RequiredDeliveryDateTime = '';
 		$UserArea_Property_3_NameValue = $WooCustomerID;
 
