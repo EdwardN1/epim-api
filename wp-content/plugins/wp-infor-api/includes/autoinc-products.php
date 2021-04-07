@@ -8,15 +8,18 @@
 
 function getWarehouseName( $whse ) {
 	$warehouseNames = get_option( 'wpiai_warehouse_names' );
+	//error_log('$warehouseNames '.print_r($warehouseNames,true));
 	$warehouseIDs   = get_option( 'wpiai_warehouse_ids' );
-
-	if(is_array($warehouseIDs)) {
+	//error_log('$warehouseIDs '.print_r($warehouseIDs,true));
+	if(!is_array($warehouseIDs)) {
 	    return false;
     }
 
 	if(!array_search( $whse, $warehouseIDs )) {
 		return false;
 	}
+
+	//error_log('Found '.$whse);
 
 	return $warehouseNames[ array_search( $whse, $warehouseIDs ) ];
 }
@@ -27,8 +30,10 @@ function getPricesQuantities( $response ) {
 	if(is_array($response)) {
 		foreach ( $response as $rec ) {
 			if ( array_key_exists( 'whse', $rec ) ) {
+				//error_log('Warehouse = '.$rec['whse']);
 				$whseName = getWarehouseName( $rec['whse'] );
 				if($whseName) {
+					//error_log('Looking up product in warehouse '.$whseName);
 					if ( array_key_exists( 'prod', $rec ) ) {
 						if ( array_key_exists( 'price', $rec ) ) {
 							if ( array_key_exists( 'netavail', $rec ) ) {
@@ -39,12 +44,17 @@ function getPricesQuantities( $response ) {
 								$resRec['price']         = $rec['price'];
 								$resRec['quantity']      = $rec['netavail'];
 								$res[]                   = $resRec;
+								//error_log(print_r($resRec,true));
 							}
 						}
 					}
+				} else {
+					//$res['error'] = 'Warehouse does not exist - '.$rec['whse'];
 				}
 			}
 		}
+	} else {
+		//$res['error'] = 'Response is empty';
 	}
 
 	return $res;

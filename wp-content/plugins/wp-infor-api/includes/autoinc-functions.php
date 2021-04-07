@@ -122,13 +122,20 @@ function wpiai_get_infor_api_response($url,$data) {
 
     curl_setopt($ch, CURLOPT_URL, $url);
 
-    curl_setopt($ch, CURLOPT_POST, true);
+    if($data==='get') {
+	    //curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    } else {
+	    curl_setopt($ch, CURLOPT_POST, true);
+	    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    }
+
+
 
 	$headers[] = "Content-Type: application/json";
 	$headers[]= "TenantID: ERFELECTRIC_TRN";
     $headers[] = "Authorization: Bearer " . $access_token;
 
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+
 
     curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
     curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
@@ -136,6 +143,24 @@ function wpiai_get_infor_api_response($url,$data) {
     $apicall = curl_exec($ch);
     curl_close($ch);
     return $apicall;
+}
+
+function wpiai_get_product_updates() {
+	$url = get_option('wpiai_product_pricing_updates_api_url');
+	$operator = get_option('wpiai_product_pricing_updates_operator');
+	$restartRowID = get_option('wpiai_product_pricing_updates_restartRowId');
+	$lookbackExp = get_option('wpiai_product_pricing_updates_lookbackExp');
+	$ionRespStyle = get_option('wpiai_product_pricing_updates_ionapiRespStyle');
+	$url .= '?operator='.$operator.'&restartRowId='.$restartRowID.'&lookbackExp='.urlencode($lookbackExp).'&ionapiRespStyle='.$ionRespStyle;
+	$request = 'get';
+	$api = wpiai_get_infor_api_response($url,$request);
+	$response = json_decode($api);
+	if(is_object($response)) {
+		return $response->result;
+	} else {
+		return false;
+	}
+
 }
 
 function wpiai_get_test_response() {

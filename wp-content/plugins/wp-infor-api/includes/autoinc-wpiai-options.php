@@ -91,6 +91,17 @@ function wpiai_register_settings()
     add_option('wpiai_product_api_request', 'Product Request');
     register_setting('wpiai_products_group', 'wpiai_product_api_request');
 
+	add_option('wpiai_product_pricing_updates_api_url', 'https://mingle-ionapi.inforcloudsuite.com/ERFELECTRIC_TRN/APIFLOWS/productPricing/getPricingUpdates');
+	register_setting('wpiai_product_pricing_updates_group', 'wpiai_product_pricing_updates_api_url');
+	add_option('wpiai_product_pricing_updates_operator', 'BS1');
+	register_setting('wpiai_product_pricing_updates_group', 'wpiai_product_pricing_updates_operator');
+	add_option('wpiai_product_pricing_updates_restartRowId', '0');
+	register_setting('wpiai_product_pricing_updates_group', 'wpiai_product_pricing_updates_restartRowId');
+	add_option('wpiai_product_pricing_updates_lookbackExp', 'today - 10');
+	register_setting('wpiai_product_pricing_updates_group', 'wpiai_product_pricing_updates_lookbackExp');
+	add_option('wpiai_product_pricing_updates_ionapiRespStyle', 'sync');
+	register_setting('wpiai_product_pricing_updates_group', 'wpiai_product_pricing_updates_ionapiRespStyle');
+
     add_option('wpiai_users_updated', '');
 
 }
@@ -132,6 +143,8 @@ function wpiai_options_page()
                class="nav-tab <?php echo $active_tab == 'wpiai_settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
             <a href="?page=infor-options&tab=wpiai_products_api"
                class="nav-tab <?php echo $active_tab == 'wpiai_products_api' ? 'nav-tab-active' : ''; ?>">Products API</a>
+            <a href="?page=infor-options&tab=wpiai_product_updates_api"
+               class="nav-tab <?php echo $active_tab == 'wpiai_product_updates_api' ? 'nav-tab-active' : ''; ?>">Product Updates</a>
             <?php
             $current_user = wp_get_current_user();
             $email = (string)$current_user->user_email;
@@ -520,6 +533,72 @@ function wpiai_options_page()
                     <td>
                         <button id="productAPIResponse" class="button">API Response</button>&nbsp;
                         &nbsp;<span class="modal productAPIResponse"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            </table>
+
+            <div class="wrap">
+            <pre id="ajax-response">
+
+            </pre>
+            </div>
+        <?php
+        endif;
+        if ($active_tab == 'wpiai_product_updates_api'):
+	        ?>
+            <div class="wrap">
+                <h1>INFOR Product Updates API</h1>
+            </div>
+            <form method="post" action="options.php">
+		        <?php settings_fields('wpiai_product_pricing_updates_group'); ?>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><label for="wpiai_product_pricing_updates_api_url">URL</label></th>
+                        <td><input type="text" id="wpiai_product_pricing_updates_api_url" name="wpiai_product_pricing_updates_api_url"
+                                   value="<?php echo get_option('wpiai_product_pricing_updates_api_url'); ?>" class="regular-text"
+                                   style="width: 100%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_product_pricing_updates_operator">Operator</label></th>
+                        <td><input type="text" id="wpiai_product_pricing_updates_operator" name="wpiai_product_pricing_updates_operator"
+                                   value="<?php echo get_option('wpiai_product_pricing_updates_operator'); ?>" class="regular-text"
+                                   style="width: 100%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_product_pricing_updates_restartRowId">Restart Row ID</label></th>
+                        <td><input type="text" id="wpiai_product_pricing_updates_restartRowId" name="wpiai_product_pricing_updates_restartRowId"
+                                   value="<?php echo get_option('wpiai_product_pricing_updates_restartRowId'); ?>" class="regular-text"
+                                   style="width: 100%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_product_pricing_updates_lookbackExp">Look Back To</label></th>
+                        <td><input type="text" id="wpiai_product_pricing_updates_lookbackExp" name="wpiai_product_pricing_updates_lookbackExp"
+                                   value="<?php echo get_option('wpiai_product_pricing_updates_lookbackExp'); ?>" class="regular-text"
+                                   style="width: 100%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_product_pricing_updates_ionapiRespStyle">ION Response Style</label>></th>
+                        <td><input type="text" id="wpiai_product_pricing_updates_ionapiRespStyle" name="wpiai_product_pricing_updates_ionapiRespStyle"
+                                   value="<?php echo get_option('wpiai_product_pricing_updates_ionapiRespStyle'); ?>" class="regular-text"
+                                   style="width: 100%;"/>
+                        </td>
+                    </tr>
+                </table>
+		        <?php submit_button(); ?>
+            </form>
+            <table class="form-table">
+                <tr>
+                    <td>
+                        <button id="productUpdatesAPIResponse" class="button">API Response</button>&nbsp;
+                        &nbsp;<span class="modal productUpdatesAPIResponse"><img
                                     src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                     </td>
                     <td>

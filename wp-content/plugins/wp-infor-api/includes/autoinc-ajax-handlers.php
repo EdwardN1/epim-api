@@ -28,6 +28,8 @@ add_action( 'wp_ajax_wpiai_get_contact_xml', 'ajax_get_wpiai_get_contact_xml' );
 
 add_action( 'wp_ajax_wpiai_get_product_api_response', 'ajax_wpiai_get_product_api_response' );
 
+add_action( 'wp_ajax_wpiai_get_product_updates_api_response', 'ajax_wpiai_get_product_updates_api_response' );
+
 function ajax_get_wpiai_get_access_token() {
 	wpiai_api_checkSecure();
 	header( "Content-Type: application/json" );
@@ -69,6 +71,14 @@ function ajax_wpiai_get_product_api_response() {
 	//echo $response;
     exit;
 }
+
+function ajax_wpiai_get_product_updates_api_response() {
+	wpiai_api_checkSecure();
+	header( "Content-Type: application/json" );
+	echo json_encode(wpiai_get_product_updates());
+	exit;
+}
+
 
 function ajax_get_wpiai_get_sales_order_xml() {
 	wpiai_api_checkSecure();
