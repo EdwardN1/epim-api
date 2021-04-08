@@ -6,6 +6,24 @@
  *
  */
 
+function wpiai_get_product_updates() {
+	$url = get_option('wpiai_product_pricing_updates_api_url');
+	$operator = get_option('wpiai_product_pricing_updates_operator');
+	$restartRowID = get_option('wpiai_product_pricing_updates_restartRowId');
+	$lookbackExp = get_option('wpiai_product_pricing_updates_lookbackExp');
+	$ionRespStyle = get_option('wpiai_product_pricing_updates_ionapiRespStyle');
+	$url .= '?operator='.$operator.'&restartRowId='.$restartRowID.'&lookbackExp='.urlencode($lookbackExp).'&ionapiRespStyle='.$ionRespStyle;
+	$request = 'get';
+	$api = wpiai_get_infor_api_response($url,$request);
+	$response = json_decode($api);
+	if(is_object($response)) {
+		return $response->result;
+	} else {
+		return false;
+	}
+
+}
+
 function getWarehouseName( $whse ) {
 	$warehouseNames = get_option( 'wpiai_warehouse_names' );
 	//error_log('$warehouseNames '.print_r($warehouseNames,true));
@@ -73,6 +91,7 @@ function createProductsRequest( $customer, $products ) {
 	if ( is_array( $products ) ) {
 		$prodStr = '';
 		foreach ($products as $product) {
+			//error_log(print_r($product,true));
 			$prodStr .= '{"seqno": 1,"prod": "' . $product . '","qtyord": 1,"unit": "EACH"},';
 		}
 		$prodStr = rtrim($prodStr,',');
