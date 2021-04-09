@@ -106,6 +106,16 @@ function wpiai_get_woo_skus_ids( $max, $seconds ) {
 	return $res;
 }
 
+function wpiai_get_product_id_by_sku( $sku ) {
+	global $wpdb;
+
+	$product_id = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key='_sku' AND meta_value='%s' LIMIT 1", $sku ) );
+
+	if ( $product_id ) return $product_id;
+
+	return null;
+}
+
 function wpiai_process_updated_products() {
 	$timeStart   = microtime( true );
 	$updatedProducts = json_decode( wpiai_get_product_updates() );
@@ -132,7 +142,7 @@ function wpiai_process_updated_products() {
 						$price['customer_id'] = $user_id;
 						$price['price'] = $productPrice['price'];
 						$price['SKU'] = $productPrice['SKU'];
-						$price['product_id'] = wc_get_product_id_by_sku($productPrice['SKU']);
+						$price['product_id'] = wpiai_get_product_id_by_sku($productPrice['SKU']);
 						$productUpdateArray[] = $price;
 					}
 				}
