@@ -21,7 +21,7 @@ add_action( 'wpiai_every_day_action', 'wpiai_do_every_day' );
 function wpiai_do_every_day() {
 	//do something every day
 	error_log( 'WP Cron is working....Every day Event' );
-	//wpiai_process_updated_products();
+	wpiai_process_updated_products();
 }
 
 function wpiai_do_every_minute() {
@@ -132,6 +132,7 @@ function wpiai_process_updated_products() {
 						$price['customer_id'] = $user_id;
 						$price['price'] = $productPrice['price'];
 						$price['SKU'] = $productPrice['SKU'];
+						$price['product_id'] = wc_get_product_id_by_sku($productPrice['SKU']);
 						$productUpdateArray[] = $price;
 					}
 				}
