@@ -6,18 +6,62 @@
  *
  */
 
+function wpiai_get_product_updates_page($restartRowID=0) {
+    $url = get_option('wpiai_product_pricing_updates_api_url');
+    $operator = get_option('wpiai_product_pricing_updates_operator');
+    $lookbackExp = get_option('wpiai_product_pricing_updates_lookbackExp');
+    $ionRespStyle = get_option('wpiai_product_pricing_updates_ionapiRespStyle');
+    $url .= '?operator='.$operator.'&restartRowId='.$restartRowID.'&lookbackExp='.urlencode($lookbackExp).'&ionapiRespStyle='.$ionRespStyle;
+    $request = 'get';
+    return wpiai_get_infor_api_response($url,$request);
+}
+
 function wpiai_get_product_updates() {
-	$url = get_option('wpiai_product_pricing_updates_api_url');
-	$operator = get_option('wpiai_product_pricing_updates_operator');
-	$restartRowID = get_option('wpiai_product_pricing_updates_restartRowId');
-	$lookbackExp = get_option('wpiai_product_pricing_updates_lookbackExp');
-	$ionRespStyle = get_option('wpiai_product_pricing_updates_ionapiRespStyle');
-	$url .= '?operator='.$operator.'&restartRowId='.$restartRowID.'&lookbackExp='.urlencode($lookbackExp).'&ionapiRespStyle='.$ionRespStyle;
-	$request = 'get';
-	$api = wpiai_get_infor_api_response($url,$request);
+	$api = wpiai_get_product_updates_page();
 	$response = json_decode($api);
+	$return = array();
 	if(is_object($response)) {
-		return $response->result;
+		$apiResult = json_decode($response->result);
+		if(is_object($apiResult)) {
+            $restartRowID = $apiResult->restartRowId;
+            $customerProducts = $apiResult->customerProducts;
+            if(is_array($customerProducts)) {
+                foreach ($customerProducts as $customerProduct) {
+                    $return[] = $customerProduct;
+                }
+                if($restartRowID != '0') {
+                    while ($restartRowID != '0') {
+
+                        $api = wpiai_get_product_updates_page($restartRowID);
+                        $response = json_decode($api);
+                        if(is_object($response)) {
+                            $apiResult = json_decode($response->result);
+                            if(is_object($apiResult)) {
+                                $restartRowID = $apiResult->restartRowId;
+                                $customerProducts = $apiResult->customerProducts;
+                                if(is_array($customerProducts)) {
+                                    foreach ($customerProducts as $customerProduct) {
+                                        $return[] = $customerProduct;
+                                    }
+                                } else {
+                                    $restartRowID = 0;
+                                }
+                            } else {
+                                $restartRowID = 0;
+                            }
+                        } else {
+                            $restartRowID = 0;
+                        }
+                    }
+                }
+                return $return;
+            } else {
+                return false;
+            }
+        } else {
+		    return false;
+        }
+
 	} else {
 		return false;
 	}
@@ -55,14 +99,19 @@ function getPricesQuantities( $response ) {
 					if ( array_key_exists( 'prod', $rec ) ) {
 						if ( array_key_exists( 'price', $rec ) ) {
 							if ( array_key_exists( 'netavail', $rec ) ) {
-								$resRec                  = array();
-								$resRec['warehouseID']   = $rec['whse'];
-								$resRec['warehouseName'] = $whseName;
-								$resRec['SKU']           = $rec['prod'];
-								$resRec['price']         = $rec['price'];
-								$resRec['quantity']      = $rec['netavail'];
-								$res[]                   = $resRec;
-								//error_log(print_r($resRec,true));
+							    $productID = wpiai_get_product_id_by_sku($rec['prod']);
+							    if($productID) {
+                                    $resRec                  = array();
+                                    $resRec['warehouseID']   = $rec['whse'];
+                                    $resRec['warehouseName'] = $whseName;
+                                    $resRec['SKU']           = $rec['prod'];
+                                    $resRec['productID'] = $productID;
+                                    $resRec['price']         = $rec['price'];
+                                    $resRec['quantity']      = $rec['netavail'];
+                                    $res[]                   = $resRec;
+                                    //error_log(print_r($resRec,true));
+                                }
+
 							}
 						}
 					}
@@ -116,6 +165,14 @@ function getDefaultProductPrices($customer,$products) {
 		}
 	}
 	return $res;
+}
+
+function wpiai_get_product_id_by_sku($sku)
+{
+    global $wpdb;
+    $product_id = $wpdb->get_var($wpdb->prepare("SELECT post_id FROM $wpdb->postmeta WHERE meta_key='_sku' AND meta_value='%s' LIMIT 1", $sku));
+    if ($product_id) return $product_id;
+    return null;
 }
 
 function getBranchStockAndPrice($customer,$products) {
