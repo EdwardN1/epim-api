@@ -181,7 +181,8 @@ function wpiai_process_updated_products()
             $customerProductList[] = $customerProductItem;
         }
     }
-    error_log(print_r($customerProductList, true));
+    //error_log(print_r($customerProductList, true));
+
     $timeEnd = microtime(true);
     $time = $timeEnd - $timeStart;
     error_log('wpiai_process_updated_products took ' . $time . ' seconds');
