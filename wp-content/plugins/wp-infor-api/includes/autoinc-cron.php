@@ -166,22 +166,52 @@ function wpiai_process_updated_products()
                 }
             }
         }
-        $productsList = array();
-        foreach ($defaultPricesFor as $defaultPrice) {
-            $productsList[] = $defaultPrice['product_CSD_ID'];
-        }
-        $defaultBranchStockAndPrice = getBranchStockAndPrice('',$productsList);
 
-        $customerProductList = array();
-        foreach ($customerPricesFor as $customerPrice) {
-            $customerProductItem = array();
-            $customerProductItem['userID'] = $customerPrice['customer'];
-            $customerProductItem['customer_CSD_ID'] = $customerPrice['customer_CSD_ID'];
-            $customerProductItem['productData'] = getBranchStockAndPrice($customerPrice['customer_CSD_ID'],$customerPrice['product_CSD_ID']);
-            $customerProductList[] = $customerProductItem;
+
+        $defaultwhse = get_option('wpiai_default_warehouse');
+        if($defaultwhse) {
+            $productsList = array();
+            foreach ($defaultPricesFor as $defaultPrice) {
+                $productsList[] = $defaultPrice['product_CSD_ID'];
+            }
+            $defaultBranchStockAndPrice = getBranchStockAndPrice('',$productsList);
+            foreach ($defaultBranchStockAndPrice as $item) {
+                if($item['warehouseID']==$defaultwhse) {
+                    $product = wc_get_product( $item['productID'] );
+                    $oldPrice = $product->get_price();
+                    $product->set_price( round($item['price'],2) );
+                    $product->set_regular_price( round($item['price'],2) ); // To be sure
+                    $product->save();
+                    //error_log('Price for : '.$product->get_sku().' updated from '.$oldPrice.' to '.$product->get_price());
+                    //break;
+                }
+            }
+            $customerProductList = array();
+            foreach ($customerPricesFor as $customerPrice) {
+                $customerProductItem = array();
+                $customerProductItem['userID'] = $customerPrice['customer'];
+                $customerProductItem['customer_CSD_ID'] = $customerPrice['customer_CSD_ID'];
+                $customerProductItem['productData'] = getBranchStockAndPrice($customerPrice['customer_CSD_ID'],$customerPrice['product_CSD_ID']);
+                $customerProductList[] = $customerProductItem;
+            }
+            foreach ($customerProductList as $customerProduct) {
+                $metaField = 'wpiai_customer_price_'.$customerProduct['userID'];
+                $productData = $customerProduct['productData'];
+
+                if(is_array($productData)) {
+                    foreach ($productData as $productDatum) {
+                        if($productDatum['warehouseID']==$defaultwhse) {
+                            update_post_meta($productDatum['productID'],$metaField, $productDatum['price']);
+                        }
+                    }
+                }
+
+            }
+            //error_log(print_r($customerProductList, true));
         }
+
     }
-    //error_log(print_r($customerProductList, true));
+
 
     $timeEnd = microtime(true);
     $time = $timeEnd - $timeStart;
