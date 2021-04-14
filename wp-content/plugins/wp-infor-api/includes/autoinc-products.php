@@ -199,6 +199,20 @@ function get_infor_price($price,$product) {
 	}
 }
 
+function check_customer_price($price,$product) {
+	$userID = get_current_user_id();
+	if($userID == 0) {
+		return $price;
+	}
+	if(!metadata_exists('post',$product->get_id(),'wpiai_customer_price_'.$userID)) {
+		return $price;
+	}
+	return get_post_meta($product->get_id(),'wpiai_customer_price_'.$userID,true);
+}
+
+add_filter('woocommerce_product_get_price', 'check_customer_price', 99, 2);
+add_filter('woocommerce_product_get_regular_price', 'check_customer_price', 99, 2);
+
 //add_filter('woocommerce_product_get_price', 'get_infor_price', 99, 2);
 //add_filter('woocommerce_product_get_regular_price', 'get_infor_price', 99, 2);
 
