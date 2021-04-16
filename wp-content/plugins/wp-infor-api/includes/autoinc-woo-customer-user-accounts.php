@@ -208,7 +208,7 @@ function wpiai_contacts_repeater_meta_box($user) {
                                     <label for="contact_phone_channel[]">Communication Options Phone:</label>
                                 </th>
                                 <td>
-                                    <input type="checkbox" class="regular-text" name="contact_phone_channel[]" value="1" <?php checked(1 == $field['contact_phone_channel']);?>/>
+                                    <input type="checkbox" class="" name="contact_phone_channel[]" value="1" <?php checked(1 == $field['contact_phone_channel']);?>/>
                                 </td>
                             </tr>
                             <tr>
@@ -216,7 +216,7 @@ function wpiai_contacts_repeater_meta_box($user) {
                                     <label for="contact_fax_channel[]">Communication Options Fax:</label>
                                 </th>
                                 <td>
-                                    <input type="checkbox" class="regular-text" name="contact_fax_channel[]" value="1" <?php checked(1 == $field['contact_fax_channel']);?>/>
+                                    <input type="checkbox" class="" name="contact_fax_channel[]" value="1" <?php checked(1 == $field['contact_fax_channel']);?>/>
                                 </td>
                             </tr>
                             <tr>
@@ -224,7 +224,7 @@ function wpiai_contacts_repeater_meta_box($user) {
                                     <label for="contact_mail_channel[]">Communication Options Mail:</label>
                                 </th>
                                 <td>
-                                    <input type="checkbox" class="regular-text" name="contact_mail_channel[]" value="1" <?php checked(1 == $field['contact_mail_channel']);?>/>
+                                    <input type="checkbox" class="" name="contact_mail_channel[]" value="1" <?php checked(1 == $field['contact_mail_channel']);?>/>
                                 </td>
                             </tr>
                             <tr>
@@ -232,7 +232,7 @@ function wpiai_contacts_repeater_meta_box($user) {
                                     <label for="contact_email_channel[]">Communication Options Email:</label>
                                 </th>
                                 <td>
-                                    <input type="checkbox" class="regular-text" name="contact_email_channel[]" value="1" <?php checked(1 == $field['contact_email_channel']);?>/>
+                                    <input type="checkbox" class="" name="contact_email_channel[]" value="1" <?php checked(1 == $field['contact_email_channel']);?>/>
                                 </td>
                             </tr>
 							<tr>
@@ -377,7 +377,7 @@ function wpiai_contacts_repeater_meta_box($user) {
                             <label for="contact_phone_channel[]">Communication Options Phone:</label>
                         </th>
                         <td>
-                            <input type="checkbox" class="regular-text" name="contact_phone_channel[]" value="1"/>
+                            <input type="checkbox" class="" name="contact_phone_channel[]" value="1"/>
                         </td>
                     </tr>
                     <tr>
@@ -385,7 +385,7 @@ function wpiai_contacts_repeater_meta_box($user) {
                             <label for="contact_fax_channel[]">Communication Options Fax:</label>
                         </th>
                         <td>
-                            <input type="checkbox" class="regular-text" name="contact_fax_channel[]" value="1"/>
+                            <input type="checkbox" class="" name="contact_fax_channel[]" value="1"/>
                         </td>
                     </tr>
                     <tr>
@@ -393,7 +393,7 @@ function wpiai_contacts_repeater_meta_box($user) {
                             <label for="contact_mail_channel[]">Communication Options Mail:</label>
                         </th>
                         <td>
-                            <input type="checkbox" class="regular-text" name="contact_mail_channel[]" value="1"/>
+                            <input type="checkbox" class="" name="contact_mail_channel[]" value="1"/>
                         </td>
                     </tr>
                     <tr>
@@ -401,7 +401,7 @@ function wpiai_contacts_repeater_meta_box($user) {
                             <label for="contact_email_channel[]">Communication Options Email:</label>
                         </th>
                         <td>
-                            <input type="checkbox" class="regular-text" name="contact_email_channel[]" value="1"/>
+                            <input type="checkbox" class="" name="contact_email_channel[]" value="1"/>
                         </td>
                     </tr>
 
