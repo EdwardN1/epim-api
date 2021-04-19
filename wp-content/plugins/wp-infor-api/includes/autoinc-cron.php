@@ -24,6 +24,9 @@ function wpiai_do_every_day()
     //do something every day
     error_log('WP Cron is working....Every day Event');
     wpiai_process_updated_products();
+    //$x = get_organization_contact_details(get_customer_organization(45));
+    //$x = get_customer_details(45);
+    //error_log(print_r($x,true));
 }
 
 function wpiai_do_every_minute()
