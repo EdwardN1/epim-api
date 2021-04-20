@@ -72,12 +72,10 @@ function get_organization_contact_details( $organization_id ) {
 					$ret_contact_detail['first_name']         = $contact_detail['contact_first_name'];
 					$ret_contact_detail['last_name']          = $contact_detail['contact_last_name'];
 					$ret_contact_detail['job_title']          = $contact_detail['contact_job_title'];
-					$ret_contact_detail['country']            = $contact_detail['delivery-country'];
 					$ret_contact_detail['address_line_1']     = $contact_detail['contact_addr_1'];
 					$ret_contact_detail['address_line_2']     = $contact_detail['contact_addr_2'];
 					$ret_contact_detail['address_line_3']     = $contact_detail['contact_addr_3'];
 					$ret_contact_detail['address_line_4']     = $contact_detail['contact_addr_4'];
-					$ret_contact_detail['town_city']          = $contact_detail['delivery-town-city'];
 					$ret_contact_detail['postcode']           = $contact_detail['contact_postcode'];
 					$ret_contact_detail['phone']              = $contact_detail['contact_phone'];
 					$ret_contact_detail['mobile_phone']       = $contact_detail['contact_mobile_phone'];
@@ -98,6 +96,42 @@ function get_organization_contact_details( $organization_id ) {
 	return false;
 }
 
+function wpiai_convert_field_names($fname) {
+	if($fname == 'first_name') return 'contact_first_name';
+	if($fname == 'last_name') return 'contact_last_name';
+	if($fname == 'job_title') return 'contact_job_title';
+	if($fname == 'address_line_1') return 'contact_addr_1';
+	if($fname == 'address_line_2') return 'contact_addr_2';
+	if($fname == 'address_line_3') return 'contact_addr_3';
+	if($fname == 'address_line_4') return 'contact_addr_4';
+	if($fname == 'postcode') return 'contact_postcode';
+	if($fname == 'phone') return 'contact_phone';
+	if($fname == 'mobile_phone') return 'contact_mobile_phone';
+	if($fname == 'email') return 'contact_email';
+	if($fname == 'marketing_by_phone') return 'contact_phone_channel';
+	if($fname == 'marketing_by_fax') return 'contact_fax_channel';
+	if($fname == 'marketing_by_mail') return 'contact_mail_channel';
+	if($fname == 'marketing_by_email') return 'contact_email_channel';
+
+	if($fname == 'contact_first_name') return 'first_name';
+	if($fname == 'contact_last_name') return 'last_name';
+	if($fname == 'contact_job_title') return 'job_title';
+	if($fname == 'contact_addr_1') return 'address_line_1';
+	if($fname == 'contact_addr_2') return 'address_line_2';
+	if($fname == 'contact_addr_3') return 'address_line_3';
+	if($fname == 'contact_addr_4') return 'address_line_4';
+	if($fname == 'contact_postcode') return 'postcode';
+	if($fname == 'contact_phone') return 'phone';
+	if($fname == 'contact_mobile_phone') return 'mobile_phone';
+	if($fname == 'contact_email') return 'email';
+	if($fname == 'contact_phone_channel') return 'marketing_by_phone';
+	if($fname == 'contact_fax_channel') return 'marketing_by_fax';
+	if($fname == 'contact_mail_channel') return 'marketing_by_mail';
+	if($fname == 'contact_email_channel') return 'marketing_by_email';
+
+	return 'field_not_found_error';
+}
+
 function set_organization_contact_details( $organization_id, $contact_id, $contact_details = array() ) {
 	$user = get_users(
 		array(
@@ -114,74 +148,192 @@ function set_organization_contact_details( $organization_id, $contact_id, $conta
 			$old_contact_details = get_user_meta( $user_id, 'wpiai_contacts', true );
 			$new_contact_details = array();
 			if ( is_array( $old_contact_details ) ) {
+				$updated = false;
 				if($contact_id == '0') {
 					//Create New Contact
+					$new_contact = array();
+
+					if(array_key_exists('first_name',$contact_details)) {
+						$new_contact[wpiai_convert_field_names('first_name')] = $contact_details['first_name'];
+						$updated = true;
+					}
+
+					if(array_key_exists('last_name',$contact_details)) {
+						$new_contact[wpiai_convert_field_names('last_name')] = $contact_details['last_name'];
+						$updated = true;
+					}
+
+					if(array_key_exists('job_title',$contact_details)) {
+						$new_contact[wpiai_convert_field_names('job_title')] = $contact_details['job_title'];
+						$updated = true;
+					}
+
+					if(array_key_exists('address_line_1',$contact_details)) {
+						$new_contact[wpiai_convert_field_names('address_line_1')] = $contact_details['address_line_1'];
+						$updated = true;
+					}
+
+					if(array_key_exists('address_line_2',$contact_details)) {
+						$new_contact[wpiai_convert_field_names('address_line_2')] = $contact_details['address_line_2'];
+						$updated = true;
+					}
+
+					if(array_key_exists('address_line_3',$contact_details)) {
+						$new_contact[wpiai_convert_field_names('address_line_3')] = $contact_details['address_line_3'];
+						$updated = true;
+					}
+
+					if(array_key_exists('address_line_4',$contact_details)) {
+						$new_contact[wpiai_convert_field_names('address_line_4')] = $contact_details['address_line_4'];
+						$updated = true;
+					}
+
+					if(array_key_exists('postcode',$contact_details)) {
+						$new_contact[wpiai_convert_field_names('postcode')] = $contact_details['postcode'];
+						$updated = true;
+					}
+
+					if(array_key_exists('phone',$contact_details)) {
+						$new_contact[wpiai_convert_field_names('phone')] = $contact_details['phone'];
+						$updated = true;
+					}
+
+					if(array_key_exists('mobile_phone',$contact_details)) {
+						$new_contact[wpiai_convert_field_names('mobile_phone')] = $contact_details['mobile_phone'];
+						$updated = true;
+					}
+
+					if(array_key_exists('email',$contact_details)) {
+						$new_contact[wpiai_convert_field_names('email')] = $contact_details['email'];
+						$updated = true;
+					}
+
+					if(array_key_exists('marketing_by_phone',$contact_details)) {
+						$new_contact[wpiai_convert_field_names('marketing_by_phone')] = $contact_details['marketing_by_phone'];
+						$updated = true;
+					}
+
+					if(array_key_exists('marketing_by_fax',$contact_details)) {
+						$new_contact[wpiai_convert_field_names('marketing_by_fax')] = $contact_details['marketing_by_fax'];
+						$updated = true;
+					}
+
+					if(array_key_exists('marketing_by_mail',$contact_details)) {
+						$new_contact[wpiai_convert_field_names('marketing_by_mail')] = $contact_details['marketing_by_mail'];
+						$updated = true;
+					}
+
+					if(array_key_exists('marketing_by_email',$contact_details)) {
+						$new_contact[wpiai_convert_field_names('marketing_by_email')] = $contact_details['marketing_by_email'];
+						$updated = true;
+					}
+
+					if($updated) {
+						//$new_contact['contact_CSD_ID'] = '';
+						//$new_contact['contact_CONTACT_ID'] = uniqid();
+						//$new_contact['CREATED_BY'] = 'WOO';
+						$old_contact_details[] = $new_contact;
+						$users_updated = get_option('wpiai_users_updated');
+						if(!is_array($users_updated)) {
+							$users_updated = array();
+						}
+						$users_updated[] = $user_id;
+						if(!update_option('wpiai_users_updated',$users_updated)) {
+							error_log('UserID not saved: '.$user_id);
+						} else {
+							error_log($user_id . ' added to the meta update queue');
+						}
+						update_user_meta($user_id,'wpiai_contacts',$old_contact_details);
+					}
 
 					return get_organization_contact_details($organization_id);
 				}
-				$updated = false;
 				foreach ($old_contact_details as $old_contact_detail) {
 					if($old_contact_detail['contact_CSD_ID']==$contact_id) {
 						$array_keys = array_keys($old_contact_detail);
 						$new_contact_detail = array();
 						foreach ($array_keys as $array_key) {
-							if(array_key_exists($array_key,$contact_details)) {
-								$new_contact_detail[$array_key] = $contact_details[$array_key];
-
+							if(array_key_exists(wpiai_convert_field_names($array_key),$contact_details)) {
+								$new_contact_detail[$array_key] = $contact_details[wpiai_convert_field_names($array_key)];
+								$updated = true;
 							} else {
-
+								$new_contact_detail[$array_key] = $old_contact_detail[$array_key];
 							}
-
 						}
+						$new_array_keys = array_keys($contact_details);
+						foreach ($new_array_keys as $new_array_key) {
+							if(!array_key_exists(wpiai_convert_field_names($new_array_key),$new_contact_detail)) {
+								$new_contact_detail[wpiai_convert_field_names($new_array_key)] = $contact_details[$new_array_key];
+								$updated = true;
+							}
+						}
+						$new_contact_detail['contact_CSD_ID'] = $contact_id;
+						$new_contact_details[] = $new_contact_detail;
 					} else {
 						$new_contact_details[] = $old_contact_detail;
 					}
 				}
 				if($updated) {
 					update_user_meta($user_id,'wpiai_contacts',$new_contact_details);
+					$users_updated = get_option('wpiai_users_updated');
+					if(!is_array($users_updated)) {
+						$users_updated = array();
+					}
+					$users_updated[] = $user_id;
+					if(!update_option('wpiai_users_updated',$users_updated)) {
+						error_log('UserID not saved: '.$user_id);
+					} else {
+						error_log($user_id . ' added to the meta update queue');
+					}
 					return get_organization_contact_details($organization_id);
+				} else {
+					error_log('nothing to update');
 				}
 			} else {
 				$wpiai_contacts = array();
-				$wpiai_contacts[] = $contact_details;
+				$array_keys = array_keys($contact_details);
+				$new_contact = array();
+				foreach ($array_keys as $array_key) {
+					$new_contact[wpiai_convert_field_names($array_key)] = $contact_details[$array_key];
+				}
+				//$new_contact['contact_CSD_ID'] = '';
+				//$new_contact['contact_CONTACT_ID'] = uniqid();
+				//$new_contact['CREATED_BY'] = 'WOO';
+				$wpiai_contacts[] = $new_contact;
 				if(metadata_exists('user',$user_id,'wpiai_contacts')) {
 					update_user_meta($user_id,'wpiai_contacts',$wpiai_contacts);
+					$users_updated = get_option('wpiai_users_updated');
+					if(!is_array($users_updated)) {
+						$users_updated = array();
+					}
+					$users_updated[] = $user_id;
+					if(!update_option('wpiai_users_updated',$users_updated)) {
+						error_log('UserID not saved: '.$user_id);
+					} else {
+						error_log($user_id . ' added to the meta update queue');
+					}
 					return get_organization_contact_details($organization_id);
 				} else {
 					add_user_meta($user_id,'wpiai_contacts',$wpiai_contacts);
+					$users_updated = get_option('wpiai_users_updated');
+					if(!is_array($users_updated)) {
+						$users_updated = array();
+					}
+					$users_updated[] = $user_id;
+					if(!update_option('wpiai_users_updated',$users_updated)) {
+						error_log('UserID not saved: '.$user_id);
+					} else {
+						error_log($user_id . ' added to the meta update queue');
+					}
 					return get_organization_contact_details($organization_id);
 				}
-
 			}
-			$ret_contact_details = array();
-			foreach ( $contact_details as $contact_detail ) {
-				$ret_contact_detail                       = array();
-				$ret_contact_detail['CSD_ID']             = $contact_detail['contact_CSD_ID'];
-				$ret_contact_detail['first_name']         = $contact_detail['contact_first_name'];
-				$ret_contact_detail['last_name']          = $contact_detail['contact_last_name'];
-				$ret_contact_detail['job_title']          = $contact_detail['contact_job_title'];
-				$ret_contact_detail['country']            = $contact_detail['delivery-country'];
-				$ret_contact_detail['address_line_1']     = $contact_detail['contact_addr_1'];
-				$ret_contact_detail['address_line_2']     = $contact_detail['contact_addr_2'];
-				$ret_contact_detail['address_line_3']     = $contact_detail['contact_addr_3'];
-				$ret_contact_detail['address_line_4']     = $contact_detail['contact_addr_4'];
-				$ret_contact_detail['town_city']          = $contact_detail['delivery-town-city'];
-				$ret_contact_detail['postcode']           = $contact_detail['contact_postcode'];
-				$ret_contact_detail['phone']              = $contact_detail['contact_phone'];
-				$ret_contact_detail['mobile_phone']       = $contact_detail['contact_mobile_phone'];
-				$ret_contact_detail['email']              = $contact_detail['contact_email'];
-				$ret_contact_detail['marketing_by_phone'] = $contact_detail['contact_phone_channel'];
-				$ret_contact_detail['marketing_by_fax']   = $contact_detail['contact_fax_channel'];
-				$ret_contact_detail['marketing_by_mail']  = $contact_detail['contact_mail_channel'];
-				$ret_contact_detail['marketing_by_email'] = $contact_detail['contact_email_channel'];
-				$ret_contact_details[]                    = $ret_contact_detail;
-			}
-			if ( ! empty( $ret_contact_details ) ) {
-				return $ret_contact_details;
-			}
+		} else {
+			//error_log('not a customer');
 		}
+	} else {
+		//error_log('User Not Found');
 	}
-
 	return false;
 }
 
