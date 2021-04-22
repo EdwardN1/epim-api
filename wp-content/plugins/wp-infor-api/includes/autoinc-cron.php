@@ -432,128 +432,93 @@ function wpiai_process_user_shiptos($user_id)
     error_log('Finished Processing ShipTos for user_id: ' . $user_id);
 }
 
-function wpiai_compare_contact($index,$keys,$oldvalue,$searchArray) {
-	$i = 0;
-	foreach ($searchArray as $item) {
-		if($oldvalue[$index]==$item[$index]) {
-			foreach ($keys as $key) {
-				if($oldvalue[$key]<>$item[$key]) return $i;
-			}
-		}
-		$i++;
-	}
-	return false;
+function wpiai_array_equal($a, $b) {
+    return (
+        is_array($a)
+        && is_array($b)
+        && count($a) == count($b)
+        && array_diff($a, $b) === array_diff($b, $a)
+    );
+}
+
+function wpiai_different_array_indexes($array1,$array2) {
+    $r = array();
+    if(!is_array($array1)||!is_array($array2)) {
+        error_log('Need two arrays to compare');
+        return false;
+    }
+    if(count($array1)<>count($array2)) {
+        error_log('Compared Arrays are of different sizes, can not compare these');
+        return false;
+    }
+    $i=0;
+    foreach ($array1 as $array1_item) {
+        if(!wpiai_array_equal($array1_item,$array2[$i])) {
+            $r[] = $i;
+        }
+        $i++;
+    }
+    if(count($r)>0) {
+        return $r;
+    }
+    error_log('Arrays are identical');
+    return false;
+}
+
+function wpiai_equalise_arrays($newData,$oldData,$key) {
+    $r = array();
+    //Check for deleted records
+    foreach($oldData as $oldDatum) {
+        foreach ($newData as $newDatum) {
+            if($oldDatum[$key] == $newDatum[$key]) {
+                $r[] = $oldDatum;
+            }
+        }
+    }
+    //Add in new records (added at the end)
+    foreach ($newData as $newDatum) {
+        $found = false;
+        foreach ($r as $oldDatum) {
+            if($oldDatum[$key]==$newDatum[$key]) {
+                $found = true;
+            }
+        }
+        if(!$found) {
+            $r[] = $newDatum;
+        }
+    }
+    //put old data in same order as new data
+    $ret = array();
+    foreach ($newData as $newDatum) {
+        foreach ($r as $oldDatum) {
+            if($newDatum[$key]==$oldDatum[$key]) {
+                $ret[] = $oldDatum[$key];
+            }
+        }
+    }
+    return $ret;
 }
 
 function wpiai_update_csd_contacts($user_id) {
-	$contactRec = get_user_meta($user_id, 'wpiai_contacts', true);
-	if (is_array($contactRec)) {
-		$contactRec_url = get_option('wpiai_contact_url');
-		$contactRec_paramaters = set_messageid(get_option('wpiai_contact_parameters'));
-		$oldContacts = get_user_meta($user_id, 'wpiai_last_contacts', true);
-		$contactChange = array();
-		if (is_array($oldContacts)) {
-			error_log('Processing wpiai_last_contacts for user_id: ' . $user_id);
-			//error_log(print_r($oldContacts,true));
-			foreach ($oldContacts as $old_contact) {
-				$keys = array(
-					'contact_status_code',
-					'contact_first_name',
-					'contact_last_name',
-					'contact_job_title',
-					'contact_addr_1',
-					'contact_addr_2',
-					'contact_addr_3',
-					'contact_addr_4',
-					'contact_email',
-					'contact_postcode',
-					'contact_phone',
-					'contact_mobile_phone',
-					'contact_type',
-					'contact_phone_channel',
-					'contact_fax_channel',
-					'contact_mail_channel',
-					'contact_email_channel'
-				);
-				$different = wpiai_compare_contact('contact_CONTACT_ID',$keys,$old_contact,$contactRec);
-				if ($different) {
-					error_log('Contact Updated');
-					error_log('old contact_CONTACT_ID: ' . $old_contact['contact_CONTACT_ID'] . ', new contact_CONTACT_ID: ' . $contactRec[$different]['contact_CONTACT_ID']);
-					$contactChange[] = $contactRec[$different];
-				}
-				/*$contactRecRecID = array_search($old_contact['contact_CONTACT_ID'], array_column($contactRec, 'contact_CONTACT_ID'));
-				if ($contactRecRecID) {
-					$different = false;
-					if ($contactRec[$contactRecRecID]['contact_status_code'] <> $old_contact['contact_status_code']) {
-						$different = true;
-					}
-					if ($contactRec[$contactRecRecID]['contact_first_name'] <> $old_contact['contact_first_name']) {
-						$different = true;
-					}
-					if ($contactRec[$contactRecRecID]['contact_last_name'] <> $old_contact['contact_last_name']) {
-						$different = true;
-					}
-					if ($contactRec[$contactRecRecID]['contact_job_title'] <> $old_contact['contact_job_title']) {
-						$different = true;
-					}
-					if ($contactRec[$contactRecRecID]['contact_addr_1'] <> $old_contact['contact_addr_1']) {
-						$different = true;
-					}
-					if ($contactRec[$contactRecRecID]['contact_addr_2'] <> $old_contact['contact_addr_2']) {
-						$different = true;
-					}
-					if ($contactRec[$contactRecRecID]['contact_addr_3'] <> $old_contact['contact_addr_3']) {
-						$different = true;
-					}
-					if ($contactRec[$contactRecRecID]['contact_addr_4'] <> $old_contact['contact_addr_4']) {
-						$different = true;
-					}
-					if ($contactRec[$contactRecRecID]['contact_email'] <> $old_contact['contact_email']) {
-						$different = true;
-					}
-					if ($contactRec[$contactRecRecID]['contact_postcode'] <> $old_contact['contact_postcode']) {
-						$different = true;
-					}
-					if ($contactRec[$contactRecRecID]['contact_phone'] <> $old_contact['contact_phone']) {
-						$different = true;
-					}
-					if ($contactRec[$contactRecRecID]['contact_mobile_phone'] <> $old_contact['contact_mobile_phone']) {
-						$different = true;
-					}
-					if ($contactRec[$contactRecRecID]['contact_type'] <> $old_contact['contact_type']) {
-						$different = true;
-					}
-					if ($contactRec[$contactRecRecID]['contact_phone_channel'] <> $old_contact['contact_phone_channel']) {
-						$different = true;
-					}
-					if ($contactRec[$contactRecRecID]['contact_fax_channel'] <> $old_contact['contact_fax_channel']) {
-						$different = true;
-					}
-					if ($contactRec[$contactRecRecID]['contact_mail_channel'] <> $old_contact['contact_mail_channel']) {
-						$different = true;
-					}
-					if ($contactRec[$contactRecRecID]['contact_email_channel'] <> $old_contact['contact_email_channel']) {
-						$different = true;
-					}
-					if ($different) {
-						error_log('Contact Updated');
-						error_log('old contact_CONTACT_ID: ' . $old_contact['contact_CONTACT_ID'] . ', new contact_CONTACT_ID: ' . $contactRec[$contactRecRecID]['contact_CONTACT_ID']);
-						$contactChange[] = $contactRec[$contactRecRecID];
-					}
-				}*/
-			}
-		}
-		if ((count($contactChange) > 0)) {
-			foreach ($contactChange as $update_contact) {
-				$contactRec_xml = get_contact_XML_record($user_id, 'Change', $update_contact);
-				error_log('Contact Change');
-				$updated = wpiai_get_infor_message_multipart_message($contactRec_url, $contactRec_paramaters, $contactRec_xml);
-			}
-			update_user_meta($user_id, 'wpiai_last_contacts', $contactRec);
-		} else {
-			error_log('Contacts have not changed');
-		}
-
+	$contactRecs = get_user_meta($user_id, 'wpiai_contacts', true);
+	if (is_array($contactRecs)) {
+        $oldContacts = get_user_meta($user_id, 'wpiai_last_contacts', true);
+        if(is_array($oldContacts)) {
+            //$oldContacts = wpiai_equalise_arrays($contactRecs,$oldContacts_m,'contact_CONTACT_ID');
+            $changedContacts = wpiai_different_array_indexes($contactRecs,$oldContacts);
+            if($changedContacts) {
+                $contactRec_url = get_option('wpiai_contact_url');
+                $contactRec_paramaters = set_messageid(get_option('wpiai_contact_parameters'));
+                foreach ($changedContacts as $changedContact) {
+                    $contactRec_xml = get_contact_XML_record($user_id, 'Change', $contactRecs[$changedContact]);
+                    error_log('Contact Change: '.$contactRecs[$changedContact]['contact_CONTACT_ID']);
+                    $updated = wpiai_get_infor_message_multipart_message($contactRec_url, $contactRec_paramaters, $contactRec_xml);
+                }
+                update_user_meta($user_id, 'wpiai_last_contacts', $contactRecs);
+            } else {
+                error_log('No contacts to update');
+            }
+        }
 	}
 }
 
@@ -561,32 +526,40 @@ function wpiai_process_user_contacts($user_id)
 {
     error_log('Processing Contacts for user_id: ' . $user_id);
     $contactRec_meta = get_user_meta($user_id, 'wpiai_contacts', true);
+    $lastContactRec_meta = get_user_meta($user_id, 'wpiai_last_contacts', true);
     $contactRec = array();
+    $lastContactRec = array();
+    if(is_array($lastContactRec_meta)) {
+        foreach ($lastContactRec_meta as $lastContactRec_m) {
+            $lastContactRec[] = $lastContactRec_m;
+        }
+    }
     $contactAdd = array();
-    $contactChange = array();
     if (is_array($contactRec_meta)) {
         foreach ($contactRec_meta as $contactRec_m) {
             $contactRec_rec = $contactRec_m;
             if (($contactRec_rec['contact_CSD_ID'] == '') || (!array_key_exists('contact_CSD_ID', $contactRec_rec))) {
-                $contactRec_rec['contact_CREATED_BY'] = 'WOO';
+                //$contactRec_rec['contact_CREATED_BY'] = 'WOO';
                 if (($contactRec_rec['contact_CONTACT_ID'] == '') || (!array_key_exists('contact_CONTACT_ID', $contactRec_rec))) {
                     $contactRec_rec['contact_CONTACT_ID'] = uniqid();
                     $contactAdd[] = $contactRec_rec;
                 }
             } else {
-                $contactRec_rec['contact_CREATED_BY'] = 'EXTERNAL';
+                //$contactRec_rec['contact_CREATED_BY'] = 'EXTERNAL';
             }
             if (($contactRec_rec['contact_CONTACT_ID'] == '') || (!array_key_exists('contact_CONTACT_ID', $contactRec_rec))) {
                 $contactRec_rec['contact_CONTACT_ID'] = uniqid();
-                $contactChange[] = $contactRec_rec;
             }
             $contactRec[] = $contactRec_rec;
+            $lastContactRec[] = $contactRec_rec;
         }
     } else {
         error_log('No Contact Meta');
     }
+    update_user_meta($user_id, 'wpiai_last_contacts', $lastContactRec);
     if (!update_user_meta($user_id, 'wpiai_contacts', $contactRec)) {
         error_log('Contact update_user_meta Failed or not changed for $user_id: ' . $user_id);
+        wpiai_update_csd_contacts($user_id);
     } else {
         $contactRec_url = get_option('wpiai_contact_url');
         $contactRec_paramaters = set_messageid(get_option('wpiai_contact_parameters'));
