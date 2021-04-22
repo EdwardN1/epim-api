@@ -236,13 +236,14 @@ function get_contact_XML_record( $user_id, $action, $record ) {
         }
 		$JobTitle = $record['contact_job_title'];
         $AddressLine = $record['contact_addr_1'];
-        if($record['contact_addr_2'] != '') {
+		$AddressLine2 = $record['contact_addr_2'];
+        /*if($record['contact_addr_2'] != '') {
             $AddressLine .= ', '.$record['contact_addr_2'];
-        }
+        }*/
         $CityName = $record['contact_addr_3'];
         $PostalCode = $record['contact_postcode'];
         $DialNumber = $record['contact_phone'];
-		$DialNumber = $record['contact_mobile_phone'];
+		$MobileNumber = $record['contact_mobile_phone'];
         $URI = $record['contact_email'];
 
         $commPhone = $record['contact_phone_channel'];
@@ -314,18 +315,24 @@ function get_contact_XML_record( $user_id, $action, $record ) {
         if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->AddressLine[0] ) {
             $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->AddressLine[0] = $AddressLine;
         }
+		if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->AddressLine[1] ) {
+			$xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->AddressLine[1] = $AddressLine2;
+		}
         if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->CityName[0] ) {
             $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->CityName[0] = $CityName;
         }
-		if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->CountrySubDivisionCode[0] ) {
+		/*if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->CountrySubDivisionCode[0] ) {
 			$xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->CountrySubDivisionCode[0] = $contact_CONTACT_ID;
-		}
+		}*/
         if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->PostalCode[0] ) {
             $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[0]->Address[0]->PostalCode[0] = $PostalCode;
         }
         if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[1]->DialNumber[0] ) {
             $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[1]->DialNumber[0] = $DialNumber;
         }
+		if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[2]->DialNumber[0] ) {
+			$xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[2]->DialNumber[0] = $contact_CONTACT_ID;
+		}
         if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[4]->DialNumber[0] ) {
             $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[4]->DialNumber[0] = $MobileNumber;
         }

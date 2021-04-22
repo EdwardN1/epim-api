@@ -28,11 +28,14 @@ function wpiai_do_every_day()
     //$x = get_customer_details(45);
     //error_log(print_r($x,true));
 	$contactDetails = array();
-	$contactDetails['first_name'] = 'first_name Test 4';
-	$contactDetails['last_name'] = 'last_name Test 4';
-	$x = set_organization_contact_details(get_customer_organization(45),6835,$contactDetails);
+	/*$contactDetails['first_name'] = 'first_name Test 11';
+	$contactDetails['last_name'] = 'last_name Test 11';*/
+	$contactDetails['address_line_1'] = 'contact_addr_1 Test 9.2x.y';
+	$contactDetails['address_line_2'] = 'contact_addr_2 Test 9.2x.y';
+	$x = set_organization_contact_details(get_customer_organization(45),6834,$contactDetails);
 	if($x) {
-		error_log(print_r($x, true));
+		//error_log(print_r($x, true));
+		error_log('Test Contact Updated');
 	} else {
 		error_log('Contact Not Updated');
 	}
@@ -56,7 +59,7 @@ add_filter('cron_schedules', 'wpiai_add_cron_interval');
 function wpiai_add_cron_interval($schedules)
 {
     $schedules['everyminute'] = array(
-        'interval' => 60, // time in seconds
+        'interval' => 5600, // time in seconds
         'display' => 'Every Minute'
     );
     $schedules['everytwentyminutes'] = array(
@@ -429,6 +432,131 @@ function wpiai_process_user_shiptos($user_id)
     error_log('Finished Processing ShipTos for user_id: ' . $user_id);
 }
 
+function wpiai_compare_contact($index,$keys,$oldvalue,$searchArray) {
+	$i = 0;
+	foreach ($searchArray as $item) {
+		if($oldvalue[$index]==$item[$index]) {
+			foreach ($keys as $key) {
+				if($oldvalue[$key]<>$item[$key]) return $i;
+			}
+		}
+		$i++;
+	}
+	return false;
+}
+
+function wpiai_update_csd_contacts($user_id) {
+	$contactRec = get_user_meta($user_id, 'wpiai_contacts', true);
+	if (is_array($contactRec)) {
+		$contactRec_url = get_option('wpiai_contact_url');
+		$contactRec_paramaters = set_messageid(get_option('wpiai_contact_parameters'));
+		$oldContacts = get_user_meta($user_id, 'wpiai_last_contacts', true);
+		$contactChange = array();
+		if (is_array($oldContacts)) {
+			error_log('Processing wpiai_last_contacts for user_id: ' . $user_id);
+			//error_log(print_r($oldContacts,true));
+			foreach ($oldContacts as $old_contact) {
+				$keys = array(
+					'contact_status_code',
+					'contact_first_name',
+					'contact_last_name',
+					'contact_job_title',
+					'contact_addr_1',
+					'contact_addr_2',
+					'contact_addr_3',
+					'contact_addr_4',
+					'contact_email',
+					'contact_postcode',
+					'contact_phone',
+					'contact_mobile_phone',
+					'contact_type',
+					'contact_phone_channel',
+					'contact_fax_channel',
+					'contact_mail_channel',
+					'contact_email_channel'
+				);
+				$different = wpiai_compare_contact('contact_CONTACT_ID',$keys,$old_contact,$contactRec);
+				if ($different) {
+					error_log('Contact Updated');
+					error_log('old contact_CONTACT_ID: ' . $old_contact['contact_CONTACT_ID'] . ', new contact_CONTACT_ID: ' . $contactRec[$different]['contact_CONTACT_ID']);
+					$contactChange[] = $contactRec[$different];
+				}
+				/*$contactRecRecID = array_search($old_contact['contact_CONTACT_ID'], array_column($contactRec, 'contact_CONTACT_ID'));
+				if ($contactRecRecID) {
+					$different = false;
+					if ($contactRec[$contactRecRecID]['contact_status_code'] <> $old_contact['contact_status_code']) {
+						$different = true;
+					}
+					if ($contactRec[$contactRecRecID]['contact_first_name'] <> $old_contact['contact_first_name']) {
+						$different = true;
+					}
+					if ($contactRec[$contactRecRecID]['contact_last_name'] <> $old_contact['contact_last_name']) {
+						$different = true;
+					}
+					if ($contactRec[$contactRecRecID]['contact_job_title'] <> $old_contact['contact_job_title']) {
+						$different = true;
+					}
+					if ($contactRec[$contactRecRecID]['contact_addr_1'] <> $old_contact['contact_addr_1']) {
+						$different = true;
+					}
+					if ($contactRec[$contactRecRecID]['contact_addr_2'] <> $old_contact['contact_addr_2']) {
+						$different = true;
+					}
+					if ($contactRec[$contactRecRecID]['contact_addr_3'] <> $old_contact['contact_addr_3']) {
+						$different = true;
+					}
+					if ($contactRec[$contactRecRecID]['contact_addr_4'] <> $old_contact['contact_addr_4']) {
+						$different = true;
+					}
+					if ($contactRec[$contactRecRecID]['contact_email'] <> $old_contact['contact_email']) {
+						$different = true;
+					}
+					if ($contactRec[$contactRecRecID]['contact_postcode'] <> $old_contact['contact_postcode']) {
+						$different = true;
+					}
+					if ($contactRec[$contactRecRecID]['contact_phone'] <> $old_contact['contact_phone']) {
+						$different = true;
+					}
+					if ($contactRec[$contactRecRecID]['contact_mobile_phone'] <> $old_contact['contact_mobile_phone']) {
+						$different = true;
+					}
+					if ($contactRec[$contactRecRecID]['contact_type'] <> $old_contact['contact_type']) {
+						$different = true;
+					}
+					if ($contactRec[$contactRecRecID]['contact_phone_channel'] <> $old_contact['contact_phone_channel']) {
+						$different = true;
+					}
+					if ($contactRec[$contactRecRecID]['contact_fax_channel'] <> $old_contact['contact_fax_channel']) {
+						$different = true;
+					}
+					if ($contactRec[$contactRecRecID]['contact_mail_channel'] <> $old_contact['contact_mail_channel']) {
+						$different = true;
+					}
+					if ($contactRec[$contactRecRecID]['contact_email_channel'] <> $old_contact['contact_email_channel']) {
+						$different = true;
+					}
+					if ($different) {
+						error_log('Contact Updated');
+						error_log('old contact_CONTACT_ID: ' . $old_contact['contact_CONTACT_ID'] . ', new contact_CONTACT_ID: ' . $contactRec[$contactRecRecID]['contact_CONTACT_ID']);
+						$contactChange[] = $contactRec[$contactRecRecID];
+					}
+				}*/
+			}
+		}
+		if ((count($contactChange) > 0)) {
+			foreach ($contactChange as $update_contact) {
+				$contactRec_xml = get_contact_XML_record($user_id, 'Change', $update_contact);
+				error_log('Contact Change');
+				$updated = wpiai_get_infor_message_multipart_message($contactRec_url, $contactRec_paramaters, $contactRec_xml);
+			}
+			update_user_meta($user_id, 'wpiai_last_contacts', $contactRec);
+		} else {
+			error_log('Contacts have not changed');
+		}
+
+	}
+}
+
 function wpiai_process_user_contacts($user_id)
 {
     error_log('Processing Contacts for user_id: ' . $user_id);
@@ -440,13 +568,13 @@ function wpiai_process_user_contacts($user_id)
         foreach ($contactRec_meta as $contactRec_m) {
             $contactRec_rec = $contactRec_m;
             if (($contactRec_rec['contact_CSD_ID'] == '') || (!array_key_exists('contact_CSD_ID', $contactRec_rec))) {
-                $contactRec_rec['CREATED_BY'] = 'WOO';
+                $contactRec_rec['contact_CREATED_BY'] = 'WOO';
                 if (($contactRec_rec['contact_CONTACT_ID'] == '') || (!array_key_exists('contact_CONTACT_ID', $contactRec_rec))) {
                     $contactRec_rec['contact_CONTACT_ID'] = uniqid();
                     $contactAdd[] = $contactRec_rec;
                 }
             } else {
-                $contactRec_rec['CREATED_BY'] = 'EXTERNAL';
+                $contactRec_rec['contact_CREATED_BY'] = 'EXTERNAL';
             }
             if (($contactRec_rec['contact_CONTACT_ID'] == '') || (!array_key_exists('contact_CONTACT_ID', $contactRec_rec))) {
                 $contactRec_rec['contact_CONTACT_ID'] = uniqid();
@@ -470,81 +598,7 @@ function wpiai_process_user_contacts($user_id)
                 $updated = wpiai_get_infor_message_multipart_message($contactRec_url, $contactRec_paramaters, $contactRec_xml);
             }
         }
-        $oldContacts = get_user_meta($user_id, 'wpiai_last_contacts', true);
-        if (is_array($oldContacts)) {
-            error_log('Processing wpiai_last_contacts for user_id: ' . $user_id);
-            //error_log(print_r($oldContacts,true));
-            foreach ($oldContacts as $old_contact) {
-                $contactRecRecID = array_search($old_contact['contact_CONTACT_ID'], array_column($contactRec, 'contact_CONTACT_ID'));
-                if ($contactRecRecID) {
-                    $different = false;
-                    if ($contactRec[$contactRecRecID]['contact_status_code'] <> $old_contact['contact_status_code']) {
-                        $different = true;
-                    }
-                    if ($contactRec[$contactRecRecID]['contact_first_name'] <> $old_contact['contact_first_name']) {
-                        $different = true;
-                    }
-                    if ($contactRec[$contactRecRecID]['contact_last_name'] <> $old_contact['contact_last_name']) {
-                        $different = true;
-                    }
-                    if ($contactRec[$contactRecRecID]['contact_job_title'] <> $old_contact['contact_job_title']) {
-                        $different = true;
-                    }
-                    if ($contactRec[$contactRecRecID]['contact_addr_1'] <> $old_contact['contact_addr_1']) {
-                        $different = true;
-                    }
-                    if ($contactRec[$contactRecRecID]['contact_addr_2'] <> $old_contact['contact_addr_2']) {
-                        $different = true;
-                    }
-                    if ($contactRec[$contactRecRecID]['contact_addr_3'] <> $old_contact['contact_addr_3']) {
-                        $different = true;
-                    }
-                    if ($contactRec[$contactRecRecID]['contact_addr_4'] <> $old_contact['contact_addr_4']) {
-                        $different = true;
-                    }
-                    if ($contactRec[$contactRecRecID]['contact_email'] <> $old_contact['contact_email']) {
-                        $different = true;
-                    }
-                    if ($contactRec[$contactRecRecID]['contact_postcode'] <> $old_contact['contact_postcode']) {
-                        $different = true;
-                    }
-                    if ($contactRec[$contactRecRecID]['contact_phone'] <> $old_contact['contact_phone']) {
-                        $different = true;
-                    }
-                    if ($contactRec[$contactRecRecID]['contact_mobile_phone'] <> $old_contact['contact_mobile_phone']) {
-                        $different = true;
-                    }
-                    if ($contactRec[$contactRecRecID]['contact_type'] <> $old_contact['contact_type']) {
-                        $different = true;
-                    }
-                    if ($contactRec[$contactRecRecID]['contact_phone_channel'] <> $old_contact['contact_phone_channel']) {
-                        $different = true;
-                    }
-                    if ($contactRec[$contactRecRecID]['contact_fax_channel'] <> $old_contact['contact_fax_channel']) {
-                        $different = true;
-                    }
-                    if ($contactRec[$contactRecRecID]['contact_mail_channel'] <> $old_contact['contact_mail_channel']) {
-                        $different = true;
-                    }
-                    if ($contactRec[$contactRecRecID]['contact_email_channel'] <> $old_contact['contact_email_channel']) {
-                        $different = true;
-                    }
-                    if ($different) {
-                        error_log('Contact Updated');
-                        error_log('old contact_CONTACT_ID: ' . $old_contact['contact_CONTACT_ID'] . ', new contact_CONTACT_ID: ' . $contactRec[$contactRecRecID]['contact_CONTACT_ID']);
-                        $contactChange[] = $contactRec[$contactRecRecID];
-                    }
-                }
-            }
-        }
-        if ((count($contactChange) > 0)) {
-            foreach ($contactChange as $update_contact) {
-                $contactRec_xml = get_contact_XML_record($user_id, 'Change', $update_contact);
-                error_log('Contact Change');
-                $updated = wpiai_get_infor_message_multipart_message($contactRec_url, $contactRec_paramaters, $contactRec_xml);
-            }
-        }
-        update_user_meta($user_id, 'wpiai_last_contacts', $contactRec);
+        wpiai_update_csd_contacts($user_id);
     }
     error_log('Finished Processing Contacts for user_id: ' . $user_id);
 }

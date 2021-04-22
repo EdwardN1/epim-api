@@ -53,7 +53,10 @@ function wpiai_contacts_repeater_meta_box($user) {
                                     } else {echo uniqid();}?>">
                                     <input type="hidden" name="contact_CSD_ID[]" value="<?php if ( $field['contact_CSD_ID'] != '' ) {
 		                                echo esc_attr( $field['contact_CSD_ID'] );
-	                                } else {echo uniqid();}?>">
+	                                }?>">
+                                    <input type="hidden" name="contact_CREATED_BY[]" value="<?php if ( $field['contact_CREATED_BY'] != '' ) {
+		                                echo esc_attr( $field['contact_CREATED_BY'] );
+	                                }?>">
                                     contact_CSD_ID
                                 </th>
                                 <td>
@@ -71,6 +74,16 @@ function wpiai_contacts_repeater_meta_box($user) {
 	                                <?php if ( $field['contact_CONTACT_ID'] != '' ) {
 		                                echo esc_attr( $field['contact_CONTACT_ID'] );
 	                                } else {echo uniqid();}?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    contact_CREATED_BY:
+                                </th>
+                                <td>
+									<?php if ( $field['contact_CREATED_BY'] != '' ) {
+										echo esc_attr( $field['contact_CREATED_BY'] );
+									}?>
                                 </td>
                             </tr>
                             <tr>
