@@ -22,23 +22,22 @@ add_action('wpiai_every_day_action', 'wpiai_do_every_day');
 function wpiai_do_every_day()
 {
     //do something every day
-    error_log('WP Cron is working....Every day Event');
-    //wpiai_process_updated_products();
+    //error_log('WP Cron is working....Every day Event');
+	//wpiai_process_updated_products();
     //$x = get_organization_contact_details(get_customer_organization(45));
     //$x = get_customer_details(45);
     //error_log(print_r($x,true));
-	$contactDetails = array();
-	/*$contactDetails['first_name'] = 'first_name Test 11';
-	$contactDetails['last_name'] = 'last_name Test 11';*/
-	$contactDetails['address_line_1'] = 'contact_addr_1 Test 9.2x.y';
-	$contactDetails['address_line_2'] = 'contact_addr_2 Test 9.2x.y';
-	$x = set_organization_contact_details(get_customer_organization(45),6834,$contactDetails);
+	/*$contactDetails = array();
+	$contactDetails['first_name'] = 'first_name Test 17';
+	$contactDetails['last_name'] = 'last_name Test 1';
+	$contactDetails['address_line_1'] = 'contact_addr_1 Test 17';
+	$contactDetails['address_line_2'] = 'contact_addr_2 Test 17';
+	$x = set_organization_contact_details(get_customer_organization(45),0,$contactDetails);
 	if($x) {
-		//error_log(print_r($x, true));
 		error_log('Test Contact Updated');
 	} else {
 		error_log('Contact Not Updated');
-	}
+	}*/
 }
 
 function wpiai_do_every_minute()
@@ -46,6 +45,8 @@ function wpiai_do_every_minute()
     // do something every minute
     //error_log('WP Cron is working....Every Minute Event');
     wpiai_check_user_meta();
+	//wpiai_clear_old_contacts(45);
+	//wpiai_reset_old_contacts(45);
     //wpiai_process_products(150,1200,true);
 }
 
@@ -53,13 +54,14 @@ function wpiai_do_every_twenty_minutes()
 {
     // do something every twenty minutes
     //error_log('WP Cron is working....');
+	wpiai_process_updated_products();
 }
 
 add_filter('cron_schedules', 'wpiai_add_cron_interval');
 function wpiai_add_cron_interval($schedules)
 {
     $schedules['everyminute'] = array(
-        'interval' => 5600, // time in seconds
+        'interval' => 60, // time in seconds
         'display' => 'Every Minute'
     );
     $schedules['everytwentyminutes'] = array(
@@ -444,11 +446,11 @@ function wpiai_array_equal($a, $b) {
 function wpiai_different_array_indexes($array1,$array2) {
     $r = array();
     if(!is_array($array1)||!is_array($array2)) {
-        error_log('Need two arrays to compare');
+        //error_log('Need two arrays to compare');
         return false;
     }
     if(count($array1)<>count($array2)) {
-        error_log('Compared Arrays are of different sizes, can not compare these');
+        //error_log('Compared Arrays are of different sizes, can not compare these');
         return false;
     }
     $i=0;
@@ -461,42 +463,20 @@ function wpiai_different_array_indexes($array1,$array2) {
     if(count($r)>0) {
         return $r;
     }
-    error_log('Arrays are identical');
+    //error_log('Arrays are identical');
     return false;
 }
 
-function wpiai_equalise_arrays($newData,$oldData,$key) {
-    $r = array();
-    //Check for deleted records
-    foreach($oldData as $oldDatum) {
-        foreach ($newData as $newDatum) {
-            if($oldDatum[$key] == $newDatum[$key]) {
-                $r[] = $oldDatum;
-            }
-        }
-    }
-    //Add in new records (added at the end)
-    foreach ($newData as $newDatum) {
-        $found = false;
-        foreach ($r as $oldDatum) {
-            if($oldDatum[$key]==$newDatum[$key]) {
-                $found = true;
-            }
-        }
-        if(!$found) {
-            $r[] = $newDatum;
-        }
-    }
-    //put old data in same order as new data
-    $ret = array();
-    foreach ($newData as $newDatum) {
-        foreach ($r as $oldDatum) {
-            if($newDatum[$key]==$oldDatum[$key]) {
-                $ret[] = $oldDatum[$key];
-            }
-        }
-    }
-    return $ret;
+function wpiai_clear_old_contacts($user_id) {
+	$blank_array = array();
+	update_user_meta($user_id, 'wpiai_last_contacts', $blank_array);
+}
+
+function wpiai_reset_old_contacts($user_id) {
+	$contacts = get_user_meta($user_id,'wpiai_contacts',true);
+	if(is_array($contacts)) {
+		update_user_meta($user_id,'wpiai_last_contacts',$contacts);
+	}
 }
 
 function wpiai_update_csd_contacts($user_id) {
@@ -504,19 +484,33 @@ function wpiai_update_csd_contacts($user_id) {
 	if (is_array($contactRecs)) {
         $oldContacts = get_user_meta($user_id, 'wpiai_last_contacts', true);
         if(is_array($oldContacts)) {
-            //$oldContacts = wpiai_equalise_arrays($contactRecs,$oldContacts_m,'contact_CONTACT_ID');
+        	//Check for added contacts
+	        if(count($contactRecs)<>count($oldContacts)) {
+		        foreach ($contactRecs as $contact_rec) {
+			        $contact_CONTACT_ID = $contact_rec['contact_CONTACT_ID'];
+			        $found = false;
+			        foreach ($oldContacts as $oldContact) {
+			        	if($oldContact['contact_CONTACT_ID'] == $contact_CONTACT_ID) {
+			        		$found = true;
+				        }
+			        }
+			        if(!$found) {
+			        	$oldContacts[] = $contact_rec;
+			        }
+		        }
+	        }
             $changedContacts = wpiai_different_array_indexes($contactRecs,$oldContacts);
             if($changedContacts) {
                 $contactRec_url = get_option('wpiai_contact_url');
                 $contactRec_paramaters = set_messageid(get_option('wpiai_contact_parameters'));
                 foreach ($changedContacts as $changedContact) {
                     $contactRec_xml = get_contact_XML_record($user_id, 'Change', $contactRecs[$changedContact]);
-                    error_log('Contact Change: '.$contactRecs[$changedContact]['contact_CONTACT_ID']);
+                    //error_log('Contact Change: '.$contactRecs[$changedContact]['contact_CONTACT_ID']);
                     $updated = wpiai_get_infor_message_multipart_message($contactRec_url, $contactRec_paramaters, $contactRec_xml);
                 }
                 update_user_meta($user_id, 'wpiai_last_contacts', $contactRecs);
             } else {
-                error_log('No contacts to update');
+                //error_log('No contacts to update');
             }
         }
 	}
@@ -526,14 +520,14 @@ function wpiai_process_user_contacts($user_id)
 {
     error_log('Processing Contacts for user_id: ' . $user_id);
     $contactRec_meta = get_user_meta($user_id, 'wpiai_contacts', true);
-    $lastContactRec_meta = get_user_meta($user_id, 'wpiai_last_contacts', true);
+    //$lastContactRec_meta = get_user_meta($user_id, 'wpiai_last_contacts', true);
     $contactRec = array();
-    $lastContactRec = array();
-    if(is_array($lastContactRec_meta)) {
+    //$lastContactRec = array();
+    /*if(is_array($lastContactRec_meta)) {
         foreach ($lastContactRec_meta as $lastContactRec_m) {
             $lastContactRec[] = $lastContactRec_m;
         }
-    }
+    }*/
     $contactAdd = array();
     if (is_array($contactRec_meta)) {
         foreach ($contactRec_meta as $contactRec_m) {
@@ -551,14 +545,14 @@ function wpiai_process_user_contacts($user_id)
                 $contactRec_rec['contact_CONTACT_ID'] = uniqid();
             }
             $contactRec[] = $contactRec_rec;
-            $lastContactRec[] = $contactRec_rec;
+            //$lastContactRec[] = $contactRec_rec;
         }
     } else {
-        error_log('No Contact Meta');
+        //error_log('No Contact Meta');
     }
-    update_user_meta($user_id, 'wpiai_last_contacts', $lastContactRec);
+    //update_user_meta($user_id, 'wpiai_last_contacts', $lastContactRec);
     if (!update_user_meta($user_id, 'wpiai_contacts', $contactRec)) {
-        error_log('Contact update_user_meta Failed or not changed for $user_id: ' . $user_id);
+        //error_log('Contact update_user_meta Failed or not changed for $user_id: ' . $user_id);
         wpiai_update_csd_contacts($user_id);
     } else {
         $contactRec_url = get_option('wpiai_contact_url');
@@ -567,7 +561,7 @@ function wpiai_process_user_contacts($user_id)
         if ((count($contactAdd) > 0)) {
             foreach ($contactAdd as $add_contact) {
                 $contactRec_xml = get_contact_XML_record($user_id, 'Add', $add_contact);
-                error_log('contact Add');
+                //error_log('contact Add');
                 $updated = wpiai_get_infor_message_multipart_message($contactRec_url, $contactRec_paramaters, $contactRec_xml);
             }
         }
