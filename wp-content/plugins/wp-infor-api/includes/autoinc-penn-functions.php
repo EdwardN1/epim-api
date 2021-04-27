@@ -27,6 +27,7 @@ function get_organization_shipping_details( $organization_id ) {
 				$ret_shipping_details = array();
 				foreach ( $shipping_details as $shipping_detail ) {
 					$ret_shipping_detail                   = array();
+					$ret_shipping_detail['CSD_ID']     = $shipping_detail['delivery-CSD-ID'];
 					$ret_shipping_detail['first_name']     = $shipping_detail['delivery-first-name'];
 					$ret_shipping_detail['last_name']      = $shipping_detail['delivery-last-name'];
 					$ret_shipping_detail['company_name']   = $shipping_detail['delivery-company-name'];
@@ -47,7 +48,228 @@ function get_organization_shipping_details( $organization_id ) {
 			}
 		}
 	}
+	return false;
+}
 
+function wpiai_convert_shipping_field_names($fname) {
+	if($fname == 'CSD_ID') return 'delivery-CSD-ID';
+	if($fname == 'first_name') return 'delivery-first-name';
+	if($fname == 'last_name') return 'delivery-last-name';
+	if($fname == 'company_name') return 'delivery-company-name';
+	if($fname == 'country') return 'delivery-country';
+	if($fname == 'address_line_1') return 'delivery-street-address-1';
+	if($fname == 'address_line_2') return 'delivery-street-address-2';
+	if($fname == 'address_line_3') return 'delivery-street-address-3';
+	if($fname == 'town_city') return 'delivery-town-city';
+	if($fname == 'county') return 'delivery-county';
+	if($fname == 'postcode') return 'delivery-postcode';
+	if($fname == 'phone') return 'delivery-phone';
+	if($fname == 'email') return 'delivery-email';
+
+	if($fname == 'delivery-CSD-ID') return 'CSD_ID';
+	if($fname == 'delivery-first-name') return 'first_name';
+	if($fname == 'delivery-last-name') return 'last_name';
+	if($fname == 'delivery-company-name') return 'company_name';
+	if($fname == 'delivery-country') return 'country';
+	if($fname == 'delivery-street-address-1') return 'address_line_1';
+	if($fname == 'delivery-street-address-2') return 'address_line_2';
+	if($fname == 'delivery-street-address-3') return 'address_line_3';
+	if($fname == 'delivery-town-city') return 'town_city';
+	if($fname == 'delivery-county') return 'county';
+	if($fname == 'delivery-postcode') return 'postcode';
+	if($fname == 'delivery-phone') return 'phone';
+	if($fname == 'delivery-email') return 'email';
+	return false;
+}
+
+function set_organization_shipping_details( $organization_id, $shipping_id, $shipping_details = array() ) {
+	$user = get_users(
+		array(
+			'meta_key'    => 'CSD_ID',
+			'meta_value'  => $organization_id,
+			'number'      => 1,
+			'count_total' => false
+		)
+	);
+	if ( $user ) {
+		$user_id = $user[0]->ID;
+		$roles   = $user[0]->roles;
+		if ( in_array( 'customer', $roles ) ) {
+			$old_shipping_details = get_user_meta( $user_id, 'wpiai_last_delivery_addresses', true );
+			$new_shipping_details = array();
+			if ( is_array( $old_shipping_details ) ) {
+				$updated = false;
+				if($shipping_id == '0') {
+					//Create New Contact
+					$new_shipping = array();
+
+					if(array_key_exists('first_name',$shipping_details)) {
+						$new_shipping[wpiai_convert_shipping_field_names('first_name')] = $shipping_details['first_name'];
+						$updated = true;
+					}
+
+					if(array_key_exists('last_name',$shipping_details)) {
+						$new_shipping[wpiai_convert_shipping_field_names('last_name')] = $shipping_details['last_name'];
+						$updated = true;
+					}
+
+					if(array_key_exists('job_title',$shipping_details)) {
+						$new_shipping[wpiai_convert_shipping_field_names('company_name')] = $shipping_details['company_name'];
+						$updated = true;
+					}
+
+					if(array_key_exists('address_line_1',$shipping_details)) {
+						$new_shipping[wpiai_convert_shipping_field_names('country')] = $shipping_details['country'];
+						$updated = true;
+					}
+
+					if(array_key_exists('address_line_2',$shipping_details)) {
+						$new_shipping[wpiai_convert_shipping_field_names('address_line_1')] = $shipping_details['address_line_1'];
+						$updated = true;
+					}
+
+					if(array_key_exists('address_line_3',$shipping_details)) {
+						$new_shipping[wpiai_convert_shipping_field_names('address_line_2')] = $shipping_details['address_line_2'];
+						$updated = true;
+					}
+
+					if(array_key_exists('address_line_4',$shipping_details)) {
+						$new_shipping[wpiai_convert_shipping_field_names('address_line_3')] = $shipping_details['address_line_3'];
+						$updated = true;
+					}
+
+					if(array_key_exists('postcode',$shipping_details)) {
+						$new_shipping[wpiai_convert_shipping_field_names('town_city')] = $shipping_details['town_city'];
+						$updated = true;
+					}
+
+					if(array_key_exists('phone',$shipping_details)) {
+						$new_shipping[wpiai_convert_shipping_field_names('county')] = $shipping_details['county'];
+						$updated = true;
+					}
+
+					if(array_key_exists('town_city',$shipping_details)) {
+						$new_shipping[wpiai_convert_shipping_field_names('postcode')] = $shipping_details['postcode'];
+						$updated = true;
+					}
+
+					if(array_key_exists('email',$shipping_details)) {
+						$new_shipping[wpiai_convert_shipping_field_names('phone')] = $shipping_details['phone'];
+						$updated = true;
+					}
+
+					if(array_key_exists('marketing_by_phone',$shipping_details)) {
+						$new_shipping[wpiai_convert_shipping_field_names('email')] = $shipping_details['email'];
+						$updated = true;
+					}
+
+
+					if($updated) {
+						//$new_contact['contact_CSD_ID'] = '';
+						//$new_contact['contact_CONTACT_ID'] = uniqid();
+						//$new_contact['CREATED_BY'] = 'WOO';
+						$old_shipping_details[] = $new_shipping;
+						$users_updated = get_option('wpiai_users_updated');
+						if(!is_array($users_updated)) {
+							$users_updated = array();
+						}
+						$users_updated[] = $user_id;
+						if(!update_option('wpiai_users_updated',$users_updated)) {
+							error_log('UserID not saved: '.$user_id);
+						} else {
+							error_log($user_id . ' added to the meta update queue');
+						}
+						update_user_meta($user_id,'wpiai_contacts',$old_shipping_details);
+					}
+
+					return get_organization_shipping_details($organization_id);
+				}
+				foreach ($old_shipping_details as $old_shipping_detail) {
+					if($old_shipping_detail['delivery-CSD-ID']==$shipping_id) {
+						$array_keys = array_keys($old_shipping_detail);
+						$new_shipping_detail = array();
+						foreach ($array_keys as $array_key) {
+							if(array_key_exists(wpiai_convert_shipping_field_names($array_key),$shipping_details)) {
+								$new_shipping_detail[$array_key] = $shipping_details[wpiai_convert_field_names($array_key)];
+								$updated = true;
+							} else {
+								$new_shipping_detail[$array_key] = $old_shipping_detail[$array_key];
+							}
+						}
+						$new_array_keys = array_keys($shipping_details);
+						foreach ($new_array_keys as $new_array_key) {
+							if(!array_key_exists(wpiai_convert_shipping_field_names($new_array_key),$new_shipping_detail)) {
+								$new_shipping_detail[wpiai_convert_shipping_field_names($new_array_key)] = $shipping_details[$new_array_key];
+								$updated = true;
+							}
+						}
+						$new_shipping_detail['delivery-CSD-ID'] = $shipping_id;
+						$new_shipping_details[] = $new_shipping_detail;
+					} else {
+						$new_shipping_details[] = $old_shipping_detail;
+					}
+				}
+				if($updated) {
+					update_user_meta($user_id,'wpiai_delivery_addresses',$shipping_details);
+					$users_updated = get_option('wpiai_users_updated');
+					if(!is_array($users_updated)) {
+						$users_updated = array();
+					}
+					$users_updated[] = $user_id;
+					if(!update_option('wpiai_users_updated',$users_updated)) {
+						error_log('UserID not saved: '.$user_id);
+					} else {
+						error_log($user_id . ' added to the meta update queue');
+					}
+					return get_organization_shipping_details($organization_id);
+				} else {
+					error_log('nothing to update');
+				}
+			} else {
+				$wpiai_delivery_addresses = array();
+				$array_keys = array_keys($shipping_details);
+				$new_shipping = array();
+				foreach ($array_keys as $array_key) {
+					$new_shipping[wpiai_convert_shipping_field_names($array_key)] = $shipping_details[$array_key];
+				}
+				//$new_contact['contact_CSD_ID'] = '';
+				//$new_contact['contact_CONTACT_ID'] = uniqid();
+				//$new_contact['CREATED_BY'] = 'WOO';
+				$wpiai_delivery_addresses[] = $new_shipping;
+				if(metadata_exists('user',$user_id,'wpiai_delivery_addresses')) {
+					update_user_meta($user_id,'wpiai_delivery_addresses',$wpiai_delivery_addresses);
+					$users_updated = get_option('wpiai_users_updated');
+					if(!is_array($users_updated)) {
+						$users_updated = array();
+					}
+					$users_updated[] = $user_id;
+					if(!update_option('wpiai_users_updated',$users_updated)) {
+						error_log('UserID not saved: '.$user_id);
+					} else {
+						error_log($user_id . ' added to the meta update queue');
+					}
+					return get_organization_shipping_details($organization_id);
+				} else {
+					add_user_meta($user_id,'wpiai_delivery_addresses',$wpiai_delivery_addresses);
+					$users_updated = get_option('wpiai_users_updated');
+					if(!is_array($users_updated)) {
+						$users_updated = array();
+					}
+					$users_updated[] = $user_id;
+					if(!update_option('wpiai_users_updated',$users_updated)) {
+						error_log('UserID not saved: '.$user_id);
+					} else {
+						error_log($user_id . ' added to the meta update queue');
+					}
+					return get_organization_shipping_details($organization_id);
+				}
+			}
+		} else {
+			//error_log('not a customer');
+		}
+	} else {
+		//error_log('User Not Found');
+	}
 	return false;
 }
 
@@ -96,7 +318,25 @@ function get_organization_contact_details( $organization_id ) {
 	return false;
 }
 
+
+
 function wpiai_convert_field_names($fname) {
+	if($fname == 'contact_first_name') return 'first_name';
+	if($fname == 'contact_last_name') return 'last_name';
+	if($fname == 'contact_job_title') return 'job_title';
+	if($fname == 'contact_addr_1') return 'address_line_1';
+	if($fname == 'contact_addr_2') return 'address_line_2';
+	if($fname == 'contact_addr_3') return 'address_line_3';
+	if($fname == 'contact_addr_4') return 'address_line_4';
+	if($fname == 'contact_postcode') return 'postcode';
+	if($fname == 'contact_phone') return 'phone';
+	if($fname == 'contact_mobile_phone') return 'mobile_phone';
+	if($fname == 'contact_email') return 'email';
+	if($fname == 'contact_phone_channel') return 'marketing_by_phone';
+	if($fname == 'contact_fax_channel') return 'marketing_by_fax';
+	if($fname == 'contact_mail_channel') return 'marketing_by_mail';
+	if($fname == 'contact_email_channel') return 'marketing_by_email';
+
 	if($fname == 'first_name') return 'contact_first_name';
 	if($fname == 'last_name') return 'contact_last_name';
 	if($fname == 'job_title') return 'contact_job_title';

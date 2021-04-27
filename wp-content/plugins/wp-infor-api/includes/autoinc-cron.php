@@ -38,6 +38,15 @@ function wpiai_do_every_day()
 	} else {
 		error_log('Contact Not Updated');
 	}*/
+	/*$shippingDetails = array();
+	$shippingDetails['first_name'] = 'first_name test 1';
+	$shippingDetails['last_name'] = 'last_name test 1';
+	$x = set_organization_shipping_details(get_customer_organization(45),0,$shippingDetails);
+	if($x) {
+		error_log('Test ShipTo Updated');
+	} else {
+		error_log('ShipTo Not Updated');
+	}*/
 }
 
 function wpiai_do_every_minute()
