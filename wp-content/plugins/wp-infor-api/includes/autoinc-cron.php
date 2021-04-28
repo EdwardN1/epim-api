@@ -38,15 +38,17 @@ function wpiai_do_every_day()
 	} else {
 		error_log('Contact Not Updated');
 	}*/
-	/*$shippingDetails = array();
-	$shippingDetails['first_name'] = 'first_name test 1';
-	$shippingDetails['last_name'] = 'last_name test 1';
-	$x = set_organization_shipping_details(get_customer_organization(45),0,$shippingDetails);
+	$shippingDetails = array();
+	$shippingDetails['company_name'] = 'company_name test 3';
+	$x = set_organization_shipping_details(get_customer_organization(45),'1000912375-6',$shippingDetails);
 	if($x) {
 		error_log('Test ShipTo Updated');
 	} else {
 		error_log('ShipTo Not Updated');
-	}*/
+	}
+	/*update_user_meta(45,'wpiai_delivery_addresses',array());
+	update_user_meta(45,'wpiai_last_delivery_addresses',array());*/
+
 }
 
 function wpiai_do_every_minute()
