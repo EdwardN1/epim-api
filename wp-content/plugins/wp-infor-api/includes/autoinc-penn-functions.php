@@ -84,6 +84,10 @@ function get_organization_shipping_details( $organization_id ) {
 }
 
 function wpiai_convert_shipping_field_names( $fname ) {
+	if($fname=='delivery_UNIQUE_ID') {
+		return 'delivery_UNIQUE_ID';
+	}
+
 	if ( $fname == 'CSD_ID' ) {
 		return 'delivery-CSD-ID';
 	}
@@ -185,7 +189,7 @@ function set_organization_shipping_details( $organization_id, $shipping_id, $shi
 			if ( is_array( $old_shipping_details ) ) {
 				$updated = false;
 				if ( $shipping_id == '0' ) {
-					//Create New Contact
+					//Create New ShipTo
 					$new_shipping = array();
 
 					if ( array_key_exists( 'first_name', $shipping_details ) ) {
@@ -364,10 +368,10 @@ function set_organization_shipping_details( $organization_id, $shipping_id, $shi
 				}
 			}
 		} else {
-			//error_log('not a customer');
+			error_log('not a customer');
 		}
 	} else {
-		//error_log('User Not Found');
+		error_log('User Not Found');
 	}
 
 	return false;
