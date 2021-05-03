@@ -189,6 +189,7 @@ function set_organization_shipping_details($organization_id, $shipping_id, $ship
         $roles = $user[0]->roles;
         if (in_array('customer', $roles)) {
             $old_shipping_details = get_user_meta($user_id, 'wpiai_last_delivery_addresses', true);
+            $current_shipTos = get_user_meta($user_id,'wpiai_delivery_addresses',true);
             $new_shipping_details = array();
             if(!is_array($old_shipping_details)) {
                 $old_shipping_details = array();
@@ -279,7 +280,10 @@ function set_organization_shipping_details($organization_id, $shipping_id, $ship
                     //$new_contact['contact_CSD_ID'] = '';
                     //$new_contact['contact_CONTACT_ID'] = uniqid();
                     //$new_contact['CREATED_BY'] = 'WOO';
-                    $old_shipping_details[] = $new_shipping;
+                    //$new_shipping['delivery_UNIQUE_ID'] = uniqid();
+                    $current_shipTos[] = $new_shipping;
+                    update_user_meta($user_id, 'wpiai_delivery_addresses', $current_shipTos);
+
                     $users_updated = get_option('wpiai_users_updated');
                     if (!is_array($users_updated)) {
                         $users_updated = array();
@@ -290,7 +294,7 @@ function set_organization_shipping_details($organization_id, $shipping_id, $ship
                     } else {
                         error_log($user_id . ' added to the meta update queue');
                     }
-                    update_user_meta($user_id, 'wpiai_delivery_addresses', $old_shipping_details);
+
                 }
 
                 error_log('New ShipTo Added');
@@ -300,7 +304,7 @@ function set_organization_shipping_details($organization_id, $shipping_id, $ship
 
             //update a shipTo
 
-            $current_shipTos = get_user_meta($user_id,'wpiai_delivery_addresses',true);
+
 
             if(is_array($current_shipTos)) {
                 $new_shipTos = array();
