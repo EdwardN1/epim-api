@@ -376,6 +376,70 @@ adminJQ(function ($) {
         });
     });
 
+    $('#accountsGetCustomerBalances').on('click', function () {
+        $('#ajax-response').html('Working...');
+        $('.modal.accountsGetCustomerBalances').show();
+        let security = wpiai_ajax_object.security;
+        let url = wpiai_ajax_object.ajax_url;
+        //let custNum = $('#customer_number').val();
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {action: 'wpiai_get_accounts_customer_balances_api_response', security: security},
+            success: function (data) {
+                //window.console.log('data returned');
+                try {
+                    let resp = JSON.parse(data);
+                    let rstr = JSON.stringify(resp, undefined, 4);
+                    $('#ajax-response').html(syntaxHighlight(rstr));
+                    $('.modal.accountsGetCustomerBalances').hide();
+                    window.console.log('Data is JSON');
+                }
+                catch (e) {
+                    if(typeof data === 'object' && data !== null) {
+                        let x = JSON.stringify(data);
+                        $('#ajax-response').html(syntaxHighlight(x.replace(/\\(.)/mg, "")));
+                    } else {
+                        $('#ajax-response').html(syntaxHighlight(data));
+                    }
+                    $('.modal.accountsGetCustomerBalances').hide();
+                }
+            }
+        });
+    });
+
+    $('#accountsGetCustomerDataCredit').on('click', function () {
+        $('#ajax-response').html('Working...');
+        $('.modal.accountsGetCustomerDataCredit').show();
+        let security = wpiai_ajax_object.security;
+        let url = wpiai_ajax_object.ajax_url;
+        //let custNum = $('#customer_number').val();
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {action: 'wpiai_get_accounts_customer_data_credit_api_response', security: security},
+            success: function (data) {
+                //window.console.log('data returned');
+                try {
+                    let resp = JSON.parse(data);
+                    let rstr = JSON.stringify(resp, undefined, 4);
+                    $('#ajax-response').html(syntaxHighlight(rstr));
+                    $('.modal.accountsGetCustomerDataCredit').hide();
+                    window.console.log('Data is JSON');
+                }
+                catch (e) {
+                    if(typeof data === 'object' && data !== null) {
+                        let x = JSON.stringify(data);
+                        $('#ajax-response').html(syntaxHighlight(x.replace(/\\(.)/mg, "")));
+                    } else {
+                        $('#ajax-response').html(syntaxHighlight(data));
+                    }
+                    $('.modal.accountsGetCustomerDataCredit').hide();
+                }
+            }
+        });
+    });
+
     $('#testSalesOrderXML').on('click', function () {
         $('#ajax-response').html('Working...');
         $('.modal.testSalesOrderXML').show();

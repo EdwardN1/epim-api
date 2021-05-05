@@ -102,6 +102,13 @@ function wpiai_register_settings()
 	add_option('wpiai_product_pricing_updates_ionapiRespStyle', 'sync');
 	register_setting('wpiai_product_pricing_updates_group', 'wpiai_product_pricing_updates_ionapiRespStyle');
 
+	add_option('wpiai_accounts_customer_balance_url', 'https://mingle-ionapi.inforcloudsuite.com/ERFELECTRIC_TRN/SX/web/sxapirestservice/sxapiARGetCustomerBalanceV2');
+	register_setting('wpiai_accounts_settings_group', 'wpiai_accounts_customer_balance_url');
+	add_option('wpiai_accounts_customer_data_credit_url', 'https://mingle-ionapi.inforcloudsuite.com/ERFELECTRIC_TRN/SX/web/sxapirestservice/sxapiARGetCustomerDataCredit');
+	register_setting('wpiai_accounts_settings_group', 'wpiai_accounts_customer_data_credit_url');
+	add_option('wpiai_accounts_request', 'API Request');
+	register_setting('wpiai_accounts_settings_group', 'wpiai_accounts_request');
+
     add_option('wpiai_users_updated', '');
 
 }
@@ -145,6 +152,8 @@ function wpiai_options_page()
                class="nav-tab <?php echo $active_tab == 'wpiai_products_api' ? 'nav-tab-active' : ''; ?>">Products API</a>
             <a href="?page=infor-options&tab=wpiai_product_updates_api"
                class="nav-tab <?php echo $active_tab == 'wpiai_product_updates_api' ? 'nav-tab-active' : ''; ?>">Product Updates</a>
+            <a href="?page=infor-options&tab=wpiai_accounts_api"
+               class="nav-tab <?php echo $active_tab == 'wpiai_accounts_api' ? 'nav-tab-active' : ''; ?>">Accounts API</a>
             <?php
             $current_user = wp_get_current_user();
             $email = (string)$current_user->user_email;
@@ -603,6 +612,63 @@ function wpiai_options_page()
                     </td>
                     <td>
 
+                    </td>
+                </tr>
+            </table>
+
+            <div class="wrap">
+            <pre id="ajax-response">
+
+            </pre>
+            </div>
+        <?php
+        endif;
+        if ($active_tab == 'wpiai_accounts_api'):
+	        ?>
+            <div class="wrap">
+                <h1>INFOR Accounts API</h1>
+            </div>
+            <form method="post" action="options.php">
+		        <?php settings_fields('wpiai_accounts_settings_group'); ?>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><label for="wpiai_accounts_customer_balance_url">Customer Balances URL</label></th>
+                        <td><input type="text" id="wpiai_accounts_customer_balance_url" name="wpiai_accounts_customer_balance_url"
+                                   value="<?php echo get_option('wpiai_accounts_customer_balance_url'); ?>" class="regular-text"
+                                   style="width: 100%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_accounts_customer_data_credit_url">Customer Data Credit URL</label></th>
+                        <td><input type="text" id="wpiai_accounts_customer_data_credit_url" name="wpiai_accounts_customer_data_credit_url"
+                                   value="<?php echo get_option('wpiai_accounts_customer_data_credit_url'); ?>" class="regular-text"
+                                   style="width: 100%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_accounts_request">Parameters</label></th>
+                        <td><textarea id="wpiai_accounts_request" name="wpiai_accounts_request" rows="20"
+                                      style="width: 100%;"><?php echo get_option('wpiai_accounts_request'); ?></textarea>
+                        </td>
+                    </tr>
+                </table>
+		        <?php submit_button(); ?>
+            </form>
+            <table class="form-table">
+                <!--<tr>
+                    <th scope="row"><label for="customer_number">Customer Number</label></th>
+                    <td><input type="text" id="customer_number" name="customer_number" value="" class="regular-text" style="width: 100%;"/></td>
+                </tr>-->
+                <tr>
+                    <td>
+                        <button id="accountsGetCustomerBalances" class="button">Get Customer Balances</button>&nbsp;
+                        &nbsp;<span class="modal accountsGetCustomerBalances"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                    </td>
+                    <td>
+                        <button id="accountsGetCustomerDataCredit" class="button">Get Customer Data Credit</button>&nbsp;
+                        &nbsp;<span class="modal accountsGetCustomerDataCredit"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                     </td>
                 </tr>
             </table>
