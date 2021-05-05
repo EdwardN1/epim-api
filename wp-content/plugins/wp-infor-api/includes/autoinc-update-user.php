@@ -147,8 +147,14 @@ function get_shipTo_XML_record( $user_id, $action, $record )
         $CreationDateTime = $nowDT->format(DateTime::ATOM);
         $BODID = uniqid();
 
-        $FirstName = $record['delivery-first-name'];
-        $LastName = $record['delivery-last-name'];
+        $FirstName = '';
+        if(array_key_exists('delivery-first-name',$record)) {
+            $FirstName = $record['delivery-first-name'];
+        }
+        $LastName = '';
+        if(array_key_exists('delivery-last-name',$record)) {
+            $LastName = $record['delivery-last-name'];
+        }
         $CompanyName = $record['delivery-company-name'];
         $AddressLine1 = $record['delivery-street-address-1'];
         $AddressLine2 = $record['delivery-street-address-2'];
@@ -156,8 +162,10 @@ function get_shipTo_XML_record( $user_id, $action, $record )
         $CityName = $record['delivery-town-city'];
         $PostalCode = $record['delivery-postcode'];
         $DialNumber = $record['delivery-phone'];
-        $URI = $record['delivery-email'];
-
+        $URI = '';
+        if(array_key_exists('delivery-email',$record)) {
+            $URI = $record['delivery-email'];
+        }
         $delivery_UNIQUE_ID = $record['delivery_UNIQUE_ID'];
         $ShipTo_ID = $record['delivery-CSD-ID'];
         $Customer_CSD_ID = get_user_meta( $user_id, 'CSD_ID', true );

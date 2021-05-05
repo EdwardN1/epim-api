@@ -38,27 +38,29 @@ function wpiai_do_every_day()
 	} else {
 		error_log('Contact Not Updated');
 	}*/
-	/*$shippingDetails = array();
-	$shippingDetails['company_name'] = 'company_name test 3';
-	$x = set_organization_shipping_details(get_customer_organization(45),'1000912375-6',$shippingDetails);
+    //wpiai_equalize_shiptos(50);
+    //wpiai_equalize_last_shiptos(50);
+	$shippingDetails = array();
+	$shippingDetails['address_line_1'] = 'address_line_1 test 2';
+	$x = set_organization_shipping_details(get_customer_organization(50),'1000912380-2',$shippingDetails);
 	if($x) {
 		error_log('Test ShipTo Updated');
 	} else {
 		error_log('ShipTo Not Updated');
-	}*/
+	}
 
-	update_user_meta(45,'wpiai_delivery_addresses',array());
-	update_user_meta(45,'wpiai_last_delivery_addresses',array());
-	$users_updated          = get_option( 'wpiai_users_updated' );
+	/*update_user_meta(45,'wpiai_delivery_addresses',array());
+	update_user_meta(45,'wpiai_last_delivery_addresses',array());*/
+	/*$users_updated          = get_option( 'wpiai_users_updated' );
 	if ( ! is_array( $users_updated ) ) {
 		$users_updated = array();
 	}
-	$users_updated[] = '45';
+	$users_updated[] = '50';
 	if ( ! update_option( 'wpiai_users_updated', $users_updated ) ) {
-		error_log( 'UserID not saved: ' . '45' );
+		error_log( 'UserID not saved: ' . '50' );
 	} else {
-		error_log( '45' . ' added to the meta update queue' );
-	}
+		error_log( '50' . ' added to the meta update queue' );
+	}*/
 
 }
 
@@ -352,7 +354,7 @@ function wpiai_process_products($max, $seconds, $log = false)
 }
 
 
-function wpiai_process_user_shiptos($user_id)
+function wpiai_process_user_shiptos_x($user_id)
 {
     error_log('Processing ShipTos for user_id: ' . $user_id);
     $shipTo_meta = get_user_meta($user_id, 'wpiai_delivery_addresses', true);
@@ -489,6 +491,20 @@ function wpiai_different_array_indexes($array1,$array2) {
     return false;
 }
 
+function wpiai_equalize_shiptos($user_id) {
+    $wpiai_delivery_addresses = get_user_meta($user_id,'wpiai_delivery_addresses',true);
+    if(is_array($wpiai_delivery_addresses)) {
+        update_user_meta($user_id,'wpiai_last_delivery_addresses',$wpiai_delivery_addresses);
+    }
+}
+
+function wpiai_equalize_last_shiptos($user_id) {
+    $wpiai_delivery_addresses = get_user_meta($user_id,'wpiai_last_delivery_addresses',true);
+    if(is_array($wpiai_delivery_addresses)) {
+        update_user_meta($user_id,'wpiai_delivery_addresses',$wpiai_delivery_addresses);
+    }
+}
+
 function wpiai_clear_old_contacts($user_id) {
 	$blank_array = array();
 	update_user_meta($user_id, 'wpiai_last_contacts', $blank_array);
@@ -536,6 +552,101 @@ function wpiai_update_csd_contacts($user_id) {
             }
         }
 	}
+}
+
+function wpiai_update_csd_ship_tos($user_id) {
+    $shiptoRecs = get_user_meta($user_id, 'wpiai_delivery_addresses', true);
+    if (is_array($shiptoRecs)) {
+        $oldShipTos = get_user_meta($user_id, 'wpiai_last_delivery_addresses', true);
+        if(is_array($oldShipTos)) {
+            //Check for added contacts
+            if(count($shiptoRecs)<>count($oldShipTos)) {
+                foreach ($shiptoRecs as $shipTo_rec) {
+                    $delivery_UNIQUE_ID = $shipTo_rec['delivery_UNIQUE_ID'];
+                    $found = false;
+                    foreach ($oldShipTos as $oldShipTo) {
+                        if($oldShipTo['delivery_UNIQUE_ID'] == $delivery_UNIQUE_ID) {
+                            $found = true;
+                        }
+                    }
+                    if(!$found) {
+                        $oldShipTos[] = $shipTo_rec;
+                    }
+                }
+            }
+            $changedShipTos = wpiai_different_array_indexes($shiptoRecs,$oldShipTos);
+            if($changedShipTos) {
+                $shipToRec_url = get_option('wpiai_ship_to_url');
+                $shipToRec_paramaters = set_messageid(get_option('wpiai_ship_to_parameters'));
+                foreach ($changedShipTos as $changedShipTo) {
+                    $shipToRec_xml = get_shipTo_XML_record($user_id, 'Change', $shiptoRecs[$changedShipTo]);
+                    //error_log('Contact Change: '.$shiptoRecs[$changedShipTo]['contact_CONTACT_ID']);
+                    $updated = wpiai_get_infor_message_multipart_message($shipToRec_url, $shipToRec_paramaters, $shipToRec_xml);
+                }
+                update_user_meta($user_id, 'wpiai_last_delivery_addresses', $shiptoRecs);
+            } else {
+                //error_log('No contacts to update');
+            }
+        }
+    }
+}
+
+
+function wpiai_process_user_shiptos($user_id) {
+    error_log('Processing ShipTos for user_id: ' . $user_id);
+    $shiptoRec_meta = get_user_meta($user_id, 'wpiai_delivery_addresses', true);
+    $shipToRec = array();
+    $shipToAdd = array();
+    if (is_array($shiptoRec_meta)) {
+        foreach ($shiptoRec_meta as $shipToRec_m) {
+            $shipToRec_rec = $shipToRec_m;
+            if(!array_key_exists('delivery-CSD-ID', $shipToRec_rec)) {
+                $shipToRec_rec['delivery-CSD-ID'] = '';
+            }
+            if(!array_key_exists('delivery_UNIQUE_ID', $shipToRec_rec)) {
+                $shipToRec_rec['delivery_UNIQUE_ID'] = '';
+            }
+            if (($shipToRec_rec['delivery-CSD-ID'] == '')) {
+                //$shipToRec_rec['contact_CREATED_BY'] = 'WOO';
+                if ($shipToRec_rec['delivery_UNIQUE_ID'] == '' ) {
+                    $shipToRec_rec['delivery_UNIQUE_ID'] = uniqid();
+                }
+                $shipToAdd[] = $shipToRec_rec;
+            } else {
+                //$shipToRec_rec['contact_CREATED_BY'] = 'EXTERNAL';
+            }
+            if ($shipToRec_rec['delivery_UNIQUE_ID'] == '') {
+                $shipToRec_rec['delivery_UNIQUE_ID'] = uniqid();
+            }
+            $shipToRec[] = $shipToRec_rec;
+            //$lastContactRec[] = $shipToRec_rec;
+        }
+    } else {
+        //error_log('No Contact Meta');
+    }
+    //update_user_meta($user_id, 'wpiai_last_contacts', $lastContactRec);
+    if (!update_user_meta($user_id, 'wpiai_delivery_addresses', $shipToRec)) {
+        //error_log('Contact update_user_meta Failed or not changed for $user_id: ' . $user_id);
+        wpiai_update_csd_ship_tos($user_id);
+    } else {
+        $shipToRec_url = get_option('wpiai_ship_to_url');
+        $shipToRec_paramaters = set_messageid(get_option('wpiai_ship_to_parameters'));
+
+        if ((count($shipToAdd) > 0)) {
+            $wpiai_last_delivery_addresses = get_user_meta($user_id,'wpiai_last_delivery_addresses',true);
+            foreach ($shipToAdd as $add_shipto) {
+                $wpiai_last_delivery_addresses[] = $add_shipto;
+                $shipToRec_xml = get_shipTo_XML_record($user_id, 'Add', $add_shipto);
+                //error_log('shipto Add');
+                $updated = wpiai_get_infor_message_multipart_message($shipToRec_url, $shipToRec_paramaters, $shipToRec_xml);
+            }
+            update_user_meta($user_id,'wpiai_last_delivery_addresses',$wpiai_last_delivery_addresses);
+        }
+
+
+        wpiai_update_csd_ship_tos($user_id);
+    }
+    error_log('Finished Processing Contacts for user_id: ' . $user_id);
 }
 
 function wpiai_process_user_contacts($user_id)
