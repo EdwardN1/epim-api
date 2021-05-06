@@ -1,82 +1,27 @@
 {
-  "request": {
-    "companyNumber": 1,
-    "operatorInit": "BS1",
-    "customerNumber": 9,
-    "getPriceBreaks": true,
-    "useDefaultWhse": false,
-    "sendFullQtyOnOrder": true,
-    "checkOtherWhseInventory": true,
-    "pricingMethod": "full",
-    "tOemultprcinV2": {
-      "t-oemultprcinV2": [
-        {
-          "seqno": 1,
-          "prod": "RYA2P540-13",
-          "qtyord": 1,
-          "unit": "EACH"
-        },
-        {
-          "seqno": 1,
-          "prod": "RYA2P530-13",
-          "qtyord": 1,
-          "unit": "EACH"
-        },
-        {
-          "seqno": 1,
-          "prod": "RULTRIM-13",
-          "qtyord": 1,
-          "unit": "EACH"
-        },
-        {
-          "seqno": 1,
-          "prod": "RULTRIM-10",
-          "qtyord": 1,
-          "unit": "EACH"
-        },
-        {
-          "seqno": 1,
-          "prod": "RULTRIM-03",
-          "qtyord": 1,
-          "unit": "EACH"
-        },
-        {
-          "seqno": 1,
-          "prod": "RUL07X0-01",
-          "qtyord": 1,
-          "unit": "EACH"
-        },
-        {
-          "seqno": 1,
-          "prod": "RUL05X0-01",
-          "qtyord": 1,
-          "unit": "EACH"
-        },
-        {
-          "seqno": 1,
-          "prod": "RU360-01",
-          "qtyord": 1,
-          "unit": "EACH"
-        },
-        {
-          "seqno": 1,
-          "prod": "RSN15050DAS-04",
-          "qtyord": 1,
-          "unit": "EACH"
-        },
-        {
-          "seqno": 1,
-          "prod": "RRE5040-04",
-          "qtyord": 1,
-          "unit": "EACH"
-        },
-        {
-          "seqno": 1,
-          "prod": "RRE3040P-04",
-          "qtyord": 1,
-          "unit": "EACH"
-        }
-      ]
-    }
+  "response": {
+    "cErrorMessage": "",
+    "period1Text": "(1) 03/01/20 - 03/31/20:",
+    "period1Balance": 35387.56,
+    "period2Text": "(2) 02/01/20 - 02/29/20:",
+    "period2Balance": 0,
+    "period3Text": "(3) 01/01/20 - 01/31/20:",
+    "period3Balance": 0,
+    "period4Text": "(4) 12/01/19 - 12/31/19:",
+    "period4Balance": 0,
+    "period5Text": "(5) Older    - 11/30/19:",
+    "period5Balance": 0,
+    "futureBalanceText": "Future Invoice Balance:",
+    "futureBalance": 95864.13,
+    "total1Text": "Service Charges:",
+    "total1Balance": 0,
+    "total2Text": "COD Balance:",
+    "total2Balance": 0,
+    "total3Text": "Total Balance:",
+    "total3Balance": 131251.69,
+    "total4Text": "Memo Misc Credits:",
+    "total4Balance": -43.37,
+    "total5Text": "Memo Unapplied Cash:",
+    "total5Balance": -100
   }
 }

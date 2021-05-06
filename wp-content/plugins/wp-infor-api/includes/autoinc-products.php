@@ -130,7 +130,7 @@ function getPricesQuantities( $response ) {
 function createProductsRequest( $customer, $products ) {
     $wpiai_guest_customer_number = get_option('wpiai_guest_customer_number');
     if(!is_numeric($wpiai_guest_customer_number)) $wpiai_guest_customer_number = 9;
-	$request = '{"request": {"companyNumber": 1,"operatorInit": "BS1",';
+	$request = '{"request": {"companyNumber": 1,"operatorInit": "WOO",';
 	if ( $customer != '' ) {
 		$request .= '"customerNumber": ' . $customer . ',';
 	} else {
