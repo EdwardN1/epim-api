@@ -68,3 +68,45 @@ function display_custom_meta_data_in_backend_orders( $order ){
 }
 
 
+/**
+ * Adds 'Profit' column header to 'Orders' page immediately after 'Total' column.
+ *
+ * @param string[] $columns
+ * @return string[] $new_columns
+ */
+function cac_add_collection_branch_column( $columns ) {
+
+	$new_columns = array();
+
+	foreach ( $columns as $column_name => $column_info ) {
+
+		$new_columns[ $column_name ] = $column_info;
+
+		if ( 'order_total' === $column_name ) {
+			$new_columns['order_collect_branch'] = __( 'Collection Branch', 'clickcollect' );
+		}
+	}
+
+	return $new_columns;
+}
+add_filter( 'manage_edit-shop_order_columns', 'cac_add_collection_branch_column', 20 );
+
+
+
+
+function cac_collection_branch_column($column) {
+	global $post;
+	if('order_collect_branch'===$column) {
+		$order    = wc_get_order( $post->ID );
+		$ship_array =$order->get_items( 'shipping' );
+		$shipping = reset( $ship_array )->get_method_id();
+		//error_log(get_post_meta($order->get_id(), '_COLLECTION_BRANCH_NAME', true));
+		if($shipping==='clickcollect') {
+			echo get_post_meta($order->get_id(), '_COLLECTION_BRANCH_NAME', true);
+		}
+	}
+
+}
+add_action( 'manage_shop_order_posts_custom_column', 'cac_collection_branch_column' );
+
+
