@@ -70,6 +70,8 @@ function wpiai_do_every_day()
 	/*$x = getAccountBalances('10324');
 	error_log(print_r($x, true));*/
 
+	get_customer_invoices('10324','2021-01-01','2021-04-26');
+
 }
 
 function wpiai_do_every_minute()

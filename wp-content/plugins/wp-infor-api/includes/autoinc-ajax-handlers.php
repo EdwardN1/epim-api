@@ -33,6 +33,18 @@ add_action( 'wp_ajax_wpiai_get_product_updates_api_response', 'ajax_wpiai_get_pr
 add_action( 'wp_ajax_wpiai_get_accounts_customer_balances_api_response', 'ajax_wpiai_get_accounts_customer_balances_api_response' );
 add_action( 'wp_ajax_wpiai_get_accounts_customer_data_credit_api_response', 'ajax_wpiai_get_accounts_customer_data_credit_api_response' );
 
+add_action( 'wp_ajax_wpiai_get_invoices_api_response', 'ajax_wpiai_get_invoices_api_response' );
+
+function ajax_wpiai_get_invoices_api_response() {
+	wpiai_api_checkSecure();
+	header( "Content-Type: application/json" );
+	$url = get_option('wpiai_invoices_url');
+	$request = get_option('wpiai_invoices_request');
+	$response = wpiai_get_infor_api_response($url,$request);
+	echo $response;
+	exit;
+}
+
 function ajax_get_wpiai_get_access_token() {
 	wpiai_api_checkSecure();
 	header( "Content-Type: application/json" );

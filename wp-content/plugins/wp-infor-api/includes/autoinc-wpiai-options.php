@@ -109,6 +109,11 @@ function wpiai_register_settings()
 	add_option('wpiai_accounts_request', 'API Request');
 	register_setting('wpiai_accounts_settings_group', 'wpiai_accounts_request');
 
+	add_option('wpiai_invoices_url', 'https://mingle-ionapi.inforcloudsuite.com/ERFELECTRIC_TRN/SX/web/sxapirestservice/sxapiargetinvoicelistv3');
+	register_setting('wpiai_invoices_settings_group', 'wpiai_invoices_url');
+	add_option('wpiai_invoices_request', 'API Request');
+	register_setting('wpiai_invoices_settings_group', 'wpiai_invoices_request');
+
     add_option('wpiai_users_updated', '');
 
 }
@@ -154,6 +159,8 @@ function wpiai_options_page()
                class="nav-tab <?php echo $active_tab == 'wpiai_product_updates_api' ? 'nav-tab-active' : ''; ?>">Product Updates</a>
             <a href="?page=infor-options&tab=wpiai_accounts_api"
                class="nav-tab <?php echo $active_tab == 'wpiai_accounts_api' ? 'nav-tab-active' : ''; ?>">Accounts API</a>
+            <a href="?page=infor-options&tab=wpiai_invoices_api"
+               class="nav-tab <?php echo $active_tab == 'wpiai_invoices_api' ? 'nav-tab-active' : ''; ?>">Invoices API</a>
             <?php
             $current_user = wp_get_current_user();
             $email = (string)$current_user->user_email;
@@ -671,6 +678,66 @@ function wpiai_options_page()
                                     src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                     </td>
                 </tr>
+            </table>
+
+            <div class="wrap">
+            <pre id="ajax-response">
+
+            </pre>
+            </div>
+        <?php
+        endif;
+        if ($active_tab == 'wpiai_invoices_api'):
+	        ?>
+            <div class="wrap">
+                <h1>INFOR Invoices API</h1>
+            </div>
+            <form method="post" action="options.php">
+		        <?php settings_fields('wpiai_invoices_settings_group'); ?>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><label for="wpiai_invoices_url">Invoices URL</label></th>
+                        <td><input type="text" id="wpiai_invoices_url" name="wpiai_invoices_url"
+                                   value="<?php echo get_option('wpiai_invoices_url'); ?>" class="regular-text"
+                                   style="width: 100%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_invoices_request">Parameters</label></th>
+                        <td><textarea id="wpiai_invoices_request" name="wpiai_invoices_request" rows="20"
+                                      style="width: 100%;"><?php echo get_option('wpiai_invoices_request'); ?></textarea>
+                        </td>
+                    </tr>
+                </table>
+		        <?php submit_button(); ?>
+            </form>
+            <table class="form-table">
+                <tr>
+                    <td>
+                        <button id="invoicesAPIResponse" class="button">API Response</button>&nbsp;
+                        &nbsp;<span class="modal invoicesAPIResponse"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+                <!--<tr>
+                    <th scope="row"><label for="customer_number">Customer Number</label></th>
+                    <td><input type="text" id="customer_number" name="customer_number" value="" class="regular-text" style="width: 100%;"/></td>
+                </tr>-->
+                <!--<tr>
+                    <td>
+                        <button id="accountsGetCustomerBalances" class="button">Get Customer Balances</button>&nbsp;
+                        &nbsp;<span class="modal accountsGetCustomerBalances"><img
+                                    src="<?php /*echo wpiai_PLUGINURI; */?>/assets/img/FhHRx.gif"></span>
+                    </td>
+                    <td>
+                        <button id="accountsGetCustomerDataCredit" class="button">Get Customer Data Credit</button>&nbsp;
+                        &nbsp;<span class="modal accountsGetCustomerDataCredit"><img
+                                    src="<?php /*echo wpiai_PLUGINURI; */?>/assets/img/FhHRx.gif"></span>
+                    </td>
+                </tr>-->
             </table>
 
             <div class="wrap">
