@@ -314,14 +314,18 @@ function set_organization_shipping_details($organization_id, $shipping_id, $ship
                         $new_shipTo = array();
                         foreach ($array_keys as $array_key) {
                             $real_key = wpiai_convert_shipping_field_names($array_key);
+                            //error_log($array_key.' = '.$real_key);
                             if($real_key) {
                                 if(array_key_exists($real_key,$current_shipTo)) {
                                     $new_VAL = $shipping_details[$array_key];
                                     $old_VAL = $current_shipTo[$real_key];
+                                    //error_log('New: '.$new_VAL.' | Old: '.$old_VAL);
                                     if($new_VAL == $old_VAL) {
-                                        $new_shipTo[$real_key] = $current_shipTo[$real_key];
+                                        $new_shipTo[$real_key] = $old_VAL;
+                                        //error_log('No Change: $new_shipTo['.$real_key.'] = '.$old_VAL);
                                     } else {
-                                        $new_shipTo[$real_key] = $shipping_details[$array_key];
+                                        $new_shipTo[$real_key] = $new_VAL;
+                                        //error_log('Updated: $new_shipTo['.$real_key.'] = '.$new_VAL);
                                         $updated = true;
                                     }
                                 } else {
@@ -331,12 +335,12 @@ function set_organization_shipping_details($organization_id, $shipping_id, $ship
                             }
                             $current_array_keys = array_keys($current_shipTo);
                             foreach ($current_array_keys as $current_array_key) {
-                                if($current_array_key != $real_key) {
+                                if(!array_key_exists($current_array_key,$new_shipTo)) {
                                     $new_shipTo[$current_array_key] = $current_shipTo[$current_array_key];
                                 }
                             }
-                            $new_shipTos[] = $new_shipTo;
                         }
+	                    $new_shipTos[] = $new_shipTo;
                     } else {
                         $new_shipTos[] = $current_shipTo;
                     }

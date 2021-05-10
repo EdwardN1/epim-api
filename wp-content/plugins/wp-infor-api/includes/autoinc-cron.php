@@ -39,10 +39,15 @@ function wpiai_do_every_day()
 		error_log('Contact Not Updated');
 	}*/
     //wpiai_equalize_shiptos(50);
-    //wpiai_equalize_last_shiptos(50);
+    //wpiai_equalize_last_shiptos(48);
 	/*$shippingDetails = array();
-	$shippingDetails['address_line_1'] = 'address_line_1 test 2';
-	$x = set_organization_shipping_details(get_customer_organization(50),'1000912380-2',$shippingDetails);
+
+	$shippingDetails['phone'] = 'Penn Studio X';
+	$shippingDetails['company_name'] = 'Penn Studio X';
+	$shippingDetails['address_line_1'] = 'Penn Studio X';
+	$shippingDetails['town_city'] = 'Penn Studio X';
+	$shippingDetails['postcode'] = 'Penn Studio X';
+	$x = set_organization_shipping_details(get_customer_organization(48),'1000912376-1',$shippingDetails);
 	if($x) {
 		error_log('Test ShipTo Updated');
 	} else {
@@ -62,8 +67,8 @@ function wpiai_do_every_day()
 		error_log( '50' . ' added to the meta update queue' );
 	}*/
 
-	$x = getAccountBalances('10324');
-	error_log(print_r($x, true));
+	/*$x = getAccountBalances('10324');
+	error_log(print_r($x, true));*/
 
 }
 
