@@ -88,28 +88,28 @@ function getAccountBalances( $custNum ) {
 }
 
 function get_invoice_codes( $code ) {
-	if ( $code = 'invdt' ) {
+	if ( $code == 'invdt' ) {
 		return 'date';
 	}
-	if ( $code = 'invno' ) {
+	if ( $code == 'invno' ) {
 		return 'invoice_number';
 	}
-	if ( $code = 'statustype' ) {
+	if ( $code == 'statustype' ) {
 		return 'status';
 	}
-	if ( $code = 'transcd' ) {
+	if ( $code == 'transcd' ) {
 		return 'transaction_type';
 	}
-	if ( $code = 'amountx' ) {
+	if ( $code == 'amountx' ) {
 		return 'amount';
 	}
-	if ( $code = 'amtduex' ) {
+	if ( $code == 'amtduex' ) {
 		return 'amount_due';
 	}
-	if ( $code = 'duedt' ) {
+	if ( $code == 'duedt' ) {
 		return 'due_date';
 	}
-	if ( $code = 'custpo' ) {
+	if ( $code == 'custpo' ) {
 		return 'customer_po_reference';
 	}
 	return false;
@@ -148,13 +148,50 @@ function get_customer_invoices( $organizationID, $start_date, $end_date ) {
 	//error_log($request);
 	$url      = get_option( 'wpiai_invoices_url' );
 	$response = json_decode( wpiai_get_infor_api_response( $url, $request ), true );
-
 	if ( is_array( $response ) ) {
 		//error_log(print_r($response, true));
-		if(is_array($response['tArtransV3']['t-artransV3'])) {
-			$invoices = $response['tArtransV3']['t-artransV3'];
+		if(is_array($response['response']['tArtransV3']['t-artransV3'])) {
+			$invoices = $response['response']['tArtransV3']['t-artransV3'];
+			//error_log(print_r($invoices,true));
+			$res = array();
 			foreach ($invoices as $invoice) {
-				
+				$i = array();
+				$keys = array_keys($invoice);
+				foreach ($keys as $key) {
+					$i_key = get_invoice_codes($key);
+					//error_log($i_key);
+					if($i_key) {
+						if($i_key=='transaction_type') {
+							if($invoice[$key]=='IN') {
+								$i[$i_key]='Invoice';
+							} else {
+								if($invoice[$key]=='UC') {
+									$i[$i_key]='Unapplied Cash';
+								} else {
+									if($invoice[$key]=='MC') {
+										$i[$i_key]='Micellaneous Credit';
+									} else {
+										if($invoice[$key]=='CK') {
+											$i[$i_key]='Payment';
+										} else {
+											$i[$i_key] = $invoice[$key];
+										}
+									}
+								}
+							}
+						} else {
+							$i[$i_key] = trim(trim($invoice[$key],'-'));
+						}
+
+					}
+				}
+				if(!empty($i)) {
+					$res[] = $i;
+				}
+			}
+			if(!empty($res)) {
+				//error_log(print_r($res,true));
+				return $res;
 			}
 		}
 	}

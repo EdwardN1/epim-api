@@ -524,6 +524,24 @@ function wpiai_convert_field_names($fname)
     return 'field_not_found_error';
 }
 
+function get_organization_id($organization_id) {
+	$user = get_users(
+		array(
+			'meta_key' => 'CSD_ID',
+			'meta_value' => $organization_id,
+			'number' => 1,
+			'count_total' => false
+		)
+	);
+	if ($user) {
+		$user_id = $user[0]->ID;
+		if($user_id) {
+			return $user_id;
+		}
+	}
+	return false;
+}
+
 function set_organization_contact_details($organization_id, $contact_id, $contact_details = array())
 {
     $user = get_users(

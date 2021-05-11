@@ -74,8 +74,10 @@ function wpiai_register_settings()
     register_setting('wpiai_contact_group', 'wpiai_contact_url');
     add_option('wpiai_contact_parameters', 'API Parameters');
     register_setting('wpiai_contact_group', 'wpiai_contact_parameters');
-    add_option('wpiai_contact_xml', 'API XML');
+    add_option('wpiai_contact_xml', 'API XML for Adding');
     register_setting('wpiai_contact_group', 'wpiai_contact_xml');
+	add_option('wpiai_contact_xml_update', 'API XML for Updating');
+	register_setting('wpiai_contact_group', 'wpiai_contact_xml_update');
 
     add_option('wpiai_guest_customer_number', 'Customer Number for Guest Orders');
     register_setting('wpiai_settings_group', 'wpiai_guest_customer_number');
@@ -769,11 +771,18 @@ function wpiai_options_page()
                         </td>
                     </tr>
                     <tr>
-                        <th scope="row"><label for="wpiai_contact_xml">XML</label></th>
+                        <th scope="row"><label for="wpiai_contact_xml">XML - used for adding a contact</label></th>
                         <td><textarea id="wpiai_contact_xml" name="wpiai_contact_xml" rows="40"
                                       style="width: 100%;"><?php echo get_option('wpiai_contact_xml'); ?></textarea>
                         </td>
                     </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_contact_xml_update">XML - used for updating a contact</label></th>
+                        <td><textarea id="wpiai_contact_xml_update" name="wpiai_contact_xml_update" rows="40"
+                                      style="width: 100%;"><?php echo get_option('wpiai_contact_xml_update'); ?></textarea>
+                        </td>
+                    </tr>
+
 
                 </table>
                 <?php submit_button(); ?>

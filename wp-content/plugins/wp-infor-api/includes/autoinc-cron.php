@@ -70,8 +70,15 @@ function wpiai_do_every_day()
 	/*$x = getAccountBalances('10324');
 	error_log(print_r($x, true));*/
 
-	get_customer_invoices('10324','2021-01-01','2021-04-26');
+	//get_customer_invoices('10324','2021-01-01','2021-04-26');
 
+	/*error_log(get_organization_id('1000912376'));
+	error_log(get_contant_customer_csd_id( 6878 ));
+	error_log(get_contant_customer_csd_id( 6844 ));
+	error_log(get_contant_customer_csd_id( 6833 ));
+	error_log(get_contant_customer_csd_id( 6830 ));
+	error_log(get_contant_customer_csd_id( 6879 ));
+	error_log(get_contant_customer_csd_id( 6876 ));*/
 }
 
 function wpiai_do_every_minute()

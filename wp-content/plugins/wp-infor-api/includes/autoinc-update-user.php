@@ -227,6 +227,9 @@ function get_contact_XML_record( $user_id, $action, $record ) {
 	$user = get_userdata( $user_id );
 	if ( $user ) {
 		$xmld = get_option( 'wpiai_contact_xml' );
+		if($action <> 'Add') {
+			$xmld = get_option( 'wpiai_contact_xml_update' );
+		}
 		$xml  = simplexml_load_string( $xmld );
 
 		$nowDT            = new DateTime();
@@ -287,8 +290,6 @@ function get_contact_XML_record( $user_id, $action, $record ) {
 			$commEmail = 'false';
 		}
 
-
-
         $xml->registerXPathNamespace( 'x', 'http://schema.infor.com/InforOAGIS/2' );
         if ( $xml->xpath( '//x:ApplicationArea' )[0]->CreationDateTime[0] ) {
             $xml->xpath( '//x:ApplicationArea' )[0]->CreationDateTime[0] = $CreationDateTime;
@@ -347,18 +348,20 @@ function get_contact_XML_record( $user_id, $action, $record ) {
         if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[5]->URI[0] ) {
             $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[5]->URI[0] = $URI;
         }
-		if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[0]->DoNotUseIndicator[0] ) {
-			$xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[0]->DoNotUseIndicator[0] = $commPhone;
-		}
-		if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[1]->DoNotUseIndicator[0] ) {
-			$xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[1]->DoNotUseIndicator[0] = $commFax;
-		}
-		if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[2]->DoNotUseIndicator[0] ) {
-			$xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[2]->DoNotUseIndicator[0] = $commMail;
-		}
-		if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[3]->DoNotUseIndicator[0] ) {
-			$xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[3]->DoNotUseIndicator[0] = $commEmail;
-		}
+        if($action=='Add') {
+	        if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[0]->DoNotUseIndicator[0] ) {
+		        $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[0]->DoNotUseIndicator[0] = $commPhone;
+	        }
+	        if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[1]->DoNotUseIndicator[0] ) {
+		        $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[1]->DoNotUseIndicator[0] = $commFax;
+	        }
+	        if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[2]->DoNotUseIndicator[0] ) {
+		        $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[2]->DoNotUseIndicator[0] = $commMail;
+	        }
+	        if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[3]->DoNotUseIndicator[0] ) {
+		        $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[3]->DoNotUseIndicator[0] = $commEmail;
+	        }
+        }
 		if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->EmployerReference[0]->DocumentID[0]->ID[0] ) {
 			$xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->EmployerReference[0]->DocumentID[0]->ID[0] = $Customer_CSD_ID;
 		}
