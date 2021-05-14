@@ -34,6 +34,35 @@ add_action( 'wp_ajax_wpiai_get_accounts_customer_balances_api_response', 'ajax_w
 add_action( 'wp_ajax_wpiai_get_accounts_customer_data_credit_api_response', 'ajax_wpiai_get_accounts_customer_data_credit_api_response' );
 
 add_action( 'wp_ajax_wpiai_get_invoices_api_response', 'ajax_wpiai_get_invoices_api_response' );
+add_action( 'wp_ajax_wpiai_get_single_invoice_api_response', 'wpiai_get_single_invoice_api_response' );
+add_action( 'wp_ajax_wpiai_get_single_invoice_api_response_test', 'wpiai_get_single_invoice_api_response_test' );
+
+function wpiai_get_single_invoice_api_response_test() {
+	wpiai_api_checkSecure();
+	header( "Content-Type: application/json" );
+	$url = get_option('wpiai_single_invoice_url');
+	$order = $_POST['order'];
+	//error_log($order);
+	if($order) {
+		$response = getSingleInvoice($order);
+		//error_log(print_r($response,true));
+		echo json_encode($response);
+	} else {
+		echo 'Something went wrong.';
+	}
+
+	exit;
+}
+
+function wpiai_get_single_invoice_api_response() {
+	wpiai_api_checkSecure();
+	header( "Content-Type: application/json" );
+	$url = get_option('wpiai_single_invoice_url');
+	$request = get_option('wpiai_single_invoice_request');
+	$response = wpiai_get_infor_api_response($url,$request);
+	echo $response;
+	exit;
+}
 
 function ajax_wpiai_get_invoices_api_response() {
 	wpiai_api_checkSecure();

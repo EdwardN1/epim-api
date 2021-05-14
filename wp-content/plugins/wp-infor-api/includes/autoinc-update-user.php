@@ -227,9 +227,9 @@ function get_contact_XML_record( $user_id, $action, $record ) {
 	$user = get_userdata( $user_id );
 	if ( $user ) {
 		$xmld = get_option( 'wpiai_contact_xml' );
-		if($action <> 'Add') {
+		/*if($action <> 'Add') {
 			$xmld = get_option( 'wpiai_contact_xml_update' );
-		}
+		}*/
 		$xml  = simplexml_load_string( $xmld );
 
 		$nowDT            = new DateTime();
@@ -348,7 +348,7 @@ function get_contact_XML_record( $user_id, $action, $record ) {
         if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[5]->URI[0] ) {
             $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationDetail[5]->URI[0] = $URI;
         }
-        if($action=='Add') {
+        /*if($action=='Add') {*/
 	        if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[0]->DoNotUseIndicator[0] ) {
 		        $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[0]->DoNotUseIndicator[0] = $commPhone;
 	        }
@@ -361,7 +361,7 @@ function get_contact_XML_record( $user_id, $action, $record ) {
 	        if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[3]->DoNotUseIndicator[0] ) {
 		        $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->CommunicationSummary[3]->DoNotUseIndicator[0] = $commEmail;
 	        }
-        }
+        /*}*/
 		if ( $xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->EmployerReference[0]->DocumentID[0]->ID[0] ) {
 			$xml->xpath( '//x:DataArea' )[0]->ContactMaster[0]->EmployerReference[0]->DocumentID[0]->ID[0] = $Customer_CSD_ID;
 		}

@@ -472,6 +472,70 @@ adminJQ(function ($) {
         });
     });
 
+    $('#singleInvoiceAPIResponse').on('click', function () {
+        $('#ajax-response').html('Working...');
+        $('.modal.singleInvoiceAPIResponse').show();
+        let security = wpiai_ajax_object.security;
+        let url = wpiai_ajax_object.ajax_url;
+        //let custNum = $('#customer_number').val();
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {action: 'wpiai_get_single_invoice_api_response', security: security},
+            success: function (data) {
+                //window.console.log('data returned');
+                try {
+                    let resp = JSON.parse(data);
+                    let rstr = JSON.stringify(resp, undefined, 4);
+                    $('#ajax-response').html(syntaxHighlight(rstr));
+                    $('.modal.singleInvoiceAPIResponse').hide();
+                    window.console.log('Data is JSON');
+                }
+                catch (e) {
+                    if(typeof data === 'object' && data !== null) {
+                        let x = JSON.stringify(data);
+                        $('#ajax-response').html(syntaxHighlight(x.replace(/\\(.)/mg, "")));
+                    } else {
+                        $('#ajax-response').html(syntaxHighlight(data));
+                    }
+                    $('.modal.singleInvoiceAPIResponse').hide();
+                }
+            }
+        });
+    });
+
+    $('#singleInvoiceAPIResponseTest').on('click', function () {
+        $('#ajax-response').html('Working...');
+        $('.modal.singleInvoiceAPIResponseTest').show();
+        let security = wpiai_ajax_object.security;
+        let url = wpiai_ajax_object.ajax_url;
+        //let custNum = $('#customer_number').val();
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: {action: 'wpiai_get_single_invoice_api_response_test', security: security, order: $('#wpiai_single_invoice_number').val()},
+            success: function (data) {
+                //window.console.log('data returned');
+                try {
+                    let resp = JSON.parse(data);
+                    let rstr = JSON.stringify(resp, undefined, 4);
+                    $('#ajax-response').html(syntaxHighlight(rstr));
+                    $('.modal.singleInvoiceAPIResponseTest').hide();
+                    window.console.log('Data is JSON');
+                }
+                catch (e) {
+                    if(typeof data === 'object' && data !== null) {
+                        let x = JSON.stringify(data);
+                        $('#ajax-response').html(syntaxHighlight(x.replace(/\\(.)/mg, "")));
+                    } else {
+                        $('#ajax-response').html(syntaxHighlight(data));
+                    }
+                    $('.modal.singleInvoiceAPIResponseTest').hide();
+                }
+            }
+        });
+    });
+
     $('#testSalesOrderXML').on('click', function () {
         $('#ajax-response').html('Working...');
         $('.modal.testSalesOrderXML').show();

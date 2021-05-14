@@ -56,16 +56,16 @@ function wpiai_do_every_day()
 
 	/*update_user_meta(45,'wpiai_delivery_addresses',array());
 	update_user_meta(45,'wpiai_last_delivery_addresses',array());*/
-	/*$users_updated          = get_option( 'wpiai_users_updated' );
+	$users_updated          = get_option( 'wpiai_users_updated' );
 	if ( ! is_array( $users_updated ) ) {
 		$users_updated = array();
 	}
-	$users_updated[] = '50';
+	$users_updated[] = '51';
 	if ( ! update_option( 'wpiai_users_updated', $users_updated ) ) {
-		error_log( 'UserID not saved: ' . '50' );
+		error_log( 'UserID not saved: ' . '51' );
 	} else {
-		error_log( '50' . ' added to the meta update queue' );
-	}*/
+		error_log( '51' . ' added to the meta update queue' );
+	}
 
 	/*$x = getAccountBalances('10324');
 	error_log(print_r($x, true));*/
@@ -568,6 +568,14 @@ function wpiai_update_csd_contacts($user_id) {
                 //error_log('No contacts to update');
             }
         }
+        /*foreach ($contactRecs as $contact_rec) {
+        	if($contact_rec['contact_CONTACT_ID']=='') {
+		        $contactRec_url = get_option('wpiai_contact_url');
+		        $contactRec_paramaters = set_messageid(get_option('wpiai_contact_parameters'));
+		        $contactRec_xml = get_contact_XML_record($user_id, 'Change', $contact_rec);
+		        $updated = wpiai_get_infor_message_multipart_message($contactRec_url, $contactRec_paramaters, $contactRec_xml);
+	        }
+        }*/
 	}
 }
 
@@ -614,7 +622,13 @@ function wpiai_process_user_shiptos($user_id) {
     $shiptoRec_meta = get_user_meta($user_id, 'wpiai_delivery_addresses', true);
     $shipToRec = array();
     $shipToAdd = array();
-    if (is_array($shiptoRec_meta)) {
+    $hasShipping = is_array($shiptoRec_meta);
+    if($hasShipping) {
+    	if(empty($shiptoRec_meta)) {
+    		$hasShipping = false;
+	    }
+    }
+    if ($hasShipping) {
         foreach ($shiptoRec_meta as $shipToRec_m) {
             $shipToRec_rec = $shipToRec_m;
             if(!array_key_exists('delivery-CSD-ID', $shipToRec_rec)) {
@@ -640,6 +654,28 @@ function wpiai_process_user_shiptos($user_id) {
         }
     } else {
         //error_log('No Contact Meta');
+	    $user_CSD_ID = get_user_meta($user_id, 'CSD_ID',true);
+	    if($user_CSD_ID != '') {
+		    $customer = new WC_Customer( $user_id );
+		    $shipping_company    = $customer->get_shipping_company();
+		    $shipping_address_1  = $customer->get_shipping_address_1();
+		    $shipping_address_2  = $customer->get_shipping_address_2();
+		    $shipping_city       = $customer->get_shipping_city();
+		    $shipping_state      = $customer->get_shipping_state();
+		    $shipping_postcode   = $customer->get_shipping_postcode();
+		    $shipping_country    = $customer->get_shipping_country();
+		    $first_shipping = array();
+		    $first_shipping['delivery-company-name'] = $shipping_company;
+		    $first_shipping['delivery-country'] = $shipping_country;
+		    $first_shipping['delivery-street-address-1'] = $shipping_address_1;
+		    $first_shipping['delivery-street-address-2'] = $shipping_address_2;
+		    $first_shipping['delivery-town-city'] = $shipping_city;
+		    $first_shipping['delivery-street-address-3'] = $shipping_state;
+		    $first_shipping['delivery-postcode'] = $shipping_postcode;
+		    $first_shipping['delivery-phone'] = '';
+		    $first_shipping['delivery_UNIQUE_ID'] = uniqid();
+		    $shipToRec[] = $first_shipping;
+	    }
     }
     //update_user_meta($user_id, 'wpiai_last_contacts', $lastContactRec);
     if (!update_user_meta($user_id, 'wpiai_delivery_addresses', $shipToRec)) {
@@ -651,6 +687,9 @@ function wpiai_process_user_shiptos($user_id) {
 
         if ((count($shipToAdd) > 0)) {
             $wpiai_last_delivery_addresses = get_user_meta($user_id,'wpiai_last_delivery_addresses',true);
+            if(!is_array($wpiai_last_delivery_addresses)) {
+	            $wpiai_last_delivery_addresses = array();
+            }
             foreach ($shipToAdd as $add_shipto) {
                 $wpiai_last_delivery_addresses[] = $add_shipto;
                 $shipToRec_xml = get_shipTo_XML_record($user_id, 'Add', $add_shipto);
@@ -679,7 +718,13 @@ function wpiai_process_user_contacts($user_id)
         }
     }*/
     $contactAdd = array();
-    if (is_array($contactRec_meta)) {
+    $hasContacts = is_array($contactRec_meta);
+    if($hasContacts) {
+    	if(empty($contactRec_meta)) {
+    		$hasContacts = false;
+	    }
+    }
+    if ($hasContacts) {
         foreach ($contactRec_meta as $contactRec_m) {
             $contactRec_rec = $contactRec_m;
             if (($contactRec_rec['contact_CSD_ID'] == '') || (!array_key_exists('contact_CSD_ID', $contactRec_rec))) {
@@ -698,7 +743,33 @@ function wpiai_process_user_contacts($user_id)
             //$lastContactRec[] = $contactRec_rec;
         }
     } else {
-        //error_log('No Contact Meta');
+        error_log('No Contact Meta');
+	    $user_CSD_ID = get_user_meta($user_id, 'CSD_ID',true);
+	    if($user_CSD_ID != '') {
+	    	$customer = new WC_Customer($user_id);
+		    $user_email   = $customer->get_email(); // Get account email
+		    $first_name   = $customer->get_first_name();
+		    $last_name    = $customer->get_last_name();
+		    $billing_address_1  = $customer->get_billing_address_1();
+		    $billing_address_2  = $customer->get_billing_address_2();
+		    $billing_city       = $customer->get_billing_city();
+		    $billing_state      = $customer->get_billing_state();
+		    $billing_postcode   = $customer->get_billing_postcode();
+		    $first_contact = array();
+		    $first_contact['contact_first_name'] = $first_name;
+		    $first_contact['contact_last_name'] = $last_name;
+		    $first_contact['contact_job_title'] = '';
+		    $first_contact['contact_addr_1'] = $billing_address_1;
+		    $first_contact['contact_addr_2'] = $billing_address_2;
+		    $first_contact['contact_addr_3'] = $billing_city;
+		    $first_contact['contact_addr_4'] = $billing_state;
+		    $first_contact['contact_email'] = $user_email;
+		    $first_contact['contact_postcode'] = $billing_postcode;
+		    $first_contact['contact_phone'] = '';
+		    $first_contact['contact_type'] = '';
+		    $first_contact['contact_CONTACT_ID'] = uniqid();
+		    $contactRec[] = $first_contact;
+	    }
     }
     //update_user_meta($user_id, 'wpiai_last_contacts', $lastContactRec);
     if (!update_user_meta($user_id, 'wpiai_contacts', $contactRec)) {
