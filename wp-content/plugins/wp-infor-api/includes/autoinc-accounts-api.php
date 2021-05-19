@@ -1,12 +1,15 @@
 <?php
 
-function createSingleInvoiceRequest( $order_number ) {
+function createSingleInvoiceRequest( $order_number, $order_suffix = 0 ) {
 	$request = json_decode( get_option( 'wpiai_single_invoice_request' ), true );
 	if ( is_array( $request ) ) {
 		if ( array_key_exists( 'request', $request ) ) {
 			$body = $request['request'];
 			if ( array_key_exists( 'orderNumber', $body ) ) {
 				$body['orderNumber'] = $order_number;
+				if(array_key_exists('orderSuffix',$body)) {
+					$body['orderSuffix'] = $order_suffix;
+				}
 				$return              = array();
 				$return['request']   = array();
 				$return['request'][] = $body;
@@ -19,8 +22,8 @@ function createSingleInvoiceRequest( $order_number ) {
 	return false;
 }
 
-function getSingleInvoice( $order_number ) {
-	$request = createSingleInvoiceRequest( $order_number );
+function getSingleInvoice( $order_number, $order_suffix ) {
+	$request = createSingleInvoiceRequest( $order_number, $order_suffix );
 	$request = str_replace( '[', '', $request );
 	$request = str_replace( ']', '', $request );
 	//error_log($request);

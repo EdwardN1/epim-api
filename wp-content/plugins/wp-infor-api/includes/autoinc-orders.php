@@ -249,6 +249,7 @@ function wpiai_get_order_XML( $order_id, $action ) {
 		$ShipToParty_Location_Address_CityName   = $order->get_billing_city();
 		$ShipToParty_Location_Address_PostalCode = $order->get_billing_postcode();
 		//$TransportationMethodCode = ''; //07 for Click and Collect 04 for Carrier delivery
+		$contact_ordered = get_post_meta($order_id,'_contact_ordered',true);
 		/**
 		 * This is how the order is shipped need to check the:
 		 * shipping_lines
@@ -331,6 +332,12 @@ function wpiai_get_order_XML( $order_id, $action ) {
 
 		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[0]->NameValue[0] ) {
 			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[0]->NameValue[0] = $order_id;
+		}
+
+		if($contact_ordered) {
+			if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[1]->NameValue[0] ) {
+				$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[1]->NameValue[0] = $contact_ordered;
+			}
 		}
 
 		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[2]->NameValue[0] ) {

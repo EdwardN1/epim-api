@@ -11,6 +11,17 @@ function get_customer_organization($customer_id)
     return false;
 }
 
+function get_csd_order_id($order_id) {
+	$order = wc_get_order( $order_id );
+	if($order) {
+		$CSD_ID = get_post_meta($order_id,'CSD_ID',true);
+		if($CSD_ID) {
+			return $CSD_ID;
+		}
+	}
+	return false;
+}
+
 function get_organization_shipping_details($organization_id)
 {
     $user = get_users(

@@ -56,16 +56,16 @@ function wpiai_do_every_day()
 
 	/*update_user_meta(45,'wpiai_delivery_addresses',array());
 	update_user_meta(45,'wpiai_last_delivery_addresses',array());*/
-	$users_updated          = get_option( 'wpiai_users_updated' );
+	/*$users_updated          = get_option( 'wpiai_users_updated' );
 	if ( ! is_array( $users_updated ) ) {
 		$users_updated = array();
 	}
-	$users_updated[] = '51';
+	$users_updated[] = '54';
 	if ( ! update_option( 'wpiai_users_updated', $users_updated ) ) {
-		error_log( 'UserID not saved: ' . '51' );
+		error_log( 'UserID not saved: ' . '54' );
 	} else {
-		error_log( '51' . ' added to the meta update queue' );
-	}
+		error_log( '54' . ' added to the meta update queue' );
+	}*/
 
 	/*$x = getAccountBalances('10324');
 	error_log(print_r($x, true));*/
@@ -79,6 +79,8 @@ function wpiai_do_every_day()
 	error_log(get_contant_customer_csd_id( 6830 ));
 	error_log(get_contant_customer_csd_id( 6879 ));
 	error_log(get_contant_customer_csd_id( 6876 ));*/
+
+	/*error_log(get_csd_order_id(61900));*/
 }
 
 function wpiai_do_every_minute()
@@ -769,6 +771,8 @@ function wpiai_process_user_contacts($user_id)
 		    $first_contact['contact_type'] = '';
 		    $first_contact['contact_CONTACT_ID'] = uniqid();
 		    $contactRec[] = $first_contact;
+	    } else {
+	    	error_log('$user_CSD_ID not set yet wait..');
 	    }
     }
     //update_user_meta($user_id, 'wpiai_last_contacts', $lastContactRec);

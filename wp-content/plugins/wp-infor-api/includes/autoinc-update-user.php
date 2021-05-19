@@ -43,7 +43,7 @@ function compare_multi_Arrays( $arrayOld, $arrayNew, $indexKey ) {
 
 function wpiai_profile_update( $user_id, $old_user_data ) {
 	// Do something
-	//error_log( 'Profile update registered for userID: ' . $user_id );
+	error_log( 'Profile update registered for userID: ' . $user_id );
 
 
 	$user = get_userdata( $user_id );
@@ -97,6 +97,8 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 
 		}
 
+	} else {
+		error_log('No user for user_id: '. $user_id);
 	}
 }
 

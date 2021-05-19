@@ -106,7 +106,8 @@ function getPricesQuantities( $response ) {
                                     $resRec['warehouseName'] = $whseName;
                                     $resRec['SKU']           = $rec['prod'];
                                     $resRec['productID'] = $productID;
-                                    $resRec['price']         = $rec['price'];
+                                    //$resRec['price']         = $rec['price'];
+								    $resRec['price']         = $rec['extamt'];
                                     $resRec['quantity']      = $rec['netavail'];
                                     $res[]                   = $resRec;
                                     //error_log(print_r($resRec,true));
