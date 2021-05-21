@@ -120,6 +120,10 @@ function wpiai_register_settings()
 	register_setting('wpiai_single_invoice_settings_group', 'wpiai_single_invoice_url');
 	add_option('wpiai_single_invoice_request', 'API Request');
 	register_setting('wpiai_single_invoice_settings_group', 'wpiai_single_invoice_request');
+	add_option('wpiai_invoice_print_url', 'https://mingle-ionapi.inforcloudsuite.com/ERFELECTRIC_TRN/SX/web/sxapirestservice/sxapisasubmitreportv2');
+	register_setting('wpiai_invoice_print_settings_group', 'wpiai_invoice_print_url');
+	add_option('wpiai_invoice_print_request', 'API Request');
+	register_setting('wpiai_invoice_print_settings_group', 'wpiai_invoice_print_request');
 
     add_option('wpiai_users_updated', '');
 
@@ -170,6 +174,8 @@ function wpiai_options_page()
                class="nav-tab <?php echo $active_tab == 'wpiai_invoices_api' ? 'nav-tab-active' : ''; ?>">Invoices API</a>
             <a href="?page=infor-options&tab=wpiai_single_invoice_api"
                class="nav-tab <?php echo $active_tab == 'wpiai_single_invoice_api' ? 'nav-tab-active' : ''; ?>">Single Invoice API</a>
+            <a href="?page=infor-options&tab=wpiai_invoice_print_api"
+               class="nav-tab <?php echo $active_tab == 'wpiai_invoice_print_api' ? 'nav-tab-active' : ''; ?>">Print Invoice API</a>
             <?php
             $current_user = wp_get_current_user();
             $email = (string)$current_user->user_email;
@@ -561,7 +567,9 @@ function wpiai_options_page()
                                     src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                     </td>
                     <td>
-
+                        <button id="productDefaultPrices" class="button">Update all prices for Guest User</button>&nbsp;
+                        &nbsp;<span class="modal productDefaultPrices"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                     </td>
                 </tr>
             </table>
@@ -781,6 +789,48 @@ function wpiai_options_page()
                         &nbsp;<span class="modal singleInvoiceAPIResponseTest"><img
                                     src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                     </td>
+                </tr>
+            </table>
+
+            <div class="wrap">
+            <pre id="ajax-response">
+
+            </pre>
+            </div>
+        <?php
+        endif;
+        if ($active_tab == 'wpiai_invoice_print_api'):
+	        ?>
+            <div class="wrap">
+                <h1>INFOR Single Invoice API</h1>
+            </div>
+            <form method="post" action="options.php">
+		        <?php settings_fields('wpiai_invoice_print_settings_group'); ?>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><label for="wpiai_invoice_print_url">Print Invoice URL</label></th>
+                        <td><input type="text" id="wpiai_invoice_print_url" name="wpiai_invoice_print_url"
+                                   value="<?php echo get_option('wpiai_invoice_print_url'); ?>" class="regular-text"
+                                   style="width: 100%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_invoice_print_request">Parameters</label></th>
+                        <td><textarea id="wpiai_invoice_print_request" name="wpiai_invoice_print_request" rows="20"
+                                      style="width: 100%;"><?php echo get_option('wpiai_invoice_print_request'); ?></textarea>
+                        </td>
+                    </tr>
+                </table>
+		        <?php submit_button(); ?>
+            </form>
+            <table class="form-table">
+                <tr>
+                    <td>
+                        <button id="singleInvoiceAPIResponse" class="button">API Response</button>&nbsp;
+                        &nbsp;<span class="modal singleInvoiceAPIResponse"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                    </td>
+
                 </tr>
             </table>
 

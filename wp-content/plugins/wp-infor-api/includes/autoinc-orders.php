@@ -250,6 +250,10 @@ function wpiai_get_order_XML( $order_id, $action ) {
 		$ShipToParty_Location_Address_PostalCode = $order->get_billing_postcode();
 		//$TransportationMethodCode = ''; //07 for Click and Collect 04 for Carrier delivery
 		$contact_ordered = get_post_meta($order_id,'_contact_ordered',true);
+		$shipping_total = $order->get_shipping_total();
+		$shipping_tax = $order->get_shipping_tax();
+		$payment_method = $order->get_payment_method();
+		$shipping_method = $order->get_shipping_method();
 		/**
 		 * This is how the order is shipped need to check the:
 		 * shipping_lines
@@ -342,6 +346,20 @@ function wpiai_get_order_XML( $order_id, $action ) {
 
 		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[2]->NameValue[0] ) {
 			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[2]->NameValue[0] = $CustomerPartyID;
+		}
+
+		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[3]->NameValue[0] ) {
+			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[3]->NameValue[0] = $shipping_total - $shipping_tax;
+		}
+
+		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[4]->NameValue[0] ) {
+			if($payment_method=='stripe') {
+				$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[4]->NameValue[0] = 'Paid';
+			}
+			if($payment_method=='cod') {
+				$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[4]->NameValue[0] = 'Account';
+			}
+
 		}
 
 		// Get and Loop Over Order Items

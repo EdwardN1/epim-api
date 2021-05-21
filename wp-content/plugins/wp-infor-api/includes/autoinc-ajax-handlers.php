@@ -27,6 +27,7 @@ add_action( 'wp_ajax_wpiai_get_contact_response', 'ajax_get_wpiai_get_contact_re
 add_action( 'wp_ajax_wpiai_get_contact_xml', 'ajax_get_wpiai_get_contact_xml' );
 
 add_action( 'wp_ajax_wpiai_get_product_api_response', 'ajax_wpiai_get_product_api_response' );
+add_action( 'wp_ajax_wpiai_update_default_prices', 'ajax_wpiai_update_default_prices' );
 
 add_action( 'wp_ajax_wpiai_get_product_updates_api_response', 'ajax_wpiai_get_product_updates_api_response' );
 
@@ -36,6 +37,51 @@ add_action( 'wp_ajax_wpiai_get_accounts_customer_data_credit_api_response', 'aja
 add_action( 'wp_ajax_wpiai_get_invoices_api_response', 'ajax_wpiai_get_invoices_api_response' );
 add_action( 'wp_ajax_wpiai_get_single_invoice_api_response', 'wpiai_get_single_invoice_api_response' );
 add_action( 'wp_ajax_wpiai_get_single_invoice_api_response_test', 'wpiai_get_single_invoice_api_response_test' );
+
+function ajax_wpiai_update_default_prices () {
+	wpiai_api_checkSecure();
+	header( "Content-Type: application/json" );
+	$wpiai_guest_customer_number = get_option('wpiai_guest_customer_number');
+	if($wpiai_guest_customer_number) {
+		$timeStart = microtime(true);
+		$all_ids = get_posts( array(
+			'post_type' => 'product',
+			'numberposts' => -1,
+			'post_status' => 'publish',
+			'fields' => 'ids',
+		) );
+		$skus = array();
+		$skuBlocks = array();
+		error_log('Number of products to update: '.count($all_ids));
+		$i = 0;
+		foreach ( $all_ids as $product_id ) {
+			$product = wc_get_product( $product_id );
+			$skus[] = $product->get_sku();
+			$i++;
+			if($i>=100) {
+				$skuBlocks[] = $skus;
+				$skus = array();
+				$i = 0;
+			}
+		}
+		if(!empty($skus)) {
+			$skuBlocks[] = $skus;
+		}
+		if(!empty($skuBlocks)) {
+			//echo json_encode(getBranchStockAndPrice($wpiai_guest_customer_number,$skus));
+			//echo json_encode(createProductsRequest($wpiai_guest_customer_number,$skuBlocks[0]));
+			echo json_encode($skuBlocks);
+		} else {
+			echo 'No Products Found';
+		}
+		$timeEnd = microtime(true);
+		$time = $timeEnd - $timeStart;
+		error_log('ajax_wpiai_update_default_prices took ' . $time . ' seconds');
+	} else {
+		echo 'No Default Customer';
+	}
+	exit;
+}
 
 function wpiai_get_single_invoice_api_response_test() {
 	wpiai_api_checkSecure();

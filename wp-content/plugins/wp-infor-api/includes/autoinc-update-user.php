@@ -2,6 +2,7 @@
 
 
 add_action( 'profile_update', 'wpiai_profile_update', 10, 2 );
+add_action( 'erf_registration', 'wpiai_profile_register', 10, 2 );
 
 function compare_multi_Arrays( $arrayOld, $arrayNew, $indexKey ) {
 	$result = array( "added" => array(), "removed" => array(), "changed" => array() );
@@ -39,6 +40,10 @@ function compare_multi_Arrays( $arrayOld, $arrayNew, $indexKey ) {
 	}
 
 	return $result;
+}
+
+function wpiai_profile_register($user_id) {
+	wpiai_profile_update($user_id,null);
 }
 
 function wpiai_profile_update( $user_id, $old_user_data ) {
