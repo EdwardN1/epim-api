@@ -250,6 +250,7 @@ function wpiai_get_order_XML( $order_id, $action ) {
 		$ShipToParty_Location_Address_PostalCode = $order->get_billing_postcode();
 		//$TransportationMethodCode = ''; //07 for Click and Collect 04 for Carrier delivery
 		$contact_ordered = get_post_meta($order_id,'_contact_ordered',true);
+        $contact_shipto = get_post_meta($order_id,'_contact_shipto',true);
 		$shipping_total = $order->get_shipping_total();
 		$shipping_tax = $order->get_shipping_tax();
 		$payment_method = $order->get_payment_method();
