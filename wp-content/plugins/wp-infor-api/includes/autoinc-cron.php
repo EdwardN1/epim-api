@@ -81,6 +81,32 @@ function wpiai_do_every_day() {
 	/*error_log(get_csd_order_id(61900));*/
 	/*$order = wc_get_order( 63105 );
 	error_log($order->get_shipping_method());*/
+	/*error_log(createContactsAPIRequest(
+		1000912376,
+		'Mr',
+		'Edward',
+		'Nickerson',
+		'edward223399@4477yyhh.org',
+		'0124589631',
+		'Addr1',
+		'Addr2',
+		'Addr3',
+		'City',
+		'LN4 5HD'
+	));*/
+	error_log(createCSDContact(
+		1000912376,
+		'Mr',
+		'Edward',
+		'Nickerson',
+		'edward223399@4477ffkkyyhh.org',
+		'0124589631',
+		'Addr1',
+		'Addr2',
+		'Addr3',
+		'City',
+		'LN4 5HD'
+	));
 }
 
 function wpiai_do_every_minute() {

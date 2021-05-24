@@ -79,6 +79,11 @@ function wpiai_register_settings()
 	add_option('wpiai_contact_xml_update', 'API XML for Updating');
 	register_setting('wpiai_contact_group', 'wpiai_contact_xml_update');
 
+	add_option('wpiai_contacts_api_url', 'https://mingle-ionapi.inforcloudsuite.com/ERFELECTRIC_TRN/SX/web/sxapirestservice/sxapicamcontactmnt');
+	register_setting('wpiai_contacts_api_group', 'wpiai_contacts_api_url');
+	add_option('wpiai_contacts_api_request', 'Product Request');
+	register_setting('wpiai_contacts_api_group', 'wpiai_contacts_api_request');
+
     add_option('wpiai_guest_customer_number', 'Customer Number for Guest Orders');
     register_setting('wpiai_settings_group', 'wpiai_guest_customer_number');
     add_option('wpiai_default_warehouse', 'Default Warehouse for Orders');
@@ -162,6 +167,9 @@ function wpiai_options_page()
             <a href="?page=infor-options&tab=wpiai_contact_record"
                class="nav-tab <?php echo $active_tab == 'wpiai_contact_record' ? 'nav-tab-active' : ''; ?>">Contact
                 Master Record</a>
+            <a href="?page=infor-options&tab=wpiai_contacts_api"
+               class="nav-tab <?php echo $active_tab == 'wpiai_contacts_api' ? 'nav-tab-active' : ''; ?>">Contacts
+                API</a>
             <a href="?page=infor-options&tab=wpiai_settings"
                class="nav-tab <?php echo $active_tab == 'wpiai_settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
             <a href="?page=infor-options&tab=wpiai_products_api"
@@ -571,6 +579,52 @@ function wpiai_options_page()
                         &nbsp;<span class="modal productDefaultPrices"><img
                                     src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                     </td>
+                </tr>
+            </table>
+
+            <div class="wrap">
+            <pre id="ajax-response">
+
+            </pre>
+            </div>
+        <?php
+        endif;
+        if ($active_tab == 'wpiai_contacts_api'):
+	        ?>
+            <div class="wrap">
+                <h1>INFOR Contacts API</h1>
+            </div>
+            <form method="post" action="options.php">
+		        <?php settings_fields('wpiai_contacts_api_group'); ?>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><label for="wpiai_contacts_api_url">URL</label></th>
+                        <td><input type="text" id="wpiai_contacts_api_url" name="wpiai_contacts_api_url"
+                                   value="<?php echo get_option('wpiai_contacts_api_url'); ?>" class="regular-text"
+                                   style="width: 100%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_contacts_api_request">Parameters</label></th>
+                        <td><textarea id="wpiai_contacts_api_request" name="wpiai_contacts_api_request" rows="20"
+                                      style="width: 100%;"><?php echo get_option('wpiai_contacts_api_request'); ?></textarea>
+                        </td>
+                    </tr>
+                </table>
+		        <?php submit_button(); ?>
+            </form>
+            <table class="form-table">
+                <tr>
+                    <td>
+                        <button id="contactAPIResponse" class="button">API Response</button>&nbsp;
+                        &nbsp;<span class="modal contactAPIResponse"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                    </td>
+                    <!--<td>
+                        <button id="productDefaultPrices" class="button">Update all prices for Guest User</button>&nbsp;
+                        &nbsp;<span class="modal productDefaultPrices"><img
+                                    src="<?php /*echo wpiai_PLUGINURI; */?>/assets/img/FhHRx.gif"></span>
+                    </td>-->
                 </tr>
             </table>
 

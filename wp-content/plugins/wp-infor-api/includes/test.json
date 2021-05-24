@@ -1,27 +1,170 @@
 {
-  "response": {
-    "cErrorMessage": "",
-    "period1Text": "(1) 03/01/20 - 03/31/20:",
-    "period1Balance": 35387.56,
-    "period2Text": "(2) 02/01/20 - 02/29/20:",
-    "period2Balance": 0,
-    "period3Text": "(3) 01/01/20 - 01/31/20:",
-    "period3Balance": 0,
-    "period4Text": "(4) 12/01/19 - 12/31/19:",
-    "period4Balance": 0,
-    "period5Text": "(5) Older    - 11/30/19:",
-    "period5Balance": 0,
-    "futureBalanceText": "Future Invoice Balance:",
-    "futureBalance": 95864.13,
-    "total1Text": "Service Charges:",
-    "total1Balance": 0,
-    "total2Text": "COD Balance:",
-    "total2Balance": 0,
-    "total3Text": "Total Balance:",
-    "total3Balance": 131251.69,
-    "total4Text": "Memo Misc Credits:",
-    "total4Balance": -43.37,
-    "total5Text": "Memo Unapplied Cash:",
-    "total5Balance": -100
+  "request": {
+    "companyNumber": 1,
+    "operatorInit": "WOO",
+    "tMntTt": {
+      "t-mnt-tt": [
+        {
+          "setNo": 1,
+          "seqNo": 1,
+          "updateMode": "add",
+          "fieldName": "Addtiearsc","
+          fieldValue
+          ": "
+          1000912376
+          "},{"
+          setNo
+          ": 1,"
+          seqNo
+          ": 2,"
+          updateMode
+          ": "
+          add
+          ","
+          fieldName
+          ": "
+          firstnm
+          ","
+          fieldValue
+          ": "
+          Edward
+          "},{"
+          setNo
+          ": 1,"
+          seqNo
+          ": 3,"
+          updateMode
+          ": "
+          add
+          ","
+          fieldName
+          ": "
+          lastnm
+          ","
+          fieldValue
+          ": "
+          Nickerson
+          "},{"
+          setNo
+          ": 1,"
+          seqNo
+          ": 4,"
+          updateMode
+          ": "add",
+          "fieldName": "workemailaddr",
+          "fieldValue": "edward223399@4477yyhh.org"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 5,
+          "updateMode": "add",
+          "fieldName": "workphoneno",
+          "fieldValue": "0124589631"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 6,
+          "updateMode": "add",
+          "fieldName": "faxnumber",
+          "fie
+          ldValue
+          ": "
+          60aba073c3fe5
+          "},{"
+          setNo
+          ": 1,"
+          seqNo
+          ": 7,"
+          updateMode
+          ": "
+          add
+          ","
+          fieldName
+          ": "
+          addr1
+          ","
+          fieldValue
+          ": "
+          Addr1
+          "},{"
+          setNo
+          ": 1,"
+          seqNo
+          ": 8,"
+          updateMode
+          ": "
+          add
+          ","
+          fieldName
+          ": "
+          addr2
+          ","
+          fieldValue
+          ": "
+          Addr2
+          "},{"
+          setNo
+          ": 1,"
+          seqNo
+          ": 9,"
+          updateMode
+          ": "
+          add
+          ","
+          field
+          Name
+          ": "
+          addr3
+          ","
+          fieldValue
+          ": "
+          Addr3
+          "},{"
+          setNo
+          ": 1,"
+          seqNo
+          ": 10,"
+          updateMode
+          ": "
+          add
+          ","
+          fieldName
+          ": "
+          city
+          ","
+          fieldValue
+          ": "
+          City
+          "},{"
+          setNo
+          ": 1,"
+          seqNo
+          ": 11,"
+          updateMode
+          ": "
+          add
+          ","
+          fieldName
+          ": "
+          zipcd
+          ","
+          fieldValue
+          ": "
+          LN4
+          5HD
+          "},{"
+          setNo
+          ": 1,"
+          seqNo
+          ": 5,"
+          updateMode
+          ":
+          "add",
+          "fieldName": "cotitle",
+          "fieldValue": "Mr"
+        }
+      ]
+    },
+    "extraData": "string"
   }
 }
