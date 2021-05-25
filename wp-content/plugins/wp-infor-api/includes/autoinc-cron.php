@@ -94,7 +94,7 @@ function wpiai_do_every_day() {
 		'City',
 		'LN4 5HD'
 	));*/
-	error_log(createCSDContact(
+	/*error_log(createCSDContact(
 		1000912376,
 		'Mr',
 		'Edward',
@@ -106,7 +106,17 @@ function wpiai_do_every_day() {
 		'Addr3',
 		'City',
 		'LN4 5HD'
-	));
+	));*/
+	/*error_log(returnCSDShipToID('Set#: 1 Update Successful, Cono: 1 Customer #: 1000912376, Ship To: 6fa61c7aab8de'));*/
+	/*$organizationID = '1000912376';
+	$customerID = '48';
+	$company = 'Technicks So.lutuions';
+	$address_1 = 'Addr1';
+	$address_2 = 'Addr2';
+	$address_3 = 'Addr3';
+	$city = 'City';
+	$post_code = 'LN2 5TB';
+	error_log(createCSDShipTo($organizationID,$customerID,$company,$address_1,$address_2,$address_3,$city,$post_code) );*/
 }
 
 function wpiai_do_every_minute() {

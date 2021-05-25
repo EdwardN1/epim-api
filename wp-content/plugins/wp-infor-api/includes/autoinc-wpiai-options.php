@@ -70,6 +70,11 @@ function wpiai_register_settings()
     add_option('wpiai_ship_to_xml', 'API XML');
     register_setting('wpiai_ship_to_group', 'wpiai_ship_to_xml');
 
+	add_option('wpiai_shipto_api_url', 'https://mingle-ionapi.inforcloudsuite.com/ERFELECTRIC_TRN/SX/web/sxapirestservice/sxapiarcustomermnt');
+	register_setting('wpiai_shipto_api_group', 'wpiai_shipto_api_url');
+	add_option('wpiai_shipto_api_request', 'Ship To API Request');
+	register_setting('wpiai_shipto_api_group', 'wpiai_shipto_api_request');
+
     add_option('wpiai_contact_url', 'API URL');
     register_setting('wpiai_contact_group', 'wpiai_contact_url');
     add_option('wpiai_contact_parameters', 'API Parameters');
@@ -81,7 +86,7 @@ function wpiai_register_settings()
 
 	add_option('wpiai_contacts_api_url', 'https://mingle-ionapi.inforcloudsuite.com/ERFELECTRIC_TRN/SX/web/sxapirestservice/sxapicamcontactmnt');
 	register_setting('wpiai_contacts_api_group', 'wpiai_contacts_api_url');
-	add_option('wpiai_contacts_api_request', 'Product Request');
+	add_option('wpiai_contacts_api_request', 'Contacts API Request');
 	register_setting('wpiai_contacts_api_group', 'wpiai_contacts_api_request');
 
     add_option('wpiai_guest_customer_number', 'Customer Number for Guest Orders');
@@ -164,6 +169,9 @@ function wpiai_options_page()
             <a href="?page=infor-options&tab=wpiai_ship_to_record"
                class="nav-tab <?php echo $active_tab == 'wpiai_ship_to_record' ? 'nav-tab-active' : ''; ?>">Ship To
                 Master Record</a>
+            <a href="?page=infor-options&tab=wpiai_shipto_api"
+               class="nav-tab <?php echo $active_tab == 'wpiai_shipto_api' ? 'nav-tab-active' : ''; ?>">Ship To
+                API</a>
             <a href="?page=infor-options&tab=wpiai_contact_record"
                class="nav-tab <?php echo $active_tab == 'wpiai_contact_record' ? 'nav-tab-active' : ''; ?>">Contact
                 Master Record</a>
@@ -533,6 +541,52 @@ function wpiai_options_page()
                     <td>
 
                     </td>
+                </tr>
+            </table>
+
+            <div class="wrap">
+            <pre id="ajax-response">
+
+            </pre>
+            </div>
+        <?php
+        endif;
+        if ($active_tab == 'wpiai_shipto_api'):
+	        ?>
+            <div class="wrap">
+                <h1>INFOR Ship To API</h1>
+            </div>
+            <form method="post" action="options.php">
+		        <?php settings_fields('wpiai_shipto_api_group'); ?>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><label for="wpiai_shipto_api_url">URL</label></th>
+                        <td><input type="text" id="wpiai_shipto_api_url" name="wpiai_shipto_api_url"
+                                   value="<?php echo get_option('wpiai_shipto_api_url'); ?>" class="regular-text"
+                                   style="width: 100%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_shipto_api_request">Parameters</label></th>
+                        <td><textarea id="wpiai_shipto_api_request" name="wpiai_shipto_api_request" rows="20"
+                                      style="width: 100%;"><?php echo get_option('wpiai_shipto_api_request'); ?></textarea>
+                        </td>
+                    </tr>
+                </table>
+		        <?php submit_button(); ?>
+            </form>
+            <table class="form-table">
+                <tr>
+                    <td>
+                        <button id="shiptoAPIResponse" class="button">API Response</button>&nbsp;
+                        &nbsp;<span class="modal shiptoAPIResponse"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                    </td>
+                    <!--<td>
+                        <button id="productDefaultPrices" class="button">Update all prices for Guest User</button>&nbsp;
+                        &nbsp;<span class="modal productDefaultPrices"><img
+                                    src="<?php /*echo wpiai_PLUGINURI; */?>/assets/img/FhHRx.gif"></span>
+                    </td>-->
                 </tr>
             </table>
 
