@@ -193,7 +193,7 @@ function ajax_wpiai_get_product_updates_api_response() {
 function ajax_get_wpiai_get_sales_order_xml() {
 	wpiai_api_checkSecure();
 	header( "Content-Type: application/json" );
-	echo json_encode(wpiai_get_order_XML(49049, 'Add'));
+	echo json_encode(wpiai_get_order_XML(64123, 'Add'));
 	exit;
 }
 

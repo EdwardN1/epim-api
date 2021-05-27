@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<ProcessSalesOrder xmlns="http://schema.infor.com/InforOAGIS/2" releaseID="9.2" versionID="2.12.0">
+    <ApplicationArea>
+        <Sender>
+            <LogicalID>lid://infor.ims.woocommercein</LogicalID>
+        </Sender>
+        <CreationDateTime>2021-05-27T09:02:45+00:00</CreationDateTime>
+        <BODID>60af603533409</BODID>
+    </ApplicationArea>
+    <DataArea>
+        <Process>
+            <TenantID>ERFELECTRIC_TRN</TenantID>
+            <AccountingEntityID>1</AccountingEntityID>
+            <ActionCriteria>
+                <ActionExpression actionCode="Add">Add</ActionExpression>
+            </ActionCriteria>
+        </Process>
+        <SalesOrder>
+            <SalesOrderHeader>
+                <DocumentID>
+                    <ID/>
+                </DocumentID>
+                <AlternateDocumentID>
+                    <ID schemeAgencyID="9" schemeName="Customer">SX9_29</ID>
+                </AlternateDocumentID>
+                <Reference>
+                    <NameValue name="SXe.ShippingInstructions" type="string"/>
+                </Reference>
+                <DocumentDateTime>2021-05-27T08:46:37+00:00</DocumentDateTime>
+                <OrderTypeCode>CS</OrderTypeCode>
+                <Status>
+                    <Code>Open</Code>
+                </Status>
+                <CustomerParty>
+                    <PartyIDs>
+                        <ID>9</ID>
+                    </PartyIDs>
+                    <Name languageID="en-US">FCC CASH SALE ACCOUNT</Name>
+                    <Communication>
+                        <URI>nickerson.edward@gmail.com</URI>
+                    </Communication>
+                </CustomerParty>
+                <ShipFromParty>
+                    <Location type="Warehouse">
+                        <ID>FCC</ID>
+                    </Location>
+                </ShipFromParty>
+                <ShipToParty>
+                    <PartyIDs>
+                        <ID accountingEntity="1">1000912375-02.03-4</ID>
+                    </PartyIDs>
+                    <Communication>
+                        <DialNumber>07454123456</DialNumber>
+                    </Communication>
+                </ShipToParty>
+                <TransportationMethodCode listID="Transportation Methods">02</TransportationMethodCode>
+                <RequiredDeliveryDateTime>2021-03-09T12:58:01Z</RequiredDeliveryDateTime>
+                <CurrencyCode>GBP</CurrencyCode>
+                <TransactionSourceCode languageID="en-US">WEB</TransactionSourceCode>
+                <UserArea>
+                    <Property>
+                        <NameValue name="SXe_user4" type="SX">64077</NameValue>
+                    </Property>
+                    <Property>
+                        <NameValue name="SXe_user1">6925</NameValue>
+                    </Property>
+                    <Property>
+                        <NameValue name="SXe_user6">9</NameValue>
+                    </Property>
+                    <Property>
+                        <NameValue name="SXe_user7">3.96</NameValue>
+                    </Property>
+                    <Property>
+                        <NameValue name="SXe_user5">Paid</NameValue>
+                    </Property>
+                </UserArea>
+            </SalesOrderHeader>
+            <SalesOrderLine>
+                <Item>
+                    <ItemID>
+                        <ID>ELLIPSE</ID>
+                    </ItemID>
+                </Item>
+                <Quantity>1</Quantity>
+                <UserArea>
+                    <Property>
+                        <NameValue name="SXe_user2">2070</NameValue>
+                    </Property>
+                </UserArea>
+            </SalesOrderLine>
+            <SalesOrder>
+                <SalesOrderHeader>
+                    <ShipToParty>
+                        <PartyIDs>
+                            <ID>9-60af60365ab95</ID>
+                        </PartyIDs>
+                    </ShipToParty>
+                </SalesOrderHeader>
+            </SalesOrder>
+        </SalesOrder>
+    </DataArea>
+</ProcessSalesOrder>

@@ -248,7 +248,10 @@ function wpiai_get_order_XML( $order_id, $action ) {
 		//$ShipToParty_Location_Address_AddressLine_3 = $order->get_billing_address_2();
 		$ShipToParty_Location_Address_CityName   = $order->get_billing_city();
 		$ShipToParty_Location_Address_PostalCode = $order->get_billing_postcode();
-		//$TransportationMethodCode = ''; //07 for Click and Collect 04 for Carrier delivery
+		$TransportationMethodCode = '08'; //07 for Click and Collect 04 for Carrier delivery
+		if(get_post_meta($order_id,'_delivery_type',true)=='pickup') {
+			$TransportationMethodCode = '07';
+		}
 		$contact_ordered = get_post_meta($order_id,'_contact_ordered',true);
         $contact_shipto = get_post_meta($order_id,'_contact_shipto',true);
         $shippingto_address = get_post_meta($order_id,'_shippingto_address',true);
@@ -262,15 +265,15 @@ function wpiai_get_order_XML( $order_id, $action ) {
         	$contactCSDID = $contact_shipto;
         }
         $shipToCSDID = '';
-        if(is_array($contact_shipto)) {
-	        $shipping_first_name = $contact_shipto['shipping_first_name'];
-	        $shipping_last_name = $contact_shipto['shipping_last_name'];
-	        $shipping_address_1 = $contact_shipto['shipping_address_1'];
-	        $shipping_address_2 = $contact_shipto['shipping_address_2'];
-	        $shipping_postcode = $contact_shipto['shipping_postcode'];
-	        $shipping_city = $contact_shipto['shipping_city'];
-	        $shipping_company = $contact_shipto['shipping_company'];
-	        $shipping_country = $contact_shipto['shipping_country'];
+        if(is_array($shippingto_address)) {
+	        $shipping_first_name = $shippingto_address['shipping_first_name'];
+	        $shipping_last_name = $shippingto_address['shipping_last_name'];
+	        $shipping_address_1 = $shippingto_address['shipping_address_1'];
+	        $shipping_address_2 = $shippingto_address['shipping_address_2'];
+	        $shipping_postcode = $shippingto_address['shipping_postcode'];
+	        $shipping_city = $shippingto_address['shipping_city'];
+	        $shipping_company = $shippingto_address['shipping_company'];
+	        $shipping_country = $shippingto_address['shipping_country'];
 	        $shipToCSDID = createCSDShipTo(
 	        	$CustomerPartyID,
 		        $WooCustomerID,
@@ -352,9 +355,9 @@ function wpiai_get_order_XML( $order_id, $action ) {
 			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->ShipFromParty[0]->Location[0]->ID[0] = $ShipFromParty_Location_ID;
 		}
 
-		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->ShipToParty[0]->Location[0]->Address[0]->AddressLine[0] ) {
+		/*if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->ShipToParty[0]->Location[0]->Address[0]->AddressLine[0] ) {
 			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->ShipToParty[0]->Location[0]->Address[0]->AddressLine[0] = $ShipToParty_Location_Address_AddressLine_0;
-		}
+		}*/
 
 		/*if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->ShipToParty[0]->Location[0]->Address[0]->AddressLine[1] ) {
 			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->ShipToParty[0]->Location[0]->Address[0]->AddressLine[1] = $ShipToParty_Location_Address_AddressLine_1;
@@ -369,7 +372,13 @@ function wpiai_get_order_XML( $order_id, $action ) {
 		}*/
 
 		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->ShipToParty[0]->PartyIDs[0]->ID[0] ) {
-			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrder[0]->SalesOrderHeader[0]->ShipToParty[0]->PartyIDs[0]->ID[0] = $shipToCSDID;
+			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->ShipToParty[0]->PartyIDs[0]->ID[0] = $shipToCSDID;
+			//error_log('$shipToCSDID = '.$shipToCSDID);
+			//error_log('XML = '.$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->ShipToParty[0]->PartyIDs[0]->ID[0]);
+		}
+
+		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->TransportationMethodCode [0] ) {
+			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->TransportationMethodCode [0] = $TransportationMethodCode;
 		}
 
 		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[0]->NameValue[0] ) {
@@ -377,6 +386,12 @@ function wpiai_get_order_XML( $order_id, $action ) {
 		}
 
 		if($contact_ordered) {
+			if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[1]->NameValue[0] ) {
+				$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[1]->NameValue[0] = $contactCSDID;
+			}
+		}
+
+		if($contact_shipto) {
 			if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[1]->NameValue[0] ) {
 				$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[1]->NameValue[0] = $contactCSDID;
 			}
