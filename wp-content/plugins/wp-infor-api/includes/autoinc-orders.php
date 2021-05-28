@@ -258,8 +258,8 @@ function wpiai_get_order_XML( $order_id, $action ) {
         $contactCSDID = '';
         if(is_array($contact_shipto)) {
 	        $first_name = $contact_shipto['first_name'];
-	        $last_name = $contact_shipto['first_name'];
-	        $phone = $contact_shipto['first_name'];
+	        $last_name = $contact_shipto['last_name'];
+	        $phone = $contact_shipto['telephone'];
 	        $contactCSDID = createCSDContact($CustomerPartyID,'',$first_name,$last_name,'',$phone,'','','','','');
         } else {
         	$contactCSDID = $contact_shipto;
