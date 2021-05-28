@@ -247,10 +247,12 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray) {
         $objProduct->set_category_ids($categoryIDS); // array of category ids, You can get category id from WooCommerce Product Category Section of Wordpress Admin
 
 	    $import_options = get_option( 'epim_no_price_or_stocks' );
-	    if($import_options['checkbox_value']!=1) {
-		    $objProduct->set_price($price); // set product price
-		    $objProduct->set_regular_price($regularPrice); // set product regular price
-		    $objProduct->set_stock_quantity($stockQuantity);
+	    if(is_array($import_options)) {
+		    if ( $import_options['checkbox_value'] != 1 ) {
+			    $objProduct->set_price( $price ); // set product price
+			    $objProduct->set_regular_price( $regularPrice ); // set product regular price
+			    $objProduct->set_stock_quantity( $stockQuantity );
+		    }
 	    }
 
         $productImagesIDs = array(); // define an array to store the media ids.

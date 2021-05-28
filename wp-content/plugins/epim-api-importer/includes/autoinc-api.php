@@ -149,7 +149,24 @@ function get_epimaapi_all_products() {
 }
 
 function get_epimaapi_variation( $id ) {
-	return epimaapi_make_api_call( 'Variations/' . $id );
+	$epim_always_include_epim_attributes = get_option('epim_always_include_epim_attributes');
+	$epim_exclude_luckins_data = get_option('epim_exclude_luckins_data');
+	error_log('$epim_always_include_epim_attributes = '.print_r($epim_always_include_epim_attributes,true));
+	$url = 'Variations/' . $id;
+	$queryChar = '?';
+	if(is_array($epim_always_include_epim_attributes)) {
+		if($epim_always_include_epim_attributes['checkbox_value'] == 1) {
+			$url .= '?alwaysIncludeEpimAttributes=true';
+			$queryChar = '&';
+		}
+	}
+	if(is_array($epim_exclude_luckins_data)) {
+		if($epim_exclude_luckins_data['checkbox_value'] == 1) {
+			$url .= $queryChar.'includeLuckins=false';
+		}
+	}
+	error_log('$url = '.$url);
+	return epimaapi_make_api_call( $url );
 }
 
 function get_epimaapi_all_attributes() {

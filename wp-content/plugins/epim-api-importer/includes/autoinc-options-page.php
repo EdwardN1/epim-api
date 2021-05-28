@@ -38,6 +38,10 @@ function epim_register_settings() {
 	register_setting( 'epim_options_group', 'epim_api_retrieval_method' );
 	add_option( 'epim_no_price_or_stocks', '1' );
 	register_setting( 'epim_options_group', 'epim_no_price_or_stocks' );
+	add_option( 'epim_always_include_epim_attributes', '1' );
+	register_setting( 'epim_options_group', 'epim_always_include_epim_attributes' );
+	add_option( 'epim_exclude_luckins_data', '1' );
+	register_setting( 'epim_options_group', 'epim_exclude_luckins_data' );
 
     add_option( 'epim_enable_scheduled_updates', '0' );
     register_setting( 'epim_schedule_options_group', 'epim_enable_scheduled_updates' );
@@ -267,6 +271,20 @@ function epim_options_page() {
                         <?php $options = get_option( 'epim_no_price_or_stocks' );?>
                         <td>
                             <input type="checkbox" id="epim_no_price_or_stocks" name="epim_no_price_or_stocks[checkbox_value]" value="1" <?php  if(is_array($options)) echo checked( '1', $options['checkbox_value'], false );?>/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="epim_always_include_epim_attributes">Always Include EPIM Attributes</label></th>
+		                <?php $options = get_option( 'epim_always_include_epim_attributes' );?>
+                        <td>
+                            <input type="checkbox" id="epim_always_include_epim_attributes" name="epim_always_include_epim_attributes[checkbox_value]" value="1" <?php  if(is_array($options)) echo checked( '1', $options['checkbox_value'], false );?>/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="epim_exclude_luckins_data">Exclude Luckins Data</label></th>
+		                <?php $options = get_option( 'epim_exclude_luckins_data' );?>
+                        <td>
+                            <input type="checkbox" id="epim_exclude_luckins_data" name="epim_exclude_luckins_data[checkbox_value]" value="1" <?php  if(is_array($options)) echo checked( '1', $options['checkbox_value'], false );?>/>
                         </td>
                     </tr>
                 </table>
