@@ -117,6 +117,7 @@ function wpiai_do_every_day() {
 	$city = 'City';
 	$post_code = 'LN2 5TB';
 	error_log(createCSDShipTo($organizationID,$customerID,$company,$address_1,$address_2,$address_3,$city,$post_code) );*/
+	wpiai_import_default_product_prices_and_stock_levels();
 }
 
 function wpiai_do_every_minute() {

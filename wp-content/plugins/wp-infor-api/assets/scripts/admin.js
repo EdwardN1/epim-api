@@ -345,10 +345,43 @@ adminJQ(function ($) {
         });
     });
 
+    function _oi(text) {
+        $('#ajax-response').prepend(text + '<br>');
+    }
+
+    let productDefaultPricesQueue = new ts_execute_queue('#ajax-response', function () {
+        _oi('finished');
+        $('.modal.productDefaultPrices').hide();
+    }, function (action, request, data) {
+        _oi('Action Completed: ' + action);
+        _oi('Request: ' + request);
+        _oi('<br>Data: ' + data);
+        if(action==='wpiai_update_default_prices') {
+            let obj = this;
+            /*obj.queue(ajaxurl,{action: 'wpiai_update_default_price_for_product', ID: 'EMRCHJ34RED'});
+            obj.queue(ajaxurl,{action: 'wpiai_update_default_price_for_product', ID: 'IS4825OR'});
+            obj.queue(ajaxurl,{action: 'wpiai_update_default_price_for_product', ID: 'PFA20B'});
+            obj.queue(ajaxurl,{action: 'wpiai_update_default_price_for_product', ID: 'TC1D0910P7'});
+            obj.queue(ajaxurl,{action: 'wpiai_update_default_price_for_product', ID: 'GSC4'});*/
+            $(data).each(function (index, sku) {
+                //window.console.log('Adding: '+sku+' to the queue');
+                obj.queue(ajaxurl,{action: 'wpiai_update_default_price_for_product', sku: sku});
+            });
+        }
+        if(action=='wpiai_update_default_price_for_product') {
+            window.console.log('Processed Product');
+        }
+
+    });
+
     $('#productDefaultPrices').on('click', function () {
         $('#ajax-response').html('Working...');
         $('.modal.productDefaultPrices').show();
-        let security = wpiai_ajax_object.security;
+        productDefaultPricesQueue.reset();
+        productDefaultPricesQueue.queue(ajaxurl,{action: 'wpiai_update_default_prices'});
+        productDefaultPricesQueue.process();
+        window.console.log('productDefaultPricesQueue processing');
+        /*let security = wpiai_ajax_object.security;
         let url = wpiai_ajax_object.ajax_url;
         $.ajax({
             type: "POST",
@@ -358,21 +391,39 @@ adminJQ(function ($) {
                 try {
                     let resp = JSON.parse(data);
                     let rstr = JSON.stringify(resp, undefined, 4);
-                    $('#ajax-response').html(syntaxHighlight(rstr));
+                    $('#ajax-response').html('<strong>Products to Update:</strong><br><br>'+syntaxHighlight(rstr));
                     $('.modal.productDefaultPrices').hide();
                     window.console.log('Data is JSON');
                 }
                 catch (e) {
                     if(typeof data === 'object' && data !== null) {
                         let x = JSON.stringify(data);
-                        $('#ajax-response').html(syntaxHighlight(x.replace(/\\(.)/mg, "")));
+                        window.console.log('Data is object');
+                        //$('#ajax-response').html(syntaxHighlight(x.replace(/\\(.)/mg, "")));
+                        c = 0;
+                        $(data).each(function () {
+                            c++;
+                        });
+                        _oi('Processing ' +c+' products');
+                        $(data).each(function (productID) {
+                            $.ajax((
+                                {
+                                    type: "POST",
+                                    url: url,
+                                    data: {action: 'wpiai_update_default_price_for_product', security: security, ID: productID},
+                                    success: function (data) {
+                                        _oi(data);
+                                    }
+                                }
+                            ))
+                        });
                     } else {
                         $('#ajax-response').html(syntaxHighlight(data));
                     }
                     $('.modal.productDefaultPrices').hide();
                 }
             }
-        });
+        });*/
     });
 
     $('#productUpdatesAPIResponse').on('click', function () {
