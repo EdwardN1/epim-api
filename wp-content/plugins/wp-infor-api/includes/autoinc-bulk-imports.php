@@ -1,7 +1,7 @@
 <?php
 
 function _oi( $message ) {
-	error_log( date( "Y-m-d H:i:s" ) . ': ' . $message . PHP_EOL, 3, '/var/www/erf.making.me.uk/web/oi.log' );
+	error_log( date( "Y-m-d H:i:s" ) . ': ' . $message . PHP_EOL, 3, '/var/www/html/oi.log' );
 }
 
 function wpiai_product_blocks() {
@@ -33,6 +33,7 @@ function wpiai_product_blocks() {
 		}
 		if ( ! empty( $skus ) ) {
 			$skuBlocks[] = $skus;
+			_oi(print_r($skuBlocks,true));
 		}
 		if ( empty( $skuBlocks ) ) {
 			_oi( 'wpiai_product_blocks No Products Found' );
