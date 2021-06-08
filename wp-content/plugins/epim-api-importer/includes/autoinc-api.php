@@ -676,6 +676,9 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 	$productArray   = array();
 	$jsonVariation  = get_epimaapi_variation( $variationID );
 	$variation      = json_decode( $jsonVariation );
+    if(!$variation) {
+        return $variationID . ' returns no result from API';
+    }
 	$jsonAttributes = get_epimaapi_all_attributes();
 	$attributes     = json_decode( $jsonAttributes );
 
@@ -781,6 +784,8 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 		$productArray['price'] = $Qty_Price_3;
 	}
 
+	//error_log('Price for '.$productArray['productSKU'].','.$variationID.' = '.$productArray['price']);
+
 	/*
 	* Set the product Meta Data
 	*/
@@ -812,13 +817,15 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 	 */
 	$aCounter          = 1;
 	$productAttributes = array();
-	foreach ( $variation->AttributeValues as $attribute_value ) {
-		$aName = epimaapi_getAttributeNameFromID( $attribute_value->AttributeId, $attributes );
-		if ( $aName != '0 ( )' ) {
-			$productAttributes[] = array( "name" => $aName, "options" => array( $attribute_value->Value ), "position" => $aCounter, "visible" => 1, "variation" => 1 );
-			$aCounter ++;
-		}
-	}
+	if($variation->AttributeValues) {
+        foreach ($variation->AttributeValues as $attribute_value) {
+            $aName = epimaapi_getAttributeNameFromID($attribute_value->AttributeId, $attributes);
+            if ($aName != '0 ( )') {
+                $productAttributes[] = array("name" => $aName, "options" => array($attribute_value->Value), "position" => $aCounter, "visible" => 1, "variation" => 1);
+                $aCounter++;
+            }
+        }
+    }
 	$productArray['attributes'] = $productAttributes;
 
 	/*

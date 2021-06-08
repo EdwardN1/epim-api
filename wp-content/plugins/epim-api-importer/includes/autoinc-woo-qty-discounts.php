@@ -24,6 +24,7 @@ function epim_quantity_based_pricing( $cart ) {
         $epim_threshold2 = epimaapi_isInteger(get_post_meta($id,'epim_Qty_Break_2',true));
         $epim_threshold3 = epimaapi_isInteger(get_post_meta($id,'epim_Qty_Break_3',true));
 
+        //$epim_price = get_post_meta($id, 'epim_Price', true);
         $epim_price1 = get_post_meta($id,'epim_Qty_Price_1',true);
         $epim_price2 = get_post_meta($id,'epim_Qty_Price_2',true);
         $epim_price3 = get_post_meta($id,'epim_Qty_Price_3',true);
