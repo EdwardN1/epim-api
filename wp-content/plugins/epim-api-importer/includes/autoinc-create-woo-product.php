@@ -56,11 +56,15 @@ function epimaapi_wooCreateProduct_ex( $pid, $productArray ) {
 	try {
 		$import_options = get_option( 'epim_no_price_or_stocks' );
 		$set_stock      = false;
-		if ( is_array( $import_options ) ) {
-			if ( $import_options['checkbox_value'] != 1 ) {
-				$set_stock = true;
-			}
-		}
+		if(!$import_options) {
+		    $set_stock = true;
+        } else {
+            if ( is_array( $import_options ) ) {
+                if ($import_options['checkbox_value'] != 1) {
+                    $set_stock = true;
+                }
+            }
+        }
 		if ( array_key_exists( 'productTitle', $productArray ) ) {
 			$productTitle = $productArray['productTitle'];
 			if ( $productTitle == '' ) {
@@ -265,7 +269,9 @@ function epimaapi_wooCreateProduct_ex( $pid, $productArray ) {
 			$objProduct->set_price( $price ); // set product price
 			$objProduct->set_regular_price( $regularPrice ); // set product regular price
 			$objProduct->set_stock_quantity( $stockQuantity );
-		}
+		} else {
+		    //error_log('Stock not set');
+        }
 
 		$productImagesIDs = array(); // define an array to store the media ids.
 		//$images = array("image1 url","image2 url","image3 url"); // images url array of product
