@@ -1,6 +1,6 @@
 <?php
-function createShipToAPIRequest($organizationID,$customerID,$company,$address_1,$address_2,$address_3,$city,$post_code) {
-	$unique = uniqid();
+function createShipToAPIRequest($organizationID,$customerID,$company,$address_1,$address_2,$address_3,$city,$post_code,$email = '') {
+	$unique = uniqidReal(8);//uniqid();
 	$request = '{"request": {"companyNumber": 1,"operatorInit": "WOO","tMntTt": {"t-mnt-tt": [';
 	$request .= '{"setNo": 1,"seqNo": 1,"key1": "'.$organizationID.'","key2": "'.$unique.'","updateMode": "add","fieldName": "addr1","fieldValue": "'.$address_1.'"},';
 	$request .= '{"setNo": 1,"seqNo": 2,"key1": "'.$organizationID.'","key2": "'.$unique.'","updateMode": "add","fieldName": "addr2","fieldValue": "'.$address_2.'"},';
@@ -9,7 +9,10 @@ function createShipToAPIRequest($organizationID,$customerID,$company,$address_1,
 	$request .= '{"setNo": 1,"seqNo": 5,"key1": "'.$organizationID.'","key2": "'.$unique.'","updateMode": "add","fieldName": "city","fieldValue": "'.$city.'"},';
 	$request .= '{"setNo": 1,"seqNo": 6,"key1": "'.$organizationID.'","key2": "'.$unique.'","updateMode": "add","fieldName": "zipcd","fieldValue": "'.$post_code.'"},';
 	$request .= '{"setNo": 1,"seqNo": 7,"key1": "'.$organizationID.'","key2": "'.$unique.'","updateMode": "add","fieldName": "user1","fieldValue": "'.$customerID.'"},';
-	$request .= '{"setNo": 1,"seqNo": 8,"key1": "'.$organizationID.'","key2": "'.$unique.'","updateMode": "add","fieldName": "user2","fieldValue": "'.$unique.'"}';
+	if($email!='') {
+		$request .= '{"setNo": 1,"seqNo": 8,"key1": "'.$organizationID.'","key2": "'.$unique.'","updateMode": "add","fieldName": "email","fieldValue": "'.$email.'"},';
+	}
+	$request .= '{"setNo": 1,"seqNo": 9,"key1": "'.$organizationID.'","key2": "'.$unique.'","updateMode": "add","fieldName": "user2","fieldValue": "'.$unique.'"}';
 	$request .= ' ]},"extraData": "string"}}';
 	return $request;
 }
@@ -30,8 +33,8 @@ function returnCSDShipToID($returnData) {
 	return false;
 }
 
-function createCSDShipTo($organizationID,$customerID,$company,$address_1,$address_2,$address_3,$city,$post_code) {
-	$request = createShipToAPIRequest($organizationID,$customerID,$company,$address_1,$address_2,$address_3,$city,$post_code);
+function createCSDShipTo($organizationID,$customerID,$company,$address_1,$address_2,$address_3,$city,$post_code, $email='') {
+	$request = createShipToAPIRequest($organizationID,$customerID,$company,$address_1,$address_2,$address_3,$city,$post_code,$email);
 	$url = get_option('wpiai_shipto_api_url');
 	$response = wpiai_get_infor_api_response($url,$request);
 	$allArray = json_decode($response,true);

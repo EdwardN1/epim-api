@@ -107,28 +107,47 @@ add_filter('acf/load_field/name=store_region', 'prepopulate_store_regions');
 function add_tax_to_price( $html ) {
 
 	global $product;
-	if($product){
+	
+	if( $product ):
+
 		$html = '';
 		$vat_enabled	= $_SESSION['show_vat'];
 		$price 			= $product->get_price();
-		$incTax 		= wc_price( $product->get_price_including_tax() );
-		$exTax 			= wc_price( $product->get_price_excluding_tax() );
+		$incTax 		= $product->get_price_including_tax();
+		$exTax 			= $product->get_price_excluding_tax();
 
 		if( $price ) {
 			if( $vat_enabled == 'true' ) {
-				$html = $incTax;
+				$html = wc_price( $incTax );
 				$html .= '<small>inc. VAT</small>';
-				$html .= '<span class="alternate">' . $exTax . '<small>ex. VAT</small></span>';
+				$html .= '<span class="alternate">' . wc_price($exTax) . '<small>ex. VAT</small></span>';
 			} else {
-				$html = $exTax;
+				$html = wc_price( $exTax );
 				$html .= '<small>ex. VAT</small>';
-				$html .= '<span class="alternate">' . $incTax . '<small>inc. VAT</small></span>';
+				$html .= '<span class="alternate">' . wc_price($incTax) . '<small>inc. VAT</small></span>';
 			}
 		} else {
 			$html = '<div class="price-placeholder"></div>';
 		}
-	}
 
+	endif;
+
+	/**
+	 * If the product has multiples, * the Price by the Multiple
+	 */
+	$multiples = get_the_terms( get_the_id(), 'pa_selling-multiple' );
+	if( $multiples ):
+		$html = '';
+		if( $vat_enabled == 'true' ) {
+			$html .= wc_price( $incTax * floatval($multiples[0]->name) );
+			$html .= sprintf( '<small>inc. VAT per %s</small>', $multiples[0]->name . 'm' );
+			$html .= '<span class="alternate">' . wc_price( $exTax * floatval($multiples[0]->name) ) . '<small>ex. VAT</small></span>';
+		} else {
+			$html = wc_price( $exTax * floatval($multiples[0]->name) );
+			$html .= sprintf( '<small>ex. VAT per %s</small>', $multiples[0]->name . 'm' );
+			$html .= '<span class="alternate">' . wc_price( $incTax * floatval($multiples[0]->name) ) . '<small>inc. VAT</small></span>';
+		}
+	endif;
 	
 	return $html;
 }
@@ -138,7 +157,7 @@ add_filter( 'woocommerce_get_price_html', 'add_tax_to_price', 10 );
  * Display - before QTY
  */
 function display_minus_qty() {
-	echo '<button class="minus-qty">-</button>';
+	echo '<button type="button" class="minus-qty">-</button>';
 }
 add_action( 'woocommerce_before_add_to_cart_quantity', 'display_minus_qty' );
 
@@ -146,7 +165,7 @@ add_action( 'woocommerce_before_add_to_cart_quantity', 'display_minus_qty' );
  * Display + after QTY
  */
 function display_plus_qty() {
-	echo '<button class="plus-qty">+</button>';
+	echo '<button type="button" class="plus-qty">+</button>';
 }
 add_action( 'woocommerce_after_add_to_cart_quantity', 'display_plus_qty' );
 
