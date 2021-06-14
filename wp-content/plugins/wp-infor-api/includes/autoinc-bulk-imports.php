@@ -1,7 +1,7 @@
 <?php
 
-function _oi( $message ) {
-	error_log( date( "Y-m-d H:i:s" ) . ': ' . $message . PHP_EOL, 3, '/var/www/html/oi.log' );
+function _oi( $message, $name = 'oi' ) {
+	error_log( date( "Y-m-d H:i:s" ) . ': ' . $message . PHP_EOL, 3, '/var/www/html/'.$name.'.log' );
 }
 
 function wpiai_product_blocks() {

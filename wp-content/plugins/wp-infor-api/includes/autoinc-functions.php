@@ -113,6 +113,9 @@ function wpiai_get_infor_message_multipart_message($url,$paramters,$xml) {
 	$apicall = curl_exec($ch);
 	curl_close($ch);
 	error_log('API Call made to CSD');
+	_oi($url,'api');
+    _oi($xml,'api');
+    _oi($apicall,'api');
 	return $apicall;
 }
 

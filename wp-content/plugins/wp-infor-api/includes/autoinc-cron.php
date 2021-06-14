@@ -123,7 +123,7 @@ function wpiai_do_every_day() {
 function wpiai_do_every_minute() {
 	// do something every minute
 	//error_log('WP Cron is working....Every Minute Event');
-	wpiai_check_user_meta();
+	//wpiai_check_user_meta();
 	//wpiai_clear_old_contacts(45);
 	//wpiai_reset_old_contacts(45);
 	//wpiai_process_products(150,1200,true);
@@ -402,108 +402,7 @@ function wpiai_process_products( $max, $seconds, $log = false ) {
 }
 
 
-function wpiai_process_user_shiptos_x( $user_id ) {
-	error_log( 'Processing ShipTos for user_id: ' . $user_id );
-	$shipTo_meta = get_user_meta( $user_id, 'wpiai_delivery_addresses', true );
-	$shipTo      = array();
-	$shipAdd     = array();
-	$shipChange  = array();
-	if ( is_array( $shipTo_meta ) ) {
-		foreach ( $shipTo_meta as $shipTo_m ) {
-			$shipTo_rec = $shipTo_m;
-			if ( ( $shipTo_rec['delivery-CSD-ID'] == '' ) || ( ! array_key_exists( 'delivery-CSD-ID', $shipTo_rec ) ) ) {
-				/*$shipTo_rec['CREATED_BY'] = 'WOO';*/
-				if ( ( $shipTo_rec['delivery_UNIQUE_ID'] == '' ) || ( ! array_key_exists( 'delivery_UNIQUE_ID', $shipTo_rec ) ) ) {
-					$shipTo_rec['delivery_UNIQUE_ID'] = uniqid();
-					$shipAdd[]                        = $shipTo_rec;
-				}
-			} else {
-				/*$shipTo_rec['CREATED_BY'] = 'EXTERNAL';*/
-			}
-			if ( ( $shipTo_rec['delivery_UNIQUE_ID'] == '' ) || ( ! array_key_exists( 'delivery_UNIQUE_ID', $shipTo_rec ) ) ) {
-				$shipTo_rec['delivery_UNIQUE_ID'] = uniqid();
-				$shipChange[]                     = $shipTo_rec;
-			}
-			$shipTo[] = $shipTo_rec;
-		}
-	} else {
-		error_log( 'No ShipTo Meta' );
-	}
-	if ( ! update_user_meta( $user_id, 'wpiai_delivery_addresses', $shipTo ) ) {
-		error_log( 'Ship To update_user_meta Failed or not changed for $user_id: ' . $user_id );
-	} else {
-		$shipTo_url        = get_option( 'wpiai_ship_to_url' );
-		$shipTo_paramaters = set_messageid( get_option( 'wpiai_ship_to_parameters' ) );
-		if ( ( count( $shipAdd ) > 0 ) ) {
-			foreach ( $shipAdd as $add_shipTo ) {
-				$shipTo_xml = get_shipTo_XML_record( $user_id, 'Add', $add_shipTo );
-				error_log( 'shipto Add' );
-				$updated = wpiai_get_infor_message_multipart_message( $shipTo_url, $shipTo_paramaters, $shipTo_xml );
-			}
-		}
-		$oldShipTos = get_user_meta( $user_id, 'wpiai_last_delivery_addresses', true );
-		if ( is_array( $oldShipTos ) ) {
-			error_log( 'Processing wpiai_last_delivery_addresses for user_id: ' . $user_id );
-			//error_log(print_r($oldShipTos,true));
-			foreach ( $oldShipTos as $old_ship_to ) {
-				$shipToRecID = array_search( $old_ship_to['delivery_UNIQUE_ID'], array_column( $shipTo, 'delivery_UNIQUE_ID' ) );
-				if ( $shipToRecID ) {
-					$different = false;
-					if ( $shipTo[ $shipToRecID ]['delivery-first-name'] <> $old_ship_to['delivery-first-name'] ) {
-						$different = true;
-					}
-					if ( $shipTo[ $shipToRecID ]['delivery-last-name'] <> $old_ship_to['delivery-last-name'] ) {
-						$different = true;
-					}
-					if ( $shipTo[ $shipToRecID ]['delivery-company-name'] <> $old_ship_to['delivery-company-name'] ) {
-						$different = true;
-					}
-					if ( $shipTo[ $shipToRecID ]['delivery-country'] <> $old_ship_to['delivery-country'] ) {
-						$different = true;
-					}
-					if ( $shipTo[ $shipToRecID ]['delivery-street-address-1'] <> $old_ship_to['delivery-street-address-1'] ) {
-						$different = true;
-					}
-					if ( $shipTo[ $shipToRecID ]['delivery-street-address-2'] <> $old_ship_to['delivery-street-address-2'] ) {
-						$different = true;
-					}
-					if ( $shipTo[ $shipToRecID ]['delivery-street-address-3'] <> $old_ship_to['delivery-street-address-3'] ) {
-						$different = true;
-					}
-					if ( $shipTo[ $shipToRecID ]['delivery-town-city'] <> $old_ship_to['delivery-town-city'] ) {
-						$different = true;
-					}
-					if ( $shipTo[ $shipToRecID ]['delivery-county'] <> $old_ship_to['delivery-county'] ) {
-						$different = true;
-					}
-					if ( $shipTo[ $shipToRecID ]['delivery-postcode'] <> $old_ship_to['delivery-postcode'] ) {
-						$different = true;
-					}
-					if ( $shipTo[ $shipToRecID ]['delivery-phone'] <> $old_ship_to['delivery-phone'] ) {
-						$different = true;
-					}
-					if ( $shipTo[ $shipToRecID ]['delivery-email'] <> $old_ship_to['delivery-email'] ) {
-						$different = true;
-					}
-					if ( $different ) {
-						error_log( 'Shipto Updated' );
-						error_log( 'old delivery_UNIQUE_ID: ' . $old_ship_to['delivery_UNIQUE_ID'] . ', new delivery_UNIQUE_ID: ' . $shipTo[ $shipToRecID ]['delivery_UNIQUE_ID'] );
-						$shipChange[] = $shipTo[ $shipToRecID ];
-					}
-				}
-			}
-		}
-		if ( ( count( $shipChange ) > 0 ) ) {
-			foreach ( $shipChange as $update_shipTo ) {
-				$shipTo_xml = get_shipTo_XML_record( $user_id, 'Change', $update_shipTo );
-				error_log( 'shipto Change' );
-				$updated = wpiai_get_infor_message_multipart_message( $shipTo_url, $shipTo_paramaters, $shipTo_xml );
-			}
-		}
-		update_user_meta( $user_id, 'wpiai_last_delivery_addresses', $shipTo );
-	}
-	error_log( 'Finished Processing ShipTos for user_id: ' . $user_id );
-}
+
 
 function wpiai_array_equal( $a, $b ) {
 	return (
@@ -653,6 +552,7 @@ function wpiai_process_user_shiptos( $user_id ) {
 	$shiptoRec_meta = get_user_meta( $user_id, 'wpiai_delivery_addresses', true );
 	$shipToRec      = array();
 	$shipToAdd      = array();
+	//$shipToChange = array();
 	$hasShipping    = is_array( $shiptoRec_meta );
 	if ( $hasShipping ) {
 		if ( empty( $shiptoRec_meta ) ) {
@@ -677,9 +577,10 @@ function wpiai_process_user_shiptos( $user_id ) {
 			} else {
 				//$shipToRec_rec['contact_CREATED_BY'] = 'EXTERNAL';
 			}
-			if ( $shipToRec_rec['delivery_UNIQUE_ID'] == '' ) {
+			/*if ( $shipToRec_rec['delivery_UNIQUE_ID'] == '' ) {
 				$shipToRec_rec['delivery_UNIQUE_ID'] = uniqid();
-			}
+				$shipToChange[] = $shipToRec;
+			}*/
 			$shipToRec[] = $shipToRec_rec;
 			//$lastContactRec[] = $shipToRec_rec;
 		}
@@ -710,7 +611,7 @@ function wpiai_process_user_shiptos( $user_id ) {
 	}
 	//update_user_meta($user_id, 'wpiai_last_contacts', $lastContactRec);
 	if ( ! update_user_meta( $user_id, 'wpiai_delivery_addresses', $shipToRec ) ) {
-		//error_log('Contact update_user_meta Failed or not changed for $user_id: ' . $user_id);
+		error_log('Contact wpiai_delivery_addresses Failed or not changed for $user_id: ' . $user_id);
 		wpiai_update_csd_ship_tos( $user_id );
 	} else {
 		$shipToRec_url        = get_option( 'wpiai_ship_to_url' );
@@ -729,6 +630,16 @@ function wpiai_process_user_shiptos( $user_id ) {
 			}
 			update_user_meta( $user_id, 'wpiai_last_delivery_addresses', $wpiai_last_delivery_addresses );
 		}
+
+        /*if ( ( count( $shipToChange ) > 0 ) ) {
+            $wpiai_last_delivery_addresses = get_user_meta( $user_id, 'wpiai_delivery_addresses', true );
+            foreach ( $shipToChange as $add_shipto ) {
+                $wpiai_last_delivery_addresses[] = $add_shipto;
+                $shipToRec_xml                   = get_shipTo_XML_record( $user_id, 'Change', $add_shipto );
+                $updated = wpiai_get_infor_message_multipart_message( $shipToRec_url, $shipToRec_paramaters, $shipToRec_xml );
+            }
+            update_user_meta( $user_id, 'wpiai_last_delivery_addresses', $wpiai_last_delivery_addresses );
+        }*/
 
 
 		wpiai_update_csd_ship_tos( $user_id );
