@@ -118,12 +118,13 @@ function wpiai_do_every_day() {
 	$post_code = 'LN2 5TB';
 	error_log(createCSDShipTo($organizationID,$customerID,$company,$address_1,$address_2,$address_3,$city,$post_code) );*/
 	wpiai_import_default_product_prices_and_stock_levels();
+    //wpiai_equalize_shiptos(150);
 }
 
 function wpiai_do_every_minute() {
 	// do something every minute
 	//error_log('WP Cron is working....Every Minute Event');
-	//wpiai_check_user_meta();
+	wpiai_check_user_meta();
 	//wpiai_clear_old_contacts(45);
 	//wpiai_reset_old_contacts(45);
 	//wpiai_process_products(150,1200,true);
@@ -577,10 +578,10 @@ function wpiai_process_user_shiptos( $user_id ) {
 			} else {
 				//$shipToRec_rec['contact_CREATED_BY'] = 'EXTERNAL';
 			}
-			/*if ( $shipToRec_rec['delivery_UNIQUE_ID'] == '' ) {
+			if ( $shipToRec_rec['delivery_UNIQUE_ID'] == '' ) {
 				$shipToRec_rec['delivery_UNIQUE_ID'] = uniqid();
 				$shipToChange[] = $shipToRec;
-			}*/
+			}
 			$shipToRec[] = $shipToRec_rec;
 			//$lastContactRec[] = $shipToRec_rec;
 		}
