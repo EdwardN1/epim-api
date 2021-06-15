@@ -119,6 +119,7 @@ function wpiai_do_every_day() {
 	error_log(createCSDShipTo($organizationID,$customerID,$company,$address_1,$address_2,$address_3,$city,$post_code) );*/
 	wpiai_import_default_product_prices_and_stock_levels();
     //wpiai_equalize_shiptos(150);
+	//wpiai_update_csd_ship_tos( 150 );
 }
 
 function wpiai_do_every_minute() {
@@ -406,11 +407,12 @@ function wpiai_process_products( $max, $seconds, $log = false ) {
 
 
 function wpiai_array_equal( $a, $b ) {
+	//_oi(print_r(array_diff_assoc( $a, $b )));
 	return (
 		is_array( $a )
 		&& is_array( $b )
 		&& count( $a ) == count( $b )
-		&& array_diff( $a, $b ) === array_diff( $b, $a )
+		&& array_diff_assoc( $a, $b ) === array_diff_assoc( $b, $a )
 	);
 }
 
@@ -421,7 +423,7 @@ function wpiai_different_array_indexes( $array1, $array2 ) {
 		return false;
 	}
 	if ( count( $array1 ) <> count( $array2 ) ) {
-		//error_log('Compared Arrays are of different sizes, can not compare these');
+		_oi('Compared Arrays are of different sizes, can not compare these');
 		return false;
 	}
 	$i = 0;
@@ -435,7 +437,7 @@ function wpiai_different_array_indexes( $array1, $array2 ) {
 		return $r;
 	}
 
-	//error_log('Arrays are identical');
+	_oi('Arrays are identical');
 	return false;
 }
 
@@ -511,6 +513,7 @@ function wpiai_update_csd_contacts( $user_id ) {
 }
 
 function wpiai_update_csd_ship_tos( $user_id ) {
+	_oi('wpiai_update_csd_ship_tos for '.$user_id);
 	$shiptoRecs = get_user_meta( $user_id, 'wpiai_delivery_addresses', true );
 	if ( is_array( $shiptoRecs ) ) {
 		$oldShipTos = get_user_meta( $user_id, 'wpiai_last_delivery_addresses', true );
@@ -529,6 +532,8 @@ function wpiai_update_csd_ship_tos( $user_id ) {
 						$oldShipTos[] = $shipTo_rec;
 					}
 				}
+			} else {
+				_oi('No ShipTo Recs Added or Removed');
 			}
 			$changedShipTos = wpiai_different_array_indexes( $shiptoRecs, $oldShipTos );
 			if ( $changedShipTos ) {
@@ -537,6 +542,7 @@ function wpiai_update_csd_ship_tos( $user_id ) {
 				foreach ( $changedShipTos as $changedShipTo ) {
 					$shipToRec_xml = get_shipTo_XML_record( $user_id, 'Change', $shiptoRecs[ $changedShipTo ] );
 					//error_log('Contact Change: '.$shiptoRecs[$changedShipTo]['contact_CONTACT_ID']);
+					_oi('ShipTo Change: '.$shiptoRecs[$changedShipTo]['delivery-CSD-ID']);
 					$updated = wpiai_get_infor_message_multipart_message( $shipToRec_url, $shipToRec_paramaters, $shipToRec_xml );
 				}
 				update_user_meta( $user_id, 'wpiai_last_delivery_addresses', $shiptoRecs );
