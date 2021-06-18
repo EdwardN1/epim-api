@@ -44,7 +44,8 @@ function ajax_wpiai_update_default_price_for_product() {
 	wpiai_api_checkSecure();
 	header( "Content-Type: application/json" );
 	$ID = $_POST['sku'];
-	error_log('Updating price for product: '. $ID);
+	//error_log('Updating price for product: '. $ID);
+	_oi('Updating price for product: '. $ID,'ajax-handlers');
 	if ( $ID ) {
 		$productsList = array();
 		$product      = wc_get_product( wc_get_product_id_by_sku($ID) );
@@ -61,17 +62,20 @@ function ajax_wpiai_update_default_price_for_product() {
 					$product->set_stock_quantity( $item['quantity'] );
 					$product->save();
 					echo 'Price for : ' . $product->get_sku() . ' updated from ' . $oldPrice . ' to ' . $product->get_price() . ' Quantity set to ' . $product->get_stock_quantity();
-					error_log('Price for : '.$product->get_sku().' updated from '.$oldPrice.' to '.$product->get_price());
+					//error_log('Price for : '.$product->get_sku().' updated from '.$oldPrice.' to '.$product->get_price());
+					_oi('Price for : '.$product->get_sku().' updated from '.$oldPrice.' to '.$product->get_price(),'ajax-handlers');
 					//break;
 				}
 			}
 		} else {
 			echo $ID . ' can not find that product';
-			error_log($ID . ' can not find that product');
+			//error_log($ID . ' can not find that product');
+			_oi($ID . ' can not find that product','ajax-handlers');
 		}
 	} else {
 		echo 'No product ID requested';
 		error_log('No product ID requested');
+		_oi('No product ID requested','ajax-handlers');
 	}
 	exit;
 }

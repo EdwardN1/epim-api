@@ -34,7 +34,8 @@ function wpiai_order_added( $order_id ) {
 			$xmlRequest = wpiai_get_order_XML( $order_id, 'Add' );
 			$updated    = wpiai_get_infor_message_multipart_message( $url, $pRequest, $xmlRequest );
 			if ( $updated ) {
-				error_log( 'Order: ' . $order_id . ' Added' );
+				//error_log( 'Order: ' . $order_id . ' Added' );
+				_oi( 'Order: ' . $order_id . ' Added','orders' );
 			}
 		}
 	}

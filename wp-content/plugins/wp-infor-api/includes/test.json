@@ -1,34 +1,98 @@
-{
-  "id": "150",
-  "meta_data": [
-    {
-      "key": "wpiai_delivery_addresses",
-      "value": [
-        {
-          "delivery-company-name": "ROWELEC LTD",
-          "delivery-country": "GB",
-          "delivery-street-address-1": "CHURCHBRIDGE",
-          "delivery-street-address-2": "",
-          "delivery-street-address-3": "",
-          "delivery-town-city": "WEST MIDLANDS",
-          "delivery-postcode": "B69 2AX",
-          "delivery-phone": "0121 544 1117",
-          "delivery-CSD-ID": "60508-123",
-          "delivery_UNIQUE_ID": ""
-        },
-        {
-          "delivery-company-name": "ROWELEC LTD",
-          "delivery-country": "GB",
-          "delivery-street-address-1": "RICHARD 0121 5441117",
-          "delivery-street-address-2": "UNIT 2B GRANADA TRADING ESTATE",
-          "delivery-street-address-3": "PARK STREET",
-          "delivery-town-city": "OLDBURY",
-          "delivery-postcode": "B69 4LH",
-          "delivery-phone": "0121 544 1117",
-          "delivery-CSD-ID": "60508-MW000053",
-          "delivery_UNIQUE_ID": ""
-        }
-      ]
-    }
-  ]
-}
+[
+  {
+    "warehouseID": "BLY",
+    "warehouseName": "BLABY BRANCH",
+    "SKU": "NBS22g",
+    "productID": "64855",
+    "price": 6.63,
+    "quantity": 5119
+  },
+  {
+    "warehouseID": "BUL",
+    "warehouseName": "ANDOVER BRANCH",
+    "SKU": "NBS22g",
+    "productID": "64855",
+    "price": 6.63,
+    "quantity": 5020
+  },
+  {
+    "warehouseID": "CAN",
+    "warehouseName": "CANNOCK BRANCH",
+    "SKU": "NBS22g",
+    "productID": "64855",
+    "price": 6.63,
+    "quantity": 5043
+  },
+  {
+    "warehouseID": "DER",
+    "warehouseName": "DERBY BRANCH",
+    "SKU": "NBS22g",
+    "productID": "64855",
+    "price": 6.63,
+    "quantity": 5035
+  },
+  {
+    "warehouseID": "FCC",
+    "warehouseName": "FCC ELECTRICAL WHOLESALERS",
+    "SKU": "NBS22g",
+    "productID": "64855",
+    "price": 6.63,
+    "quantity": 4946
+  },
+  {
+    "warehouseID": "HOCE",
+    "warehouseName": "HEAD OFFICE CENTRAL",
+    "SKU": "NBS22g",
+    "productID": "64855",
+    "price": 6.63,
+    "quantity": 0
+  },
+  {
+    "warehouseID": "ILK",
+    "warehouseName": "ILKESTON BRANCH",
+    "SKU": "NBS22g",
+    "productID": "64855",
+    "price": 6.63,
+    "quantity": 5016
+  },
+  {
+    "warehouseID": "LEI",
+    "warehouseName": "LEICESTER BRANCH",
+    "SKU": "NBS22g",
+    "productID": "64855",
+    "price": 6.63,
+    "quantity": 5027
+  },
+  {
+    "warehouseID": "NEW",
+    "warehouseName": "NEWARK BRANCH",
+    "SKU": "NBS22g",
+    "productID": "64855",
+    "price": 6.63,
+    "quantity": 5037
+  },
+  {
+    "warehouseID": "NTM",
+    "warehouseName": "NOTTINGHAM BRANCH",
+    "SKU": "NBS22g",
+    "productID": "64855",
+    "price": 6.63,
+    "quantity": 4956
+  },
+  {
+    "warehouseID": "NUN",
+    "warehouseName": "NUNEATON BRANCH",
+    "SKU": "NBS22g",
+    "productID": "64855",
+    "price": 6.63,
+    "quantity": 5071
+  },
+  {
+    "warehouseID": "WOLC",
+    "warehouseName": "WOLVERHAMPTON BRANCH",
+    "SKU": "NBS22g",
+    "productID": "64855",
+    "price": 6.63,
+    "quantity": 5096
+  }
+]

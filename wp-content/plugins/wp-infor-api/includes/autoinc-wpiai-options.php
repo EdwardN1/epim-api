@@ -136,6 +136,9 @@ function wpiai_register_settings()
 	register_setting('wpiai_invoice_print_settings_group', 'wpiai_invoice_print_request');
 
     add_option('wpiai_users_updated', '');
+	add_option('wpiai_background_processes_to_start', '');
+	add_option('wpiai_background_processes_to_stop', '');
+	add_option('wpiai_background_processes_running', '');
 
 }
 

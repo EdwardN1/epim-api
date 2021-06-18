@@ -2,7 +2,8 @@
 register_activation_hook( wpiai_PLUGINFILE, 'wpiai_cron_activation' );
 
 function wpiai_cron_activation() {
-	error_log( 'Running wpiai_cron_activation' );
+	//error_log( 'Running wpiai_cron_activation' );
+	_oi( 'Running wpiai_cron_activation', 'cron' );
 	if ( ! wp_next_scheduled( 'wpiai_every_minute_action' ) ) {
 		wp_schedule_event( time(), 'everyminute', 'wpiai_every_minute_action' );
 	}
@@ -117,15 +118,26 @@ function wpiai_do_every_day() {
 	$city = 'City';
 	$post_code = 'LN2 5TB';
 	error_log(createCSDShipTo($organizationID,$customerID,$company,$address_1,$address_2,$address_3,$city,$post_code) );*/
-	wpiai_import_default_product_prices_and_stock_levels();
-    //wpiai_equalize_shiptos(150);
+	//wpiai_import_product_prices_and_stock_levels( ' 10324 ' );
+	//wpiai_import_default_product_prices_and_stock_levels();
+	//wpiai_equalize_shiptos(150);
 	//wpiai_update_csd_ship_tos( 150 );
+	//wpiai_start('wpiai_import_customer_price_lists');
+	//wpiai_stop('wpiai_import_customer_price_lists');
+	error_log('Processes Running: '.print_r(get_option('wpiai_background_processes_running'),true));
+	error_log('Processes Stopping: '.print_r(get_option('wpiai_background_processes_to_stop'),true));
+	error_log('Processes Starting: '.print_r(get_option('wpiai_background_processes_to_start'),true));
+	error_log('Is It Stopping?: '.wpiai_check_if_stopping('wpiai_import_customer_price_lists'));
+	//update_option('wpiai_background_processes_to_start','');
+	//update_option('wpiai_background_processes_to_stop','');
+	//update_option('wpiai_background_processes_running','');
 }
 
 function wpiai_do_every_minute() {
 	// do something every minute
 	//error_log('WP Cron is working....Every Minute Event');
 	wpiai_check_user_meta();
+	wpiai_check_processes();
 	//wpiai_clear_old_contacts(45);
 	//wpiai_reset_old_contacts(45);
 	//wpiai_process_products(150,1200,true);
@@ -311,7 +323,7 @@ function wpiai_process_updated_products() {
 	error_log( 'wpiai_process_updated_products took ' . $time . ' seconds' );
 }
 
-function wpiai_process_updated_products_x() {
+/*function wpiai_process_updated_products_x() {
 	$timeStart       = microtime( true );
 	$updatedProducts = json_decode( wpiai_get_product_updates() );
 	//error_log(print_r($updatedProducts,true));
@@ -353,7 +365,7 @@ function wpiai_process_updated_products_x() {
 	$timeEnd = microtime( true );
 	$time    = $timeEnd - $timeStart;
 	error_log( 'wpiai_process_updated_products took ' . $time . ' seconds' );
-}
+}*/
 
 function wpiai_process_products( $max, $seconds, $log = false ) {
 	$timeStart   = microtime( true );
@@ -404,8 +416,6 @@ function wpiai_process_products( $max, $seconds, $log = false ) {
 }
 
 
-
-
 function wpiai_array_equal( $a, $b ) {
 	//_oi(print_r(array_diff_assoc( $a, $b )));
 	return (
@@ -423,7 +433,8 @@ function wpiai_different_array_indexes( $array1, $array2 ) {
 		return false;
 	}
 	if ( count( $array1 ) <> count( $array2 ) ) {
-		_oi('Compared Arrays are of different sizes, can not compare these');
+		_oi( 'Compared Arrays are of different sizes, can not compare these' );
+
 		return false;
 	}
 	$i = 0;
@@ -437,7 +448,8 @@ function wpiai_different_array_indexes( $array1, $array2 ) {
 		return $r;
 	}
 
-	_oi('Arrays are identical');
+	_oi( 'Arrays are identical' );
+
 	return false;
 }
 
@@ -513,7 +525,7 @@ function wpiai_update_csd_contacts( $user_id ) {
 }
 
 function wpiai_update_csd_ship_tos( $user_id ) {
-	_oi('wpiai_update_csd_ship_tos for '.$user_id);
+	_oi( 'wpiai_update_csd_ship_tos for ' . $user_id );
 	$shiptoRecs = get_user_meta( $user_id, 'wpiai_delivery_addresses', true );
 	if ( is_array( $shiptoRecs ) ) {
 		$oldShipTos = get_user_meta( $user_id, 'wpiai_last_delivery_addresses', true );
@@ -533,7 +545,7 @@ function wpiai_update_csd_ship_tos( $user_id ) {
 					}
 				}
 			} else {
-				_oi('No ShipTo Recs Added or Removed');
+				_oi( 'No ShipTo Recs Added or Removed' );
 			}
 			$changedShipTos = wpiai_different_array_indexes( $shiptoRecs, $oldShipTos );
 			if ( $changedShipTos ) {
@@ -542,13 +554,22 @@ function wpiai_update_csd_ship_tos( $user_id ) {
 				foreach ( $changedShipTos as $changedShipTo ) {
 					$shipToRec_xml = get_shipTo_XML_record( $user_id, 'Change', $shiptoRecs[ $changedShipTo ] );
 					//error_log('Contact Change: '.$shiptoRecs[$changedShipTo]['contact_CONTACT_ID']);
-					_oi('ShipTo Change: '.$shiptoRecs[$changedShipTo]['delivery-CSD-ID']);
+					_oi( 'ShipTo Change: ' . $shiptoRecs[ $changedShipTo ]['delivery-CSD-ID'] );
 					$updated = wpiai_get_infor_message_multipart_message( $shipToRec_url, $shipToRec_paramaters, $shipToRec_xml );
 				}
 				update_user_meta( $user_id, 'wpiai_last_delivery_addresses', $shiptoRecs );
 			} else {
 				//error_log('No contacts to update');
 			}
+		} else {
+			_oi( 'No old shipto records for ' . $user_id . '. Updating CSD ShipTos with ' . count( $shiptoRecs ) . ' Shiptos' );
+			foreach ( $shiptoRecs as $shipTo_rec ) {
+				$shipToRec_url        = get_option( 'wpiai_ship_to_url' );
+				$shipToRec_paramaters = set_messageid( get_option( 'wpiai_ship_to_parameters' ) );
+				$shipToRec_xml        = get_shipTo_XML_record( $user_id, 'Change', $shipTo_rec );
+				$updated              = wpiai_get_infor_message_multipart_message( $shipToRec_url, $shipToRec_paramaters, $shipToRec_xml );
+			}
+			update_user_meta( $user_id, 'wpiai_last_delivery_addresses', $shiptoRecs );
 		}
 	}
 }
@@ -560,12 +581,13 @@ function wpiai_process_user_shiptos( $user_id ) {
 	$shipToRec      = array();
 	$shipToAdd      = array();
 	//$shipToChange = array();
-	$hasShipping    = is_array( $shiptoRec_meta );
+	$hasShipping = is_array( $shiptoRec_meta );
 	if ( $hasShipping ) {
 		if ( empty( $shiptoRec_meta ) ) {
 			$hasShipping = false;
 		}
 	}
+	$add_first_shipping = false;
 	if ( $hasShipping ) {
 		foreach ( $shiptoRec_meta as $shipToRec_m ) {
 			$shipToRec_rec = $shipToRec_m;
@@ -586,7 +608,7 @@ function wpiai_process_user_shiptos( $user_id ) {
 			}
 			if ( $shipToRec_rec['delivery_UNIQUE_ID'] == '' ) {
 				$shipToRec_rec['delivery_UNIQUE_ID'] = uniqid();
-				$shipToChange[] = $shipToRec;
+				$shipToChange[]                      = $shipToRec;
 			}
 			$shipToRec[] = $shipToRec_rec;
 			//$lastContactRec[] = $shipToRec_rec;
@@ -614,11 +636,12 @@ function wpiai_process_user_shiptos( $user_id ) {
 			$first_shipping['delivery-phone']            = '';
 			$first_shipping['delivery_UNIQUE_ID']        = uniqid();
 			$shipToRec[]                                 = $first_shipping;
+			$add_first_shipping                          = true;
 		}
 	}
 	//update_user_meta($user_id, 'wpiai_last_contacts', $lastContactRec);
 	if ( ! update_user_meta( $user_id, 'wpiai_delivery_addresses', $shipToRec ) ) {
-		error_log('Contact wpiai_delivery_addresses Failed or not changed for $user_id: ' . $user_id);
+		error_log( 'Contact wpiai_delivery_addresses Failed or not changed for $user_id: ' . $user_id );
 		wpiai_update_csd_ship_tos( $user_id );
 	} else {
 		$shipToRec_url        = get_option( 'wpiai_ship_to_url' );
@@ -638,15 +661,20 @@ function wpiai_process_user_shiptos( $user_id ) {
 			update_user_meta( $user_id, 'wpiai_last_delivery_addresses', $wpiai_last_delivery_addresses );
 		}
 
-        /*if ( ( count( $shipToChange ) > 0 ) ) {
-            $wpiai_last_delivery_addresses = get_user_meta( $user_id, 'wpiai_delivery_addresses', true );
-            foreach ( $shipToChange as $add_shipto ) {
-                $wpiai_last_delivery_addresses[] = $add_shipto;
-                $shipToRec_xml                   = get_shipTo_XML_record( $user_id, 'Change', $add_shipto );
-                $updated = wpiai_get_infor_message_multipart_message( $shipToRec_url, $shipToRec_paramaters, $shipToRec_xml );
-            }
-            update_user_meta( $user_id, 'wpiai_last_delivery_addresses', $wpiai_last_delivery_addresses );
-        }*/
+		/*if ( $add_first_shipping ) {
+			$shipToRec_xml                   = get_shipTo_XML_record( $user_id, 'Add', $add_shipto );
+			$updated = wpiai_get_infor_message_multipart_message( $shipToRec_url, $shipToRec_paramaters, $shipToRec_xml );
+		}*/
+
+		/*if ( ( count( $shipToChange ) > 0 ) ) {
+			$wpiai_last_delivery_addresses = get_user_meta( $user_id, 'wpiai_delivery_addresses', true );
+			foreach ( $shipToChange as $add_shipto ) {
+				$wpiai_last_delivery_addresses[] = $add_shipto;
+				$shipToRec_xml                   = get_shipTo_XML_record( $user_id, 'Change', $add_shipto );
+				$updated = wpiai_get_infor_message_multipart_message( $shipToRec_url, $shipToRec_paramaters, $shipToRec_xml );
+			}
+			update_user_meta( $user_id, 'wpiai_last_delivery_addresses', $wpiai_last_delivery_addresses );
+		}*/
 
 
 		wpiai_update_csd_ship_tos( $user_id );
@@ -696,34 +724,34 @@ function wpiai_process_user_contacts( $user_id ) {
 		$user_CSD_ID = get_user_meta( $user_id, 'CSD_ID', true );
 		if ( $user_CSD_ID != '' ) {
 			error_log( 'Creating First Contact..' );
-			$customer                            = new WC_Customer( $user_id );
-			$user_email                          = $customer->get_email(); // Get account email
-			$first_name                          = $customer->get_first_name();
-			$last_name                           = $customer->get_last_name();
-			$billing_address_1                   = $customer->get_billing_address_1();
-			$billing_address_2                   = $customer->get_billing_address_2();
-			$billing_city                        = $customer->get_billing_city();
-			$billing_state                       = $customer->get_billing_state();
-			$billing_postcode                    = $customer->get_billing_postcode();
-			$billing_phone                       = $customer->get_billing_phone();
-			$job_title = get_user_meta($user_id,'_contact_job_title',true);
-			$user_marketing = get_user_meta($user_id,'_user_marketing',true);
-			$first_contact                       = array();
+			$customer                               = new WC_Customer( $user_id );
+			$user_email                             = $customer->get_email(); // Get account email
+			$first_name                             = $customer->get_first_name();
+			$last_name                              = $customer->get_last_name();
+			$billing_address_1                      = $customer->get_billing_address_1();
+			$billing_address_2                      = $customer->get_billing_address_2();
+			$billing_city                           = $customer->get_billing_city();
+			$billing_state                          = $customer->get_billing_state();
+			$billing_postcode                       = $customer->get_billing_postcode();
+			$billing_phone                          = $customer->get_billing_phone();
+			$job_title                              = get_user_meta( $user_id, '_contact_job_title', true );
+			$user_marketing                         = get_user_meta( $user_id, '_user_marketing', true );
+			$first_contact                          = array();
 			$first_contact['contact_email_channel'] = false;
 			$first_contact['contact_phone_channel'] = false;
-			$first_contact['contact_mail_channel'] = false;
-			$first_contact['contact_fax_channel'] = false;
-			if(is_array($user_marketing)) {
-				if(array_key_exists('email',$user_marketing)) {
+			$first_contact['contact_mail_channel']  = false;
+			$first_contact['contact_fax_channel']   = false;
+			if ( is_array( $user_marketing ) ) {
+				if ( array_key_exists( 'email', $user_marketing ) ) {
 					$first_contact['contact_email_channel'] = true;
 				}
-				if(array_key_exists('telephone',$user_marketing)) {
+				if ( array_key_exists( 'telephone', $user_marketing ) ) {
 					$first_contact['contact_phone_channel'] = true;
 				}
-				if(array_key_exists('mail',$user_marketing)) {
+				if ( array_key_exists( 'mail', $user_marketing ) ) {
 					$first_contact['contact_mail_channel'] = true;
 				}
-				if(array_key_exists('sms',$user_marketing)) {
+				if ( array_key_exists( 'sms', $user_marketing ) ) {
 					$first_contact['contact_fax_channel'] = true;
 				}
 			}
@@ -781,4 +809,113 @@ function wpiai_check_user_meta() {
 		wpiai_process_user_contacts( $user_id );
 		error_log( 'wpiai_process_user_contacts completed' );
 	}
+}
+
+function wpiai_start( $fName ) {
+	error_log('Starting '.$fName);
+	$start   = get_option( 'wpiai_background_processes_to_start' );
+	$running = get_option( 'wpiai_background_processes_running' );
+	if ( ! is_array( $start ) ) {
+		$start = array();
+	}
+	if ( ! is_array( $running ) ) {
+		$running = array();
+	}
+	if ( $fName ) {
+		if ( ! in_array( $fName, $start ) ) {
+			if ( ! in_array( $fName, $running ) ) {
+				$start[] = $fName;
+				update_option( 'wpiai_background_processes_to_start', $start );
+			}
+		}
+	}
+}
+
+function wpiai_stop( $fName ) {
+	error_log('Stopping '.$fName);
+	$start   = get_option( 'wpiai_background_processes_to_start' );
+	$running = get_option( 'wpiai_background_processes_running' );
+	if ( ! is_array( $start ) ) {
+		$start = array();
+	}
+	if ( ! is_array( $running ) ) {
+		$running = array();
+	}
+	if($fName) {
+		if(in_array($fName,$start)) {
+			if (($key = array_search($fName, $start)) !== false) {
+				unset($start[$key]);
+			}
+		}
+		if(in_array($fName,$running)) {
+			$stopping = get_option('wpiai_background_processes_to_stop');
+			if(!is_array($stopping)) {
+				$stopping = array();
+			}
+			if(!in_array($stopping)) {
+				$stopping[] = $fName;
+				update_option('wpiai_background_processes_to_stop',$stopping);
+			}
+		}
+	}
+}
+
+function wpiai_check_if_stopping($fName) {
+	$GLOBALS['wp_object_cache']->delete( 'wpiai_background_processes_to_stop', 'options' );
+	$stopping = get_option('wpiai_background_processes_to_stop');
+	if(!$stopping) {
+		//error_log($fName.' is not stopping');
+		return false;
+	}
+	if(!is_array($stopping)) {
+		//error_log($fName.' is not stopping');
+		return false;
+	}
+	if(in_array($fName,$stopping)) {
+		error_log($fName.' is stopping');
+		return true;
+	}
+	//error_log($fName.' is not stopping');
+	return false;
+}
+
+function wpiai_check_processes() {
+	error_log('Checking Infor Processes');
+	$to_start = get_option('wpiai_background_processes_to_start');
+	if(is_array($to_start)) {
+		foreach ($to_start as $start) {
+			if(function_exists($start)) {
+				if(!wpiai_check_if_stopping($start)) {
+					$running = get_option('wpiai_background_processes_running');
+					if(!is_array($running)) {
+						$running = array();
+					}
+					if(!in_array($start,$running)) {
+						$running[] = $start;
+						update_option('wpiai_background_processes_running',$running);
+						error_log('Running '.$start);
+						$start();
+					}
+				}
+			}
+		}
+	}
+	$to_start = array();
+	update_option('wpiai_background_processes_to_start',$to_start);
+	$to_stop = get_option('wpiai_background_processes_to_stop');
+	$stops_to_go = array();
+	if(is_array($to_stop)) {
+		foreach ($to_stop as $stop) {
+			$running = get_option('wpiai_background_processes_running');
+			if(!in_array($stop,$running)) {
+				$stops_to_go[] = $stop;
+			}
+		}
+	}
+	foreach ($stops_to_go as $go) {
+		if (($key = array_search($go, $to_stop)) !== false) {
+			unset($to_stop[$key]);
+		}
+	}
+
 }
