@@ -1,98 +1,157 @@
-[
-  {
-    "warehouseID": "BLY",
-    "warehouseName": "BLABY BRANCH",
-    "SKU": "NBS22g",
-    "productID": "64855",
-    "price": 6.63,
-    "quantity": 5119
+{
+  "id": "120165",
+  "status": "ordered",
+  "currency": "GBP",
+  "date_created": "2021-06-28T14:50:00Z",
+  "date_modified": "2021-06-28T15:23:00Z",
+  "total": "73.44",
+  "total_tax": "12.24",
+  "customer_id": "264",
+  "customer_note": "",
+  "billing": {
+    "company": "LED ELECTRICAL LIMITED",
+    "address_1": "ELECTRICITY HOUSE",
+    "address_2": "10 KENYON ROAD",
+    "city": "NELSON  LANCASHIRE",
+    "postcode": "BB9 5SP",
+    "country": "UK",
+    "phone": "01282695269       "
   },
-  {
-    "warehouseID": "BUL",
-    "warehouseName": "ANDOVER BRANCH",
-    "SKU": "NBS22g",
-    "productID": "64855",
-    "price": 6.63,
-    "quantity": 5020
+  "shipping": {
+    "company": "LED ELECTRICAL LIMITED",
+    "address_1": "ELECTRICITY HOUSE",
+    "address_2": "10 KENYON ROAD",
+    "city": "NELSON  LANCASHIRE",
+    "postcode": "BB9 5SP",
+    "country": "UK",
+    "phone": "01282695269       "
   },
-  {
-    "warehouseID": "CAN",
-    "warehouseName": "CANNOCK BRANCH",
-    "SKU": "NBS22g",
-    "productID": "64855",
-    "price": 6.63,
-    "quantity": 5043
-  },
-  {
-    "warehouseID": "DER",
-    "warehouseName": "DERBY BRANCH",
-    "SKU": "NBS22g",
-    "productID": "64855",
-    "price": 6.63,
-    "quantity": 5035
-  },
-  {
-    "warehouseID": "FCC",
-    "warehouseName": "FCC ELECTRICAL WHOLESALERS",
-    "SKU": "NBS22g",
-    "productID": "64855",
-    "price": 6.63,
-    "quantity": 4946
-  },
-  {
-    "warehouseID": "HOCE",
-    "warehouseName": "HEAD OFFICE CENTRAL",
-    "SKU": "NBS22g",
-    "productID": "64855",
-    "price": 6.63,
-    "quantity": 0
-  },
-  {
-    "warehouseID": "ILK",
-    "warehouseName": "ILKESTON BRANCH",
-    "SKU": "NBS22g",
-    "productID": "64855",
-    "price": 6.63,
-    "quantity": 5016
-  },
-  {
-    "warehouseID": "LEI",
-    "warehouseName": "LEICESTER BRANCH",
-    "SKU": "NBS22g",
-    "productID": "64855",
-    "price": 6.63,
-    "quantity": 5027
-  },
-  {
-    "warehouseID": "NEW",
-    "warehouseName": "NEWARK BRANCH",
-    "SKU": "NBS22g",
-    "productID": "64855",
-    "price": 6.63,
-    "quantity": 5037
-  },
-  {
-    "warehouseID": "NTM",
-    "warehouseName": "NOTTINGHAM BRANCH",
-    "SKU": "NBS22g",
-    "productID": "64855",
-    "price": 6.63,
-    "quantity": 4956
-  },
-  {
-    "warehouseID": "NUN",
-    "warehouseName": "NUNEATON BRANCH",
-    "SKU": "NBS22g",
-    "productID": "64855",
-    "price": 6.63,
-    "quantity": 5071
-  },
-  {
-    "warehouseID": "WOLC",
-    "warehouseName": "WOLVERHAMPTON BRANCH",
-    "SKU": "NBS22g",
-    "productID": "64855",
-    "price": 6.63,
-    "quantity": 5096
-  }
-]
+  "meta_data": [
+    {
+      "key": "CSD_ID",
+      "value": "13279991-01"
+    },
+    {
+      "key": "CSD_Customer_ID",
+      "value": "10310"
+    },
+    {
+      "key": "po_reference",
+      "value": "CONDUIT"
+    },
+    {
+      "key": "order_type",
+      "value": "Stock Order"
+    },
+    {
+      "key": "order_status_code",
+      "value": "1"
+    },
+    {
+      "key": "order_notes",
+      "value": ""
+    },
+    {
+      "key": "warehouse",
+      "value": "CAN"
+    },
+    {
+      "key": "ship_via",
+      "value": "ERF Vehicle"
+    },
+    {
+      "key": "shipping_instructions",
+      "value": ""
+    },
+    {
+      "key": "subtotal_before_tax",
+      "value": "61.20"
+    },
+    {
+      "key": "tax_type",
+      "value": "V.A.T."
+    },
+    {
+      "key": "tax_amount",
+      "value": "12.24"
+    },
+    {
+      "key": "disposition",
+      "value": ""
+    },
+    {
+      "key": "tendered",
+      "value": ""
+    },
+    {
+      "key": "date_shipped",
+      "value": ""
+    },
+    {
+      "key": "date_canceled",
+      "value": ""
+    },
+    {
+      "key": "OrderDate",
+      "value": "2021-06-28"
+    },
+    {
+      "key": "payment_term",
+      "value": "E30 Nett"
+    },
+    {
+      "key": "paymentterm_duedate",
+      "value": "2021-07-31"
+    },
+    {
+      "key": "origin_code",
+      "value": ""
+    },
+    {
+      "key": "approval_code",
+      "value": "N/A"
+    }
+  ],
+  "line_items": [
+    {
+      "name": "Metpro SBS20WH Spacer Ba r Saddle 20mm",
+      "quantity": 30,
+      "subtotal": "61.2",
+      "total": "61.2",
+      "total_tax": "0.0",
+      "meta_data": [
+        {
+          "key": "line_number",
+          "value": "2"
+        },
+        {
+          "key": "line_status",
+          "value": "Open"
+        },
+        {
+          "key": "item_notes",
+          "value": 0
+        },
+        {
+          "key": "back_order",
+          "value": "false"
+        },
+        {
+          "key": "price_paid",
+          "value": 61.2
+        },
+        {
+          "key": "uom",
+          "value": "EACH"
+        },
+        {
+          "key": "quantity_shipped",
+          "value": "0.00"
+        }
+      ],
+      "sku": "SBS20WHI",
+      "price": "2.04",
+      "id": "6262"
+    }
+  ]
+}
