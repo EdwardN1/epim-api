@@ -11,7 +11,7 @@ function custom_post_type() {
         'archives'              => __( 'Order Archives', 'wpiai_domain' ),
         'attributes'            => __( 'Order Attributes', 'wpiai_domain' ),
         'parent_item_colon'     => __( 'Parent Order:', 'wpiai_domain' ),
-        'all_items'             => __( 'All Order', 'wpiai_domain' ),
+        'all_items'             => __( 'All Orders', 'wpiai_domain' ),
         'add_new_item'          => __( 'Add New Order', 'wpiai_domain' ),
         'add_new'               => __( 'Add New', 'wpiai_domain' ),
         'new_item'              => __( 'New Order', 'wpiai_domain' ),
@@ -38,7 +38,7 @@ function custom_post_type() {
         'labels'                => $labels,
         //'supports'              => array( 'title', 'editor' ),
         'supports'              => array( 'title' ),
-        'taxonomies'            => array( 'category', 'post_tag' ),
+        'taxonomies'            => array(),
         'hierarchical'          => false,
         'public'                => true,
         'show_ui'               => true,
@@ -70,6 +70,13 @@ foreach ( $screens as $screen ) {
         'wpiai_cached_order_timestamp_meta_box_callback',
         $screen
     );
+
+    add_meta_box(
+        'wpiai_cached_order_request',
+        __( 'Order request', 'wpiai_domain' ),
+        'wpiai_cached_order_request_meta_box_callback',
+        $screen
+    );
 }
 }
 add_action( 'add_meta_boxes', 'wpiai_cached_order_add_meta_box' );
@@ -82,7 +89,7 @@ add_action( 'add_meta_boxes', 'wpiai_cached_order_add_meta_box' );
 function wpiai_cached_order_timestamp_meta_box_callback( $post ) {
 
 // Add a nonce field so we can check for it later.
-    wp_nonce_field( 'wpiai_cached_order_timestamp', 'wpiai_cached_order_nonce' );
+    wp_nonce_field( 'wpiai_cached_order_timestamp', 'wpiai_cached_order_timestamp_nonce' );
 
     /*
      * Use get_post_meta() to retrieve an existing value
@@ -96,18 +103,35 @@ function wpiai_cached_order_timestamp_meta_box_callback( $post ) {
     echo '<input type="text" id="wpiai_cached_order_timestamp" name="wpiai_cached_order_timestamp" value="' . esc_attr( $value ) . '" size="25" />';
 }
 
+function wpiai_cached_order_request_meta_box_callback( $post ) {
+
+// Add a nonce field so we can check for it later.
+    wp_nonce_field( 'wpiai_cached_order_request', 'wpiai_cached_order_request_nonce' );
+
+    /*
+     * Use get_post_meta() to retrieve an existing value
+     * from the database and use the value for the form.
+     */
+    $value = get_post_meta( $post->ID, '_wpiai_cached_order_request', true );
+
+    echo '<label for="wpiai_cached_order_request">';
+    _e( 'Order Request', 'wpiai_domain' );
+    echo '</label> ';
+    echo '<input type="text" id="wpiai_cached_order_request" name="wpiai_cached_order_request" value="' . esc_attr( $value ) . '" size="25" />';
+}
+
 /**
  * When the post is saved, saves our custom data.
  *
  * @param int $post_id The ID of the post being saved.
  */
- function member_save_meta_box_data( $post_id ) {
+ function wpiai_cached_order_timestamp_save_meta_box_data( $post_id ) {
 
-     if ( ! isset( $_POST['member_meta_box_nonce'] ) ) {
+     if ( ! isset( $_POST['wpiai_cached_order_timestamp_nonce'] ) ) {
          return;
      }
 
-     if ( ! wp_verify_nonce( $_POST['member_meta_box_nonce'], 'member_save_meta_box_data' ) ) {
+     if ( ! wp_verify_nonce( $_POST['wpiai_cached_order_timestamp_nonce'], 'wpiai_cached_order_timestamp_nonce' ) ) {
          return;
      }
 
@@ -116,7 +140,7 @@ function wpiai_cached_order_timestamp_meta_box_callback( $post ) {
      }
 
      // Check the user's permissions.
-     if ( isset( $_POST['post_type'] ) && 'page' == $_POST['post_type'] ) {
+     if ( isset( $_POST['post_type'] ) && 'wpiai_cached_orders' == $_POST['post_type'] ) {
 
          if ( ! current_user_can( 'edit_page', $post_id ) ) {
              return;
@@ -129,15 +153,53 @@ function wpiai_cached_order_timestamp_meta_box_callback( $post ) {
          }
      }
 
-     if ( ! isset( $_POST['member_new_field'] ) ) {
+     if ( ! isset( $_POST['wpiai_cached_order_timestamp'] ) ) {
          return;
      }
 
-     $my_data = sanitize_text_field( $_POST['member_new_field'] );
+     $my_data = sanitize_text_field( $_POST['wpiai_cached_order_timestamp'] );
 
-     update_post_meta( $post_id, '_my_meta_value_key', $my_data );
+     update_post_meta( $post_id, '_wpiai_cached_order_timestamp', $my_data );
  }
-add_action( 'save_post', 'member_save_meta_box_data' );
+add_action( 'save_post', 'wpiai_cached_order_timestamp_save_meta_box_data' );
+
+function wpiai_cached_order_request_save_meta_box_data( $post_id ) {
+
+    if ( ! isset( $_POST['wpiai_cached_order_request_nonce'] ) ) {
+        return;
+    }
+
+    if ( ! wp_verify_nonce( $_POST['wpiai_cached_order_request_nonce'], 'wpiai_cached_order_request' ) ) {
+        return;
+    }
+
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+        return;
+    }
+
+    // Check the user's permissions.
+    if ( isset( $_POST['post_type'] ) && 'wpiai_cached_orders' == $_POST['post_type'] ) {
+
+        if ( ! current_user_can( 'edit_page', $post_id ) ) {
+            return;
+        }
+
+    } else {
+
+        if ( ! current_user_can( 'edit_post', $post_id ) ) {
+            return;
+        }
+    }
+
+    if ( ! isset( $_POST['wpiai_cached_order_request'] ) ) {
+        return;
+    }
+
+    $my_data = sanitize_text_field( $_POST['wpiai_cached_order_request'] );
+
+    update_post_meta( $post_id, '_wpiai_cached_order_request', $my_data );
+}
+add_action( 'save_post', 'wpiai_cached_order_request_save_meta_box_data' );
 
 function set_csdorders( $request ) {
 	//return array( 'csdorders' => 'Data' );
