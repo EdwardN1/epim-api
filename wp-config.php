@@ -99,4 +99,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 /** Sets up WordPress vars and included files. */
 require_once( ABSPATH . 'wp-settings.php' );
 
+define( 'WP_MEMORY_LIMIT', '2048M' );
 define('DISABLE_WP_CRON', true);
