@@ -179,10 +179,15 @@ function get_epimaapi_product( $id ) {
 
 function get_epimaapi_all_changed_products_since( $datetime = '2002-10-02T10:00:00-00:00' ) {
 	$xdatetime = substr( $datetime, 0, 10 ) . 'T10:00:00-00:00';
-	$r         = epimaapi_make_api_call( 'ProductsUpdatedSince?ChangedSinceUTC=' . $xdatetime );
+	$i         = epimaapi_make_api_call( 'ProductsUpdatedSince?ChangedSinceUTC=' . $xdatetime );
 
-	//$r = epimaapi_make_api_call('https://epim.azure-api.net/Grahams/api/ProductsUpdatedSince?ChangedSinceUTC=' . '2020-01-06T10:00:00-00:00');
-	return $r;
+	return $i;
+}
+
+function get_epimaapi_all_changed_products_since_starting( $start, $datetime = '2002-10-02T10:00:00-00:00'  ) {
+    $xdatetime = substr( $datetime, 0, 10 ) . 'T10:00:00-00:00';
+    $i         = epimaapi_make_api_call( 'ProductsUpdatedSince?ChangedSinceUTC=' . $xdatetime.'&start='.$start );
+    return $i;
 }
 
 function get_epimaapi_get_branch_stock_since( $branch, $datetime ) {

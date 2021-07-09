@@ -95,6 +95,32 @@ function epimaapi_update_branch_stock_cron() {
     } else {
         //error_log('epim daily cron - failed to get branches');
     }
+    $updatedProducts = get_epimaapi_all_changed_products_since($yesterday);
+    $jProducts = json_decode($updatedProducts,true);
+    if(is_array($jProducts)) {
+        $limit = $jProducts['Limit'];
+        $totalResults = $jProducts['TotalResults'];
+        $pages = ceil($totalResults/$limit);
+        $products = $jProducts['Results'];
+        foreach ($products as $product) {
+            foreach ($product['VariationIds'] as $variationId) {
+                epimaapi_create_product($product['Id'],$variationId,$product['BulletText'],$product['Name'],$product['CategoryIds'],$product['PictureIds']);
+            }
+        }
+        for($i=1;$i<=$pages;$i++){
+            $start = $i*$limit;
+            $pagedProducts = get_epimaapi_all_changed_products_since_starting($start,$yesterday);
+            $jpProducts = json_decode($pagedProducts,true);
+            $products = $jpProducts['Results'];
+            if(is_array($products)) {
+                foreach ($products as $product) {
+                    foreach ($product['VariationIds'] as $variationId) {
+                        epimaapi_create_product($product['Id'],$variationId,$product['BulletText'],$product['Name'],$product['CategoryIds'],$product['PictureIds']);
+                    }
+                }
+            }
+        }
+    }
     $time_elapsed_secs = microtime(true) - $start;
     $log .= 'Import took '.$time_elapsed_secs.' seconds.';
     //error_log('epimaapi_update_branch_stock_daily Import Took '.$time_elapsed_secs.' seconds');

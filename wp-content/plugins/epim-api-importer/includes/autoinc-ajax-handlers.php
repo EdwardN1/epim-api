@@ -25,6 +25,7 @@ add_action( 'wp_ajax_get_branch_stock', 'ajax_get_epimaapi_branch_stock' );
 add_action( 'wp_ajax_get_all_attributes', 'ajax_get_epimaapi_all_attributes' );
 add_action( 'wp_ajax_get_all_products', 'ajax_get_epimaapi_all_products' );
 add_action( 'wp_ajax_get_all_changed_products_since', 'ajax_get_epimaapi_all_changed_products_since' );
+add_action( 'wp_ajax_get_all_changed_products_since_starting', 'ajax_get_epimaapi_all_changed_products_since_starting' );
 add_action( 'wp_ajax_get_product', 'ajax_get_epimaapi_product' );
 add_action( 'wp_ajax_get_category', 'ajax_get_epimaapi_category' );
 add_action( 'wp_ajax_get_picture', 'ajax_get_epimaapi_picture' );
@@ -357,6 +358,25 @@ function ajax_get_epimaapi_all_changed_products_since() {
         $response = json_decode($jsonResponse);
         //header( "Content-Type: application/json" );
         echo json_encode($response);
+    }
+    exit;
+}
+
+function ajax_get_epimaapi_all_changed_products_since_starting() {
+    //error_log('working');
+    epimaapi_checkSecure();
+    if ( ! empty( $_POST['timeCode'] ) ) {
+        if(! empty( $_POST['start']) ){
+            //error_log('start = '.$_POST['start']);
+            $jsonResponse = get_epimaapi_all_changed_products_since_starting($_POST['start'],$_POST['timeCode']);
+            $response = json_decode($jsonResponse);
+            //header( "Content-Type: application/json" );
+            echo json_encode($response);
+        } else {
+            //error_log('no start');
+        }
+    } else {
+        error_log('no timeCode');
     }
     exit;
 }

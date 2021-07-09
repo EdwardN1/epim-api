@@ -128,31 +128,86 @@ adminJQ(function ($) {
             let iso = dateUtc.toISOString();
             updateSinceProducts.queue(ajaxurl,{action: 'get_all_changed_products_since', timeCode: iso});
         }*/
+        if(action==='get_all_changed_products_since_starting'){
+            if( data!='[]' ) {
+                //window.console.log(data);
+                if ($.trim(data)) {
+                    let products = JSON.parse(data);
+                    let c = 0;
+                    let results = products['Results'];
+                    if (results) {
+                        $(results).each(function (index, product) {
+                            $(product.VariationIds).each(function (index, variationID) {
+                                updateSinceProducts.queue(ajaxurl, {
+                                    action: 'create_product',
+                                    productID: product.Id,
+                                    variationID: variationID,
+                                    bulletText: product.BulletText,
+                                    productName: product.Name,
+                                    categoryIDs: product.CategoryIds,
+                                    pictureIDs: product.PictureIds
+                                });
+                            });
+                            if (debug) {
+                                c++;
+                                if (c >= cMax) {
+                                    return false;
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        }
         if(action==='get_all_changed_products_since') {
             if( data!='[]' ) {
                 //window.console.log(data);
                 if ($.trim(data)) {
                     let products = JSON.parse(data);
                     let c = 0;
-                    $(products).each(function (index, product) {
-                        $(product.VariationIds).each(function (index, variationID) {
-                            updateSinceProducts.queue(ajaxurl, {
-                                action: 'create_product',
-                                productID: product.Id,
-                                variationID: variationID,
-                                bulletText: product.BulletText,
-                                productName: product.Name,
-                                categoryIDs: product.CategoryIds,
-                                pictureIDs: product.PictureIds
-                            });
-                        });
-                        if (debug) {
-                            c++;
-                            if (c >= cMax) {
-                                return false;
+                    let results = products['Results'];
+                    if(results){
+                        let totalResults = products.TotalResults;
+                        let limit = products.Limit;
+                        let pages = Math.ceil(totalResults/limit);
+                        let timeCodeStart = request.indexOf('timeCode=');
+                        let timeCode = '';
+                        if (timeCodeStart>-1){
+                            timeCodeStart += 9;
+                            timeCode = request.substr(timeCodeStart,24);
+                            window.console.log(timeCode);
+                        }
+                        if (timeCode != '') {
+                            for (let i = 1; i<= pages; i++){
+                                updateSinceProducts.queue(ajaxurl, {
+                                    action: 'get_all_changed_products_since_starting',
+                                    start: i*limit,
+                                    timeCode: timeCode,
+                                })
                             }
                         }
-                    });
+
+                        $(results).each(function (index, product) {
+                            $(product.VariationIds).each(function (index, variationID) {
+                                updateSinceProducts.queue(ajaxurl, {
+                                    action: 'create_product',
+                                    productID: product.Id,
+                                    variationID: variationID,
+                                    bulletText: product.BulletText,
+                                    productName: product.Name,
+                                    categoryIDs: product.CategoryIds,
+                                    pictureIDs: product.PictureIds
+                                });
+                            });
+                            if (debug) {
+                                c++;
+                                if (c >= cMax) {
+                                    return false;
+                                }
+                            }
+                        });
+                    }
+
                 } else {
                     _o('<strong>No Products Found to Update or Create');
                     updateSinceProducts.processFinished = false;

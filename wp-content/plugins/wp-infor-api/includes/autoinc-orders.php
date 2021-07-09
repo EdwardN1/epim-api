@@ -236,6 +236,15 @@ function wpiai_get_order_XML( $order_id, $action ) {
 		$Reference_NameValue_0                 = $order->get_meta( 'shipping_instructions', true );
 		$Reference_NameValue_1                 = $order->get_total();
 
+		$CSD_ID = '';
+        $actionCode = $action;
+
+        if($order->get_meta('CSD_ID', true)) {
+            $CSD_ID = $order->get_meta('CSD_ID', true);
+            $actionCode = 'Change';
+        }
+
+
 
 		$Document_DateTime = $order->get_date_created()->format( DateTime::ATOM );
 		//$OrderTypeCode = '';
@@ -315,9 +324,13 @@ function wpiai_get_order_XML( $order_id, $action ) {
 		}
 
 		if ( $xml->xpath( '//x:DataArea' )[0]->Process[0]->ActionCriteria[0]->ActionExpression[0] ) {
-			$xml->xpath( '//x:DataArea' )[0]->Process[0]->ActionCriteria[0]->ActionExpression[0]                             = $action;
-			$xml->xpath( '//x:DataArea' )[0]->Process[0]->ActionCriteria[0]->ActionExpression[0]->attributes()['actionCode'] = $action;
+			$xml->xpath( '//x:DataArea' )[0]->Process[0]->ActionCriteria[0]->ActionExpression[0]                             = $actionCode;
+			$xml->xpath( '//x:DataArea' )[0]->Process[0]->ActionCriteria[0]->ActionExpression[0]->attributes()['actionCode'] = $actionCode;
 		}
+
+        if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->DocumentID[0]->ID[0] ) {
+            $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->DocumentID[0]->ID[0]  = $CSD_ID;
+        }
 
 		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->AlternateDocumentID[0]->ID[0] ) {
 			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->AlternateDocumentID[0]->ID[0]->attributes()['schemeAgencyID'] = $AlternateDocumentID_ID_schemeAgencyID;

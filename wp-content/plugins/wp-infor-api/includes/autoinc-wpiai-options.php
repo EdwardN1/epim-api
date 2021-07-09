@@ -93,6 +93,14 @@ function wpiai_register_settings()
     register_setting('wpiai_settings_group', 'wpiai_guest_customer_number');
     add_option('wpiai_default_warehouse', 'Default Warehouse for Orders');
     register_setting('wpiai_settings_group', 'wpiai_default_warehouse');
+
+    add_option('wpiai_consumer_key', 'Consumer Key for Cached Sales Orders');
+    register_setting('wpiai_settings_group', 'wpiai_consumer_key');
+    add_option('wpiai_consumer_secret', 'Consumer Secret for Cached Sales Orders');
+    register_setting('wpiai_settings_group', 'wpiai_consumer_secret');
+    add_option('wpiai_cache_ttl', '18000');
+    register_setting('wpiai_settings_group', 'wpiai_cache_ttl');
+
     add_option('wpiai_warehouse_ids');
     register_setting('wpiai_settings_group', 'wpiai_warehouse_ids');
     add_option('wpiai_warehouse_names');
@@ -1050,6 +1058,38 @@ function wpiai_options_page()
                             <hr>
                         </th>
                     </tr>
+
+                    <tr>
+                        <th colspan="2">Cached Sales Order Options
+                            <hr>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_consumer_key">Consumer Key for Cached Sales Orders</label></th>
+                        <td><input type="text" id="wpiai_consumer_key" name="wpiai_consumer_key"
+                                   value="<?php echo get_option('wpiai_consumer_key'); ?>"
+                                   class="regular-text"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_consumer_secret">Consumer Secret for Cached Sales Orders</label></th>
+                        <td><input type="text" id="wpiai_consumer_secret" name="wpiai_consumer_secret"
+                                   value="<?php echo get_option('wpiai_consumer_secret'); ?>" class="regular-text"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_cache_ttl">Time for cached orders to live before processing (seconds)</label></th>
+                        <td><input type="number" id="wpiai_cache_ttl" name="wpiai_cache_ttl"
+                                   value="<?php echo get_option('wpiai_cache_ttl'); ?>" class="regular-text"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="2">
+                            <hr>
+                        </th>
+                    </tr>
+
+
                     <tr>
                         <th colspan="2">Warehouses
                             <hr>
