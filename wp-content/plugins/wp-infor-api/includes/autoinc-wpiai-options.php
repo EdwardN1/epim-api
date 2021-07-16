@@ -63,6 +63,13 @@ function wpiai_register_settings()
     add_option('wpiai_sales_order_xml', 'API XML');
     register_setting('wpiai_sales_order_group', 'wpiai_sales_order_xml');
 
+    add_option('wpiai_sales_order_change_url', 'API URL');
+    register_setting('wpiai_sales_order_change_group', 'wpiai_sales_order_change_url');
+    add_option('wpiai_sales_order_change_parameters', 'API Parameters');
+    register_setting('wpiai_sales_order_change_group', 'wpiai_sales_order_change_parameters');
+    add_option('wpiai_sales_order_change_xml', 'API XML');
+    register_setting('wpiai_sales_order_change_group', 'wpiai_sales_order_change_xml');
+
     add_option('wpiai_ship_to_url', 'API URL');
     register_setting('wpiai_ship_to_group', 'wpiai_ship_to_url');
     add_option('wpiai_ship_to_parameters', 'API Parameters');
@@ -176,7 +183,10 @@ function wpiai_options_page()
                 Master Record</a>
             <a href="?page=infor-options&tab=wpiai_sales_order_record"
                class="nav-tab <?php echo $active_tab == 'wpiai_sales_order_record' ? 'nav-tab-active' : ''; ?>">Sales
-                Order Master Record</a>
+                Order Add Master Record</a>
+            <a href="?page=infor-options&tab=wpiai_sales_order_change_record"
+               class="nav-tab <?php echo $active_tab == 'wpiai_sales_order_change_record' ? 'nav-tab-active' : ''; ?>">Sales
+                Order Change Master Record</a>
             <a href="?page=infor-options&tab=wpiai_ship_to_record"
                class="nav-tab <?php echo $active_tab == 'wpiai_ship_to_record' ? 'nav-tab-active' : ''; ?>">Ship To
                 Master Record</a>
@@ -449,7 +459,7 @@ function wpiai_options_page()
         if ($active_tab == 'wpiai_sales_order_record'):
             ?>
             <div class="wrap">
-                <h1>INFOR Sales Order Master Record</h1>
+                <h1>INFOR Add Sales Order Master Record</h1>
             </div>
             <form method="post" action="options.php">
                 <?php settings_fields('wpiai_sales_order_group'); ?>
@@ -489,6 +499,64 @@ function wpiai_options_page()
                                     src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         <button id="testSalesOrderXML" class="button">Generate XML to Add a Sales Order</button>&nbsp;
                         &nbsp;<span class="modal testSalesOrderXML"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                    </td>
+                    <td>
+
+                    </td>
+                </tr>
+            </table>
+
+            <div class="wrap">
+            <pre id="ajax-response">
+
+            </pre>
+            </div>
+        <?php
+        endif;
+        if ($active_tab == 'wpiai_sales_order_change_record'):
+            ?>
+            <div class="wrap">
+                <h1>INFOR Change Sales Order Master Record</h1>
+            </div>
+            <form method="post" action="options.php">
+                <?php settings_fields('wpiai_sales_order_change_group'); ?>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row"><label for="wpiai_sales_order_change_url">URL</label></th>
+                        <td><input type="text" id="wpiai_sales_order_change_url" name="wpiai_sales_order_change_url"
+                                   value="<?php echo get_option('wpiai_sales_order_change_url'); ?>" class="regular-text"
+                                   style="width: 100%;"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_sales_order_change_parameters">Parameters</label></th>
+                        <td><textarea id="wpiai_sales_order_change_parameters" name="wpiai_sales_order_change_parameters" rows="20"
+                                      style="width: 100%;"><?php echo get_option('wpiai_sales_order_change_parameters'); ?></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_sales_order_change_xml">XML</label></th>
+                        <td><textarea id="wpiai_sales_order_change_xml" name="wpiai_sales_order_change_xml" rows="40"
+                                      style="width: 100%;"><?php echo get_option('wpiai_sales_order_change_xml'); ?></textarea>
+                        </td>
+                    </tr>
+
+                </table>
+                <?php submit_button(); ?>
+
+            </form>
+            <table class="form-table">
+                <tr>
+                    <td>
+                        <button id="salesOrderChangeRecordResponse" class="button">API Response</button>&nbsp;
+                        &nbsp;<span class="modal salesOrderChangeRecordResponse"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        <button id="PingInfor" class="button">Ping Infor</button>&nbsp;
+                        &nbsp;<span class="modal PingInfor"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        <button id="testSalesChangeOrderXML" class="button">Generate XML to Add a Sales Order</button>&nbsp;
+                        &nbsp;<span class="modal testSalesChangeOrderXML"><img
                                     src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                     </td>
                     <td>
