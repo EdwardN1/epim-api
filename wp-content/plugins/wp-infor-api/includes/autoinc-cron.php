@@ -222,7 +222,7 @@ function wpiai_process_cached_orders()
                     } else {
                         $woo_order = json_decode($response['body']);
                         $url        = get_option( 'wpiai_sales_order_url' );
-                        $parameters = get_option( 'wpiai_sales_order_parameters' );
+                        $parameters = get_option( 'wpiai_sales_order_change_parameters' );
                         $pRequest   = get_customer_param_record_x( $parameters );
                         $xmlRequest = wpiai_get_order_XML( $woo_order->id, 'Change' );
                         $updated    = wpiai_get_infor_message_multipart_message( $url, $pRequest, $xmlRequest );

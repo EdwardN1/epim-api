@@ -239,10 +239,13 @@ function wpiai_get_order_XML( $order_id, $action ) {
 		$CSD_ID = '';
         $actionCode = $action;
 
+
         if($order->get_meta('CSD_ID', true)) {
             $CSD_ID = $order->get_meta('CSD_ID', true);
+            error_log('$CSD_ID = '.$CSD_ID);
             $actionCode = 'Change';
         }
+
 
 
 
@@ -313,6 +316,12 @@ function wpiai_get_order_XML( $order_id, $action ) {
 		//$RequiredDeliveryDateTime = '';
 		$UserArea_Property_3_NameValue = $WooCustomerID;
 
+        $warehouse = $ShipFromParty_Location_ID;
+
+		if($order->get_meta('_branch_collection', true)) {
+            $warehouse = $order->get_meta('_branch_collection', true);
+        }
+
 		$xml->registerXPathNamespace( 'x', 'http://schema.infor.com/InforOAGIS/2' );
 		if ( $xml->xpath( '//x:ApplicationArea' )[0]->CreationDateTime[0] ) {
 			$xml->xpath( '//x:ApplicationArea' )[0]->CreationDateTime[0] = $CreationDateTime;
@@ -366,7 +375,7 @@ function wpiai_get_order_XML( $order_id, $action ) {
 		}
 
 		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->ShipFromParty[0]->Location[0]->ID[0] ) {
-			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->ShipFromParty[0]->Location[0]->ID[0] = $ShipFromParty_Location_ID;
+			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->ShipFromParty[0]->Location[0]->ID[0] = $warehouse;
 		}
 
 		/*if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->ShipToParty[0]->Location[0]->Address[0]->AddressLine[0] ) {
