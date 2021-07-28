@@ -208,9 +208,22 @@ add_filter( 'wc_order_statuses', 'wpiai_add_quotes_to_order_statuses' );
  *
  */
 
+function wpiai_get_changed_order_XML( $order_id, $action ) {
+    $order = wc_get_order( $order_id );
+    if ( $order ) {
+        $CSD_ID = $order->get_meta('CSD_ID', true);
+        $actionCode = 'Change';
+    } else {
+        return false;
+    }
+}
+
 function wpiai_get_order_XML( $order_id, $action ) {
 	$order = wc_get_order( $order_id );
 	if ( $order ) {
+        if($order->get_meta('CSD_ID', true)) {
+            return wpiai_get_changed_order_XML($order_id, $action);
+        }
 		$xmld = get_option( 'wpiai_sales_order_xml' );
 		$xml  = simplexml_load_string( $xmld );
 
@@ -242,12 +255,9 @@ function wpiai_get_order_XML( $order_id, $action ) {
 
         if($order->get_meta('CSD_ID', true)) {
             $CSD_ID = $order->get_meta('CSD_ID', true);
-            error_log('$CSD_ID = '.$CSD_ID);
+            //error_log('$CSD_ID = '.$CSD_ID);
             $actionCode = 'Change';
         }
-
-
-
 
 		$Document_DateTime = $order->get_date_created()->format( DateTime::ATOM );
 		//$OrderTypeCode = '';
