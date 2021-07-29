@@ -20,6 +20,7 @@ add_action( 'wp_ajax_wpiai_get_customer_params', 'ajax_get_wpiai_get_customer_pa
 
 add_action( 'wp_ajax_wpiai_get_sales_order_response', 'ajax_get_wpiai_get_sales_order_response' );
 add_action( 'wp_ajax_wpiai_get_sales_order_xml', 'ajax_get_wpiai_get_sales_order_xml' );
+add_action('wp_ajax_wpiai_get_changed_order_XML','ajax_get_wpiai_get_changed_order_XML');
 
 add_action( 'wp_ajax_wpiai_get_ship_to_response', 'ajax_get_wpiai_get_ship_to_response' );
 add_action( 'wp_ajax_wpiai_get_ship_to_xml', 'ajax_get_wpiai_get_ship_to_xml' );
@@ -237,6 +238,13 @@ function ajax_get_wpiai_get_sales_order_xml() {
 	wpiai_api_checkSecure();
 	header( "Content-Type: application/json" );
 	echo json_encode( wpiai_get_order_XML( 64123, 'Add' ) );
+	exit;
+}
+
+function ajax_get_wpiai_get_changed_order_XML() {
+	wpiai_api_checkSecure();
+	header( "Content-Type: application/json" );
+	echo json_encode( wpiai_get_changed_order_XML( 132253, 'Change' ) );
 	exit;
 }
 
