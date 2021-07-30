@@ -185,6 +185,19 @@ function wpiai_convert_shipping_field_names($fname)
     return false;
 }
 
+function update_user_to_csd($user_id) {
+	$users_updated = get_option('wpiai_users_updated');
+	if(!is_array($users_updated)) {
+		$users_updated = array();
+	}
+	$users_updated[] = $user_id;
+	if(!update_option('wpiai_users_updated',$users_updated)) {
+		error_log('UserID not saved: '.$user_id);
+	} else {
+		error_log($user_id . ' added to the meta update queue');
+	}
+}
+
 function set_organization_shipping_details($organization_id, $shipping_id, $shipping_details = array())
 {
     $user = get_users(
@@ -754,10 +767,10 @@ function set_organization_contact_details($organization_id, $contact_id, $contac
                 }
             }
         } else {
-            //error_log('not a customer');
+            error_log('not a customer');
         }
     } else {
-        //error_log('User Not Found');
+        error_log('User Not Found');
     }
 
     return false;

@@ -485,14 +485,26 @@ function wpiai_get_order_XML( $order_id, $action ) {
 		}
 		$shipToCSDID = '';
 		if ( is_array( $shippingto_address ) ) {
-			$shipping_first_name = $shippingto_address['shipping_first_name'];
-			$shipping_last_name  = $shippingto_address['shipping_last_name'];
-			$shipping_address_1  = $shippingto_address['shipping_address_1'];
-			$shipping_address_2  = $shippingto_address['shipping_address_2'];
-			$shipping_postcode   = $shippingto_address['shipping_postcode'];
-			$shipping_city       = $shippingto_address['shipping_city'];
-			$shipping_company    = $shippingto_address['shipping_company'];
-			$shipping_country    = $shippingto_address['shipping_country'];
+			$shipping_status = $shippingto_address['status'];
+			if($shipping_status == 'logged-in') {
+				$shipping_first_name = $shippingto_address['shipping_first_name'];
+				$shipping_last_name  = $shippingto_address['shipping_last_name'];
+				$shipping_address_1  = $shippingto_address['shipping_address_1'];
+				$shipping_address_2  = $shippingto_address['shipping_address_2'];
+				$shipping_postcode   = $shippingto_address['shipping_postcode'];
+				$shipping_city       = $shippingto_address['shipping_city'];
+				$shipping_company    = $shippingto_address['shipping_company'];
+				$shipping_country    = $shippingto_address['shipping_country'];
+			} else {
+				$shipping_first_name = $shippingto_address['billing_first_name'];
+				$shipping_last_name  = $shippingto_address['billing_last_name'];
+				$shipping_address_1  = $shippingto_address['billing_address_1'];
+				$shipping_address_2  = $shippingto_address['billing_address_2'];
+				$shipping_postcode   = $shippingto_address['billing_postcode'];
+				$shipping_city       = $shippingto_address['billing_city'];
+				$shipping_company    = $shippingto_address['billing_company'];
+				$shipping_country    = $shippingto_address['billing_country'];
+			}
 			$shipToCSDID         = createCSDShipTo(
 				$CustomerPartyID,
 				$WooCustomerID,

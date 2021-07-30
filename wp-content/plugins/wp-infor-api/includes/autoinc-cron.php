@@ -133,7 +133,11 @@ function wpiai_do_every_day()
     //update_option('wpiai_background_processes_to_start','');
     //update_option('wpiai_background_processes_to_stop','');
     //update_option('wpiai_background_processes_running','');
+	wpiai_check_user_meta();
     wpiai_process_cached_orders();
+	if (!wp_next_scheduled('wpiai_every_minute_action')) {
+		wp_schedule_event(time(), 'everyminute', 'wpiai_every_minute_action');
+	}
 }
 
 function wpiai_do_every_minute()
