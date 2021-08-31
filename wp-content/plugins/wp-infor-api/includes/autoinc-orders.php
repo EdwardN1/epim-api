@@ -628,7 +628,7 @@ function wpiai_get_order_XML( $order_id, $action ) {
 
 		if ( $contact_ordered ) {
 			if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[1]->NameValue[0] ) {
-				$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[1]->NameValue[0] = $contactCSDID;
+				$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[1]->NameValue[0] = $contact_ordered;
 			}
 		}
 
