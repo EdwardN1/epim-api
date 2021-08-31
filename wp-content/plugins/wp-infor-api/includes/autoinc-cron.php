@@ -190,6 +190,7 @@ function wpiai_process_cached_orders()
     // WP_Query arguments
     $coargs = array(
         'post_type' => array('wpiai_cached_orders'),
+	    'posts_per_page' => -1
     );
 
     $orders = new WP_Query($coargs);

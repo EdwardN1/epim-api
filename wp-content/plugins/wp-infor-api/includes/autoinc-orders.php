@@ -511,8 +511,8 @@ function wpiai_get_order_XML( $order_id, $action ) {
 				$shipping_company,
 				$shipping_address_1,
 				$shipping_address_2,
-				$shipping_country,
 				$shipping_city,
+				$shipping_country,
 				$shipping_postcode
 			);
 		} else {
