@@ -297,6 +297,31 @@ adminJQ(function ($) {
         }
     });
 
+    let backgroundUpdateQueue = new ts_execute_queue('#ePimResult', function () {
+        _o('Current Status Retrieved');
+        /*updateAllProducts.reset();
+        updateAllProducts.queue(ajaxurl,{action: 'sort_categories'});
+        updateAllProducts.process();*/
+    }, function (action, request, data) {
+        /*_o('Action Completed: ' + action);
+        _o('Request: ' + request);*/
+        _o(data);
+        /*if(action==='get_all_categories') {
+            let categories = JSON.parse(data);
+            let obj = this;
+            let c = 0;
+            $(categories).each(function (index, record) {
+                obj.queue(ajaxurl,{action: 'create_category', ID: record.Id, name: record.Name, ParentID: record.ParentId, picture_ids: record.PictureIds});
+                if(debug) {
+                    c++;
+                    if (c >= cMax) {
+                        return false;
+                    }
+                }
+            });
+        }*/
+    });
+
     let updateCatDetailsQueue = new ts_execute_queue('#ePimResult', function () {
         _o('Category Data Imported - Finished.');
         $('.modal.CreateCategories').removeClass('active');
@@ -519,6 +544,15 @@ adminJQ(function ($) {
         updateAllQueue.reset();
         updateAllQueue.queue(ajaxurl,{action: 'get_all_categories'});
         updateAllQueue.process();
+    });
+
+    $('#GetCurrentUpdateData').on('click', function (){
+        $('#ePimResult').html('');
+        _o('Getting Update Status....');
+        $('.modal.CreateAll').addClass('active');
+        backgroundUpdateQueue.reset();
+        backgroundUpdateQueue.queue(ajaxurl,{action: 'fast_create'});
+        backgroundUpdateQueue.process();
     });
 
     $('#CreateAllProducts').on('click',function () {

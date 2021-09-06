@@ -43,12 +43,17 @@ function epim_register_settings() {
 	add_option( 'epim_exclude_luckins_data', '1' );
 	register_setting( 'epim_options_group', 'epim_exclude_luckins_data' );
 
-    add_option( 'epim_enable_scheduled_updates', '0' );
-    register_setting( 'epim_schedule_options_group', 'epim_enable_scheduled_updates' );
-    add_option( 'epim_update_schedule', 'daily' );
-    register_setting( 'epim_schedule_options_group', 'epim_update_schedule' );
-    add_option( 'epim_schedule_log', '' );
-    register_setting( 'epim_schedule_options_group', 'epim_schedule_log' );
+	add_option( 'epim_enable_scheduled_updates', '0' );
+	register_setting( 'epim_schedule_options_group', 'epim_enable_scheduled_updates' );
+	add_option( 'epim_update_schedule', 'daily' );
+	register_setting( 'epim_schedule_options_group', 'epim_update_schedule' );
+	add_option( 'epim_schedule_log', '' );
+	register_setting( 'epim_schedule_options_group', 'epim_schedule_log' );
+
+	add_option( '_epim_update_running', '' );
+	add_option( '_epim_background_process_data', '' );
+	add_option( '_epim_background_last_process_data', '' );
+	add_option( '_epim_background_current_index', 0 );
 }
 
 add_action( 'admin_init', 'epim_register_settings' );
@@ -77,6 +82,8 @@ function epim_options_page() {
                class="nav-tab <?php echo $active_tab == 'epim_settings' ? 'nav-tab-active' : ''; ?>">ePim Settings</a>
             <a href="?page=epim&tab=epim_updates"
                class="nav-tab <?php echo $active_tab == 'epim_updates' ? 'nav-tab-active' : ''; ?>">ePim Update Schedule</a>
+            <a href="?page=epim&tab=epim_background_updates"
+               class="nav-tab <?php echo $active_tab == 'epim_background_updates' ? 'nav-tab-active' : ''; ?>">ePim Background Updates</a>
 			<?php
 			$current_user = wp_get_current_user();
 			$email        = (string) $current_user->user_email;
@@ -85,6 +92,42 @@ function epim_options_page() {
                    class="nav-tab <?php echo $active_tab == 'epim_restricted_settings' ? 'nav-tab-active' : ''; ?>">ePim Restricted Settings</a>
 			<?php endif; ?>
         </h2>
+		<?php if ( $active_tab == 'epim_background_updates' ): ?>
+            <style>
+                .modal {
+                    display: none;
+                }
+
+                .modal.active {
+                    display: inline-block;
+                }
+
+                .modal img {
+                    max-height: 25px;
+                    width: auto;
+                }
+
+                input[type=text] {
+                    vertical-align: bottom;
+                }
+
+            </style>
+            <div class="wrap">
+                <h1>ePim Management</h1>
+                <table class="form-table">
+                    <tr>
+                        <td colspan="2">
+                            <button id="GetCurrentUpdateData" class="button">Get Current Update Data</button>&nbsp;
+                            &nbsp;<span class="modal GetCurrentUpdateData"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        </td>
+                    </tr>
+                </table>
+                <div id="ePimResult">
+
+                </div>
+            </div>
+		<?php endif; ?>
 		<?php if ( $active_tab == 'epim_management' ): ?>
             <style>
                 .modal {
@@ -268,45 +311,51 @@ function epim_options_page() {
                     </tr>
                     <tr>
                         <th scope="row"><label for="epim_no_price_or_stock">Do Not Import Branch Stock or Price</label></th>
-                        <?php $options = get_option( 'epim_no_price_or_stocks' );?>
+						<?php $options = get_option( 'epim_no_price_or_stocks' ); ?>
                         <td>
-                            <input type="checkbox" id="epim_no_price_or_stocks" name="epim_no_price_or_stocks[checkbox_value]" value="1" <?php  if(is_array($options)) echo checked( '1', $options['checkbox_value'], false );?>/>
+                            <input type="checkbox" id="epim_no_price_or_stocks" name="epim_no_price_or_stocks[checkbox_value]" value="1" <?php if ( is_array( $options ) ) {
+								echo checked( '1', $options['checkbox_value'], false );
+							} ?>/>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="epim_always_include_epim_attributes">Always Include EPIM Attributes</label></th>
-		                <?php $options = get_option( 'epim_always_include_epim_attributes' );?>
+						<?php $options = get_option( 'epim_always_include_epim_attributes' ); ?>
                         <td>
-                            <input type="checkbox" id="epim_always_include_epim_attributes" name="epim_always_include_epim_attributes[checkbox_value]" value="1" <?php  if(is_array($options)) echo checked( '1', $options['checkbox_value'], false );?>/>
+                            <input type="checkbox" id="epim_always_include_epim_attributes" name="epim_always_include_epim_attributes[checkbox_value]" value="1" <?php if ( is_array( $options ) ) {
+								echo checked( '1', $options['checkbox_value'], false );
+							} ?>/>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="epim_exclude_luckins_data">Exclude Luckins Data</label></th>
-		                <?php $options = get_option( 'epim_exclude_luckins_data' );?>
+						<?php $options = get_option( 'epim_exclude_luckins_data' ); ?>
                         <td>
-                            <input type="checkbox" id="epim_exclude_luckins_data" name="epim_exclude_luckins_data[checkbox_value]" value="1" <?php  if(is_array($options)) echo checked( '1', $options['checkbox_value'], false );?>/>
+                            <input type="checkbox" id="epim_exclude_luckins_data" name="epim_exclude_luckins_data[checkbox_value]" value="1" <?php if ( is_array( $options ) ) {
+								echo checked( '1', $options['checkbox_value'], false );
+							} ?>/>
                         </td>
                     </tr>
                 </table>
 				<?php submit_button(); ?>
             </form>
 		<?php endif; ?>
-        <?php if ( $active_tab == 'epim_updates' ): ?>
+		<?php if ( $active_tab == 'epim_updates' ): ?>
             <h1>ePim Schedule Settings</h1>
             <form method="post" action="options.php">
-                <?php settings_fields( 'epim_schedule_options_group' ); ?>
+				<?php settings_fields( 'epim_schedule_options_group' ); ?>
                 <table class="form-table">
-                     <tr>
+                    <tr>
                         <th scope="row"><label for="epim_update_schedule">Stock Update Schedule</label></th>
                         <td>
                             <select name="epim_update_schedule" id="epim_update_schedule">
                                 <option value="daily" <?php if ( get_option( 'epim_update_schedule' ) == 'daily' ) {
-                                    echo 'selected';
-                                } ?>>Daily
+									echo 'selected';
+								} ?>>Daily
                                 </option>
                                 <option value="minutes" <?php if ( get_option( 'epim_update_schedule' ) == 'minutes' ) {
-                                    echo 'selected';
-                                } ?>>Every 10 minutes
+									echo 'selected';
+								} ?>>Every 10 minutes
                                 </option>
 
                             </select>
@@ -314,9 +363,11 @@ function epim_options_page() {
                     </tr>
                     <tr>
                         <th scope="row"><label for="epim_enable_scheduled_updates">Enable Scheduled Updates</label></th>
-                        <?php $options = get_option( 'epim_enable_scheduled_updates' ); ?>
+						<?php $options = get_option( 'epim_enable_scheduled_updates' ); ?>
                         <td>
-                            <input type="checkbox" id="epim_enable_scheduled_updates" name="epim_enable_scheduled_updates[checkbox_value]" value=1 <?php if(is_array($options)) echo checked( 1, $options['checkbox_value'], false );?>/>
+                            <input type="checkbox" id="epim_enable_scheduled_updates" name="epim_enable_scheduled_updates[checkbox_value]" value=1 <?php if ( is_array( $options ) ) {
+								echo checked( 1, $options['checkbox_value'], false );
+							} ?>/>
                         </td>
                     </tr>
                     <tr>
@@ -325,13 +376,13 @@ function epim_options_page() {
                                 <strong>Last Update Log:</strong>
                             </p>
                             <hr>
-                            <p><?php echo get_option('epim_schedule_log');?></p>
+                            <p><?php echo get_option( 'epim_schedule_log' ); ?></p>
                         </td>
                     </tr>
                 </table>
-                <?php submit_button(); ?>
+				<?php submit_button(); ?>
             </form>
-        <?php endif; ?>
+		<?php endif; ?>
 		<?php
 		$current_user = wp_get_current_user();
 		$email        = (string) $current_user->user_email;
