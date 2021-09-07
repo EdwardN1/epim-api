@@ -731,7 +731,7 @@ function wpiai_process_user_shiptos($user_id)
             $first_shipping['delivery-street-address-1'] = $shipping_address_1;
             $first_shipping['delivery-street-address-2'] = $shipping_address_2;
             $first_shipping['delivery-town-city'] = $shipping_city;
-            $first_shipping['delivery-street-address-3'] = $shipping_state;
+            //$first_shipping['delivery-street-address-3'] = $shipping_state;
             $first_shipping['delivery-postcode'] = $shipping_postcode;
             $first_shipping['delivery-phone'] = '';
             $first_shipping['delivery_UNIQUE_ID'] = uniqid();

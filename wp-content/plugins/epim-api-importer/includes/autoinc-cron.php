@@ -50,12 +50,24 @@ function epimaapi_update_branch_stock_daily() {
 	}
 }
 
+function cron_log($log) {
+    $log_dir= WP_PLUGIN_DIR . '/epim-api-importer';
+    if(is_dir($log_dir)) {
+        $log_file = $log_dir.'/cron-log.log';
+        ini_set("log_errors", 1);
+        ini_set("error_log", $log_file);
+        error_log($log);
+    }
+}
+
 function epimaapi_update_every_minute() {
-	error_log('epimaapi_update_every_minute running');
+	//cron_log('epimaapi_update_every_minute running');
 	$epim_update_running = get_option( '_epim_update_running' );
-	error_log('_epim_update_running - '.$epim_update_running);
-	error_log('_epim_background_current_index - '.get_option('_epim_background_current_index'));
+	//cron_log('_epim_update_running - '.$epim_update_running);
+	//cron_log('_epim_background_current_index - '.get_option('_epim_background_current_index'));
+    $epim_background_updates_max_run_time = get_option('epim_background_updates_max_run_time');
 	if(($epim_update_running=='Preparing to process ePim categories')||(substr( $epim_update_running, 0, 44 ) === "Processing categories - Restarting at Index:")) {
+	    cron_log('Starting or resuming process ePim categories');
 		$epim_background_process_data = get_option('_epim_background_process_data');
 		if(is_array($epim_background_process_data)) {
 			$i = 1;
@@ -72,14 +84,15 @@ function epimaapi_update_every_minute() {
 							if ( $category['ParentId'] ) {
 								$ParentID = $category['ParentId'];
 							}
+                            cron_log('Importing Id:'.$category['Id'].' Name: '.$category['Name']);
 							epimaapi_create_category( $category['Id'], $category['Name'], $ParentID, $picture_webpath, $picture_ids );
 						}
 					}
-					update_option( '_epim_background_current_index', $i );
+					update_option( '_epim_background_current_index', $i-1 );
 				}
 				$i++;
 				$time_now = microtime(true);
-				if(($time_now-$time_start>=23)) {
+				if(($time_now-$time_start>=$epim_background_updates_max_run_time)) {
 					update_option('_epim_update_running','Processing categories - Restarting at Index: '.$i.'/'.$c);
 					return;
 				}
@@ -123,16 +136,19 @@ function epimaapi_update_every_minute() {
 						update_term_meta( $term_id, 'epim_api_picture_link', $epim_api_picture_link );
 					}
 				}
-				update_option('_epim_background_current_index',$i);
+				update_option('_epim_background_current_index',$i-1);
 			}
 			$i++;
 			$time_now = microtime(true);
-			if(($time_now-$time_start>=23)) {
+			if(($time_now-$time_start>=$epim_background_updates_max_run_time)) {
+			    cron_log('Sorting categories - Restarting at Index: '.$i.'/'.$c);
 				update_option('_epim_update_running','Sorting categories - Restarting at Index: '.$i.'/'.$c);
 				return;
 			}
+			cron_log($epim_update_running);
 			update_option('_epim_update_running',$epim_update_running);
 		}
+		cron_log('Categories Updated and Sorted');
 		update_option('_epim_update_running','Categories Updated and Sorted');
 		update_option('_epim_background_current_index',0);
 	}

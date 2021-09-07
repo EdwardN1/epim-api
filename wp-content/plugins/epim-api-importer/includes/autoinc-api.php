@@ -202,6 +202,19 @@ function get_epimaapi_get_branch_stock_since( $branch, $datetime ) {
  *
  */
 
+function epimaapi_background_import_all_start() {
+    $jsonResponse = get_epimaapi_all_categories();
+    $response     = json_decode( $jsonResponse, true );
+    if ( json_last_error() == JSON_ERROR_NONE ) {
+        $epim_update_running = 'Preparing to process ePim categories';
+        update_option('_epim_update_running',$epim_update_running);
+        update_option( '_epim_background_process_data', $response );
+        return $epim_update_running;
+    } else {
+        return 'ePim is returning garbage.';
+    }
+}
+
 function epimaapi_getAPIIDFromCode( $code ) {
 	$res = false;
 

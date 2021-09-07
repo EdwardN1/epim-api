@@ -34,7 +34,11 @@ function returnCSDShipToID($returnData) {
 }
 
 function createCSDShipTo($organizationID,$customerID,$company,$address_1,$address_2,$address_3,$city,$post_code, $email='') {
-	$request = createShipToAPIRequest($organizationID,$customerID,$company,$address_1,$address_2,$address_3,$city,$post_code,$email);
+    $company_name = $company;
+    if($company_name == '') {
+        $company_name = $post_code;
+    }
+	$request = createShipToAPIRequest($organizationID,$customerID,$company_name,$address_1,$address_2,$address_3,$city,$post_code,$email);
 	$url = get_option('wpiai_shipto_api_url');
 	$response = wpiai_get_infor_api_response($url,$request);
 	$allArray = json_decode($response,true);

@@ -42,6 +42,8 @@ function epim_register_settings() {
 	register_setting( 'epim_options_group', 'epim_always_include_epim_attributes' );
 	add_option( 'epim_exclude_luckins_data', '1' );
 	register_setting( 'epim_options_group', 'epim_exclude_luckins_data' );
+    add_option( 'epim_background_updates_max_run_time', '23' );
+    register_setting( 'epim_options_group', 'epim_background_updates_max_run_time' );
 
 	add_option( 'epim_enable_scheduled_updates', '0' );
 	register_setting( 'epim_schedule_options_group', 'epim_enable_scheduled_updates' );
@@ -113,17 +115,39 @@ function epim_options_page() {
 
             </style>
             <div class="wrap">
-                <h1>ePim Management</h1>
+                <h1>ePim Background Updater</h1>
                 <table class="form-table">
                     <tr>
                         <td colspan="2">
-                            <button id="GetCurrentUpdateData" class="button">Get Current Update Data</button>&nbsp;
+                            <button id="GetCurrentUpdateData" class="button">Get Status</button>&nbsp;
                             &nbsp;<span class="modal GetCurrentUpdateData"><img
                                         src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            <button id="BackgroundUpdateAll" class="button">Update all</button>&nbsp;
+                            &nbsp;<span class="modal BackgroundUpdateAll"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        </td>
+                        <td>
+                            NB restarts current background import if one is active.
+                        </td>
+                    </tr>
                 </table>
                 <div id="ePimResult">
+
+                </div>
+                <div><hr></div>
+                <script type="text/javascript" src="https://creativecouple.github.io/jquery-timing/jquery-timing.min.js"></script>
+                <style>
+                    #ePimTail {
+                        width: 80%;
+                        height: 65vh;
+                        overflow-y: scroll;
+                    }
+                </style>
+                <div id="ePimTail">
 
                 </div>
             </div>
@@ -335,6 +359,11 @@ function epim_options_page() {
 								echo checked( '1', $options['checkbox_value'], false );
 							} ?>/>
                         </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="epim_background_updates_max_run_time">Max runtime for background tasks (seconds)</label></th>
+                        <td><input type="text" id="epim_background_updates_max_run_time" name="epim_background_updates_max_run_time"
+                                   value="<?php echo get_option( 'epim_background_updates_max_run_time' ); ?>" class="regular-text"/></td>
                     </tr>
                 </table>
 				<?php submit_button(); ?>

@@ -56,29 +56,54 @@ add_action( 'wp_ajax_delete_products', 'ajax_epimaapi_delete_products' );
 
 add_action( 'wp_ajax_fast_create', 'ajax_epimaapi_fast_create' );
 
+add_action( 'wp_ajax_force_background_update', 'ajax_epimaapi_force_background_update' );
+
+add_action( 'wp_ajax_cron_tail', 'ajax_epimaapi_cron_tail' );
+
+function ajax_epimaapi_cron_tail() {
+    epimaapi_checkSecure();
+    $log_dir= WP_PLUGIN_DIR . '/epim-api-importer';
+    if(is_dir($log_dir)) {
+        $log_file = $log_dir.'/cron-log.log';
+        if(file_exists($log_file)) {
+            session_start();
+            $handle = fopen($log_file, 'r');
+            if (isset($_SESSION['offset'])) {
+                $data = stream_get_contents($handle, -1, $_SESSION['offset']);
+                echo nl2br($data);
+                error_log('Session is Set: '.$_SESSION['offset']);
+                $_SESSION['offset'] = ftell($handle);
+            } else {
+                fseek($handle, 0, SEEK_END);
+                $_SESSION['offset'] = ftell($handle);
+                error_log('Session is not Set');
+            }
+        }
+    }
+    exit;
+}
+
+function ajax_epimaapi_force_background_update() {
+    epimaapi_checkSecure();
+    update_option('_epim_update_running','');
+    update_option('_epim_background_process_data','');
+    update_option('_epim_background_current_index',0);
+    session_start();
+    $_SESSION['offset'] = 0;
+    $f = @fopen(WP_PLUGIN_DIR . '/epim-api-importer/cron-log.log', "r+");
+    if ($f !== false) {
+        ftruncate($f, 0);
+        fclose($f);
+    }
+    echo epimaapi_background_import_all_start();
+    exit;
+}
+
 function ajax_epimaapi_fast_create() {
 	epimaapi_checkSecure();
-	/*$epim_background_process_data = get_option('_epim_background_process_data');
-	if ( is_array($epim_background_process_data) ) {
-		echo json_encode($epim_background_process_data[0]).'</br>';
-	}*/
-	//update_option('_epim_update_running','Categories Updated and Sorted');
 	$epim_update_running = get_option( '_epim_update_running' );
-	if($epim_update_running=='Categories Updated and Sorted') {
-		//$epim_update_running = '';
-	}
-	//$epim_update_running = '';
 	if ( $epim_update_running == '' ) {
-		$jsonResponse = get_epimaapi_all_categories();
-		$response     = json_decode( $jsonResponse, true );
-		if ( json_last_error() == JSON_ERROR_NONE ) {
-			$epim_update_running = 'Preparing to process ePim categories';
-			update_option('_epim_update_running',$epim_update_running);
-			update_option( '_epim_background_process_data', $response );
-			echo $epim_update_running;
-		} else {
-			echo 'ePim is returning garbage.';
-		}
+        echo epimaapi_background_import_all_start();
 	} else {
 		echo $epim_update_running;
 	}
