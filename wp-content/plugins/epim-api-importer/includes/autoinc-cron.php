@@ -61,10 +61,7 @@ function cron_log($log) {
 }
 
 function epimaapi_update_every_minute() {
-	//cron_log('epimaapi_update_every_minute running');
 	$epim_update_running = get_option( '_epim_update_running' );
-	//cron_log('_epim_update_running - '.$epim_update_running);
-	//cron_log('_epim_background_current_index - '.get_option('_epim_background_current_index'));
     $epim_background_updates_max_run_time = get_option('epim_background_updates_max_run_time');
 	if(($epim_update_running=='Preparing to process ePim categories')||(substr( $epim_update_running, 0, 44 ) === "Processing categories - Restarting at Index:")) {
 	    cron_log('Starting or resuming process ePim categories');
@@ -151,6 +148,82 @@ function epimaapi_update_every_minute() {
 		cron_log('Categories Updated and Sorted');
 		update_option('_epim_update_running','Categories Updated and Sorted');
 		update_option('_epim_background_current_index',0);
+	}
+
+	if($epim_update_running == 'Categories Updated and Sorted') {
+		update_option('_epim_update_running','Getting All Products to Import');
+		cron_log('Getting All Products to Import');
+		$allProductsResponse = json_decode(get_epimaapi_all_products(),true);
+		$variations = array();
+		if ( json_last_error() == JSON_ERROR_NONE ) {
+			if (array_key_exists('Results', $allProductsResponse)) {
+				foreach ( $allProductsResponse['Results'] as $Product ) {
+					$categories = array();
+					$pictures = array();
+					if(array_key_exists('CategoryIds',$Product)) {
+						$categories = $Product['CategoryIds'];
+					}
+					if(array_key_exists('PictureIds',$Product)) {
+						$pictures = $Product['PictureIds'];
+					}
+					if(array_key_exists('VariationIds',$Product)) {
+						if(is_array($Product['VariationIds'])) {
+							foreach ($Product['VariationIds'] as $variation_id) {
+								$variation = array();
+								$variation['productID'] = $Product['Id'];
+								$variation['variationID'] = $variation_id;
+								$variation['productBulletText'] = $Product['BulletText'];
+								$variation['productName'] = $Product['Name'];
+								$variation['categoryIds'] = $categories;
+								$variation['pictureIds'] = $pictures;
+								$variations[] = $variation;
+							}
+						}
+
+					}
+				}
+			}
+		} else {
+			cron_log('ePim is returning garbage, getting all products.');
+		}
+		update_option( '_epim_background_process_data', $variations );
+		update_option('_epim_update_running','Preparing to import products');
+		cron_log('Found '.count($variations). ' products to import');
+		cron_log('Preparing to import products');
+	}
+
+	if(($epim_update_running == 'Preparing to import products')||(substr( $epim_update_running, 0, 41 ) === "Importing Products - Restarting at Index:")) {
+		$time_start = microtime(true);
+		$variations = get_option('_epim_background_process_data');
+		$i = 1;
+		$c = count($variations);
+		update_option('_epim_update_running','Importing '.$c.' Products');
+		cron_log('Importing '.$c.'Products');
+		if(is_array($variations)) {
+			foreach ($variations as $variation) {
+				update_option('_epim_update_running','Importing product '.$i.'/'.$c);
+				if($i>=get_option('_epim_background_current_index')) {
+					if ( is_array( $variation ) ) {
+						if ( array_key_exists( 'variationID', $variation ) ) {
+							cron_log('Importing variation ID: '.$variation['variationID']);
+							cron_log( epimaapi_create_product( $variation['productID'], $variation['variationID'], $variation['productBulletText'], $variation['productName'], $variation['categoryIds'], $variation['pictureIds'] ) );
+						}
+					}
+					update_option( '_epim_background_current_index', $i-1 );
+				}
+
+				$i++;
+				$time_now = microtime(true);
+				if(($time_now-$time_start>=$epim_background_updates_max_run_time)) {
+					cron_log('Importing Products - Restarting at Index: '.$i.'/'.$c);
+					update_option('_epim_update_running','Importing Products - Restarting at Index: '.$i.'/'.$c);
+					return;
+				}
+			}
+		}
+		update_option('_epim_background_current_index',0);
+		cron_log('Import Finished');
+		update_option('_epim_update_running','');
 	}
 }
 

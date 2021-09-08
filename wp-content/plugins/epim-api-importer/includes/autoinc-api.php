@@ -211,7 +211,7 @@ function epimaapi_background_import_all_start() {
         update_option( '_epim_background_process_data', $response );
         return $epim_update_running;
     } else {
-        return 'ePim is returning garbage.';
+        return 'ePim is returning garbage, getting all categories.';
     }
 }
 

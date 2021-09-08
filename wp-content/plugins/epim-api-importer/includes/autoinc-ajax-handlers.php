@@ -71,12 +71,12 @@ function ajax_epimaapi_cron_tail() {
             if (isset($_SESSION['offset'])) {
                 $data = stream_get_contents($handle, -1, $_SESSION['offset']);
                 echo nl2br($data);
-                error_log('Session is Set: '.$_SESSION['offset']);
+                //error_log('Session is Set: '.$_SESSION['offset']);
                 $_SESSION['offset'] = ftell($handle);
             } else {
                 fseek($handle, 0, SEEK_END);
                 $_SESSION['offset'] = ftell($handle);
-                error_log('Session is not Set');
+                //error_log('Session is not Set');
             }
         }
     }
@@ -101,9 +101,11 @@ function ajax_epimaapi_force_background_update() {
 
 function ajax_epimaapi_fast_create() {
 	epimaapi_checkSecure();
+	update_option('_epim_update_running','');
 	$epim_update_running = get_option( '_epim_update_running' );
 	if ( $epim_update_running == '' ) {
-        echo epimaapi_background_import_all_start();
+        //echo epimaapi_background_import_all_start();
+		echo 'No active Import Jobs';
 	} else {
 		echo $epim_update_running;
 	}
