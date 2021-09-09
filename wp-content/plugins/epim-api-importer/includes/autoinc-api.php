@@ -333,6 +333,27 @@ function epimaapi_imageImported( $id ) {
 
 }
 
+function epimaapi_image_url_imported($url) {
+	$args = array(
+		'post_type'      => 'attachment',
+		'post_mime_type' => 'image',
+		'orderby'        => 'post_date',
+		'order'          => 'desc',
+		'posts_per_page' => '-1',
+		'post_status'    => 'inherit',
+		'meta_key'       => 'epim_luckins_path',
+		'meta_value'     => $url
+	);
+	$loop = new WP_Query( $args );
+
+	if($loop->have_posts()) {
+		return $loop->posts[0]->ID;
+	} else {
+		return false;
+	}
+
+}
+
 function epimaapi_getBranchID( $id ) {
 	$res  = false;
 	$args = array(
@@ -661,6 +682,38 @@ function epimaapi_importPicture( $id, $webpath ) {
 		$res = $e->getMessage();
 	}
 
+	$res .= ' - '.$webpath;
+
+	return $res;
+}
+
+function epimaapi_import_url_Picture( $url ) {
+
+	$res_Message = 'Image: ' . $url . ' - Import Error';
+	$attachment_ID = 0;
+	$res = array();
+	try {
+		$get_a_id = epimaapi_image_url_imported( $url );
+		if ( ! $get_a_id ) {
+			$attachment_ID = uploadMedia( $url );
+			if ( $attachment_ID ) {
+				//error_log('$attachment_ID: ' . $attachment_ID);
+				update_post_meta( $attachment_ID, 'epim_luckins_path', $url );
+				$res_Message = 'Image: ' . $url . ' - Imported Successfully';
+			} else {
+				$res_Message = 'Image: ' . $url . ' - Import Failure';
+			}
+		} else {
+			$res_Message = 'Image: ' . $url . ' - Already Imported';
+			$attachment_ID = $get_a_id;
+		}
+	} catch ( Exception $e ) {
+		$res_Message = $e->getMessage();
+	}
+
+	$res['Message'] = $res_Message.'</br>';
+	$res['ID'] = $attachment_ID;
+
 	return $res;
 }
 
@@ -686,7 +739,7 @@ function epimaapi_delete_attributes() {
 	}
 }
 
-function epimaapi_create_product( $productID, $variationID, $productBulletText, $productName, $categoryIds, $pictureIds ) {
+function epimaapi_create_product_x( $productID, $variationID, $productBulletText, $productName, $categoryIds, $pictureIds ) {
 	$res = '';
 	/*
 	 * Get Variation Details
@@ -875,6 +928,246 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 			if ( $attachmentID ) {
 				if ( ! in_array( $attachmentID, $imageAttachmentIDS ) ) {
 					$imageAttachmentIDS[] = $attachmentID;
+				}
+			}
+		}
+	}
+
+	$productArray['imageAttachmentIDS'] = $imageAttachmentIDS;
+
+	$id = epimaapi_getProductFromID( $productID, $variation->Id );
+
+	//error_log('$id = '.$id);
+
+	if ( ! $id ) {
+
+		if ( epimaapi_wooCreateProduct( $productArray ) ) {
+			$res .= $variation->Name . ' (' . $variation->SKU . ') Created<br>';
+		} else {
+			$res .= 'There was a problem creating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
+		}
+	} else {
+		if ( epimaapi_wooUpdateProduct( $id, $productArray ) ) {
+			$res .= $variation->Name . ' (' . $variation->SKU . ') Created<br>';
+		} else {
+			$res .= 'There was a problem updating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
+		}
+	}
+
+	return $res;
+
+}
+
+function epimaapi_create_product( $productID, $variationID, $productBulletText, $productName, $categoryIds, $pictureIds ) {
+	$res = '';
+	/*
+	 * Get Variation Details
+	 */
+	$productArray   = array();
+	$jsonVariation  = get_epimaapi_variation( $variationID );
+	$variation      = json_decode( $jsonVariation );
+	if(!$variation) {
+		return $variationID . ' returns no result from API';
+	}
+	$jsonAttributes = get_epimaapi_all_attributes();
+	$attributes     = json_decode( $jsonAttributes );
+
+	$IsArchived = $variation->IsArchived;
+
+	if ( $IsArchived ) {
+		$res = $variationID . ' ' . $productName . ' is achived removing product from WooCommerce';
+		epimaapi_delete_variation( $variationID );
+
+		return $res;
+	}
+
+	/*
+	 *
+	 *Check Attributes
+	 *
+	 */
+
+	$attribute_taxonomies = wc_get_attribute_taxonomies();
+
+
+	$currentAttributes = array();
+
+	foreach ( $attribute_taxonomies as $attribute_taxonomy ) {
+
+		$atName = $attribute_taxonomy->attribute_label;
+		if ( ! in_array( $atName, $currentAttributes ) ) {
+			//error_log($atName);
+			$currentAttributes[] = $atName;
+		}
+	}
+
+	foreach ( $attributes as $attribute ) {
+		$atName   = $attribute->Name;
+		$slugName = substr( $atName, 0, 27 );
+
+		if ( ! wc_check_if_attribute_name_is_reserved( $atName ) ) {
+			if ( ! in_array( $atName, $currentAttributes ) ) {
+				$attribute_id = wc_attribute_taxonomy_id_by_name( $atName );
+				if ( ! $attribute_id ) {
+					if ( $atName != '' ) {
+						$attribute_id = wc_create_attribute(
+							array(
+								'name' => $atName,
+								'slug' => $slugName,
+							)
+						);
+
+						if ( is_wp_error( $attribute_id ) ) {
+							/*$error_string = $attribute_id->get_error_message();
+							error_log($error_string);
+							error_log('name = ' . $atName);
+							error_log('slug = ' . substr($atName, 0, 27));*/
+						}
+					}
+				}
+
+			}
+		}
+	}
+
+
+	/*
+	 * Get Woo Categories
+	 */
+	$terms  = get_terms( [
+		'taxonomy'   => 'product_cat',
+		'hide_empty' => false,
+	] );
+	$catIds = array();
+	foreach ( $categoryIds as $category_id ) {
+		$realCatID = epimaapi_getTermFromID( $category_id, $terms );
+		if ( $realCatID ) {
+			$catIds[] = $realCatID->term_id;
+		}
+	}
+	$productArray['categoryIDS'] = $catIds;
+
+	/*
+	 * Other product Fields
+	 */
+	$productArray['productTitle']            = $variation->Name;
+	$productArray['productSKU']              = $variation->SKU;
+	$productArray['price']                   = $variation->Price;
+	$Qty_Price_1                             = $variation->Qty_Price_1;
+	$Qty_Price_2                             = $variation->Qty_Price_2;
+	$Qty_Price_3                             = $variation->Qty_Price_3;
+	$Qty_Break_1                             = $variation->Qty_Break_1;
+	$Qty_Break_2                             = $variation->Qty_Break_2;
+	$Qty_Break_3                             = $variation->Qty_Break_3;
+	$productArray['productDescription']      = $variation->Table_Heading;
+	$productArray['productShortDescription'] = $productBulletText;
+
+	if ( ( $productArray['price'] == '' ) || ( $productArray['price'] == 0 ) ) {
+		$productArray['price'] = $Qty_Price_1;
+	}
+
+	if ( ( $productArray['price'] == '' ) || ( $productArray['price'] == 0 ) ) {
+		$productArray['price'] = $Qty_Price_2;
+	}
+
+	if ( ( $productArray['price'] == '' ) || ( $productArray['price'] == 0 ) ) {
+		$productArray['price'] = $Qty_Price_3;
+	}
+
+	//error_log('Price for '.$productArray['productSKU'].','.$variationID.' = '.$productArray['price']);
+
+	/*
+	* Set the product Meta Data
+	*/
+	$epim_API_ID             = array( "meta_key" => "epim_API_ID", "meta_data" => $productID );
+	$epim_product_group_name = array( "meta_key" => "epim_product_group_name", "meta_data" => $productName );
+	$epim_variation_ID       = array( "meta_key" => "epim_variation_ID", "meta_data" => $variationID );
+	$epim_Qty_Break_1        = array( "meta_key" => "epim_Qty_Break_1", "meta_data" => $Qty_Break_1 );
+	$epim_Qty_Break_2        = array( "meta_key" => "epim_Qty_Break_2", "meta_data" => $Qty_Break_2 );
+	$epim_Qty_Break_3        = array( "meta_key" => "epim_Qty_Break_3", "meta_data" => $Qty_Break_3 );
+	$epim_Qty_Price_1        = array( "meta_key" => "epim_Qty_Price_1", "meta_data" => $Qty_Price_1 );
+	$epim_Qty_Price_2        = array( "meta_key" => "epim_Qty_Price_2", "meta_data" => $Qty_Price_2 );
+	$epim_Qty_Price_3        = array( "meta_key" => "epim_Qty_Price_3", "meta_data" => $Qty_Price_3 );
+
+	$productArray['metaData'] = array(
+		$epim_API_ID,
+		$epim_product_group_name,
+		$epim_variation_ID,
+		$epim_Qty_Break_1,
+		$epim_Qty_Break_2,
+		$epim_Qty_Break_3,
+		$epim_Qty_Price_1,
+		$epim_Qty_Price_2,
+		$epim_Qty_Price_3
+	);
+
+
+	/*
+	 * Attributes
+	 */
+	$aCounter          = 1;
+	$productAttributes = array();
+	if($variation->AttributeValues) {
+		foreach ($variation->AttributeValues as $attribute_value) {
+			$aName = epimaapi_getAttributeNameFromID($attribute_value->AttributeId, $attributes);
+			if ($aName != '0 ( )') {
+				$productAttributes[] = array("name" => $aName, "options" => array($attribute_value->Value), "position" => $aCounter, "visible" => 1, "variation" => 1);
+				$aCounter++;
+			}
+		}
+	}
+	$productArray['attributes'] = $productAttributes;
+
+	/*
+	 * Image processing
+	 */
+
+	$imageAttachmentIDS = array();
+
+	$LuckinsAssets = $variation->LuckinsAssets;
+
+	if(is_array($LuckinsAssets)) {
+		foreach ($LuckinsAssets as $luckins_asset) {
+			if($luckins_asset->Tag=='hi-res') {
+				$importResult = epimaapi_import_url_Picture($luckins_asset->URL);
+				$res .= $importResult['Message'];
+				if($importResult['ID'] != 0) {
+					$imageAttachmentIDS[] = $importResult['ID'];
+					$res .= '</br> Attachment ID '.$importResult['ID'].' returned.';
+				} else {
+					$res .= '</br> No Attachment ID returned.';
+				}
+			}
+		}
+	}
+
+	if(count($imageAttachmentIDS)==0) {
+		if ( $pictureIds ) {
+			foreach ( $pictureIds as $pictureId ) {
+				$jsonPicture  = get_epimaapi_picture( $pictureId );
+				$picture      = json_decode( $jsonPicture );
+				$res          .= epimaapi_importPicture( $picture->Id, $picture->WebPath ) . '<br>';
+				$attachmentID = epimaapi_imageIDfromAPIID( $picture->Id );
+				if ( $attachmentID ) {
+					if ( ! in_array( $attachmentID, $imageAttachmentIDS ) ) {
+						$imageAttachmentIDS[] = $attachmentID;
+					}
+				}
+			}
+		}
+	}
+
+	if(count($imageAttachmentIDS)==0) {
+		if ( $variation->PictureIds ) {
+			foreach ( $variation->PictureIds as $pictureId ) {
+				$jsonPicture  = get_epimaapi_picture( $pictureId );
+				$picture      = json_decode( $jsonPicture );
+				$res          .= epimaapi_importPicture( $picture->Id, $picture->WebPath ) . '<br>';
+				$attachmentID = epimaapi_imageIDfromAPIID( $picture->Id );
+				if ( $attachmentID ) {
+					if ( ! in_array( $attachmentID, $imageAttachmentIDS ) ) {
+						$imageAttachmentIDS[] = $attachmentID;
+					}
 				}
 			}
 		}

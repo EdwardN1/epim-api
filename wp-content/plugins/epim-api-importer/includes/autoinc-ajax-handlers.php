@@ -55,6 +55,7 @@ add_action( 'wp_ajax_delete_epim_images', 'ajax_epimaapi_delete_epim_images' );
 add_action( 'wp_ajax_delete_products', 'ajax_epimaapi_delete_products' );
 
 add_action( 'wp_ajax_fast_create', 'ajax_epimaapi_fast_create' );
+add_action( 'wp_ajax_stop_background_update', 'ajax_epimaapi_stop_background_update' );
 
 add_action( 'wp_ajax_force_background_update', 'ajax_epimaapi_force_background_update' );
 
@@ -101,7 +102,7 @@ function ajax_epimaapi_force_background_update() {
 
 function ajax_epimaapi_fast_create() {
 	epimaapi_checkSecure();
-	update_option('_epim_update_running','');
+
 	$epim_update_running = get_option( '_epim_update_running' );
 	if ( $epim_update_running == '' ) {
         //echo epimaapi_background_import_all_start();
@@ -109,6 +110,16 @@ function ajax_epimaapi_fast_create() {
 	} else {
 		echo $epim_update_running;
 	}
+	exit;
+}
+
+function ajax_epimaapi_stop_background_update() {
+	epimaapi_checkSecure();
+
+	update_option('_epim_update_running','');
+	update_option('_epim_background_current_index',0);
+
+	echo 'Current Update Stopped';
 	exit;
 }
 

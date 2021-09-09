@@ -62,6 +62,9 @@ function cron_log($log) {
 
 function epimaapi_update_every_minute() {
 	$epim_update_running = get_option( '_epim_update_running' );
+	if($epim_update_running=='') {
+		return;
+	}
     $epim_background_updates_max_run_time = get_option('epim_background_updates_max_run_time');
 	if(($epim_update_running=='Preparing to process ePim categories')||(substr( $epim_update_running, 0, 44 ) === "Processing categories - Restarting at Index:")) {
 	    cron_log('Starting or resuming process ePim categories');
@@ -71,6 +74,9 @@ function epimaapi_update_every_minute() {
 			$c = count($epim_background_process_data);
 			$time_start = microtime(true);
 			foreach ($epim_background_process_data as $category) {
+				if($epim_update_running=='') {
+					return;
+				}
 				$epim_update_running = 'Process category '.$i.'/'.$c;
 				if($i>=get_option('_epim_background_current_index')) {
 					if ( array_key_exists( 'Id', $category ) ) {
@@ -112,6 +118,9 @@ function epimaapi_update_every_minute() {
 		$i = 1;
 		$c = count($terms);
 		foreach ( $terms as $term ) {
+			if($epim_update_running=='') {
+				return;
+			}
 			$epim_update_running = 'Sorting Category '.$i.'/'.$c;
 			if($i>=get_option('_epim_background_current_index')) {
 				$api_parents = get_term_meta( $term->term_id, 'epim_api_parent_id', true );
@@ -158,6 +167,9 @@ function epimaapi_update_every_minute() {
 		if ( json_last_error() == JSON_ERROR_NONE ) {
 			if (array_key_exists('Results', $allProductsResponse)) {
 				foreach ( $allProductsResponse['Results'] as $Product ) {
+					if($epim_update_running=='') {
+						return;
+					}
 					$categories = array();
 					$pictures = array();
 					if(array_key_exists('CategoryIds',$Product)) {
@@ -169,6 +181,9 @@ function epimaapi_update_every_minute() {
 					if(array_key_exists('VariationIds',$Product)) {
 						if(is_array($Product['VariationIds'])) {
 							foreach ($Product['VariationIds'] as $variation_id) {
+								if($epim_update_running=='') {
+									return;
+								}
 								$variation = array();
 								$variation['productID'] = $Product['Id'];
 								$variation['variationID'] = $variation_id;
@@ -198,9 +213,12 @@ function epimaapi_update_every_minute() {
 		$i = 1;
 		$c = count($variations);
 		update_option('_epim_update_running','Importing '.$c.' Products');
-		cron_log('Importing '.$c.'Products');
+		cron_log('Importing '.$c.' Products');
 		if(is_array($variations)) {
 			foreach ($variations as $variation) {
+				if($epim_update_running=='') {
+					return;
+				}
 				update_option('_epim_update_running','Importing product '.$i.'/'.$c);
 				if($i>=get_option('_epim_background_current_index')) {
 					if ( is_array( $variation ) ) {

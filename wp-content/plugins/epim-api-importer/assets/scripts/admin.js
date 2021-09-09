@@ -301,6 +301,7 @@ adminJQ(function ($) {
         /*_o('Current Status Retrieved');*/
         $('.modal.GetCurrentUpdateData').removeClass('active');
         $('.modal.BackgroundUpdateAll').removeClass('active');
+        $('.modal.StopCurrentUpdate').removeClass('active');
     }, function (action, request, data) {
         _o(data);
     });
@@ -534,6 +535,14 @@ adminJQ(function ($) {
         $('.modal.GetCurrentUpdateData').addClass('active');
         backgroundUpdateQueue.reset();
         backgroundUpdateQueue.queue(ajaxurl,{action: 'fast_create'});
+        backgroundUpdateQueue.process();
+    });
+
+    $('#StopCurrentUpdate').on('click', function (){
+        $('#ePimResult').html('');
+        $('.modal.StopCurrentUpdate').addClass('active');
+        backgroundUpdateQueue.reset();
+        backgroundUpdateQueue.queue(ajaxurl,{action: 'stop_background_update'});
         backgroundUpdateQueue.process();
     });
 

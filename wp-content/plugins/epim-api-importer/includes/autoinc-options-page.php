@@ -116,11 +116,23 @@ function epim_options_page() {
             </style>
             <div class="wrap">
                 <h1>ePim Background Updater</h1>
-                <table class="form-table">
+                <style>
+                    table.form-table td, table td * {
+                        vertical-align: top;
+                    }
+                </style>
+                <table class="form-table" style="max-width: 750px;">
                     <tr>
-                        <td colspan="2">
+                        <td>
                             <button id="GetCurrentUpdateData" class="button">Get Status</button>&nbsp;
                             &nbsp;<span class="modal GetCurrentUpdateData"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                            <br>
+                            NB Stops and Cancels Current Background Update.
+                        </td>
+                        <td>
+                            <button id="StopCurrentUpdate" class="button">Stop Current Update</button>&nbsp;
+                            &nbsp;<span class="modal StopCurrentUpdate"><img
                                         src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
