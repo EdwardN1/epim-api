@@ -127,13 +127,13 @@ function epim_options_page() {
                             <button id="GetCurrentUpdateData" class="button">Get Status</button>&nbsp;
                             &nbsp;<span class="modal GetCurrentUpdateData"><img
                                         src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
-                            <br>
-                            NB Stops and Cancels Current Background Update.
                         </td>
                         <td>
                             <button id="StopCurrentUpdate" class="button">Stop Current Update</button>&nbsp;
                             &nbsp;<span class="modal StopCurrentUpdate"><img
                                         src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                            <br>
+                            NB Stops and Cancels Current Background Update.
                         </td>
                     </tr>
                     <tr>
@@ -144,6 +144,14 @@ function epim_options_page() {
                         </td>
                         <td>
                             NB restarts current background import if one is active.
+                        </td>
+                    </tr>
+                    <tr>
+                        <th style="width: 250px;"><label for="start_date">Update by product changed since:</label></th>
+                        <td><input type="text" class="custom_date" name="start_date" id="start_date" value=""/>&nbsp;<button
+                                    id="BackgroundUpdateSince" class="button">Update
+                            </button>&nbsp; &nbsp;<span class="modal BackgroundUpdateSince"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
                 </table>

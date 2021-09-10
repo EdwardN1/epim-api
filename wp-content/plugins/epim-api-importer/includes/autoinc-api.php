@@ -202,6 +202,54 @@ function get_epimaapi_get_branch_stock_since( $branch, $datetime ) {
  *
  */
 
+function epimaapi_background_import_products_from($timecode) {
+	update_option('_epim_update_running','Getting Products to Import');
+	cron_log('Getting Products to Import');
+	$allProductsResponse = json_decode(get_epimaapi_all_changed_products_since( $timecode ),true);
+	$variations = array();
+	if ( json_last_error() == JSON_ERROR_NONE ) {
+		if (array_key_exists('Results', $allProductsResponse)) {
+			foreach ( $allProductsResponse['Results'] as $Product ) {
+				if(get_option('_epim_update_running')=='') {
+					exit;
+				}
+				$categories = array();
+				$pictures = array();
+				if(array_key_exists('CategoryIds',$Product)) {
+					$categories = $Product['CategoryIds'];
+				}
+				if(array_key_exists('PictureIds',$Product)) {
+					$pictures = $Product['PictureIds'];
+				}
+				if(array_key_exists('VariationIds',$Product)) {
+					if(is_array($Product['VariationIds'])) {
+						foreach ($Product['VariationIds'] as $variation_id) {
+							if(get_option('_epim_update_running')=='') {
+								exit;
+							}
+							$variation = array();
+							$variation['productID'] = $Product['Id'];
+							$variation['variationID'] = $variation_id;
+							$variation['productBulletText'] = $Product['BulletText'];
+							$variation['productName'] = $Product['Name'];
+							$variation['categoryIds'] = $categories;
+							$variation['pictureIds'] = $pictures;
+							$variations[] = $variation;
+						}
+					}
+
+				}
+			}
+		}
+	} else {
+		cron_log('ePim is returning garbage, getting products.');
+	}
+	update_option( '_epim_background_process_data', $variations );
+	update_option('_epim_update_running','Preparing to import products');
+	cron_log('Found '.count($variations). ' products to import');
+	cron_log('Preparing to import products');
+}
+
 function epimaapi_background_import_all_start() {
     $jsonResponse = get_epimaapi_all_categories();
     $response     = json_decode( $jsonResponse, true );

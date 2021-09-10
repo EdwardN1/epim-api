@@ -56,7 +56,7 @@ add_action( 'wp_ajax_delete_products', 'ajax_epimaapi_delete_products' );
 
 add_action( 'wp_ajax_fast_create', 'ajax_epimaapi_fast_create' );
 add_action( 'wp_ajax_stop_background_update', 'ajax_epimaapi_stop_background_update' );
-
+add_action('wp_ajax_get_background_changed_products_since','ajax_get_epimaapi_background_changed_products_since');
 add_action( 'wp_ajax_force_background_update', 'ajax_epimaapi_force_background_update' );
 
 add_action( 'wp_ajax_cron_tail', 'ajax_epimaapi_cron_tail' );
@@ -98,6 +98,18 @@ function ajax_epimaapi_force_background_update() {
     }
     echo epimaapi_background_import_all_start();
     exit;
+}
+
+function ajax_get_epimaapi_background_changed_products_since() {
+	epimaapi_checkSecure();
+	update_option('_epim_update_running','');
+	update_option('_epim_background_process_data','');
+	update_option('_epim_background_current_index',0);
+	if ( ! empty( $_POST['timeCode'] ) ) {
+
+		epimaapi_background_import_products_from($_POST['timeCode']);
+	}
+	exit;
 }
 
 function ajax_epimaapi_fast_create() {

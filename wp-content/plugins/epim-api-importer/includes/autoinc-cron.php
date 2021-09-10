@@ -61,6 +61,7 @@ function cron_log($log) {
 }
 
 function epimaapi_update_every_minute() {
+	set_time_limit(0);
 	$epim_update_running = get_option( '_epim_update_running' );
 	if($epim_update_running=='') {
 		return;
@@ -74,7 +75,7 @@ function epimaapi_update_every_minute() {
 			$c = count($epim_background_process_data);
 			$time_start = microtime(true);
 			foreach ($epim_background_process_data as $category) {
-				if($epim_update_running=='') {
+				if(get_option( '_epim_update_running' )=='') {
 					return;
 				}
 				$epim_update_running = 'Process category '.$i.'/'.$c;
@@ -118,7 +119,7 @@ function epimaapi_update_every_minute() {
 		$i = 1;
 		$c = count($terms);
 		foreach ( $terms as $term ) {
-			if($epim_update_running=='') {
+			if(get_option( '_epim_update_running' )=='') {
 				return;
 			}
 			$epim_update_running = 'Sorting Category '.$i.'/'.$c;
@@ -167,7 +168,7 @@ function epimaapi_update_every_minute() {
 		if ( json_last_error() == JSON_ERROR_NONE ) {
 			if (array_key_exists('Results', $allProductsResponse)) {
 				foreach ( $allProductsResponse['Results'] as $Product ) {
-					if($epim_update_running=='') {
+					if(get_option( '_epim_update_running' )=='') {
 						return;
 					}
 					$categories = array();
@@ -216,7 +217,7 @@ function epimaapi_update_every_minute() {
 		cron_log('Importing '.$c.' Products');
 		if(is_array($variations)) {
 			foreach ($variations as $variation) {
-				if($epim_update_running=='') {
+				if(get_option( '_epim_update_running' )=='') {
 					return;
 				}
 				update_option('_epim_update_running','Importing product '.$i.'/'.$c);
@@ -246,6 +247,7 @@ function epimaapi_update_every_minute() {
 }
 
 function epimaapi_update_branch_stock_minutes() {
+	set_time_limit(0);
 	if ( ! wp_next_scheduled( 'epimaapi_update_every_minute_minute_action' ) ) {
 		wp_schedule_event( time(), 'minutes_1', 'epimaapi_update_every_minute_minute_action' );
 	}
@@ -260,12 +262,22 @@ function epimaapi_update_branch_stock_minutes() {
 	//error_log('running 10 minute branch stock update');
 	if ( $epim_update_schedule == 'minutes' ) {
 		if ( $epim_enable_scheduled_updates ) {
+			cron_log('Updating Branch Stock');
 			epimaapi_update_branch_stock_cron();
 		} else {
-			// error_log('10 minute update aborted - Updates not enabled');
+			cron_log('10 minute update aborted - Updates not enabled');
 		}
 	} else {
-		// error_log('10 minute update aborted - set to daily updates');
+		cron_log('10 minute update aborted - set to daily updates');
+	}
+
+	$epim_update_running = get_option( '_epim_update_running' );
+	if($epim_update_running=='') {
+		update_option('_epim_background_current_index',0);
+		$iso = (new \DateTime('-30 minutes',new \DateTimeZone("UTC")))->format(\DateTime::ATOM);
+		error_log($iso);
+		epimaapi_background_import_products_from($iso);
+		return;
 	}
 }
 
