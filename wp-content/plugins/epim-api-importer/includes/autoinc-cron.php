@@ -262,13 +262,13 @@ function epimaapi_update_branch_stock_minutes() {
 	//error_log('running 10 minute branch stock update');
 	if ( $epim_update_schedule == 'minutes' ) {
 		if ( $epim_enable_scheduled_updates ) {
-			cron_log('Updating Branch Stock');
+			cron_log('Updating Branch Stock (10 minute update)');
 			epimaapi_update_branch_stock_cron();
 		} else {
-			cron_log('10 minute update aborted - Updates not enabled');
+			//cron_log('10 minute update aborted - Updates not enabled');
 		}
 	} else {
-		cron_log('10 minute update aborted - set to daily updates');
+		//cron_log('10 minute branch price and stock update aborted - set to daily updates');
 	}
 
 	$epim_update_running = get_option( '_epim_update_running' );
