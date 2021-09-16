@@ -441,7 +441,7 @@ function wpiai_get_order_XML( $order_id, $action ) {
 
 		//$SalesOrderHeader_DocumentID_ID = $CustomerPartyID;
 		$AlternateDocumentID_ID_schemeAgencyID = $CustomerPartyID;
-		$AlternateDocumentID_ID                = $order->get_meta( 'po_reference', true );
+		$AlternateDocumentID_ID                = $order->get_meta( '_purchase_order', true );
 		/**
 		 * Add in po_reference meta data field into front end;
 		 */

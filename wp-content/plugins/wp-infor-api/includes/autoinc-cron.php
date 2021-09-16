@@ -97,8 +97,9 @@ function wpiai_do_every_day()
         'City',
         'LN4 5HD'
     ));*/
+
     /*error_log(createCSDContact(
-        1000912376,
+	    10324,
         'Mr',
         'Edward',
         'Nickerson',
@@ -110,6 +111,7 @@ function wpiai_do_every_day()
         'City',
         'LN4 5HD'
     ));*/
+
     /*error_log(returnCSDShipToID('Set#: 1 Update Successful, Cono: 1 Customer #: 1000912376, Ship To: 6fa61c7aab8de'));*/
     /*$organizationID = '1000912376';
     $customerID = '48';
@@ -133,6 +135,8 @@ function wpiai_do_every_day()
     //update_option('wpiai_background_processes_to_start','');
     //update_option('wpiai_background_processes_to_stop','');
     //update_option('wpiai_background_processes_running','');
+
+
 	wpiai_check_user_meta();
     wpiai_process_cached_orders();
 	if (!wp_next_scheduled('wpiai_every_minute_action')) {

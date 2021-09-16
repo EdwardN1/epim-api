@@ -22,6 +22,31 @@ function get_csd_order_id($order_id) {
 	return false;
 }
 
+function get_csd_backorders($order_id) {
+	$res = array();
+	$order = wc_get_order( $order_id );
+	if($order) {
+		$CSD_ID = get_post_meta($order_id,'CSD_ID',true);
+		if($CSD_ID) {
+			$CSD_TRUNKS = explode('-',$CSD_ID);
+			if(is_array($CSD_TRUNKS)) {
+				$CSD_TRUNK = $CSD_TRUNKS[0];
+				/*$args = array(
+					"numberposts" => -1,
+					"post_type" => "plays_events",
+					"meta_query" => array(
+						array(
+							"key"     => "show_times_%_date",
+							"value"   => $this_month . "[0-9]{2}",
+							"compare" => "REGEXP"
+						)
+					),
+				)*/
+			}
+		}
+	}
+}
+
 function get_organization_shipping_details($organization_id)
 {
     $user = get_users(
