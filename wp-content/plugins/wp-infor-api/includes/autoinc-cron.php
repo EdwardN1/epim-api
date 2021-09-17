@@ -136,6 +136,8 @@ function wpiai_do_every_day()
     //update_option('wpiai_background_processes_to_stop','');
     //update_option('wpiai_background_processes_running','');
 
+	//error_log(print_r(get_csd_backorders(141055),true));
+
 
 	wpiai_check_user_meta();
     wpiai_process_cached_orders();
