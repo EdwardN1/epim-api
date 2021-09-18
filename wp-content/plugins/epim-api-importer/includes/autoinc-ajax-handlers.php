@@ -115,7 +115,7 @@ function ajax_get_epimaapi_background_changed_products_since() {
 function ajax_epimaapi_fast_create() {
 	epimaapi_checkSecure();
 	//update_option('_epim_update_running','Categories Updated and Sorted');
-	//update_option('_epim_background_current_index',2290);
+	//update_option('_epim_background_current_index',1660);
 	$epim_update_running = get_option( '_epim_update_running' );
 	if ( $epim_update_running == '' ) {
         //echo epimaapi_background_import_all_start();
