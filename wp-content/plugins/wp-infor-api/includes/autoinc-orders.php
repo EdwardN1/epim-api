@@ -246,7 +246,8 @@ function wpiai_get_changed_order_XML( $order_id, $action ) {
 			$first_name   = $contact_shipto['first_name'];
 			$last_name    = $contact_shipto['last_name'];
 			$phone        = $contact_shipto['telephone'];
-			$contactCSDID = createCSDContact( $CustomerPartyID, '', $first_name, $last_name, '', $phone, '', '', '', '', '' );
+			$email        = $contact_shipto['email'];
+			$contactCSDID = createCSDContact( $CustomerPartyID, '', $first_name, $last_name, $email, $phone, '', '', '', '', '' );
 		} else {
 			$contactCSDID = $contact_shipto;
 		}
@@ -482,7 +483,8 @@ function wpiai_get_order_XML( $order_id, $action ) {
 			$first_name   = $contact_shipto['first_name'];
 			$last_name    = $contact_shipto['last_name'];
 			$phone        = $contact_shipto['telephone'];
-			$contactCSDID = createCSDContact( $CustomerPartyID, '', $first_name, $last_name, '', $phone, '', '', '', '', '' );
+			$email        = $contact_shipto['email'];
+			$contactCSDID = createCSDContact( $CustomerPartyID, '', $first_name, $last_name, $email, $phone, '', '', '', '', '' );
 		} else {
 			$contactCSDID = $contact_shipto;
 		}
