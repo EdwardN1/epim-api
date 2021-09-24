@@ -154,6 +154,7 @@ function wpiai_register_settings()
 	add_option('wpiai_background_processes_to_start', '');
 	add_option('wpiai_background_processes_to_stop', '');
 	add_option('wpiai_background_processes_running', '');
+	add_option('wpiai_price_files_imported', '');
 
 }
 

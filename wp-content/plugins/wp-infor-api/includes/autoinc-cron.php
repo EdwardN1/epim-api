@@ -11,6 +11,9 @@ function wpiai_cron_activation()
     if (!wp_next_scheduled('wpiai_every_twenty_minutes_action')) {
         wp_schedule_event(time(), 'everytwentyminutes', 'wpiai_every_twenty_minutes_action');
     }
+	if (!wp_next_scheduled('wpiai_every_hour_action')) {
+		wp_schedule_event(time(), 'hourly', 'wpiai_every_hour_action');
+	}
     if (!wp_next_scheduled('wpiai_every_day_action')) {
         wp_schedule_event(time(), 'daily', 'wpiai_every_day_action');
     }
@@ -19,6 +22,11 @@ function wpiai_cron_activation()
 add_action('wpiai_every_minute_action', 'wpiai_do_every_minute');
 add_action('wpiai_every_twenty_minutes_action', 'wpiai_do_every_twenty_minutes');
 add_action('wpiai_every_day_action', 'wpiai_do_every_day');
+add_action('wpiai_every_hour_action', 'wpiai_do_every_hour');
+
+function wpiai_do_every_hour() {
+	wpiai_import_all_files();
+}
 
 function wpiai_do_every_day()
 {
@@ -138,6 +146,11 @@ function wpiai_do_every_day()
 
 	//error_log(print_r(get_csd_backorders(141055),true));
 
+	///web/wp-content/plugins/wp-infor-api/price_imports/mail122630.csv
+
+	//wpiai_import_price_file('/var/www/html/wp-content/plugins/wp-infor-api/price_imports/testfile.csv');
+
+	//wpiai_import_all_files();
 
 	wpiai_check_user_meta();
     wpiai_process_cached_orders();
@@ -396,7 +409,7 @@ function wpiai_process_updated_products()
                 $customerProductList[] = $customerProductItem;
             }
             foreach ($customerProductList as $customerProduct) {
-                $metaField = 'wpiai_customer_price_' . $customerProduct['userID'];
+                $metaField = 'wpiai_customer_price_' . $customerProduct['userID']; // Woo ID
                 $productData = $customerProduct['productData'];
 
                 if (is_array($productData)) {
