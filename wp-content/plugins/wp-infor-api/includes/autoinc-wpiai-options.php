@@ -154,6 +154,7 @@ function wpiai_register_settings()
 	add_option('wpiai_background_processes_to_start', '');
 	add_option('wpiai_background_processes_to_stop', '');
 	add_option('wpiai_background_processes_running', '');
+	add_option('wpiai_price_files_imported', '');
 
 }
 
@@ -1310,8 +1311,16 @@ function wpiai_options_page()
                 <h1>INFOR Restricted</h1>
             </div>
         <?php
+            $files_imported = get_option('wpiai_price_files_imported');
+            if(is_array($files_imported)) {
+                echo '<div class=wrap">';
+                echo 'Files Imported = '.count($files_imported).'</br>';
+                foreach ($files_imported as $file_name) {
+                    echo $file_name.'</br>';
+                }
+                echo '</div>';
+            }
         endif;
-
         ?>
     </div>
     <?php
