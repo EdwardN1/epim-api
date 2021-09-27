@@ -303,6 +303,7 @@ adminJQ(function ($) {
         $('.modal.BackgroundUpdateAll').removeClass('active');
         $('.modal.StopCurrentUpdate').removeClass('active');
         $('.modal.BackgroundUpdateSince').removeClass('active');
+        $('.modal.BackgroundUnfreezeQueue').removeClass('active');
     }, function (action, request, data) {
         _o(data);
     });
@@ -557,15 +558,14 @@ adminJQ(function ($) {
         backgroundUpdateQueue.process();
     });
 
-    $('#BackgroundUpdateSince').on('click',function () {
+    $('#BackgroundUnfreezeQueue').on('click', function (){
+        $('#ePimResult').html('');
+        _o('Starting Background Update....');
+        $('.modal.BackgroundUnfreezeQueue').addClass('active');
         backgroundUpdateQueue.reset();
-        let dpDate = $('.custom_date').datepicker('getDate');
-        let dateUtc = localAsUtc(dpDate);
-        let iso = dateUtc.toISOString();
-        $('.modal.BackgroundUpdateSince').addClass('active');
-        backgroundUpdateQueue.queue(ajaxurl,{action: 'get_background_changed_products_since', timeCode: iso});
+        $('#ePimTail').html('');
+        backgroundUpdateQueue.queue(ajaxurl,{action: 'unfreeze_queue'});
         backgroundUpdateQueue.process();
-
     });
 
     $('#CreateAllProducts').on('click',function () {
@@ -600,6 +600,17 @@ adminJQ(function ($) {
         $('.modal.UpdateSince').addClass('active');
         updateSinceProducts.queue(ajaxurl,{action: 'get_all_changed_products_since', timeCode: iso});
         updateSinceProducts.process();
+
+    });
+
+    $('#BackgroundUpdateSince').on('click',function () {
+        backgroundUpdateQueue.reset();
+        let dpDate = $('.custom_date').datepicker('getDate');
+        let dateUtc = localAsUtc(dpDate);
+        let iso = dateUtc.toISOString();
+        $('.modal.BackgroundUpdateSince').addClass('active');
+        backgroundUpdateQueue.queue(ajaxurl,{action: 'get_background_changed_products_since', timeCode: iso});
+        backgroundUpdateQueue.process();
 
     });
 

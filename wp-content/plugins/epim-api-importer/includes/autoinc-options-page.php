@@ -154,6 +154,16 @@ function epim_options_page() {
                                         src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            <button id="BackgroundUnfreezeQueue" class="button">Unfreeze Queue</button>&nbsp;
+                            &nbsp;<span class="modal BackgroundUnfreezeQueue"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        </td>
+                        <td>
+                            NB attempts to unfreeze the queue by reloading product data.
+                        </td>
+                    </tr>
                 </table>
                 <div id="ePimResult">
 

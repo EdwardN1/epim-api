@@ -58,6 +58,8 @@ add_action( 'wp_ajax_fast_create', 'ajax_epimaapi_fast_create' );
 add_action( 'wp_ajax_stop_background_update', 'ajax_epimaapi_stop_background_update' );
 add_action('wp_ajax_get_background_changed_products_since','ajax_get_epimaapi_background_changed_products_since');
 add_action( 'wp_ajax_force_background_update', 'ajax_epimaapi_force_background_update' );
+add_action( 'wp_ajax_unfreeze_queue', 'ajax_epimaapi_unfreeze_queue' );
+
 
 add_action( 'wp_ajax_cron_tail', 'ajax_epimaapi_cron_tail' );
 
@@ -110,6 +112,14 @@ function ajax_get_epimaapi_background_changed_products_since() {
 		epimaapi_background_import_products_from($_POST['timeCode']);
 	}
 	exit;
+}
+
+function ajax_epimaapi_unfreeze_queue() {
+    epimaapi_checkSecure();
+    update_option('_epim_update_running','Categories Updated and Sorted');
+    cron_log('Unfreezing Queue Please wait.');
+    echo 'Unfreezing Queue Please wait.';
+    exit;
 }
 
 function ajax_epimaapi_fast_create() {
