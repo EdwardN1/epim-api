@@ -1,22 +1,26 @@
-{
-  "request": {
-    "companyNumber": 1,
-    "operatorInit": "WOO",
-    "tMntTt": {
-      "t-mnt-tt": [
-        {"setNo": 1,"seqNo": 1,"updateMode": "chg","key1": "8449","fieldName": "firstnm","fieldValue": "JamesChange"},
-        {"setNo": 1,"seqNo": 2,"updateMode": "chg","key1": "8449","fieldName": "lastnm","fieldValue": "RawingsChange"},
-        {"setNo": 1,"seqNo": 3,"updateMode": "chg","key1": "8449","fieldName": "workemailaddr","fieldValue": "change@change.com"},
-        {"setNo": 1,"seqNo": 4,"updateMode": "chg","key1": "8449","fieldName": "workphoneno","fieldValue": "01234567891"},
-        {"setNo": 1,"seqNo": 5,"updateMode": "chg","key1": "8449","fieldName": "faxnumber","fieldValue": "60a76ae800284"},
-        {"setNo": 1,"seqNo": 6,"updateMode": "chg","key1": "8449","fieldName": "addr1","fieldValue": "changeline1"},
-        {"setNo": 1,"seqNo": 7,"updateMode": "chg","key1": "8449","fieldName": "addr2","fieldValue": "changeline2"},
-        {"setNo": 1,"seqNo": 8,"updateMode": "chg","key1": "8449","fieldName": "addr3","fieldValue": ""},
-        {"setNo": 1,"seqNo": 9,"updateMode": "chg","key1": "8449","fieldName": "city","fieldValue": "changecity"},
-        {"setNo": 1,"seqNo": 10,"updateMode": "chg","key1": "8449","fieldName": "zipcd","fieldValue": "CH14GE"},
-        {"setNo": 1,"seqNo": 11,"updateMode": "chg","key1": "8449","fieldName": "cotitle","fieldValue": "changetitle"},
-        {"setNo": 1,"seqNo": 5,"updateMode": "add","fieldName": "cotitle","fieldValue": "iamatitle"}
-      ]
-    },
-    "extraData": "string"
-  },
+{"request": {"companyNumber": 1,"operatorInit": "JR2","tMntTt": {"t-mnt-tt": [
+{"setNo": 1,"seqNo": 1,"updateMode": "add","fieldName": "addr1","fieldValue": "Address 1"},
+{"setNo": 1,"seqNo": 2,"updateMode": "add","fieldName": "addr2","fieldValue": "Address 2"},
+{"setNo": 1,"seqNo": 3,"updateMode": "add","fieldName": "city","fieldValue": "city"},
+{"setNo": 1,"seqNo": 4,"updateMode": "add","fieldName": "zipcd","fieldValue": "ng1 1ng"},
+{"setNo": 1,"seqNo": 5,"updateMode": "add","fieldName": "name","fieldValue": "API Add Test 2"},
+{"setNo": 1,"seqNo": 6,"updateMode": "add","fieldName": "custtype","fieldValue": "DI"},
+{"setNo": 1,"seqNo": 7,"updateMode": "add","fieldName": "phoneno","fieldValue": "07454123456"},
+{"setNo": 1,"seqNo": 8,"updateMode": "add","fieldName": "email","fieldValue": "APITest2@test.com"},
+{"setNo": 1,"seqNo": 9,"updateMode": "add","fieldName": "user4","fieldValue": "WOO ID"},
+{"setNo": 1,"seqNo": 10,"updateMode": "add","fieldName": "whse","fieldValue": "FCC"},
+{"setNo": 1,"seqNo": 11,"updateMode": "add","fieldName": "statecd","fieldValue": "gb"},
+{"setNo": 1,"seqNo": 12,"updateMode": "add","fieldName": "divno","fieldValue": "09"},
+{"setNo": 1,"seqNo": 13,"updateMode": "add","fieldName": "selltype","fieldValue": "c"},
+{"setNo": 1,"seqNo": 14,"updateMode": "add","fieldName": "slsrepin","fieldValue": "MA99"},
+{"setNo": 1,"seqNo": 15,"updateMode": "add","fieldName": "slsrepout","fieldValue": "MA99"},
+{"setNo": 1,"seqNo": 16,"updateMode": "add","fieldName": "taxablety","fieldValue": "y"},
+{"setNo": 1,"seqNo": 17,"updateMode": "add","fieldName": "bankno","fieldValue": "1"},
+{"setNo": 1,"seqNo": 18,"updateMode": "add","fieldName": "termstype","fieldValue": "01"},
+{"setNo": 1,"seqNo": 19,"updateMode": "add","fieldName": "tendqtyfl","fieldValue": "yes"},
+{"setNo": 1,"seqNo": 20,"updateMode": "add","fieldName": "pricecd","fieldValue": "1"},
+{"setNo": 1,"seqNo": 21,"updateMode": "add","fieldName": "disccd","fieldValue": "1"},
+{"setNo": 1,"seqNo": 22,"updateMode": "add","fieldName": "wodisccd","fieldValue": "1"},
+{"setNo": 1,"seqNo": 23,"updateMode": "add","fieldName": "einvtype","fieldValue": "M"},
+{"setNo": 1,"seqNo": 24,"updateMode": "add","fieldName": "einvto","fieldValue": "invtest@test.com"}
+]},"extraData": "string"}}
