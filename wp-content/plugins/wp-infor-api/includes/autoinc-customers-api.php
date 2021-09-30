@@ -24,7 +24,7 @@ function createCustomersAPIRequest($user_id,$company_name,$email,$phone,$address
 	$request .= '{"setNo": 1,"seqNo": 21,"updateMode": "add","fieldName": "disccd","fieldValue": "1"},';
 	$request .= '{"setNo": 1,"seqNo": 22,"updateMode": "add","fieldName": "wodisccd","fieldValue": "1"},';
 	$request .= '{"setNo": 1,"seqNo": 23,"updateMode": "add","fieldName": "einvtype","fieldValue": "M"},';
-	$request .= '{"setNo": 1,"seqNo": 24,"updateMode": "add","fieldName": "einvto","fieldValue": "invtest@test.com"}';
+	$request .= '{"setNo": 1,"seqNo": 24,"updateMode": "add","fieldName": "einvto","fieldValue": "'.$email.'"}';
 	$request .= ' ]},"extraData": "string"}}';
 	return $request;
 }
