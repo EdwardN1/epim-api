@@ -25,7 +25,7 @@ add_action('wpiai_every_day_action', 'wpiai_do_every_day');
 add_action('wpiai_every_hour_action', 'wpiai_do_every_hour');
 
 function wpiai_do_every_hour() {
-	wpiai_import_all_files();
+	//wpiai_import_all_files();
 }
 
 function wpiai_do_every_day()

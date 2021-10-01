@@ -1,0 +1,179 @@
+{
+  "request": {
+    "companyNumber": 1,
+    "operatorInit": "JR2",
+    "tMntTt": {
+      "t-mnt-tt": [
+        {
+          "setNo": 1,
+          "seqNo": 1,
+          "updateMode": "add",
+          "fieldName": "addr1",
+          "fieldValue": "Address1"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 2,
+          "updateMode": "add",
+          "fieldName": "addr2",
+          "fieldValue": ""
+        },
+        {
+          "setNo": 1,
+          "seqNo": 3,
+          "updateMode": "add",
+          "fieldName": "city",
+          "fieldValue": "Town"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 4,
+          "updateMode": "add",
+          "fieldName": "zipcd",
+          "fieldValue": "NG6 5HD"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 5,
+          "updateMode": "add",
+          "fieldName": "name",
+          "fieldValue": ""
+        },
+        {
+          "setNo": 1,
+          "seqNo": 6,
+          "updateMode": "add",
+          "fieldName": "custtype",
+          "fieldValue": "DI"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 7,
+          "updateMode": "add",
+          "fieldName": "phoneno",
+          "fieldValue": "0123456789"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 8,
+          "updateMode": "add",
+          "fieldName": "email",
+          "fieldValue": "vicki1@erfelectrical.co.uk"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 9,
+          "updateMode": "add",
+          "fieldName": "user4",
+          "fieldValue": "4370"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 10,
+          "updateMode": "add",
+          "fieldName": "whse",
+          "fieldValue": "FCC"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 11,
+          "updateMode": "add",
+          "fieldName": "statecd",
+          "fieldValue": "gb"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 12,
+          "updateMode": "add",
+          "fieldName": "divno",
+          "fieldValue": "09"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 13,
+          "updateMode": "add",
+          "fieldName": "selltype",
+          "fieldValue": "c"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 14,
+          "updateMode": "add",
+          "fieldName": "slsrepin",
+          "fieldValue": "MA99"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 15,
+          "updateMode": "add",
+          "fieldName": "slsrepout",
+          "fieldValue": "MA99"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 16,
+          "updateMode": "add",
+          "fieldName": "taxablety",
+          "fieldValue": "y"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 17,
+          "updateMode": "add",
+          "fieldName": "bankno",
+          "fieldValue": "1"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 18,
+          "updateMode": "add",
+          "fieldName": "termstype",
+          "fieldValue": "01"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 19,
+          "updateMode": "add",
+          "fieldName": "tendqtyfl",
+          "fieldValue": "yes"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 20,
+          "updateMode": "add",
+          "fieldName": "pricecd",
+          "fieldValue": "1"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 21,
+          "updateMode": "add",
+          "fieldName": "disccd",
+          "fieldValue": "1"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 22,
+          "updateMode": "add",
+          "fieldName": "wodisccd",
+          "fieldValue": "1"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 23,
+          "updateMode": "add",
+          "fieldName": "einvtype",
+          "fieldValue": "M"
+        },
+        {
+          "setNo": 1,
+          "seqNo": 24,
+          "updateMode": "add",
+          "fieldName": "einvto",
+          "fieldValue": "vicki1@erfelectrical.co.uk"
+        }
+      ]
+    },
+    "extraData": "string"
+  }
+}

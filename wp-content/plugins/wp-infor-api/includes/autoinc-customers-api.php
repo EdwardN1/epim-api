@@ -1,6 +1,6 @@
 <?php
 function createCustomersAPIRequest($user_id,$company_name,$email,$phone,$address_1,$address_2,$city,$post_code) {
-	$request = '{"{"request": {"companyNumber": 1,"operatorInit": "JR2","tMntTt": {"t-mnt-tt": [';
+	$request = '{"request": {"companyNumber": 1,"operatorInit": "JR2","tMntTt": {"t-mnt-tt": [';
 	$request .= '{"setNo": 1,"seqNo": 1,"updateMode": "add","fieldName": "addr1","fieldValue": "'.$address_1.'"},';
 	$request .= '{"setNo": 1,"seqNo": 2,"updateMode": "add","fieldName": "addr2","fieldValue": "'.$address_2.'"},';
 	$request .= '{"setNo": 1,"seqNo": 3,"updateMode": "add","fieldName": "city","fieldValue": "'.$city.'"},';
@@ -26,6 +26,7 @@ function createCustomersAPIRequest($user_id,$company_name,$email,$phone,$address
 	$request .= '{"setNo": 1,"seqNo": 23,"updateMode": "add","fieldName": "einvtype","fieldValue": "M"},';
 	$request .= '{"setNo": 1,"seqNo": 24,"updateMode": "add","fieldName": "einvto","fieldValue": "'.$email.'"}';
 	$request .= ' ]},"extraData": "string"}}';
+	//wp_mail('edward@technicks.com','Infor Customer Request',$request,array('Content-Type: text/html; charset=UTF-8'));
 	return $request;
 }
 
@@ -51,13 +52,16 @@ function createCSDCustomer($user_id,$company_name,$email,$phone,$address_1,$addr
 					if ( array_key_exists( 'returnData', $allArray['response'] ) ) {
 						$id = returnCSDCustomerID( $allArray['response']['returnData'] );
 						if ( $id ) {
+							//wp_mail('edward@technicks.com','Infor Customer Request',$id,array('Content-Type: text/html; charset=UTF-8'));
 							return $id;
 						}
 					}
 				} else {
+					//wp_mail('edward@technicks.com','Infor Customer Request',$allArray['cErrorMessage'],array('Content-Type: text/html; charset=UTF-8'));
 					error_log( $allArray['cErrorMessage'] );
 				}
 			} else {
+				//wp_mail('edward@technicks.com','Infor Customer Request',$id,array('Content-Type: text/html; charset=UTF-8'));
 				error_log( 'No cErrorMessage' );
 			}
 		}
