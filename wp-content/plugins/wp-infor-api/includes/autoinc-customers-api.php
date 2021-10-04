@@ -1,5 +1,9 @@
 <?php
-function createCustomersAPIRequest($user_id,$company_name,$email,$phone,$address_1,$address_2,$city,$post_code) {
+function createCustomersAPIRequest($user_id,$company_name,$email,$phone,$address_1,$address_2,$city,$post_code,$credit_check=false) {
+	$cc = '0';
+	if($credit_check) {
+		$cc = '1';
+	}
 	$request = '{"request": {"companyNumber": 1,"operatorInit": "JR2","tMntTt": {"t-mnt-tt": [';
 	$request .= '{"setNo": 1,"seqNo": 1,"updateMode": "add","fieldName": "addr1","fieldValue": "'.$address_1.'"},';
 	$request .= '{"setNo": 1,"seqNo": 2,"updateMode": "add","fieldName": "addr2","fieldValue": "'.$address_2.'"},';
@@ -24,9 +28,10 @@ function createCustomersAPIRequest($user_id,$company_name,$email,$phone,$address
 	$request .= '{"setNo": 1,"seqNo": 21,"updateMode": "add","fieldName": "disccd","fieldValue": "1"},';
 	$request .= '{"setNo": 1,"seqNo": 22,"updateMode": "add","fieldName": "wodisccd","fieldValue": "1"},';
 	$request .= '{"setNo": 1,"seqNo": 23,"updateMode": "add","fieldName": "einvtype","fieldValue": "M"},';
-	$request .= '{"setNo": 1,"seqNo": 24,"updateMode": "add","fieldName": "einvto","fieldValue": "'.$email.'"}';
+	$request .= '{"setNo": 1,"seqNo": 24,"updateMode": "add","fieldName": "einvto","fieldValue": "'.$email.'"},';
+	$request .= '{"setNo": 1,"seqNo": 25,"updateMode": "add","fieldName": "user6","fieldValue": "'.$cc.'"}';
 	$request .= ' ]},"extraData": "string"}}';
-	//wp_mail('edward@technicks.com','Infor Customer Request',$request,array('Content-Type: text/html; charset=UTF-8'));
+	wp_mail('edward@technicks.com','Infor Customer Request',$request,array('Content-Type: text/html; charset=UTF-8'));
 	return $request;
 }
 
