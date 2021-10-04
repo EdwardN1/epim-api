@@ -45,7 +45,7 @@ function returnCSDCustomerID($returnData) {
 	return false;
 }
 
-function createCSDCustomer($user_id,$company_name,$email,$phone,$address_1,$address_2,$city,$post_code) {
+function createCSDCustomer($user_id,$company_name,$email,$phone,$address_1,$address_2,$city,$post_code,$credit_check=false) {
 	$request = createCustomersAPIRequest($user_id,$company_name,$email,$phone,$address_1,$address_2,$city,$post_code);
 	$url = 'https://mingle-ionapi.inforcloudsuite.com/ERFELECTRIC_TRN/SX/web/sxapirestservice/sxapiarcustomermnt';
 	$response = wpiai_get_infor_api_response($url,$request);
