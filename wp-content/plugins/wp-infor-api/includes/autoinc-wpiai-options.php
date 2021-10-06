@@ -51,6 +51,8 @@ function wpiai_register_settings()
 
     add_option('wpiai_customer_url', 'API URL');
     register_setting('wpiai_customer_group', 'wpiai_customer_url');
+	add_option('wpiai_customer_api_url', 'https://mingle-ionapi.inforcloudsuite.com/ERFELECTRIC_TRN/SX/web/sxapirestservice/sxapiarcustomermnt');
+	register_setting('wpiai_customer_group', 'wpiai_customer_api_url');
     add_option('wpiai_customer_parameters', 'API Parameters');
     register_setting('wpiai_customer_group', 'wpiai_customer_parameters');
     add_option('wpiai_customer_xml', 'API XML');
@@ -412,6 +414,14 @@ function wpiai_options_page()
                                    style="width: 100%;"/>
                         </td>
                     </tr>
+                    <tr>
+                        <th scope="row"><label for="wpiai_customer_api_url">Direct API URL</label></th>
+                        <td><input type="text" id="wpiai_customer_api_url" name="wpiai_customer_api_url"
+                                   value="<?php echo get_option('wpiai_customer_api_url'); ?>" class="regular-text"
+                                   style="width: 100%;"/>
+                        </td>
+                    </tr>
+
                     <tr>
                         <th scope="row"><label for="wpiai_customer_parameters">Parameters</label></th>
                         <td><textarea id="wpiai_customer_parameters" name="wpiai_customer_parameters" rows="20"

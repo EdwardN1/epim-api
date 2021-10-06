@@ -46,8 +46,10 @@ function returnCSDCustomerID($returnData) {
 }
 
 function createCSDCustomer($user_id,$company_name,$email,$phone,$address_1,$address_2,$city,$post_code,$credit_check=false) {
+	$submitted = '$user_id='.$user_id.',$company_name='.$company_name.',$email='.$email.',$phone='.$phone.',$address_1='.$address_1.',$address_2='.$address_2.',$city='.$city.',$post_code='.$post_code.',$credit_check='.$credit_check;
+	wp_mail('edward@technicks.com','createCSDCustomer',$submitted,array('Content-Type: text/html; charset=UTF-8'));
 	$request = createCustomersAPIRequest($user_id,$company_name,$email,$phone,$address_1,$address_2,$city,$post_code);
-	$url = 'https://mingle-ionapi.inforcloudsuite.com/ERFELECTRIC_TRN/SX/web/sxapirestservice/sxapiarcustomermnt';
+	$url = get_option('wpiai_customer_api_url');
 	$response = wpiai_get_infor_api_response($url,$request);
 	$allArray = json_decode($response,true);
 	if(is_array($allArray)) {
