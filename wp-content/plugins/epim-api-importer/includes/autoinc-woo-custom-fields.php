@@ -25,6 +25,10 @@ function epim_taxonomy_add_new_meta_field() {
         <input type="text" name="epim_api_picture_link" id="epim_api_picture_link">
         <p class="description"><?php _e('Enter API PICTURE LINK', 'epim'); ?></p>
 
+        <label for="epim_api_exclude_from_category_menu"><?php _e('Exclude From Category Menu', 'epim'); ?></label>
+        <input type="checkbox" name="epim_api_exclude_from_category_menu" id="epim_api_exclude_from_category_menu">
+        <p class="description"><?php _e('Choose if this category shows in the category menu', 'epim'); ?></p>
+
         <!--<label for="epim_api_Qty_Break_1"><?php /*_e('Qty_Break_1', 'epim'); */?></label>
         <input type="text" name="epim_api_Qty_Break_1" id="epim_api_Qty_Break_1">
         <p class="description"><?php /*_e('Enter API Qty_Break_1', 'epim'); */?></p>
@@ -64,7 +68,11 @@ function epim_taxonomy_edit_meta_field($term) {
     $epim_api_parent_id = get_term_meta($term_id, 'epim_api_parent_id', true);
     $epim_api_picture_ids = get_term_meta($term_id, 'epim_api_picture_ids', true);
     $epim_api_picture_link = get_term_meta($term_id, 'epim_api_picture_link', true);
-
+	$epim_api_exclude_from_category_menu = get_term_meta($term_id, 'epim_api_exclude_from_category_menu', true);
+	$epim_api_exclude_from_category_menu_checked = '';
+    if($epim_api_exclude_from_category_menu == 'on') {
+	    $epim_api_exclude_from_category_menu_checked = ' checked';
+    }
     ?>
     <tr class="form-field">
         <th scope="row" valign="top"><label for="epim_api_id"><?php _e('API ID', 'epim'); ?></label></th>
@@ -97,6 +105,14 @@ function epim_taxonomy_edit_meta_field($term) {
             <p class="description"><?php _e('Enter API PICTURE IDS', 'epim'); ?></p>
         </td>
     </tr>
+
+    <tr class="form-field">
+        <th scope="row" valign="top"><label for="epim_api_exclude_from_category_menu"><?php _e('Exclude From Category Menu', 'epim'); ?></label></th>
+        <td>
+            <input type="checkbox" name="epim_api_exclude_from_category_menu" id="epim_api_exclude_from_category_menu" <?php _e($epim_api_exclude_from_category_menu_checked,'epim');?>/>
+            <p class="description"><?php _e('Choose if this category shows in the category menu', 'epim'); ?></p>
+        </td>
+    </tr>
     <?php
 }
 
@@ -110,11 +126,13 @@ function epim_save_taxonomy_custom_meta($term_id) {
     $epim_api_parent_id = filter_input(INPUT_POST, 'epim_api_parent_id');
     $epim_api_picture_ids = filter_input(INPUT_POST, 'epim_api_picture_ids');
     $epim_api_picture_link = filter_input(INPUT_POST, 'epim_api_picture_link');
+    $epim_api_exclude_from_category_menu = filter_input(INPUT_POST, 'epim_api_exclude_from_category_menu');
 
     update_term_meta($term_id, 'epim_api_id', $epim_api_id);
     update_term_meta($term_id, 'epim_api_parent_id', $epim_api_parent_id);
     update_term_meta($term_id, 'epim_api_picture_ids', $epim_api_picture_ids);
     update_term_meta($term_id, 'epim_api_picture_link', $epim_api_picture_link);
+	update_term_meta($term_id, 'epim_api_exclude_from_category_menu', $epim_api_exclude_from_category_menu);
 }
 
 add_action('edited_product_cat', 'epim_save_taxonomy_custom_meta', 10, 1);
