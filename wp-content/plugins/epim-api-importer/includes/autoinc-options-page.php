@@ -42,6 +42,8 @@ function epim_register_settings() {
 	register_setting( 'epim_options_group', 'epim_always_include_epim_attributes' );
 	add_option( 'epim_exclude_luckins_data', '1' );
 	register_setting( 'epim_options_group', 'epim_exclude_luckins_data' );
+	add_option( 'epim_prioritise_epim_images', '1' );
+	register_setting( 'epim_options_group', '' );
     add_option( 'epim_background_updates_max_run_time', '23' );
     register_setting( 'epim_options_group', 'epim_background_updates_max_run_time' );
 
@@ -383,12 +385,21 @@ function epim_options_page() {
                         </td>
                     </tr>
                     <tr>
-                        <th scope="row"><label for="epim_exclude_luckins_data">Exclude Luckins Data</label></th>
+                        <th scope="row"><label for="epim_exclude_luckins_data">Exclude Luckins Attribute Data</label></th>
 						<?php $options = get_option( 'epim_exclude_luckins_data' ); ?>
                         <td>
                             <input type="checkbox" id="epim_exclude_luckins_data" name="epim_exclude_luckins_data[checkbox_value]" value="1" <?php if ( is_array( $options ) ) {
 								echo checked( '1', $options['checkbox_value'], false );
 							} ?>/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><label for="epim_prioritise_epim_images">Prioritise ePim images</label></th>
+		                <?php $options = get_option( 'epim_prioritise_epim_images' ); ?>
+                        <td>
+                            <input type="checkbox" id="epim_prioritise_epim_images" name="epim_prioritise_epim_images[checkbox_value]" value="1" <?php if ( is_array( $options ) ) {
+				                echo checked( '1', $options['checkbox_value'], false );
+			                } ?>/>
                         </td>
                     </tr>
                     <tr>

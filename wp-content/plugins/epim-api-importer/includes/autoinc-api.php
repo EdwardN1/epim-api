@@ -10,41 +10,41 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  */
 
-function epimaapi_make_curl_call($url) {
+function epimaapi_make_curl_call( $url ) {
 
-	if(function_exists('curl_init')) {
-        $ch = curl_init();
+	if ( function_exists( 'curl_init' ) ) {
+		$ch = curl_init();
 
-        curl_setopt( $ch, CURLOPT_URL, $url );
+		curl_setopt( $ch, CURLOPT_URL, $url );
 
-        $headers   = array();
-        $headers[] = "Ocp-Apim-Subscription-Key: " . get_option( 'epim_key' );
+		$headers   = array();
+		$headers[] = "Ocp-Apim-Subscription-Key: " . get_option( 'epim_key' );
 
-        curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
 
-        $apiCall = curl_exec( $ch );
+		$apiCall = curl_exec( $ch );
 
-        curl_close( $ch );
+		curl_close( $ch );
 
-        return $apiCall;
-    } else {
-        $opts = array(
-            'http' => array(
-                'method' => "GET",
-                'header' => "Ocp-Apim-Subscription-Key: " . get_option('epim_key')
-            )
-        );
-        $context = stream_context_create($opts);
-        $apiCall = file_get_contents($url, false, $context);
+		return $apiCall;
+	} else {
+		$opts    = array(
+			'http' => array(
+				'method' => "GET",
+				'header' => "Ocp-Apim-Subscription-Key: " . get_option( 'epim_key' )
+			)
+		);
+		$context = stream_context_create( $opts );
+		$apiCall = file_get_contents( $url, false, $context );
 
-        return $apiCall;
-    }
+		return $apiCall;
+	}
 
 }
 
 function epimaapi_make_api_call( $url ) {
-    $response = null;
+	$response = null;
 	$method   = get_option( 'epim_api_retrieval_method' );
 	$epim_url = get_option( 'epim_url' );
 	if ( substr( $epim_url, - 1 != '/' ) ) {
@@ -52,26 +52,26 @@ function epimaapi_make_api_call( $url ) {
 	}
 	$epim_url .= 'api/';
 	if ( $method == 'curl' ) {
-		return epimaapi_make_curl_call($epim_url.$url);
+		return epimaapi_make_curl_call( $epim_url . $url );
 	} else {
 
 		$apiCall = false;
 
 		$args = array(
 			'headers' => array(
-				'Ocp-Apim-Subscription-Key' => get_option('epim_key')
+				'Ocp-Apim-Subscription-Key' => get_option( 'epim_key' )
 			)
 		);
 
-		$response = wp_safe_remote_get($epim_url . $url,$args);
+		$response = wp_safe_remote_get( $epim_url . $url, $args );
 
 		if ( is_array( $response ) && ! is_wp_error( $response ) ) {
 			$apiCall = $response['body'];
 		} else {
-			if(is_wp_error( $response )) {
+			if ( is_wp_error( $response ) ) {
 				//error_log($response->get_error_message());
 				//error_log('URL called: '.$epim_url . $url);
-				$apiCall = epimaapi_make_curl_call($epim_url.$url);
+				$apiCall = epimaapi_make_curl_call( $epim_url . $url );
 			}
 		}
 
@@ -144,27 +144,29 @@ function get_epimaapi_all_products() {
 	$TotalResults = $allProducts->TotalResults;
 	//error_log('$TotalResults = '. $TotalResults);
 	$res = epimaapi_make_api_call( 'Products/?limit=' . $TotalResults );
+
 	//error_log('$res->TotalResults = '. $res->TotalResults);
 	return $res;
 }
 
 function get_epimaapi_variation( $id ) {
-	$epim_always_include_epim_attributes = get_option('epim_always_include_epim_attributes');
-	$epim_exclude_luckins_data = get_option('epim_exclude_luckins_data');
+	$epim_always_include_epim_attributes = get_option( 'epim_always_include_epim_attributes' );
+	$epim_exclude_luckins_data           = get_option( 'epim_exclude_luckins_data' );
 	//error_log('$epim_always_include_epim_attributes = '.print_r($epim_always_include_epim_attributes,true));
-	$url = 'Variations/' . $id;
+	$url       = 'Variations/' . $id;
 	$queryChar = '?';
-	if(is_array($epim_always_include_epim_attributes)) {
-		if($epim_always_include_epim_attributes['checkbox_value'] == 1) {
-			$url .= '?alwaysIncludeEpimAttributes=true';
+	if ( is_array( $epim_always_include_epim_attributes ) ) {
+		if ( $epim_always_include_epim_attributes['checkbox_value'] == 1 ) {
+			$url       .= '?alwaysIncludeEpimAttributes=true';
 			$queryChar = '&';
 		}
 	}
-	if(is_array($epim_exclude_luckins_data)) {
-		if($epim_exclude_luckins_data['checkbox_value'] == 1) {
-			$url .= $queryChar.'includeLuckins=false';
+	if ( is_array( $epim_exclude_luckins_data ) ) {
+		if ( $epim_exclude_luckins_data['checkbox_value'] == 1 ) {
+			$url .= $queryChar . 'includeLuckins=false';
 		}
 	}
+
 	//error_log('$url = '.$url);
 	return epimaapi_make_api_call( $url );
 }
@@ -184,14 +186,16 @@ function get_epimaapi_all_changed_products_since( $datetime = '2002-10-02T10:00:
 	return $i;
 }
 
-function get_epimaapi_all_changed_products_since_starting( $start, $datetime = '2002-10-02T10:00:00-00:00'  ) {
-    $xdatetime = substr( $datetime, 0, 10 ) . 'T10:00:00-00:00';
-    $i         = epimaapi_make_api_call( 'ProductsUpdatedSince?ChangedSinceUTC=' . $xdatetime.'&start='.$start );
-    return $i;
+function get_epimaapi_all_changed_products_since_starting( $start, $datetime = '2002-10-02T10:00:00-00:00' ) {
+	$xdatetime = substr( $datetime, 0, 10 ) . 'T10:00:00-00:00';
+	$i         = epimaapi_make_api_call( 'ProductsUpdatedSince?ChangedSinceUTC=' . $xdatetime . '&start=' . $start );
+
+	return $i;
 }
 
 function get_epimaapi_get_branch_stock_since( $branch, $datetime ) {
-	$r         = epimaapi_make_api_call( 'StockForBranchUpdatedSince/'.$branch.'?ChangedSinceUTC=' . $datetime );
+	$r = epimaapi_make_api_call( 'StockForBranchUpdatedSince/' . $branch . '?ChangedSinceUTC=' . $datetime );
+
 	//$r = epimaapi_make_api_call('https://epim.azure-api.net/Grahams/api/ProductsUpdatedSince?ChangedSinceUTC=' . '2020-01-06T10:00:00-00:00');
 	return $r;
 }
@@ -202,39 +206,39 @@ function get_epimaapi_get_branch_stock_since( $branch, $datetime ) {
  *
  */
 
-function epimaapi_background_import_products_from($timecode) {
-	update_option('_epim_update_running','Getting Products to Import');
-	cron_log('Getting Products to Import');
-	$allProductsResponse = json_decode(get_epimaapi_all_changed_products_since( $timecode ),true);
-	$variations = array();
+function epimaapi_background_import_products_from( $timecode ) {
+	update_option( '_epim_update_running', 'Getting Products to Import' );
+	cron_log( 'Getting Products to Import' );
+	$allProductsResponse = json_decode( get_epimaapi_all_changed_products_since( $timecode ), true );
+	$variations          = array();
 	if ( json_last_error() == JSON_ERROR_NONE ) {
-		if (array_key_exists('Results', $allProductsResponse)) {
+		if ( array_key_exists( 'Results', $allProductsResponse ) ) {
 			foreach ( $allProductsResponse['Results'] as $Product ) {
-				if(get_option('_epim_update_running')=='') {
+				if ( get_option( '_epim_update_running' ) == '' ) {
 					exit;
 				}
 				$categories = array();
-				$pictures = array();
-				if(array_key_exists('CategoryIds',$Product)) {
+				$pictures   = array();
+				if ( array_key_exists( 'CategoryIds', $Product ) ) {
 					$categories = $Product['CategoryIds'];
 				}
-				if(array_key_exists('PictureIds',$Product)) {
+				if ( array_key_exists( 'PictureIds', $Product ) ) {
 					$pictures = $Product['PictureIds'];
 				}
-				if(array_key_exists('VariationIds',$Product)) {
-					if(is_array($Product['VariationIds'])) {
-						foreach ($Product['VariationIds'] as $variation_id) {
-							if(get_option('_epim_update_running')=='') {
+				if ( array_key_exists( 'VariationIds', $Product ) ) {
+					if ( is_array( $Product['VariationIds'] ) ) {
+						foreach ( $Product['VariationIds'] as $variation_id ) {
+							if ( get_option( '_epim_update_running' ) == '' ) {
 								exit;
 							}
-							$variation = array();
-							$variation['productID'] = $Product['Id'];
-							$variation['variationID'] = $variation_id;
+							$variation                      = array();
+							$variation['productID']         = $Product['Id'];
+							$variation['variationID']       = $variation_id;
 							$variation['productBulletText'] = $Product['BulletText'];
-							$variation['productName'] = $Product['Name'];
-							$variation['categoryIds'] = $categories;
-							$variation['pictureIds'] = $pictures;
-							$variations[] = $variation;
+							$variation['productName']       = $Product['Name'];
+							$variation['categoryIds']       = $categories;
+							$variation['pictureIds']        = $pictures;
+							$variations[]                   = $variation;
 						}
 					}
 
@@ -242,25 +246,26 @@ function epimaapi_background_import_products_from($timecode) {
 			}
 		}
 	} else {
-		cron_log('ePim is returning garbage, getting products.');
+		cron_log( 'ePim is returning garbage, getting products.' );
 	}
 	update_option( '_epim_background_process_data', $variations );
-	update_option('_epim_update_running','Preparing to import products');
-	cron_log('Found '.count($variations). ' products to import');
-	cron_log('Preparing to import products');
+	update_option( '_epim_update_running', 'Preparing to import products' );
+	cron_log( 'Found ' . count( $variations ) . ' products to import' );
+	cron_log( 'Preparing to import products' );
 }
 
 function epimaapi_background_import_all_start() {
-    $jsonResponse = get_epimaapi_all_categories();
-    $response     = json_decode( $jsonResponse, true );
-    if ( json_last_error() == JSON_ERROR_NONE ) {
-        $epim_update_running = 'Preparing to process ePim categories';
-        update_option('_epim_update_running',$epim_update_running);
-        update_option( '_epim_background_process_data', $response );
-        return $epim_update_running;
-    } else {
-        return 'ePim is returning garbage, getting all categories.';
-    }
+	$jsonResponse = get_epimaapi_all_categories();
+	$response     = json_decode( $jsonResponse, true );
+	if ( json_last_error() == JSON_ERROR_NONE ) {
+		$epim_update_running = 'Preparing to process ePim categories';
+		update_option( '_epim_update_running', $epim_update_running );
+		update_option( '_epim_background_process_data', $response );
+
+		return $epim_update_running;
+	} else {
+		return 'ePim is returning garbage, getting all categories.';
+	}
 }
 
 function epimaapi_getAPIIDFromCode( $code ) {
@@ -381,7 +386,7 @@ function epimaapi_imageImported( $id ) {
 
 }
 
-function epimaapi_image_url_imported($url) {
+function epimaapi_image_url_imported( $url ) {
 	$args = array(
 		'post_type'      => 'attachment',
 		'post_mime_type' => 'image',
@@ -394,7 +399,7 @@ function epimaapi_image_url_imported($url) {
 	);
 	$loop = new WP_Query( $args );
 
-	if($loop->have_posts()) {
+	if ( $loop->have_posts() ) {
 		return $loop->posts[0]->ID;
 	} else {
 		return false;
@@ -417,7 +422,7 @@ function epimaapi_getBranchID( $id ) {
 
 		while ( $loop->have_posts() ) : $loop->the_post();
 			$ePim_ID = get_post_meta( get_the_ID(), '_branch_epim_id', true );
-            //error_log('$id = ' . $id . ' $epim_id = ' . $ePim_ID);
+			//error_log('$id = ' . $id . ' $epim_id = ' . $ePim_ID);
 			if ( $id == $ePim_ID ) {
 				//error_log('$id = ' . $id . ' $epim_id = ' . $ePim_ID);
 				$res = get_the_ID();
@@ -428,9 +433,9 @@ function epimaapi_getBranchID( $id ) {
 
 	wp_reset_postdata();
 
-	if(!$res) {
-	    error_log('could not find a branch with ePim ID of: '.$id);
-    }
+	if ( ! $res ) {
+		error_log( 'could not find a branch with ePim ID of: ' . $id );
+	}
 
 	return $res;
 }
@@ -730,16 +735,16 @@ function epimaapi_importPicture( $id, $webpath ) {
 		$res = $e->getMessage();
 	}
 
-	$res .= ' - '.$webpath;
+	$res .= ' - ' . $webpath;
 
 	return $res;
 }
 
 function epimaapi_import_url_Picture( $url ) {
 
-	$res_Message = 'Image: ' . $url . ' - Import Error';
+	$res_Message   = 'Image: ' . $url . ' - Import Error';
 	$attachment_ID = 0;
-	$res = array();
+	$res           = array();
 	try {
 		$get_a_id = epimaapi_image_url_imported( $url );
 		if ( ! $get_a_id ) {
@@ -752,15 +757,15 @@ function epimaapi_import_url_Picture( $url ) {
 				$res_Message = 'Image: ' . $url . ' - Import Failure';
 			}
 		} else {
-			$res_Message = 'Image: ' . $url . ' - Already Imported';
+			$res_Message   = 'Image: ' . $url . ' - Already Imported';
 			$attachment_ID = $get_a_id;
 		}
 	} catch ( Exception $e ) {
 		$res_Message = $e->getMessage();
 	}
 
-	$res['Message'] = $res_Message.'</br>';
-	$res['ID'] = $attachment_ID;
+	$res['Message'] = $res_Message . '</br>';
+	$res['ID']      = $attachment_ID;
 
 	return $res;
 }
@@ -792,229 +797,10 @@ function epimaapi_create_product_x( $productID, $variationID, $productBulletText
 	/*
 	 * Get Variation Details
 	 */
-	$productArray   = array();
-	$jsonVariation  = get_epimaapi_variation( $variationID );
-	$variation      = json_decode( $jsonVariation );
-    if(!$variation) {
-        return $variationID . ' returns no result from API';
-    }
-	$jsonAttributes = get_epimaapi_all_attributes();
-	$attributes     = json_decode( $jsonAttributes );
-
-	$IsArchived = $variation->IsArchived;
-
-	if ( $IsArchived ) {
-		$res = $variationID . ' ' . $productName . ' is achived removing product from WooCommerce';
-		epimaapi_delete_variation( $variationID );
-
-		return $res;
-	}
-
-	/*
-	 *
-	 *Check Attributes
-	 *
-	 */
-
-	$attribute_taxonomies = wc_get_attribute_taxonomies();
-
-
-	$currentAttributes = array();
-
-	foreach ( $attribute_taxonomies as $attribute_taxonomy ) {
-
-		$atName = $attribute_taxonomy->attribute_label;
-		if ( ! in_array( $atName, $currentAttributes ) ) {
-			//error_log($atName);
-			$currentAttributes[] = $atName;
-		}
-	}
-
-	foreach ( $attributes as $attribute ) {
-		$atName   = $attribute->Name;
-		$slugName = substr( $atName, 0, 27 );
-
-		if ( ! wc_check_if_attribute_name_is_reserved( $atName ) ) {
-			if ( ! in_array( $atName, $currentAttributes ) ) {
-				$attribute_id = wc_attribute_taxonomy_id_by_name( $atName );
-				if ( ! $attribute_id ) {
-					if ( $atName != '' ) {
-						$attribute_id = wc_create_attribute(
-							array(
-								'name' => $atName,
-								'slug' => $slugName,
-							)
-						);
-
-						if ( is_wp_error( $attribute_id ) ) {
-							/*$error_string = $attribute_id->get_error_message();
-							error_log($error_string);
-							error_log('name = ' . $atName);
-							error_log('slug = ' . substr($atName, 0, 27));*/
-						}
-					}
-				}
-
-			}
-		}
-	}
-
-
-	/*
-	 * Get Woo Categories
-	 */
-	$terms  = get_terms( [
-		'taxonomy'   => 'product_cat',
-		'hide_empty' => false,
-	] );
-	$catIds = array();
-	foreach ( $categoryIds as $category_id ) {
-		$realCatID = epimaapi_getTermFromID( $category_id, $terms );
-		if ( $realCatID ) {
-			$catIds[] = $realCatID->term_id;
-		}
-	}
-	$productArray['categoryIDS'] = $catIds;
-
-	/*
-	 * Other product Fields
-	 */
-	$productArray['productTitle']            = $variation->Name;
-	$productArray['productSKU']              = $variation->SKU;
-	$productArray['price']                   = $variation->Price;
-	$Qty_Price_1                             = $variation->Qty_Price_1;
-	$Qty_Price_2                             = $variation->Qty_Price_2;
-	$Qty_Price_3                             = $variation->Qty_Price_3;
-	$Qty_Break_1                             = $variation->Qty_Break_1;
-	$Qty_Break_2                             = $variation->Qty_Break_2;
-	$Qty_Break_3                             = $variation->Qty_Break_3;
-	$productArray['productDescription']      = $variation->Table_Heading;
-	$productArray['productShortDescription'] = $productBulletText;
-
-	if ( ( $productArray['price'] == '' ) || ( $productArray['price'] == 0 ) ) {
-		$productArray['price'] = $Qty_Price_1;
-	}
-
-	if ( ( $productArray['price'] == '' ) || ( $productArray['price'] == 0 ) ) {
-		$productArray['price'] = $Qty_Price_2;
-	}
-
-	if ( ( $productArray['price'] == '' ) || ( $productArray['price'] == 0 ) ) {
-		$productArray['price'] = $Qty_Price_3;
-	}
-
-	//error_log('Price for '.$productArray['productSKU'].','.$variationID.' = '.$productArray['price']);
-
-	/*
-	* Set the product Meta Data
-	*/
-	$epim_API_ID             = array( "meta_key" => "epim_API_ID", "meta_data" => $productID );
-	$epim_product_group_name = array( "meta_key" => "epim_product_group_name", "meta_data" => $productName );
-	$epim_variation_ID       = array( "meta_key" => "epim_variation_ID", "meta_data" => $variationID );
-	$epim_Qty_Break_1        = array( "meta_key" => "epim_Qty_Break_1", "meta_data" => $Qty_Break_1 );
-	$epim_Qty_Break_2        = array( "meta_key" => "epim_Qty_Break_2", "meta_data" => $Qty_Break_2 );
-	$epim_Qty_Break_3        = array( "meta_key" => "epim_Qty_Break_3", "meta_data" => $Qty_Break_3 );
-	$epim_Qty_Price_1        = array( "meta_key" => "epim_Qty_Price_1", "meta_data" => $Qty_Price_1 );
-	$epim_Qty_Price_2        = array( "meta_key" => "epim_Qty_Price_2", "meta_data" => $Qty_Price_2 );
-	$epim_Qty_Price_3        = array( "meta_key" => "epim_Qty_Price_3", "meta_data" => $Qty_Price_3 );
-
-	$productArray['metaData'] = array(
-		$epim_API_ID,
-		$epim_product_group_name,
-		$epim_variation_ID,
-		$epim_Qty_Break_1,
-		$epim_Qty_Break_2,
-		$epim_Qty_Break_3,
-		$epim_Qty_Price_1,
-		$epim_Qty_Price_2,
-		$epim_Qty_Price_3
-	);
-
-
-	/*
-	 * Attributes
-	 */
-	$aCounter          = 1;
-	$productAttributes = array();
-	if($variation->AttributeValues) {
-        foreach ($variation->AttributeValues as $attribute_value) {
-            $aName = epimaapi_getAttributeNameFromID($attribute_value->AttributeId, $attributes);
-            if ($aName != '0 ( )') {
-                $productAttributes[] = array("name" => $aName, "options" => array($attribute_value->Value), "position" => $aCounter, "visible" => 1, "variation" => 1);
-                $aCounter++;
-            }
-        }
-    }
-	$productArray['attributes'] = $productAttributes;
-
-	/*
-	 * Image processing
-	 */
-
-	$imageAttachmentIDS = array();
-
-	if ( $variation->PictureIds ) {
-		foreach ( $variation->PictureIds as $pictureId ) {
-			$jsonPicture  = get_epimaapi_picture( $pictureId );
-			$picture      = json_decode( $jsonPicture );
-			$res          .= epimaapi_importPicture( $picture->Id, $picture->WebPath ) . '<br>';
-			$attachmentID = epimaapi_imageIDfromAPIID( $picture->Id );
-			if ( $attachmentID ) {
-				if ( ! in_array( $attachmentID, $imageAttachmentIDS ) ) {
-					$imageAttachmentIDS[] = $attachmentID;
-				}
-			}
-		}
-	}
-
-	if ( $pictureIds ) {
-		foreach ( $pictureIds as $pictureId ) {
-			$jsonPicture  = get_epimaapi_picture( $pictureId );
-			$picture      = json_decode( $jsonPicture );
-			$res          .= epimaapi_importPicture( $picture->Id, $picture->WebPath ) . '<br>';
-			$attachmentID = epimaapi_imageIDfromAPIID( $picture->Id );
-			if ( $attachmentID ) {
-				if ( ! in_array( $attachmentID, $imageAttachmentIDS ) ) {
-					$imageAttachmentIDS[] = $attachmentID;
-				}
-			}
-		}
-	}
-
-	$productArray['imageAttachmentIDS'] = $imageAttachmentIDS;
-
-	$id = epimaapi_getProductFromID( $productID, $variation->Id );
-
-	//error_log('$id = '.$id);
-
-	if ( ! $id ) {
-
-		if ( epimaapi_wooCreateProduct( $productArray ) ) {
-			$res .= $variation->Name . ' (' . $variation->SKU . ') Created<br>';
-		} else {
-			$res .= 'There was a problem creating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
-		}
-	} else {
-		if ( epimaapi_wooUpdateProduct( $id, $productArray ) ) {
-			$res .= $variation->Name . ' (' . $variation->SKU . ') Created<br>';
-		} else {
-			$res .= 'There was a problem updating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
-		}
-	}
-
-	return $res;
-
-}
-
-function epimaapi_create_product_y( $productID, $variationID, $productBulletText, $productName, $categoryIds, $pictureIds ) {
-	$res = '';
-	/*
-	 * Get Variation Details
-	 */
-	$productArray   = array();
-	$jsonVariation  = get_epimaapi_variation( $variationID );
-	$variation      = json_decode( $jsonVariation );
-	if(!$variation) {
+	$productArray  = array();
+	$jsonVariation = get_epimaapi_variation( $variationID );
+	$variation     = json_decode( $jsonVariation );
+	if ( ! $variation ) {
 		return $variationID . ' returns no result from API';
 	}
 	$jsonAttributes = get_epimaapi_all_attributes();
@@ -1155,12 +941,231 @@ function epimaapi_create_product_y( $productID, $variationID, $productBulletText
 	 */
 	$aCounter          = 1;
 	$productAttributes = array();
-	if($variation->AttributeValues) {
-		foreach ($variation->AttributeValues as $attribute_value) {
-			$aName = epimaapi_getAttributeNameFromID($attribute_value->AttributeId, $attributes);
-			if ($aName != '0 ( )') {
-				$productAttributes[] = array("name" => $aName, "options" => array($attribute_value->Value), "position" => $aCounter, "visible" => 1, "variation" => 1);
-				$aCounter++;
+	if ( $variation->AttributeValues ) {
+		foreach ( $variation->AttributeValues as $attribute_value ) {
+			$aName = epimaapi_getAttributeNameFromID( $attribute_value->AttributeId, $attributes );
+			if ( $aName != '0 ( )' ) {
+				$productAttributes[] = array( "name" => $aName, "options" => array( $attribute_value->Value ), "position" => $aCounter, "visible" => 1, "variation" => 1 );
+				$aCounter ++;
+			}
+		}
+	}
+	$productArray['attributes'] = $productAttributes;
+
+	/*
+	 * Image processing
+	 */
+
+	$imageAttachmentIDS = array();
+
+	if ( $variation->PictureIds ) {
+		foreach ( $variation->PictureIds as $pictureId ) {
+			$jsonPicture  = get_epimaapi_picture( $pictureId );
+			$picture      = json_decode( $jsonPicture );
+			$res          .= epimaapi_importPicture( $picture->Id, $picture->WebPath ) . '<br>';
+			$attachmentID = epimaapi_imageIDfromAPIID( $picture->Id );
+			if ( $attachmentID ) {
+				if ( ! in_array( $attachmentID, $imageAttachmentIDS ) ) {
+					$imageAttachmentIDS[] = $attachmentID;
+				}
+			}
+		}
+	}
+
+	if ( $pictureIds ) {
+		foreach ( $pictureIds as $pictureId ) {
+			$jsonPicture  = get_epimaapi_picture( $pictureId );
+			$picture      = json_decode( $jsonPicture );
+			$res          .= epimaapi_importPicture( $picture->Id, $picture->WebPath ) . '<br>';
+			$attachmentID = epimaapi_imageIDfromAPIID( $picture->Id );
+			if ( $attachmentID ) {
+				if ( ! in_array( $attachmentID, $imageAttachmentIDS ) ) {
+					$imageAttachmentIDS[] = $attachmentID;
+				}
+			}
+		}
+	}
+
+	$productArray['imageAttachmentIDS'] = $imageAttachmentIDS;
+
+	$id = epimaapi_getProductFromID( $productID, $variation->Id );
+
+	//error_log('$id = '.$id);
+
+	if ( ! $id ) {
+
+		if ( epimaapi_wooCreateProduct( $productArray ) ) {
+			$res .= $variation->Name . ' (' . $variation->SKU . ') Created<br>';
+		} else {
+			$res .= 'There was a problem creating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
+		}
+	} else {
+		if ( epimaapi_wooUpdateProduct( $id, $productArray ) ) {
+			$res .= $variation->Name . ' (' . $variation->SKU . ') Created<br>';
+		} else {
+			$res .= 'There was a problem updating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
+		}
+	}
+
+	return $res;
+
+}
+
+function epimaapi_create_product_y( $productID, $variationID, $productBulletText, $productName, $categoryIds, $pictureIds ) {
+	$res = '';
+	/*
+	 * Get Variation Details
+	 */
+	$productArray  = array();
+	$jsonVariation = get_epimaapi_variation( $variationID );
+	$variation     = json_decode( $jsonVariation );
+	if ( ! $variation ) {
+		return $variationID . ' returns no result from API';
+	}
+	$jsonAttributes = get_epimaapi_all_attributes();
+	$attributes     = json_decode( $jsonAttributes );
+
+	$IsArchived = $variation->IsArchived;
+
+	if ( $IsArchived ) {
+		$res = $variationID . ' ' . $productName . ' is achived removing product from WooCommerce';
+		epimaapi_delete_variation( $variationID );
+
+		return $res;
+	}
+
+	/*
+	 *
+	 *Check Attributes
+	 *
+	 */
+
+	$attribute_taxonomies = wc_get_attribute_taxonomies();
+
+
+	$currentAttributes = array();
+
+	foreach ( $attribute_taxonomies as $attribute_taxonomy ) {
+
+		$atName = $attribute_taxonomy->attribute_label;
+		if ( ! in_array( $atName, $currentAttributes ) ) {
+			//error_log($atName);
+			$currentAttributes[] = $atName;
+		}
+	}
+
+	foreach ( $attributes as $attribute ) {
+		$atName   = $attribute->Name;
+		$slugName = substr( $atName, 0, 27 );
+
+		if ( ! wc_check_if_attribute_name_is_reserved( $atName ) ) {
+			if ( ! in_array( $atName, $currentAttributes ) ) {
+				$attribute_id = wc_attribute_taxonomy_id_by_name( $atName );
+				if ( ! $attribute_id ) {
+					if ( $atName != '' ) {
+						$attribute_id = wc_create_attribute(
+							array(
+								'name' => $atName,
+								'slug' => $slugName,
+							)
+						);
+
+						if ( is_wp_error( $attribute_id ) ) {
+							/*$error_string = $attribute_id->get_error_message();
+							error_log($error_string);
+							error_log('name = ' . $atName);
+							error_log('slug = ' . substr($atName, 0, 27));*/
+						}
+					}
+				}
+
+			}
+		}
+	}
+
+
+	/*
+	 * Get Woo Categories
+	 */
+	$terms  = get_terms( [
+		'taxonomy'   => 'product_cat',
+		'hide_empty' => false,
+	] );
+	$catIds = array();
+	foreach ( $categoryIds as $category_id ) {
+		$realCatID = epimaapi_getTermFromID( $category_id, $terms );
+		if ( $realCatID ) {
+			$catIds[] = $realCatID->term_id;
+		}
+	}
+	$productArray['categoryIDS'] = $catIds;
+
+	/*
+	 * Other product Fields
+	 */
+	$productArray['productTitle']            = $variation->Name;
+	$productArray['productSKU']              = $variation->SKU;
+	$productArray['price']                   = $variation->Price;
+	$Qty_Price_1                             = $variation->Qty_Price_1;
+	$Qty_Price_2                             = $variation->Qty_Price_2;
+	$Qty_Price_3                             = $variation->Qty_Price_3;
+	$Qty_Break_1                             = $variation->Qty_Break_1;
+	$Qty_Break_2                             = $variation->Qty_Break_2;
+	$Qty_Break_3                             = $variation->Qty_Break_3;
+	$productArray['productDescription']      = $variation->Table_Heading;
+	$productArray['productShortDescription'] = $productBulletText;
+
+	if ( ( $productArray['price'] == '' ) || ( $productArray['price'] == 0 ) ) {
+		$productArray['price'] = $Qty_Price_1;
+	}
+
+	if ( ( $productArray['price'] == '' ) || ( $productArray['price'] == 0 ) ) {
+		$productArray['price'] = $Qty_Price_2;
+	}
+
+	if ( ( $productArray['price'] == '' ) || ( $productArray['price'] == 0 ) ) {
+		$productArray['price'] = $Qty_Price_3;
+	}
+
+	//error_log('Price for '.$productArray['productSKU'].','.$variationID.' = '.$productArray['price']);
+
+	/*
+	* Set the product Meta Data
+	*/
+	$epim_API_ID             = array( "meta_key" => "epim_API_ID", "meta_data" => $productID );
+	$epim_product_group_name = array( "meta_key" => "epim_product_group_name", "meta_data" => $productName );
+	$epim_variation_ID       = array( "meta_key" => "epim_variation_ID", "meta_data" => $variationID );
+	$epim_Qty_Break_1        = array( "meta_key" => "epim_Qty_Break_1", "meta_data" => $Qty_Break_1 );
+	$epim_Qty_Break_2        = array( "meta_key" => "epim_Qty_Break_2", "meta_data" => $Qty_Break_2 );
+	$epim_Qty_Break_3        = array( "meta_key" => "epim_Qty_Break_3", "meta_data" => $Qty_Break_3 );
+	$epim_Qty_Price_1        = array( "meta_key" => "epim_Qty_Price_1", "meta_data" => $Qty_Price_1 );
+	$epim_Qty_Price_2        = array( "meta_key" => "epim_Qty_Price_2", "meta_data" => $Qty_Price_2 );
+	$epim_Qty_Price_3        = array( "meta_key" => "epim_Qty_Price_3", "meta_data" => $Qty_Price_3 );
+
+	$productArray['metaData'] = array(
+		$epim_API_ID,
+		$epim_product_group_name,
+		$epim_variation_ID,
+		$epim_Qty_Break_1,
+		$epim_Qty_Break_2,
+		$epim_Qty_Break_3,
+		$epim_Qty_Price_1,
+		$epim_Qty_Price_2,
+		$epim_Qty_Price_3
+	);
+
+
+	/*
+	 * Attributes
+	 */
+	$aCounter          = 1;
+	$productAttributes = array();
+	if ( $variation->AttributeValues ) {
+		foreach ( $variation->AttributeValues as $attribute_value ) {
+			$aName = epimaapi_getAttributeNameFromID( $attribute_value->AttributeId, $attributes );
+			if ( $aName != '0 ( )' ) {
+				$productAttributes[] = array( "name" => $aName, "options" => array( $attribute_value->Value ), "position" => $aCounter, "visible" => 1, "variation" => 1 );
+				$aCounter ++;
 			}
 		}
 	}
@@ -1174,14 +1179,14 @@ function epimaapi_create_product_y( $productID, $variationID, $productBulletText
 
 	$LuckinsAssets = $variation->LuckinsAssets;
 
-	if(is_array($LuckinsAssets)) {
-		foreach ($LuckinsAssets as $luckins_asset) {
-			if($luckins_asset->Tag=='hi-res') {
-				$importResult = epimaapi_import_url_Picture($luckins_asset->URL);
-				$res .= $importResult['Message'];
-				if($importResult['ID'] != 0) {
+	if ( is_array( $LuckinsAssets ) ) {
+		foreach ( $LuckinsAssets as $luckins_asset ) {
+			if ( $luckins_asset->Tag == 'hi-res' ) {
+				$importResult = epimaapi_import_url_Picture( $luckins_asset->URL );
+				$res          .= $importResult['Message'];
+				if ( $importResult['ID'] != 0 ) {
 					$imageAttachmentIDS[] = $importResult['ID'];
-					$res .= '</br> Attachment ID '.$importResult['ID'].' returned.';
+					$res                  .= '</br> Attachment ID ' . $importResult['ID'] . ' returned.';
 				} else {
 					$res .= '</br> No Attachment ID returned.';
 				}
@@ -1189,7 +1194,7 @@ function epimaapi_create_product_y( $productID, $variationID, $productBulletText
 		}
 	}
 
-	if(count($imageAttachmentIDS)==0) {
+	if ( count( $imageAttachmentIDS ) == 0 ) {
 		if ( $pictureIds ) {
 			foreach ( $pictureIds as $pictureId ) {
 				$jsonPicture  = get_epimaapi_picture( $pictureId );
@@ -1205,7 +1210,7 @@ function epimaapi_create_product_y( $productID, $variationID, $productBulletText
 		}
 	}
 
-	if(count($imageAttachmentIDS)==0) {
+	if ( count( $imageAttachmentIDS ) == 0 ) {
 		if ( $variation->PictureIds ) {
 			foreach ( $variation->PictureIds as $pictureId ) {
 				$jsonPicture  = get_epimaapi_picture( $pictureId );
@@ -1247,228 +1252,291 @@ function epimaapi_create_product_y( $productID, $variationID, $productBulletText
 }
 
 function epimaapi_create_product( $productID, $variationID, $productBulletText, $productName, $categoryIds, $pictureIds ) {
-    $res = '';
-    /*
-     * Get Variation Details
-     */
-    $productArray   = array();
-    $jsonVariation  = get_epimaapi_variation( $variationID );
-    $variation      = json_decode( $jsonVariation );
-    if(!$variation) {
-        return $variationID . ' returns no result from API';
-    }
+	$res = '';
+	/*
+	 * Get Variation Details
+	 */
+	$productArray  = array();
+	$jsonVariation = get_epimaapi_variation( $variationID );
+	$variation     = json_decode( $jsonVariation );
+	if ( ! $variation ) {
+		return $variationID . ' returns no result from API';
+	}
 
-    $IsArchived = $variation->IsArchived;
+	$IsArchived = $variation->IsArchived;
 
-    if ( $IsArchived ) {
-        $res = $variationID . ' ' . $productName . ' is achived removing product from WooCommerce';
-        epimaapi_delete_variation( $variationID );
+	if ( $IsArchived ) {
+		$res = $variationID . ' ' . $productName . ' is achived removing product from WooCommerce';
+		epimaapi_delete_variation( $variationID );
 
-        return $res;
-    }
-
-
-    /*
-     * Get Woo Categories
-     */
-    $terms  = get_terms( [
-        'taxonomy'   => 'product_cat',
-        'hide_empty' => false,
-    ] );
-    $catIds = array();
-    foreach ( $categoryIds as $category_id ) {
-        $realCatID = epimaapi_getTermFromID( $category_id, $terms );
-        if ( $realCatID ) {
-            $catIds[] = $realCatID->term_id;
-        }
-    }
-    $productArray['categoryIDS'] = $catIds;
-
-    /*
-     * Other product Fields
-     */
-    $productArray['productTitle']            = $variation->Name;
-    $productArray['productSKU']              = $variation->SKU;
-    $productArray['price']                   = $variation->Price;
-    $Qty_Price_1                             = $variation->Qty_Price_1;
-    $Qty_Price_2                             = $variation->Qty_Price_2;
-    $Qty_Price_3                             = $variation->Qty_Price_3;
-    $Qty_Break_1                             = $variation->Qty_Break_1;
-    $Qty_Break_2                             = $variation->Qty_Break_2;
-    $Qty_Break_3                             = $variation->Qty_Break_3;
-    $productArray['productDescription']      = $variation->Table_Heading;
-    $productArray['productShortDescription'] = $productBulletText;
-
-    if ( ( $productArray['price'] == '' ) || ( $productArray['price'] == 0 ) ) {
-        $productArray['price'] = $Qty_Price_1;
-    }
-
-    if ( ( $productArray['price'] == '' ) || ( $productArray['price'] == 0 ) ) {
-        $productArray['price'] = $Qty_Price_2;
-    }
-
-    if ( ( $productArray['price'] == '' ) || ( $productArray['price'] == 0 ) ) {
-        $productArray['price'] = $Qty_Price_3;
-    }
-
-    //error_log('Price for '.$productArray['productSKU'].','.$variationID.' = '.$productArray['price']);
-
-    /*
-    * Set the product Meta Data
-    */
-    $epim_API_ID             = array( "meta_key" => "epim_API_ID", "meta_data" => $productID );
-    $epim_product_group_name = array( "meta_key" => "epim_product_group_name", "meta_data" => $productName );
-    $epim_variation_ID       = array( "meta_key" => "epim_variation_ID", "meta_data" => $variationID );
-    $epim_Qty_Break_1        = array( "meta_key" => "epim_Qty_Break_1", "meta_data" => $Qty_Break_1 );
-    $epim_Qty_Break_2        = array( "meta_key" => "epim_Qty_Break_2", "meta_data" => $Qty_Break_2 );
-    $epim_Qty_Break_3        = array( "meta_key" => "epim_Qty_Break_3", "meta_data" => $Qty_Break_3 );
-    $epim_Qty_Price_1        = array( "meta_key" => "epim_Qty_Price_1", "meta_data" => $Qty_Price_1 );
-    $epim_Qty_Price_2        = array( "meta_key" => "epim_Qty_Price_2", "meta_data" => $Qty_Price_2 );
-    $epim_Qty_Price_3        = array( "meta_key" => "epim_Qty_Price_3", "meta_data" => $Qty_Price_3 );
-
-    $productArray['metaData'] = array(
-        $epim_API_ID,
-        $epim_product_group_name,
-        $epim_variation_ID,
-        $epim_Qty_Break_1,
-        $epim_Qty_Break_2,
-        $epim_Qty_Break_3,
-        $epim_Qty_Price_1,
-        $epim_Qty_Price_2,
-        $epim_Qty_Price_3
-    );
+		return $res;
+	}
 
 
-    /*
-     * Attributes
-     */
-    $aCounter          = 1;
-    $productAttributes = array();
-    if($variation->AttributeValues) {
-        $attribute_taxonomies = wc_get_attribute_taxonomies();
-        $currentAttributes = array();
+	/*
+	 * Get Woo Categories
+	 */
+	$terms  = get_terms( [
+		'taxonomy'   => 'product_cat',
+		'hide_empty' => false,
+	] );
+	$catIds = array();
+	foreach ( $categoryIds as $category_id ) {
+		$realCatID = epimaapi_getTermFromID( $category_id, $terms );
+		if ( $realCatID ) {
+			$catIds[] = $realCatID->term_id;
+		}
+	}
+	$productArray['categoryIDS'] = $catIds;
 
-        foreach ( $attribute_taxonomies as $attribute_taxonomy ) {
+	/*
+	 * Other product Fields
+	 */
+	$productArray['productTitle']            = $variation->Name;
+	$productArray['productSKU']              = $variation->SKU;
+	$productArray['price']                   = $variation->Price;
+	$Qty_Price_1                             = $variation->Qty_Price_1;
+	$Qty_Price_2                             = $variation->Qty_Price_2;
+	$Qty_Price_3                             = $variation->Qty_Price_3;
+	$Qty_Break_1                             = $variation->Qty_Break_1;
+	$Qty_Break_2                             = $variation->Qty_Break_2;
+	$Qty_Break_3                             = $variation->Qty_Break_3;
+	$productArray['productDescription']      = $variation->Table_Heading;
+	$productArray['productShortDescription'] = $productBulletText;
 
-            $watName = $attribute_taxonomy->attribute_label;
-            if ( ! in_array( $watName, $currentAttributes ) ) {
-                //error_log($atName);
-                $currentAttributes[] = $watName;
-            }
-        }
-        foreach ($variation->AttributeValues as $attribute_value) {
-            $atName = $attribute_value->AttributeHeaderName;
-            if($atName == 'Type') {
-                $atName = 'Product Type';
-            }
-            if($atName) {
-                $slugName = substr( $atName, 0, 27 );
-                if ( ! wc_check_if_attribute_name_is_reserved( $atName ) ) {
-                    if (!in_array($atName, $currentAttributes)) {
-                        $attribute_id = wc_attribute_taxonomy_id_by_name( $atName );
-                        if ( ! $attribute_id ) {
-                            if ( $atName != '' ) {
-                                $attribute_id = wc_create_attribute(
-                                    array(
-                                        'name' => $atName,
-                                        'slug' => $slugName,
-                                    )
-                                );
-                                if ( is_wp_error( $attribute_id ) ) {
-                                    $error_string = $attribute_id->get_error_message();
-                                    error_log($error_string);
-                                } else {
-                                    $productAttributes[] = array("name" => $atName, "options" => array($attribute_value->Value), "position" => $aCounter, "visible" => 1, "variation" => 1);
-                                    $aCounter++;
-                                }
-                            }
-                        }
-                    } else {
-                        $productAttributes[] = array("name" => $atName, "options" => array($attribute_value->Value), "position" => $aCounter, "visible" => 1, "variation" => 1);
-                        $aCounter++;
-                    }
-                }
-            }
-        }
-    }
-    $productArray['attributes'] = $productAttributes;
+	if ( ( $productArray['price'] == '' ) || ( $productArray['price'] == 0 ) ) {
+		$productArray['price'] = $Qty_Price_1;
+	}
 
-    /*
-     * Image processing
-     */
+	if ( ( $productArray['price'] == '' ) || ( $productArray['price'] == 0 ) ) {
+		$productArray['price'] = $Qty_Price_2;
+	}
 
-    $imageAttachmentIDS = array();
+	if ( ( $productArray['price'] == '' ) || ( $productArray['price'] == 0 ) ) {
+		$productArray['price'] = $Qty_Price_3;
+	}
 
-    $LuckinsAssets = $variation->LuckinsAssets;
+	//error_log('Price for '.$productArray['productSKU'].','.$variationID.' = '.$productArray['price']);
 
-    if(is_array($LuckinsAssets)) {
-        foreach ($LuckinsAssets as $luckins_asset) {
-            if($luckins_asset->Tag=='hi-res') {
-                $importResult = epimaapi_import_url_Picture($luckins_asset->URL);
-                $res .= $importResult['Message'];
-                if($importResult['ID'] != 0) {
-                    $imageAttachmentIDS[] = $importResult['ID'];
-                    $res .= '</br> Attachment ID '.$importResult['ID'].' returned.';
-                } else {
-                    $res .= '</br> No Attachment ID returned.';
-                }
-            }
-        }
-    }
+	/*
+	* Set the product Meta Data
+	*/
+	$epim_API_ID             = array( "meta_key" => "epim_API_ID", "meta_data" => $productID );
+	$epim_product_group_name = array( "meta_key" => "epim_product_group_name", "meta_data" => $productName );
+	$epim_variation_ID       = array( "meta_key" => "epim_variation_ID", "meta_data" => $variationID );
+	$epim_Qty_Break_1        = array( "meta_key" => "epim_Qty_Break_1", "meta_data" => $Qty_Break_1 );
+	$epim_Qty_Break_2        = array( "meta_key" => "epim_Qty_Break_2", "meta_data" => $Qty_Break_2 );
+	$epim_Qty_Break_3        = array( "meta_key" => "epim_Qty_Break_3", "meta_data" => $Qty_Break_3 );
+	$epim_Qty_Price_1        = array( "meta_key" => "epim_Qty_Price_1", "meta_data" => $Qty_Price_1 );
+	$epim_Qty_Price_2        = array( "meta_key" => "epim_Qty_Price_2", "meta_data" => $Qty_Price_2 );
+	$epim_Qty_Price_3        = array( "meta_key" => "epim_Qty_Price_3", "meta_data" => $Qty_Price_3 );
 
-    if(count($imageAttachmentIDS)==0) {
-        if ( $pictureIds ) {
-            foreach ( $pictureIds as $pictureId ) {
-                $jsonPicture  = get_epimaapi_picture( $pictureId );
-                $picture      = json_decode( $jsonPicture );
-                $res          .= epimaapi_importPicture( $picture->Id, $picture->WebPath ) . '<br>';
-                $attachmentID = epimaapi_imageIDfromAPIID( $picture->Id );
-                if ( $attachmentID ) {
-                    if ( ! in_array( $attachmentID, $imageAttachmentIDS ) ) {
-                        $imageAttachmentIDS[] = $attachmentID;
-                    }
-                }
-            }
-        }
-    }
+	$productArray['metaData'] = array(
+		$epim_API_ID,
+		$epim_product_group_name,
+		$epim_variation_ID,
+		$epim_Qty_Break_1,
+		$epim_Qty_Break_2,
+		$epim_Qty_Break_3,
+		$epim_Qty_Price_1,
+		$epim_Qty_Price_2,
+		$epim_Qty_Price_3
+	);
 
-    if(count($imageAttachmentIDS)==0) {
-        if ( $variation->PictureIds ) {
-            foreach ( $variation->PictureIds as $pictureId ) {
-                $jsonPicture  = get_epimaapi_picture( $pictureId );
-                $picture      = json_decode( $jsonPicture );
-                $res          .= epimaapi_importPicture( $picture->Id, $picture->WebPath ) . '<br>';
-                $attachmentID = epimaapi_imageIDfromAPIID( $picture->Id );
-                if ( $attachmentID ) {
-                    if ( ! in_array( $attachmentID, $imageAttachmentIDS ) ) {
-                        $imageAttachmentIDS[] = $attachmentID;
-                    }
-                }
-            }
-        }
-    }
 
-    $productArray['imageAttachmentIDS'] = $imageAttachmentIDS;
+	/*
+	 * Attributes
+	 */
+	$aCounter          = 1;
+	$productAttributes = array();
+	if ( $variation->AttributeValues ) {
+		$attribute_taxonomies = wc_get_attribute_taxonomies();
+		$currentAttributes    = array();
 
-    $id = epimaapi_getProductFromID( $productID, $variation->Id );
+		foreach ( $attribute_taxonomies as $attribute_taxonomy ) {
 
-    //error_log('$id = '.$id);
+			$watName = $attribute_taxonomy->attribute_label;
+			if ( ! in_array( $watName, $currentAttributes ) ) {
+				//error_log($atName);
+				$currentAttributes[] = $watName;
+			}
+		}
+		foreach ( $variation->AttributeValues as $attribute_value ) {
+			$atName = $attribute_value->AttributeHeaderName;
+			if ( $atName == 'Type' ) {
+				$atName = 'Product Type';
+			}
+			if ( $atName ) {
+				$slugName = substr( $atName, 0, 27 );
+				if ( ! wc_check_if_attribute_name_is_reserved( $atName ) ) {
+					if ( ! in_array( $atName, $currentAttributes ) ) {
+						$attribute_id = wc_attribute_taxonomy_id_by_name( $atName );
+						if ( ! $attribute_id ) {
+							if ( $atName != '' ) {
+								$attribute_id = wc_create_attribute(
+									array(
+										'name' => $atName,
+										'slug' => $slugName,
+									)
+								);
+								if ( is_wp_error( $attribute_id ) ) {
+									$error_string = $attribute_id->get_error_message();
+									error_log( $error_string );
+								} else {
+									$productAttributes[] = array( "name" => $atName, "options" => array( $attribute_value->Value ), "position" => $aCounter, "visible" => 1, "variation" => 1 );
+									$aCounter ++;
+								}
+							}
+						}
+					} else {
+						$productAttributes[] = array( "name" => $atName, "options" => array( $attribute_value->Value ), "position" => $aCounter, "visible" => 1, "variation" => 1 );
+						$aCounter ++;
+					}
+				}
+			}
+		}
+	}
+	$productArray['attributes'] = $productAttributes;
 
-    if ( ! $id ) {
+	/*
+	 * Image processing
+	 */
 
-        if ( epimaapi_wooCreateProduct( $productArray ) ) {
-            $res .= $variation->Name . ' (' . $variation->SKU . ') Created<br>';
-        } else {
-            $res .= 'There was a problem creating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
-        }
-    } else {
-        if ( epimaapi_wooUpdateProduct( $id, $productArray ) ) {
-            $res .= $variation->Name . ' (' . $variation->SKU . ') Created<br>';
-        } else {
-            $res .= 'There was a problem updating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
-        }
-    }
+	$imageAttachmentIDS = array();
 
-    return $res;
+	$epim_prioritise_epim_images = get_option( 'epim_prioritise_epim_images' );
+
+	$epimFirst = false;
+
+	if ( is_array( $epim_prioritise_epim_images ) ) {
+		if ( $epim_prioritise_epim_images['checkbox_value'] == 1 ) {
+			$epimFirst = true;
+		}
+	}
+
+	if ( $epimFirst ) {
+
+		if ( $pictureIds ) {
+			foreach ( $pictureIds as $pictureId ) {
+				$jsonPicture  = get_epimaapi_picture( $pictureId );
+				$picture      = json_decode( $jsonPicture );
+				$res          .= epimaapi_importPicture( $picture->Id, $picture->WebPath ) . '<br>';
+				$attachmentID = epimaapi_imageIDfromAPIID( $picture->Id );
+				if ( $attachmentID ) {
+					if ( ! in_array( $attachmentID, $imageAttachmentIDS ) ) {
+						$imageAttachmentIDS[] = $attachmentID;
+					}
+				}
+			}
+		}
+
+		if ( $variation->PictureIds ) {
+			foreach ( $variation->PictureIds as $pictureId ) {
+				$jsonPicture  = get_epimaapi_picture( $pictureId );
+				$picture      = json_decode( $jsonPicture );
+				$res          .= epimaapi_importPicture( $picture->Id, $picture->WebPath ) . '<br>';
+				$attachmentID = epimaapi_imageIDfromAPIID( $picture->Id );
+				if ( $attachmentID ) {
+					if ( ! in_array( $attachmentID, $imageAttachmentIDS ) ) {
+						$imageAttachmentIDS[] = $attachmentID;
+					}
+				}
+			}
+		}
+
+
+		if ( count( $imageAttachmentIDS ) == 0 ) {
+			$LuckinsAssets = $variation->LuckinsAssets;
+			if ( is_array( $LuckinsAssets ) ) {
+				foreach ( $LuckinsAssets as $luckins_asset ) {
+					if ( $luckins_asset->Tag == 'hi-res' ) {
+						$importResult = epimaapi_import_url_Picture( $luckins_asset->URL );
+						$res          .= $importResult['Message'];
+						if ( $importResult['ID'] != 0 ) {
+							$imageAttachmentIDS[] = $importResult['ID'];
+							$res                  .= '</br> Attachment ID ' . $importResult['ID'] . ' returned.';
+						} else {
+							$res .= '</br> No Attachment ID returned.';
+						}
+					}
+				}
+			}
+		}
+
+
+	} else {
+		$LuckinsAssets = $variation->LuckinsAssets;
+
+		if ( is_array( $LuckinsAssets ) ) {
+			foreach ( $LuckinsAssets as $luckins_asset ) {
+				if ( $luckins_asset->Tag == 'hi-res' ) {
+					$importResult = epimaapi_import_url_Picture( $luckins_asset->URL );
+					$res          .= $importResult['Message'];
+					if ( $importResult['ID'] != 0 ) {
+						$imageAttachmentIDS[] = $importResult['ID'];
+						$res                  .= '</br> Attachment ID ' . $importResult['ID'] . ' returned.';
+					} else {
+						$res .= '</br> No Attachment ID returned.';
+					}
+				}
+			}
+		}
+
+		if ( count( $imageAttachmentIDS ) == 0 ) {
+			if ( $pictureIds ) {
+				foreach ( $pictureIds as $pictureId ) {
+					$jsonPicture  = get_epimaapi_picture( $pictureId );
+					$picture      = json_decode( $jsonPicture );
+					$res          .= epimaapi_importPicture( $picture->Id, $picture->WebPath ) . '<br>';
+					$attachmentID = epimaapi_imageIDfromAPIID( $picture->Id );
+					if ( $attachmentID ) {
+						if ( ! in_array( $attachmentID, $imageAttachmentIDS ) ) {
+							$imageAttachmentIDS[] = $attachmentID;
+						}
+					}
+				}
+			}
+		}
+
+		if ( count( $imageAttachmentIDS ) == 0 ) {
+			if ( $variation->PictureIds ) {
+				foreach ( $variation->PictureIds as $pictureId ) {
+					$jsonPicture  = get_epimaapi_picture( $pictureId );
+					$picture      = json_decode( $jsonPicture );
+					$res          .= epimaapi_importPicture( $picture->Id, $picture->WebPath ) . '<br>';
+					$attachmentID = epimaapi_imageIDfromAPIID( $picture->Id );
+					if ( $attachmentID ) {
+						if ( ! in_array( $attachmentID, $imageAttachmentIDS ) ) {
+							$imageAttachmentIDS[] = $attachmentID;
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+	$productArray['imageAttachmentIDS'] = $imageAttachmentIDS;
+
+	$id = epimaapi_getProductFromID( $productID, $variation->Id );
+
+	//error_log('$id = '.$id);
+
+	if ( ! $id ) {
+
+		if ( epimaapi_wooCreateProduct( $productArray ) ) {
+			$res .= $variation->Name . ' (' . $variation->SKU . ') Created<br>';
+		} else {
+			$res .= 'There was a problem creating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
+		}
+	} else {
+		if ( epimaapi_wooUpdateProduct( $id, $productArray ) ) {
+			$res .= $variation->Name . ' (' . $variation->SKU . ') Created<br>';
+		} else {
+			$res .= 'There was a problem updating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
+		}
+	}
+
+	return $res;
 
 }
