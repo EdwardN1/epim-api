@@ -16,6 +16,7 @@ Author URI: https://www.technicks.com
 define( 'wpmai_FUNCTIONSPATH', plugin_dir_path( __FILE__ ) . '/includes/' );
 define( 'wpmai_PLUGINPATH', plugin_dir_path( __FILE__ ) );
 define( 'wpmai_PLUGINURI', plugin_dir_url( __FILE__ ) );
+define('wpmai_PLUGINFILE',__FILE__);
 foreach ( glob( wpmai_FUNCTIONSPATH . 'autoinc-*.php' ) as $filename ) {
 	require_once( $filename );
 }
