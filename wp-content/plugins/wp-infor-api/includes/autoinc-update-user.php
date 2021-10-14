@@ -94,9 +94,9 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
             }
             $users_updated[] = $user_id;
             if(!update_option('wpiai_users_updated',$users_updated)) {
-                error_log('UserID not saved: '.$user_id);
+                //error_log('UserID not saved: '.$user_id);
             } else {
-                error_log($user_id . ' added to the meta update queue');
+                //error_log($user_id . ' added to the meta update queue');
             }
 
 
@@ -125,7 +125,7 @@ function set_messageid( $parameters ) {
 
         return json_encode( $json );
     } else {
-        error_log('set_messageid error');
+        //error_log('set_messageid error');
         return $parameters;
     }
 }

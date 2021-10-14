@@ -25,7 +25,7 @@ add_action('wpiai_every_day_action', 'wpiai_do_every_day');
 add_action('wpiai_every_hour_action', 'wpiai_do_every_hour');
 
 function wpiai_do_every_hour() {
-	//wpiai_import_all_files();
+	wpiai_import_all_files();
 }
 
 function wpiai_do_every_day()
@@ -228,8 +228,8 @@ function wpiai_process_cached_orders()
             if(is_numeric($time_stamp)) {
                 //error_log('timestamp is numeric');
                 $time_alive = $now - $time_stamp;
-                error_log('Processing order: '.$CSD_ID);
-                error_log('Time to Live = '.($delay-$time_alive).' seconds');
+                //error_log('Processing order: '.$CSD_ID);
+                //error_log('Time to Live = '.($delay-$time_alive).' seconds');
                //error_log('$now = '.$now);
                // error_log(gmdate("M d Y H:i:s", $now));
                 //error_log('$time_stamp = '.$time_stamp);
@@ -255,7 +255,7 @@ function wpiai_process_cached_orders()
                             _oi( 'Order: ' . $woo_order->id . ' Added','orders' );
                         }
                         $deleteOrders[] = $order_ID;
-                        error_log('Order: '.$CSD_ID. ' has been processed');
+                        //error_log('Order: '.$CSD_ID. ' has been processed');
                     }
                 }
             }
@@ -292,7 +292,7 @@ function wpiai_get_woo_skus_ids($max, $seconds)
                 if (is_numeric($seconds)) {
                     if (($now - $product_price_updated) > $seconds) {
                         $sku = $product->get_sku();
-                        error_log('$sku = ' . $sku);
+                        //error_log('$sku = ' . $sku);
                         $res[] = array(
                             'id' => $id,
                             'sku' => $sku
@@ -300,7 +300,7 @@ function wpiai_get_woo_skus_ids($max, $seconds)
                     }
                 } else {
                     $sku = $product->get_sku();
-                    error_log('!is_numeric($seconds) $sku = ' . $sku);
+                    //error_log('!is_numeric($seconds) $sku = ' . $sku);
                     $res[] = array(
                         'id' => $id,
                         'sku' => $sku
@@ -313,7 +313,7 @@ function wpiai_get_woo_skus_ids($max, $seconds)
                 $i++;
             } else {
                 $sku = $product->get_sku();
-                error_log('$max !> 0, $sku = ' . $sku);
+                //error_log('$max !> 0, $sku = ' . $sku);
                 $res[] = array(
                     'id' => $id,
                     'sku' => $sku
@@ -429,7 +429,7 @@ function wpiai_process_updated_products()
 
     $timeEnd = microtime(true);
     $time = $timeEnd - $timeStart;
-    error_log('wpiai_process_updated_products took ' . $time . ' seconds');
+    //error_log('wpiai_process_updated_products took ' . $time . ' seconds');
 }
 
 /*function wpiai_process_updated_products_x() {
@@ -695,7 +695,7 @@ function wpiai_update_csd_ship_tos($user_id)
 
 function wpiai_process_user_shiptos($user_id)
 {
-    error_log('Processing ShipTos for user_id: ' . $user_id);
+    //error_log('Processing ShipTos for user_id: ' . $user_id);
     $shiptoRec_meta = get_user_meta($user_id, 'wpiai_delivery_addresses', true);
     $shipToRec = array();
     $shipToAdd = array();
@@ -798,12 +798,12 @@ function wpiai_process_user_shiptos($user_id)
 
         wpiai_update_csd_ship_tos($user_id);
     }
-    error_log('Finished Processing ShipTos for user_id: ' . $user_id);
+    //error_log('Finished Processing ShipTos for user_id: ' . $user_id);
 }
 
 function wpiai_process_user_contacts($user_id)
 {
-    error_log('Processing Contacts for user_id: ' . $user_id);
+    //error_log('Processing Contacts for user_id: ' . $user_id);
     $contactRec_meta = get_user_meta($user_id, 'wpiai_contacts', true);
     //$lastContactRec_meta = get_user_meta($user_id, 'wpiai_last_contacts', true);
     $contactRec = array();
@@ -840,10 +840,10 @@ function wpiai_process_user_contacts($user_id)
             //$lastContactRec[] = $contactRec_rec;
         }
     } else {
-        error_log('No Contact Meta');
+        //error_log('No Contact Meta');
         $user_CSD_ID = get_user_meta($user_id, 'CSD_ID', true);
         if ($user_CSD_ID != '') {
-            error_log('Creating First Contact..');
+            //error_log('Creating First Contact..');
             $customer = new WC_Customer($user_id);
             $user_email = $customer->get_email(); // Get account email
             $first_name = $customer->get_first_name();
@@ -890,15 +890,15 @@ function wpiai_process_user_contacts($user_id)
             $contactRec[] = $first_contact;
             $add_first_contact = true;
         } else {
-            error_log('$user_CSD_ID not set yet wait..');
+            //error_log('$user_CSD_ID not set yet wait..');
         }
     }
     //update_user_meta($user_id, 'wpiai_last_contacts', $lastContactRec);
     if (!update_user_meta($user_id, 'wpiai_contacts', $contactRec)) {
-        error_log('Contact update_user_meta Failed or not changed for $user_id: ' . $user_id);
+        //error_log('Contact update_user_meta Failed or not changed for $user_id: ' . $user_id);
         wpiai_update_csd_contacts($user_id);
     } else {
-        error_log('API Call Contacts for $user_id: ' . $user_id);
+        //error_log('API Call Contacts for $user_id: ' . $user_id);
         $contactRec_url = get_option('wpiai_contact_url');
         $contactRec_paramaters = set_messageid(get_option('wpiai_contact_parameters'));
 
@@ -916,7 +916,7 @@ function wpiai_process_user_contacts($user_id)
         }
         wpiai_update_csd_contacts($user_id);
     }
-    error_log('Finished Processing Contacts for user_id: ' . $user_id);
+    //error_log('Finished Processing Contacts for user_id: ' . $user_id);
 }
 
 function wpiai_check_user_meta()
@@ -926,15 +926,15 @@ function wpiai_check_user_meta()
     update_option('wpiai_users_updated', array());
     foreach ($users_updated as $user_id) {
         wpiai_process_user_shiptos($user_id);
-        error_log('wpiai_process_user_shiptos completed');
+        //error_log('wpiai_process_user_shiptos completed');
         wpiai_process_user_contacts($user_id);
-        error_log('wpiai_process_user_contacts completed');
+        //error_log('wpiai_process_user_contacts completed');
     }
 }
 
 function wpiai_start($fName)
 {
-    error_log('Starting ' . $fName);
+    //error_log('Starting ' . $fName);
     $start = get_option('wpiai_background_processes_to_start');
     $running = get_option('wpiai_background_processes_running');
     if (!is_array($start)) {
@@ -955,7 +955,7 @@ function wpiai_start($fName)
 
 function wpiai_stop($fName)
 {
-    error_log('Stopping ' . $fName);
+    //error_log('Stopping ' . $fName);
     $start = get_option('wpiai_background_processes_to_start');
     $running = get_option('wpiai_background_processes_running');
     if (!is_array($start)) {
@@ -996,7 +996,7 @@ function wpiai_check_if_stopping($fName)
         return false;
     }
     if (in_array($fName, $stopping)) {
-        error_log($fName . ' is stopping');
+        //error_log($fName . ' is stopping');
         return true;
     }
     //error_log($fName.' is not stopping');
@@ -1005,7 +1005,7 @@ function wpiai_check_if_stopping($fName)
 
 function wpiai_check_processes()
 {
-    error_log('Checking Infor Processes');
+    //error_log('Checking Infor Processes');
     $to_start = get_option('wpiai_background_processes_to_start');
     if (is_array($to_start)) {
         foreach ($to_start as $start) {
@@ -1018,7 +1018,7 @@ function wpiai_check_processes()
                     if (!in_array($start, $running)) {
                         $running[] = $start;
                         update_option('wpiai_background_processes_running', $running);
-                        error_log('Running ' . $start);
+                        //error_log('Running ' . $start);
                         $start();
                     }
                 }
