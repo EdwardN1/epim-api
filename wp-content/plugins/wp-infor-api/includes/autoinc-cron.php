@@ -11,6 +11,10 @@ function wpiai_cron_activation()
     if (!wp_next_scheduled('wpiai_every_twenty_minutes_action')) {
         wp_schedule_event(time(), 'everytwentyminutes', 'wpiai_every_twenty_minutes_action');
     }
+    if (!wp_next_scheduled('wpiai_every_thirty_minutes_action')) {
+        error_log('activate everythirtyminutes');
+        wp_schedule_event(time(), 'everythirtyminutes', 'wpiai_every_thirty_minutes_action');
+    }
 	if (!wp_next_scheduled('wpiai_every_hour_action')) {
 		wp_schedule_event(time(), 'hourly', 'wpiai_every_hour_action');
 	}
@@ -21,11 +25,16 @@ function wpiai_cron_activation()
 
 add_action('wpiai_every_minute_action', 'wpiai_do_every_minute');
 add_action('wpiai_every_twenty_minutes_action', 'wpiai_do_every_twenty_minutes');
+add_action('wpiai_every_thirty_minutes_action', 'wpiai_do_every_thirty_minutes');
 add_action('wpiai_every_day_action', 'wpiai_do_every_day');
 add_action('wpiai_every_hour_action', 'wpiai_do_every_hour');
 
+function wpiai_do_every_thirty_minutes() {
+    wpiai_import_all_files();
+}
+
 function wpiai_do_every_hour() {
-	wpiai_import_all_files();
+	//wpiai_import_all_files();
 }
 
 function wpiai_do_every_day()
@@ -188,6 +197,11 @@ function wpiai_add_cron_interval($schedules)
     $schedules['everytwentyminutes'] = array(
         'interval' => 1200, // time in seconds
         'display' => 'Every Twenty Minutes'
+    );
+
+    $schedules['everythirtyminutes'] = array(
+        'interval' => 30*60, // time in seconds
+        'display' => 'Every Thirty Minutes'
     );
 
     return $schedules;
