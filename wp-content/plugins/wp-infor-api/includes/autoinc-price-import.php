@@ -87,13 +87,14 @@ function wpiai_import_price_file( $file ) {
 		}
 		$files_imported[] = $file;
 		update_option( 'wpiai_price_files_imported', $files_imported );
+		error_log('Finished Importing '. $file);
 	}
 }
 
 function wpiai_import_all_files( $max = 1 ) {
 	$file_list = wpiai_get_files_to_import();
 	if ( $file_list ) {
-		$i = 1;
+		$i = 2;
 		foreach ( $file_list as $file ) {
 			if ( $i <= $max ) {
 				wpiai_import_price_file( $file );
