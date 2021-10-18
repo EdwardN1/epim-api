@@ -94,7 +94,7 @@ function wpiai_import_price_file( $file ) {
 function wpiai_import_all_files( $max = 1 ) {
 	$file_list = wpiai_get_files_to_import();
 	if ( $file_list ) {
-		$i = 2;
+		$i = 1;
 		foreach ( $file_list as $file ) {
 			if ( $i <= $max ) {
 				wpiai_import_price_file( $file );

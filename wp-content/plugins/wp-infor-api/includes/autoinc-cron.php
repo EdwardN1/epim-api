@@ -30,7 +30,7 @@ add_action('wpiai_every_day_action', 'wpiai_do_every_day');
 add_action('wpiai_every_hour_action', 'wpiai_do_every_hour');
 
 function wpiai_do_every_thirty_minutes() {
-    wpiai_import_all_files();
+    //wpiai_import_all_files();
 }
 
 function wpiai_do_every_hour() {
@@ -184,6 +184,7 @@ function wpiai_do_every_twenty_minutes()
 {
     // do something every twenty minutes
     //error_log('WP Cron is working....');
+    wpiai_import_all_files();
     wpiai_process_updated_products();
 }
 
