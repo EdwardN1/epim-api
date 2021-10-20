@@ -40,7 +40,7 @@ function wpiai_get_files_to_import() {
 
 function wpiai_import_price_file( $file ) {
 	$row = 1;
-	//error_log( 'Importing ' . $file );
+	error_log( 'Currently Importing ' . $file );
 	$handle = fopen( $file, 'r' );
 	if ( $handle !== false ) {
 		while ( ! feof( $handle ) ) {
@@ -87,6 +87,7 @@ function wpiai_import_price_file( $file ) {
 		}
 		$files_imported[] = $file;
 		update_option( 'wpiai_price_files_imported', $files_imported );
+		error_log('Finished Importing '. $file);
 	}
 }
 
