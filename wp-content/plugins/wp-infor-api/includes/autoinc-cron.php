@@ -760,7 +760,7 @@ function wpiai_process_user_shiptos($user_id)
     }
     //update_user_meta($user_id, 'wpiai_last_contacts', $lastContactRec);
     if (!update_user_meta($user_id, 'wpiai_delivery_addresses', $shipToRec)) {
-        error_log('Contact wpiai_delivery_addresses Failed or not changed for $user_id: ' . $user_id);
+        //error_log('Contact wpiai_delivery_addresses Failed or not changed for $user_id: ' . $user_id);
         wpiai_update_csd_ship_tos($user_id);
     } else {
         $shipToRec_url = get_option('wpiai_ship_to_url');

@@ -293,7 +293,7 @@ function epimaapi_update_branch_stock_minutes() {
 	if($epim_update_running=='') {
 		update_option('_epim_background_current_index',0);
 		$iso = (new \DateTime('-30 minutes',new \DateTimeZone("UTC")))->format(\DateTime::ATOM);
-		error_log($iso);
+		//error_log($iso);
 		epimaapi_background_import_products_from($iso);
 		return;
 	}

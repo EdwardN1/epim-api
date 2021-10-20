@@ -48,7 +48,7 @@ function wpiai_profile_register($user_id) {
 
 function wpiai_profile_update( $user_id, $old_user_data ) {
 	// Do something
-	error_log( 'Profile update registered for userID: ' . $user_id );
+	//error_log( 'Profile update registered for userID: ' . $user_id );
 
 
 	$user = get_userdata( $user_id );
@@ -70,7 +70,7 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 					if($updated) {
 						update_user_meta( $user_id, 'wpiai_force_update', '' );
 					}
-					error_log( 'Update sent for User ID: ' . $user_id . ' , CSD_ID:' . $CSD_ID );
+					//error_log( 'Update sent for User ID: ' . $user_id . ' , CSD_ID:' . $CSD_ID );
 				}
 
 			} else {
@@ -81,7 +81,7 @@ function wpiai_profile_update( $user_id, $old_user_data ) {
 				 */
 			}
 		} else {
-			error_log( 'No Data Change for userID ' . $user_id );
+			//error_log( 'No Data Change for userID ' . $user_id );
 		}
 		/**
 		 * Add To Meta Queue Processing
