@@ -374,6 +374,8 @@ adminJQ(function ($) {
         $('.modal.deleteCategories').removeClass('active');
         $('.modal.deleteImages').removeClass('active');
         $('.modal.deleteProducts').removeClass('active');
+        $('.modal.ClearProducts').removeClass('active');
+        $('#ClearProducts').prop('disabled',false);
     }, function (action, request, data) {
         _o('Action Completed: ' + action);
         _o('Request: ' + request);
@@ -644,6 +646,17 @@ adminJQ(function ($) {
         customQueue.reset();
         customQueue.queue(ajaxurl, {action: 'delete_products'});
         customQueue.process();
+    });
+
+    $('#ClearProducts').on('click',function (){
+       if(confirm('Are you sure? This cannot be undone.')) {
+           $(this).prop('disabled',true);
+           $('.modal.ClearProducts').addClass('active');
+           _o('Clearing all products, catagories and attributes from WooCommerce, please wait.....');
+           customQueue.reset();
+           customQueue.queue(ajaxurl,{action:'clear_woo_down'});
+           customQueue.process();
+       }
     });
 
 
