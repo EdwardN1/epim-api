@@ -407,9 +407,45 @@ function epim_options_page() {
                         <td><input type="text" id="epim_background_updates_max_run_time" name="epim_background_updates_max_run_time"
                                    value="<?php echo get_option( 'epim_background_updates_max_run_time' ); ?>" class="regular-text"/></td>
                     </tr>
+                    <tr>
+                        <td colspan="2">
+                            <button id="ClearProducts" class="button">Clear Products</button>&nbsp;
+                            &nbsp;<span class="modal ClearProducts"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="padding-left: 0; padding-top: 0;">
+                            DANGER!!! This will completely delete all products, categories and attributes in WooCommerce.
+                            <hr>
+                        </td>
+                    </tr>
+
                 </table>
+                <div id="ePimResult"></div>
 				<?php submit_button(); ?>
             </form>
+
+            <style>
+                .modal {
+                    display: none;
+                }
+
+                .modal.active {
+                    display: inline-block;
+                }
+
+                .modal img {
+                    max-height: 25px;
+                    width: auto;
+                }
+
+                input[type=text] {
+                    vertical-align: bottom;
+                }
+
+            </style>
+
 		<?php endif; ?>
 		<?php if ( $active_tab == 'epim_updates' ): ?>
             <h1>ePim Schedule Settings</h1>
