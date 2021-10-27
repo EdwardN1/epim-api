@@ -884,7 +884,7 @@ function epimaapi_create_product_x( $productID, $variationID, $productBulletText
 	/*
 	 * Other product Fields
 	 */
-	$productArray['productTitle']            = $variation->SKU_Text;
+	$productArray['productTitle']            = $variation->name;
 	$productArray['productSKU']              = $variation->SKU;
 	$productArray['price']                   = $variation->Price;
 	$Qty_Price_1                             = $variation->Qty_Price_1;
@@ -995,13 +995,13 @@ function epimaapi_create_product_x( $productID, $variationID, $productBulletText
 	if ( ! $id ) {
 
 		if ( epimaapi_wooCreateProduct( $productArray ) ) {
-			$res .= $variation->SKU_Text . ' (' . $variation->SKU . ') Created<br>';
+			$res .= $variation->name . ' (' . $variation->SKU . ') Created<br>';
 		} else {
 			$res .= 'There was a problem creating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
 		}
 	} else {
 		if ( epimaapi_wooUpdateProduct( $id, $productArray ) ) {
-			$res .= $variation->SKU_Text . ' (' . $variation->SKU . ') Created<br>';
+			$res .= $variation->name . ' (' . $variation->SKU . ') Created<br>';
 		} else {
 			$res .= 'There was a problem updating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
 		}
@@ -1103,7 +1103,7 @@ function epimaapi_create_product_y( $productID, $variationID, $productBulletText
 	/*
 	 * Other product Fields
 	 */
-	$productArray['productTitle']            = $variation->SKU_Text;
+	$productArray['productTitle']            = $variation->name;
 	$productArray['productSKU']              = $variation->SKU;
 	$productArray['price']                   = $variation->Price;
 	$Qty_Price_1                             = $variation->Qty_Price_1;
@@ -1235,13 +1235,13 @@ function epimaapi_create_product_y( $productID, $variationID, $productBulletText
 	if ( ! $id ) {
 
 		if ( epimaapi_wooCreateProduct( $productArray ) ) {
-			$res .= $variation->SKU_Text . ' (' . $variation->SKU . ') Created<br>';
+			$res .= $variation->name . ' (' . $variation->SKU . ') Created<br>';
 		} else {
 			$res .= 'There was a problem creating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
 		}
 	} else {
 		if ( epimaapi_wooUpdateProduct( $id, $productArray ) ) {
-			$res .= $variation->SKU_Text . ' (' . $variation->SKU . ') Created<br>';
+			$res .= $variation->name . ' (' . $variation->SKU . ') Created<br>';
 		} else {
 			$res .= 'There was a problem updating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
 		}
@@ -1292,7 +1292,7 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 	/*
 	 * Other product Fields
 	 */
-	$productArray['productTitle']            = $variation->SKU_Text;
+	$productArray['productTitle']            = $variation->name;
 	$productArray['productSKU']              = $variation->SKU;
 	$productArray['price']                   = $variation->Price;
 	$Qty_Price_1                             = $variation->Qty_Price_1;
@@ -1525,13 +1525,13 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 	if ( ! $id ) {
 
 		if ( epimaapi_wooCreateProduct( $productArray ) ) {
-			$res .= $variation->SKU_Text . ' (' . $variation->SKU . ') Created<br>';
+			$res .= $variation->name . ' (' . $variation->SKU . ') Created<br>';
 		} else {
 			$res .= 'There was a problem creating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
 		}
 	} else {
 		if ( epimaapi_wooUpdateProduct( $id, $productArray ) ) {
-			$res .= $variation->SKU_Text . ' (' . $variation->SKU . ') Created<br>';
+			$res .= $variation->name . ' (' . $variation->SKU . ') Created<br>';
 		} else {
 			$res .= 'There was a problem updating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
 		}
