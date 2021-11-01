@@ -208,6 +208,14 @@ function wpiai_add_cron_interval($schedules)
     return $schedules;
 }
 
+add_filter( 'http_request_timeout', 'wpiai_timeout_extend' );
+
+function wpiai_timeout_extend( $time )
+{
+	// Default timeout is 5
+	return 10;
+}
+
 function wpiai_process_cached_orders()
 {
     $delay = get_option('wpiai_cache_ttl');
