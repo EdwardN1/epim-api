@@ -1292,7 +1292,7 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 	/*
 	 * Other product Fields
 	 */
-	$productArray['productTitle']            = $variation->name;
+	$productArray['productTitle']            = $variation->Name;
 	$productArray['productSKU']              = $variation->SKU;
 	$productArray['price']                   = $variation->Price;
 	$Qty_Price_1                             = $variation->Qty_Price_1;
