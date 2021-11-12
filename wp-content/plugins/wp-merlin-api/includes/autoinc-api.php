@@ -158,7 +158,7 @@ function wpmai_get_check_status() {
 }
 
 function wpmai_get_web_price( $sku ) {
-	$queryStock  = "select stockID, retail_price from stock where main_mpn = '" . $sku . "'";
+	$queryStock  = "select stockID, retail_price from stock where part = '" . $sku . "' and depot = '01'";
 	$stockXMLstr = wpmai_make_api_call( $queryStock, '' );
 	$data        = simplexml_load_string( $stockXMLstr );
 	$res         = false;
@@ -205,7 +205,7 @@ function wpmai_timeout_extend( $time )
 
 function wpmai_get_stock() {
 	//$timeStarted = microtime( true );
-	$stockXMLstr = wpmai_make_api_call( "select stockID,main_mpn,retail_price,qty_hand from stock where main_mpn != ''", '' );
+	$stockXMLstr = wpmai_make_api_call( "select stockID,part,retail_price,qty_hand from stock where part != '' and depot = '01'", '' );
 	$data        = simplexml_load_string( $stockXMLstr );
 
 	$skus = get_woo_skus();
@@ -217,7 +217,7 @@ function wpmai_get_stock() {
 
 	foreach ( $data->row as $row ) {
 		$stockID      = (string) $row->stockid;
-		$sku          = (string) $row->main_mpn;
+		$sku          = (string) $row->part;
 		if(in_array($sku,$skus)) {
 			if ((!in_array($stockID,$inputArray))&&($i<$iMax)) {
 				$inputArray[] = $stockID;
@@ -248,7 +248,7 @@ function wpmai_get_stock() {
 	foreach ( $data->row as $row ) {
 		$arrayRow            = array();
 		$price               = (string) $row->retail_price;
-		$sku                 = (string) $row->main_mpn;
+		$sku                 = (string) $row->part;
 		$stockID             = (string) $row->stockid;
 		$arrayRow['stockID'] = $stockID;
 		$arrayRow['sku']     = $sku;
@@ -269,9 +269,9 @@ function wpmai_get_stock() {
 }
 
 function wpmai_get_stock_count() {
-	return wpmai_make_api_call( "select count(*) from stock where main_mpn != ''", '' );
+	return wpmai_make_api_call( "select count(*) from stock where part != '' and depot = '01'", '' );
 }
 
 function wpmai_get_stock_ids() {
-	return wpmai_make_api_call( "select stockID from stock where main_mpn != ''", '' );
+	return wpmai_make_api_call( "select stockID from stock where part != '' and depot = '01'", '' );
 }

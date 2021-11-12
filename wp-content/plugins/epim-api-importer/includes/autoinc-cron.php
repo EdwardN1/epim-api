@@ -1,4 +1,9 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 add_filter( 'cron_schedules', 'epimapi_ten_minute_interval' );
 
 // add once 10 minute interval to wp schedules
