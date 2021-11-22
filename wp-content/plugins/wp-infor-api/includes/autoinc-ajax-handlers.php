@@ -31,6 +31,7 @@ add_action( 'wp_ajax_wpiai_get_contact_xml', 'ajax_get_wpiai_get_contact_xml' );
 add_action( 'wp_ajax_wpiai_get_product_api_response', 'ajax_wpiai_get_product_api_response' );
 add_action( 'wp_ajax_wpiai_update_default_prices', 'ajax_wpiai_update_default_prices' );
 add_action( 'wp_ajax_wpiai_update_default_price_for_product', 'ajax_wpiai_update_default_price_for_product' );
+add_action( 'wp_ajax_wpiai_test_get_infor_prices', 'ajax_wpiai_test_get_infor_prices' );
 
 add_action( 'wp_ajax_wpiai_get_product_updates_api_response', 'ajax_wpiai_get_product_updates_api_response' );
 
@@ -40,6 +41,13 @@ add_action( 'wp_ajax_wpiai_get_accounts_customer_data_credit_api_response', 'aja
 add_action( 'wp_ajax_wpiai_get_invoices_api_response', 'ajax_wpiai_get_invoices_api_response' );
 add_action( 'wp_ajax_wpiai_get_single_invoice_api_response', 'wpiai_get_single_invoice_api_response' );
 add_action( 'wp_ajax_wpiai_get_single_invoice_api_response_test', 'wpiai_get_single_invoice_api_response_test' );
+
+function ajax_wpiai_test_get_infor_prices () {
+	wpiai_api_checkSecure();
+	header( "Content-Type: application/json" );
+	echo json_encode(testgetInforPriceList());
+	exit;
+}
 
 function ajax_wpiai_update_default_price_for_product() {
 	wpiai_api_checkSecure();

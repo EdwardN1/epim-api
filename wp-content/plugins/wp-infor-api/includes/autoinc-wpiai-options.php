@@ -723,6 +723,11 @@ function wpiai_options_page()
                         &nbsp;<span class="modal productDefaultPrices"><img
                                     src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                     </td>
+                    <td>
+                        <button id="productTestGetInforPrices" class="button">Test Get Infor Prices</button>&nbsp;
+                        &nbsp;<span class="modal productTestGetInforPrices"><img
+                                    src="<?php echo wpiai_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                    </td>
                 </tr>
             </table>
 

@@ -374,6 +374,24 @@ adminJQ(function ($) {
 
     });
 
+    let productTestGetInforPricesQueue = new ts_execute_queue('#ajax-response', function () {
+        _oi('finished');
+        $('.modal.productTestGetInforPrices').hide();
+    }, function (action, request, data) {
+        _oi('Action Completed: ' + action);
+        _oi('Request: ' + request);
+        _oi('<br>Data: ' + JSON.stringify(data));
+    });
+
+    $('#productTestGetInforPrices').on('click', function () {
+        $('#ajax-response').html('Working...');
+        $('.modal.productTestGetInforPrices').show();
+        productTestGetInforPricesQueue.reset();
+        productTestGetInforPricesQueue.queue(ajaxurl,{action: 'wpiai_test_get_infor_prices'});
+        productTestGetInforPricesQueue.process();
+        window.console.log('productTestGetInforPricesQueue processing');
+    });
+
     $('#productDefaultPrices').on('click', function () {
         $('#ajax-response').html('Working...');
         $('.modal.productDefaultPrices').show();

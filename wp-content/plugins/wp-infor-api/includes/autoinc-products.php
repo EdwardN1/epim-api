@@ -203,14 +203,73 @@ function getBranchStockAndPrice( $customer, $products ) {
 	return getPricesQuantities( $stkArray );
 }
 
+function testgetInforPriceList() {
+	error_log('Testing getInforPriceList');
+	$products = array();
+	$products[] = 'BSH20';
+	$products[] = 'BSH25';
+	$products[] = '5VCC500';
+	$products[] = 'GSC1';
+	$products[] = 'GSC2';
+	$products[] = 'GSC4';
+	$products[] = 'GSC5';
+	$products[] = 'EM20BPCP';
+	$products[] = 'EM20WPCP';
+	$products[] = 'EM25BPCP';
+	$products[] = 'EM25WPCP';
+	$products[] = 'GJC';
+	return getInforPriceList('99',$products);
+	//error_log(print_r($products,true));
+	//return $products;
+}
+
 function getInforPriceList( $customer, $products ) {
+	//error_log('Getting getInforPriceList');
 	$request  = createProductsRequest( $customer, $products, 'NTM' );
 	$url      = get_option( 'wpiai_product_api_url' );
 	$response = wpiai_get_infor_api_response( $url, $request );
 	$allArray = json_decode( $response, true );
+	//error_log(print_r($allArray,true));
 	$stkArray = $allArray['response']['tOemultprcoutV2']['t-oemultprcoutV2'];
+	return wpiai_parse_price_stk_array_2( $stkArray );
+}
 
-	return wpiai_parse_price_stk_array( $stkArray );
+function wpiai_parse_price_stk_array_2( $response ) {
+	//error_log(print_r($response,true));
+	$res = array();
+	if ( is_array( $response ) ) {
+		foreach ( $response as $rec ) {
+			if ( array_key_exists( 'whse', $rec ) ) {
+				//error_log('Warehouse = '.$rec['whse']);
+				$whseName = getWarehouseName( $rec['whse'] );
+				if ( $whseName ) {
+					//error_log('Looking up product in warehouse '.$whseName);
+					if ( array_key_exists( 'prod', $rec ) ) {
+						if ( array_key_exists( 'price', $rec ) ) {
+							if ( array_key_exists( 'netavail', $rec ) ) {
+								$productID = wpiai_get_product_id_by_sku( $rec['prod'] );
+								if ( $productID ) {
+									$resRec              = array();
+									$resRec['SKU']       = $rec['prod'];
+									$resRec['productID'] = $productID;
+									$resRec['price']     = $rec['price'];
+									$res[]               = $resRec;
+									//error_log(print_r($resRec,true));
+								}
+
+							}
+						}
+					}
+				} else {
+					//$res['error'] = 'Warehouse does not exist - '.$rec['whse'];
+				}
+			}
+		}
+	} else {
+		//$res['error'] = 'Response is empty';
+	}
+
+	return $res;
 }
 
 function wpiai_parse_price_stk_array( $response ) {

@@ -102,5 +102,5 @@ function wpiai_import_all_files( $max = 1 ) {
 			$i ++;
 		}
 	}
-	error_log( 'Finished' );
+	//error_log( 'Finished' );
 }
