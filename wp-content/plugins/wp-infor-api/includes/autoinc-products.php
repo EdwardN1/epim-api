@@ -252,8 +252,11 @@ function wpiai_parse_price_stk_array_2( $response ) {
 									$resRec              = array();
 									$resRec['SKU']       = $rec['prod'];
 									$resRec['productID'] = $productID;
-									$resRec['price']     = $rec['price'];
-									$resRec['priceInc']     = number_format($rec['price']*1.2,2);
+									$resRec['price']     = $rec['extamt'];
+									$resRec['priceInc']     = number_format($rec['extamt']*1.2,2);
+									if($rec['user4']=='Y') {
+										$resRec['priceInc'] = $resRec['price'];
+									}
 									$res[]               = $resRec;
 									//error_log(print_r($resRec,true));
 								}
