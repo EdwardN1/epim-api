@@ -258,6 +258,18 @@ function wpiai_parse_price_stk_array_2( $response ) {
 										$resRec['priceInc'] = $resRec['price'];
 									}
 									$res[]               = $resRec;
+									$product = wc_get_product($productID);
+									$oldPrice = $product->get_price();
+									if($oldPrice==0) {
+										$product->set_price($resRec['price']);
+										$product->set_regular_price($resRec['price']);
+										$product->save();
+									}
+									if(!$oldPrice) {
+										$product->set_price($resRec['price']);
+										$product->set_regular_price($resRec['price']);
+										$product->save();
+									}
 									//error_log(print_r($resRec,true));
 								}
 

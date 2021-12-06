@@ -184,8 +184,8 @@ function wpiai_do_every_twenty_minutes()
 {
     // do something every twenty minutes
     //error_log('WP Cron is working....');
-    wpiai_import_all_files();
-    wpiai_process_updated_products();
+    //wpiai_import_all_files();
+    //wpiai_process_updated_products();
 }
 
 add_filter('cron_schedules', 'wpiai_add_cron_interval');
@@ -213,7 +213,11 @@ add_filter( 'http_request_timeout', 'wpiai_timeout_extend' );
 function wpiai_timeout_extend( $time )
 {
 	// Default timeout is 5
-	return 10;
+	$timeout = get_option('wpiai_http_time_out');
+	if($timeout) {
+		$timeout = 10;
+	}
+	return $timeout;
 }
 
 function wpiai_process_cached_orders()
