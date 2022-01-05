@@ -665,7 +665,7 @@ function wpiai_get_order_XML( $order_id, $action ) {
 		}
 
 		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[3]->NameValue[0] ) {
-			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[3]->NameValue[0] = $shipping_total - $shipping_tax;
+			$xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[3]->NameValue[0] = $shipping_total;
 		}
 
 		if ( $xml->xpath( '//x:DataArea' )[0]->SalesOrder[0]->SalesOrderHeader[0]->UserArea[0]->Property[4]->NameValue[0] ) {
