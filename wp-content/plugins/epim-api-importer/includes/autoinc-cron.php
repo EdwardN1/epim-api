@@ -308,7 +308,7 @@ function epimaapi_update_branch_stock_cron() {
 	$log   = '';
 	$start = microtime( true );
 	//error_log('epimaapi_update_branch_stock_cron started');
-	$yesterday = date( 'dMY', strtotime( "-1 days" ) );
+	$yesterday = date( 'Y-m-d', strtotime( "-1 days" ) );
 	$branches  = json_decode( get_epimaapi_all_branches(), true );
 	if ( is_array( $branches ) ) {
 		foreach ( $branches as $branch ) {

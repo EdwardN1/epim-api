@@ -103,7 +103,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once( ABSPATH . 'wp-settings.php' );
 
 define( 'WP_MEMORY_LIMIT', '40M' );
-define( 'DISABLE_WP_CRON', true );
 
 define('WP_FAIL2BAN_ADDON_BLOCKLIST_IGNORE_IPS', [
 	'195.224.67.34',

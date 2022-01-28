@@ -181,6 +181,7 @@ function get_epimaapi_product( $id ) {
 
 function get_epimaapi_all_changed_products_since( $datetime = '2002-10-02T10:00:00-00:00' ) {
 	$xdatetime = substr( $datetime, 0, 10 ) . 'T10:00:00-00:00';
+	//error_log('ProductsUpdatedSince?ChangedSinceUTC=' . $xdatetime);
 	$i         = epimaapi_make_api_call( 'ProductsUpdatedSince?ChangedSinceUTC=' . $xdatetime );
 
 	return $i;
