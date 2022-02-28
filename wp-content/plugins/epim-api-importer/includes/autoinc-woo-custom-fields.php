@@ -255,6 +255,17 @@ function add_epim_product_data_fields() {
 			'default'       => '',
 			'desc_tip'      => false,
 		) );
+
+		$datasheets = get_post_meta($post->ID,'_epim_data_sheets',true);
+		if($datasheets) {
+		    if(is_array($datasheets)) {
+		        echo '<p class="form-field show-if-simple">';
+		        foreach ($datasheets as $datasheet) {
+		            echo $datasheet['Name'].': '.$datasheet['URL'].'<br>';
+                }
+		        echo '</p>';
+            }
+        }
 		?>
     </div>
 	<?php

@@ -1178,6 +1178,8 @@ function epimaapi_create_product_y( $productID, $variationID, $productBulletText
 
 	$imageAttachmentIDS = array();
 
+	$dataSheets = array();
+
 	$LuckinsAssets = $variation->LuckinsAssets;
 
 	if ( is_array( $LuckinsAssets ) ) {
@@ -1191,7 +1193,14 @@ function epimaapi_create_product_y( $productID, $variationID, $productBulletText
 				} else {
 					$res .= '</br> No Attachment ID returned.';
 				}
-			}
+			} else {
+			    if($luckins_asset->FileType == 'FILETYPE_PDF') {
+			        $dataSheet = array();
+			        $dataSheet['Name'] = $luckins_asset->AdditionalInfo;
+			        $dataSheet['URL'] = $luckins_asset->URL;
+			        $dataSheets[] = $dataSheet;
+                }
+            }
 		}
 	}
 
@@ -1405,6 +1414,8 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 
 	$imageAttachmentIDS = array();
 
+	$dataSheets = array();
+
 	$epim_prioritise_epim_images = get_option( 'epim_prioritise_epim_images' );
 
 	$epimFirst = false;
@@ -1479,7 +1490,14 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 					} else {
 						$res .= '</br> No Attachment ID returned.';
 					}
-				}
+				} else {
+                    if ($luckins_asset->FileType == 'FILETYPE_PDF') {
+                        $dataSheet = array();
+                        $dataSheet['Name'] = $luckins_asset->AdditionalInfo;
+                        $dataSheet['URL'] = $luckins_asset->URL;
+                        $dataSheets[] = $dataSheet;
+                    }
+                }
 			}
 		}
 
@@ -1524,14 +1542,20 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 	//error_log('$id = '.$id);
 
 	if ( ! $id ) {
-
-		if ( epimaapi_wooCreateProduct( $productArray ) ) {
+        $newProductID = epimaapi_wooCreateProduct( $productArray );
+		if ( $newProductID ) {
+		    if($dataSheets) {
+		        update_post_meta($newProductID,'_epim_data_sheets',$dataSheets);
+            }
 			$res .= $variation->name . ' (' . $variation->SKU . ') Created<br>';
 		} else {
 			$res .= 'There was a problem creating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
 		}
 	} else {
 		if ( epimaapi_wooUpdateProduct( $id, $productArray ) ) {
+            if($dataSheets) {
+                update_post_meta($id,'_epim_data_sheets',$dataSheets);
+            }
 			$res .= $variation->name . ' (' . $variation->SKU . ') Created<br>';
 		} else {
 			$res .= 'There was a problem updating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
