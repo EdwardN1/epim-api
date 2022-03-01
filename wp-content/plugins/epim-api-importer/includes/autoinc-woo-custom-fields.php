@@ -177,7 +177,7 @@ function add_epim_product_data_tab( $product_data_tabs ) {
 }
 
 add_action( 'woocommerce_product_data_panels', 'add_epim_product_data_fields' );
-function add_epim_product_data_fields() {
+function add_epim_product_data_fields($post_id) {
 	global $woocommerce, $post;
 	?>
     <!-- id below must match target registered in above add_epim_product_data_tab function -->
@@ -256,7 +256,7 @@ function add_epim_product_data_fields() {
 			'desc_tip'      => false,
 		) );
 
-		$datasheets = get_post_meta($post->ID,'_epim_data_sheets',true);
+		$datasheets = get_post_meta($post_id,'epim_data_sheets',true);
 		if($datasheets) {
 		    if(is_array($datasheets)) {
 		        echo '<p class="form-field show-if-simple">';
@@ -264,7 +264,11 @@ function add_epim_product_data_fields() {
 		            echo $datasheet['Name'].': '.$datasheet['URL'].'<br>';
                 }
 		        echo '</p>';
+            } else {
+                //error_log($post->ID.' datasheets invalid');
             }
+        } else {
+		    //error_log($post->ID.' no datasheets found');
         }
 		?>
     </div>

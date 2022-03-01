@@ -1545,7 +1545,10 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
         $newProductID = epimaapi_wooCreateProduct( $productArray );
 		if ( $newProductID ) {
 		    if($dataSheets) {
+                //error_log(print_r($dataSheets,true));
 		        update_post_meta($newProductID,'_epim_data_sheets',$dataSheets);
+            } else {
+                //error_log($newProductID.' no datasheets found');
             }
 			$res .= $variation->name . ' (' . $variation->SKU . ') Created<br>';
 		} else {
@@ -1554,7 +1557,10 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 	} else {
 		if ( epimaapi_wooUpdateProduct( $id, $productArray ) ) {
             if($dataSheets) {
+                //error_log(print_r($dataSheets,true));
                 update_post_meta($id,'_epim_data_sheets',$dataSheets);
+            } else {
+                //error_log($id.' no datasheets found');
             }
 			$res .= $variation->name . ' (' . $variation->SKU . ') Created<br>';
 		} else {
