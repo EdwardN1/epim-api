@@ -102,7 +102,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /** Sets up WordPress vars and included files. */
 require_once( ABSPATH . 'wp-settings.php' );
 
-define( 'WP_MEMORY_LIMIT', '40M' );
+define( 'WP_MEMORY_LIMIT', '120M' );
 
 define('WP_FAIL2BAN_ADDON_BLOCKLIST_IGNORE_IPS', [
 	'195.224.67.34',
