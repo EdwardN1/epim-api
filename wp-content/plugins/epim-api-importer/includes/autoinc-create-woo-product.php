@@ -134,11 +134,18 @@ function epimaapi_wooCreateProduct_ex( $pid, $productArray ) {
 			} else {
 				$stockStatus = 'instock';
 			}
+		} else {
+			if(get_option('wpmai_url')) {
+				$manageStock = true;
+			}
 		}
 		if ( array_key_exists( 'backorders', $productArray ) ) {
 			$backorders = $productArray['backorders'];
 		} else {
 			$backorders = 'no';
+			if(get_option('wpmai_url')) {
+				$backorders = 'notify';
+			}
 		}
 		if ( array_key_exists( 'reviewsAllowed', $productArray ) ) {
 			$reviewsAllowed = $productArray['reviewsAllowed'];
