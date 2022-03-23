@@ -1,0 +1,72 @@
+* {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+
+  &,
+  &::before,
+  &::after {
+    box-sizing: border-box;
+  }
+
+  &::placeholder {
+    transition: color .3s ease;
+  }
+
+  &:focus::-webkit-input-placeholder {
+    color: transparent;
+  }
+}
+
+html {
+  font-size: 62.5%;
+
+  &.wf-active body,
+  &.wf-inactive body {
+    opacity: 1;
+  }
+}
+
+body {
+  @include font-size(1.8);
+  background: $body-background;
+  color: $body-color;
+  font: {
+    family: $body-font-family;
+    weight: $body-font-family-weight;
+  }
+  opacity: 0;
+  transition: opacity .3s .3s;
+}
+
+p {
+  line-height: 1.4;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+img {
+  height: auto;
+  max-width: 100%;
+}
+
+input,
+textarea,
+select {
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  padding: 20px;
+  width: 100%;
+}
+
+textarea {
+  height: 200px;
+  resize: vertical;
+}
+
+select {
+  appearance: none;
+}

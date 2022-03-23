@@ -1,0 +1,10 @@
+.page-intro {
+  background: $page-intro-background-color;
+  color: $page-intro-color;
+  padding: 80px 0;
+  text-align: center;
+
+  &__title {
+    @include font-size(8.2);
+  }
+}

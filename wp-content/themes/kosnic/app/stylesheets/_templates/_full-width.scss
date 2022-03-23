@@ -1,0 +1,17 @@
+.full-width {
+  background: $terms-background;
+
+  .title {
+    @include font-size(4);
+  }
+
+  &__inner {
+    background: $terms-inner-background;
+    padding: 100px 150px;
+  }
+
+  &__container {
+    margin: 0 auto;
+    max-width: 1200px;
+  }
+}

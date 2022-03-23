@@ -1,0 +1,31 @@
+@media only screen and (max-width: 950px) {
+  .product-category {
+    padding: 0;
+
+    &__menu {
+      display: none;
+    }
+
+    &.col-3 {
+      width: 100%;
+    }
+
+    &__title,
+    &__item {
+      padding: 24px 20px;
+    }
+
+    &__title {
+      padding: 24px 20px;
+      transition: background $global-transition-timing;
+
+      &::after {
+        display: block;
+      }
+    }
+
+    &__item:not(.has-children).product-category__item--view-all {
+      display: block;
+    }
+  }
+}

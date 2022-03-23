@@ -1,0 +1,92 @@
+%sprite-shared {
+  background-image: url('../images/sprite.png');
+  content: '';
+}
+
+%sprite {
+  @extend %sprite-shared;
+  @include zoom(.5);
+  display: block;
+  height: 200%;
+  width: 200%;
+}
+
+%sprite-inline {
+  @extend %sprite-shared;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%) scale(.5);
+}
+
+%sprite-logo {
+  height: 40px;
+  position: relative;
+  width: 180px;
+
+  &::before,
+  &::after {
+    @extend %sprite;
+    position: absolute;
+  }
+
+  &::before {
+    background-position: 0 -300px;
+  }
+
+  &::after {
+    background-position: 0 -400px;
+    opacity: 0;
+    transition: opacity $global-transition-timing;
+  }
+
+  &:hover::after {
+    opacity: 1;
+  }
+}
+
+%sprite-plus {
+  @extend %sprite-inline;
+  background-position: -100px 0;
+  height: 60px;
+  width: 60px;
+}
+
+%sprite-plus-hover {
+  background-position: 0 0;
+}
+
+%sprite-plus-active {
+  background-position: -200px 0;
+}
+
+%sprite-drop-down {
+  @extend %sprite-inline;
+  background-position: -150px -200px;
+  height: 30px;
+  width: 19px;
+}
+
+%sprite-chevron-left,
+%sprite-chevron-right {
+  height: 45px;
+  width: 30px;
+
+  &::after {
+    @extend %sprite;
+  }
+}
+
+%sprite-chevron-left::after {
+  background-position: -200px -100px;
+}
+
+%sprite-chevron-right::after {
+  background-position: -300px -100px;
+}
+
+%sprite-arrow {
+  @extend %sprite-inline;
+  background-position: -200px -190px;
+  height: 40px;
+  width: 40px;
+}

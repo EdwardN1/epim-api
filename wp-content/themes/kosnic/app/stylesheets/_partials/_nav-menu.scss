@@ -1,0 +1,143 @@
+.nav-menu {
+  @include font-size(1.8);
+  background: $nav-menu-background;
+  padding: 25px 0;
+  z-index: 20;
+
+  > .container {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+  }
+
+  &__items {
+    align-self: center;
+  }
+
+  &__list {
+    display: flex;
+    justify-content: flex-start;
+
+    &--mobile,
+    .phone {
+      display: none;
+    }
+
+    > .menu-item {
+      @include font-size(1.6);
+      margin-right: 40px;
+      position: relative;
+      transition: opacity $global-transition-timing;
+
+      &:not(:first-child)::before {
+        @include vertical-center(absolute);
+        background-color: $nav-menu-color;
+        border-radius: 50%;
+        content: '';
+        height: 3px;
+        left: -21px;
+        width: 3px;
+      }
+
+      &::after {
+        @extend %sprite-plus;
+        content: '';
+        display: none;
+        right: 5px;
+        top: 40px;
+      }
+
+      &.active {
+        > .sub-menu {
+          opacity: 1;
+          transform: translateX(0);
+          transition: opacity $global-transition-timing, transform 0s;
+
+        }
+
+        &::after {
+          @extend %sprite-plus-active;
+        }
+      }
+
+      > a {
+        color: $nav-menu-color;
+        text-decoration: none;
+        text-transform: uppercase;
+        transition: color $global-transition-timing;
+
+        &::after {
+          background: $_color-dark-brown;
+          bottom: -27px;
+          content: '';
+          height: 4px;
+          left: 50%;
+          opacity: 0;
+          position: absolute;
+          transform: translate(-50%, -50%);
+          transition: opacity $global-transition-timing,
+                      width $global-transition-timing;
+          width: 0;
+        }
+      }
+
+      &.active,
+      &:hover {
+        > a {
+          color: $nav-menu-hover-color;
+
+          &::after {
+            opacity: 1;
+            width: 100%;
+          }
+        }
+      }
+
+      &.current-menu-item a {
+        color: $nav-menu-hover-color;
+
+        &::after {
+          opacity: 1;
+          width: 100%;
+        }
+      }
+
+      &--phone {
+        display: none;
+        position: relative;
+        text-align: center;
+
+        a {
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}
+
+
+.search-form {
+  &__input {
+    @include font-size(1.6);
+    background: $search-input-background;
+    border: 0;
+    box-sizing: border-box;
+    font-family: $search-input-font-family;
+    outline: 0;
+    padding: 10px 45px;
+  }
+
+  &__submit {
+    @include font-size(1.4);
+    background: transparent;
+    border: 0;
+    bottom: 0;
+    color: $search-submit-color;
+    cursor: pointer;
+    left: 0;
+    outline: 0;
+    padding: 0 15px;
+    position: absolute;
+    top: 0;
+  }
+}

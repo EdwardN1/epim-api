@@ -1,0 +1,17 @@
+.btn {
+  @include font-size(1.4);
+  background: transparent;
+  border: 2px solid;
+  cursor: pointer;
+  display: block;
+  font-weight: 700;
+  outline: 0;
+  padding: 15px 30px;
+  text-transform: uppercase;
+}
+
+@media only screen and (max-width: 600px) {
+  .btn {
+    padding: 12px 15px;
+  }
+}

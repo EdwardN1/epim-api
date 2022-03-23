@@ -1,0 +1,17 @@
+@media only screen and (max-width: 1200px) {
+  .page-header {
+    padding: 30px 20px;
+  }
+}
+
+@media only screen and (max-width: 950px) {
+  .page-header {
+    &__nav {
+      display: none;
+    }
+
+    &__mobile-toggle {
+      display: block;
+    }
+  }
+}

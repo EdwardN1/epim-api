@@ -1,0 +1,84 @@
+@media only screen and (max-width: 1200px) {
+  .connect-links {
+    padding: 40px 20px;
+  }
+}
+
+@media only screen and (max-width: 1170px) {
+  .connect-links {
+    .col-8,
+    .col-4 {
+      width: 50%;
+    }
+
+    .newsletter-signup {
+      flex-direction: column;
+      text-align: center;
+
+      &__text {
+        display: block;
+        margin-bottom: 15px;
+      }
+    }
+
+    .newsletter-form {
+      margin: 0;
+      width: auto;
+
+      .newsletter-input {
+        text-align: center;
+      }
+
+      .mc4wp-form {
+        flex-direction: column;
+      }
+
+      .mc4wp-response {
+        padding: 10px 10px 0;
+      }
+    }
+
+    .social-links {
+      align-self: flex-start;
+      text-align: center;
+
+      &__items {
+        display: block;
+      }
+
+      &__title {
+        display: block;
+        margin-bottom: 30px;
+      }
+
+      &__item {
+        padding: 0 20px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 550px) {
+  .connect-links {
+    padding: 30px 0;
+    text-align: center;
+
+    .col-8,
+    .col-4 {
+      width: 100%;
+    }
+
+    .newsletter-signup {
+      padding-bottom: 30px;
+    }
+
+    .newsletter-signup__text,
+    .social-links__title {
+      margin-bottom: 30px;
+    }
+
+    .newsletter-input {
+      width: 100%;
+    }
+  }
+}

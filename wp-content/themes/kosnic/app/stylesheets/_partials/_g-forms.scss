@@ -1,0 +1,206 @@
+.form-page-container {
+  margin: 60px auto 0;
+  max-width: 860px;
+}
+
+.gform_wrapper {
+  @include font-size(1.8);
+  color: $form-label-color;
+  line-height: 1.4;
+  margin: 0 auto;
+
+  .gfield {
+    display: flex;
+    margin-bottom: 30px;
+    padding: 15px 15px 15px 0;
+    position: relative;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 15px;
+  }
+
+  input[type="text"] {
+    height: 68px;
+  }
+
+  input,
+  textarea,
+  select {
+    background: $form-input-background;
+    border: 0;
+    border-radius: 0;
+    color: $form-input-color;
+    font: inherit;
+    outline: 0;
+    padding: 20px;
+    width: 100%;
+  }
+
+  textarea {
+    height: 200px;
+    resize: vertical;
+  }
+
+  select {
+    appearance: none;
+  }
+
+  .gform_title,
+  .gform_confirmation_message h2 {
+    @include font-size(3);
+    color: $title-color;
+    font-weight: normal;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .gform_description,
+  .gform_confirmation_message {
+    color: $form-paragraph-color;
+    display: block;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .ginput_container {
+    order: 2;
+  }
+
+  .gform_fields {
+    @extend %grid;
+  }
+
+  .col-1 .gfield_label {
+    display: none;
+  }
+
+  .ginput_container_checkbox {
+    height: 30px;
+    position: relative;
+    width: 30px;
+
+    .gfield_label {
+      display: none;
+    }
+
+    label {
+      border: 4px solid $form-checkbox-border-color;
+      cursor: pointer;
+      height: 100%;
+      left: 0;
+      position: absolute;
+      text-indent: -9999px;
+      top: 0;
+      width: 100%;
+
+      &:after {
+        @include absolute-center(absolute);
+        background: transparent;
+        border: 2px solid $form-checkbox-tick-color;
+        border-right: 0;
+        border-top: 0;
+        content: '';
+        height: 7px;
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(-45deg);
+        transition: opacity $global-transition-timing;
+        width: 12px;
+      }
+    }
+
+    input[type=checkbox] {
+      visibility: hidden;
+
+      &:checked + label::after {
+        opacity: 1;
+      }
+    }
+  }
+
+  .ginput_container_address {
+    label {
+      margin-top: 30px;
+    }
+  }
+
+  a {
+    color: $form-links-color;
+    text-decoration: none;
+    transition: opacity $global-transition-timing;
+
+    &:hover {
+      opacity: .6;
+    }
+  }
+
+  .gform_footer input[type=submit] {
+    @include font-size(1.4);
+    background: transparent;
+    border: 3px solid $form-btn-border;
+    color: $form-btn-color;
+    cursor: pointer;
+    display: block;
+    font-weight: 700;
+    margin-top: 50px;
+    outline: 0;
+    padding: 25px 30px;
+    text-transform: uppercase;
+    transition: background $global-transition-timing,
+                color $global-transition-timing;
+    width: initial;
+
+    &:hover {
+      background: $form-btn-hover-background;
+      color: $form-btn-hover-color;
+    }
+  }
+
+  .validation_message {
+    color: $form-error-color;
+    letter-spacing: 1.5px;
+    order: 1;
+    position: absolute;
+    left: 10px;
+    top: -5px;
+  }
+
+  .validation_message::before {
+    @include vertical-center(absolute);
+    content: '*';
+    left: -13px;
+  }
+
+  .validation_error {
+    color: $form-error-color;
+    display: block;
+    margin-bottom: 30px;
+    text-align: center;
+
+    &::before {
+      @include font-size(3);
+      color: $form-error-color;
+      content: 'Error';
+      display: block;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+  }
+
+  .gform_validation_container {
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    visibility: hidden;
+    width: 1px;
+  }
+}
+
+.gform_validation_error .gform_heading {
+  display: none;
+}
+
+.gform_confirmation_wrapper {
+  margin-bottom: 30px;
+}

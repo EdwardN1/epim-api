@@ -1,0 +1,15 @@
+@media only screen and (max-width: 1200px) {
+  .full-width {
+    &__inner {
+      padding: 70px 45px;
+    }
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .full-width {
+    &__inner {
+      padding: 30px 20px;
+    }
+  }
+}

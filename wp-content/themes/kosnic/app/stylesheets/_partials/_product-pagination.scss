@@ -1,0 +1,21 @@
+.product-pagination {
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 30px;
+
+  &__btn {
+    color: $product-pagination-btn-color;
+    text-decoration: none;
+    transition: color .3s;
+
+    &:hover {
+      color: $product-pagination-btn-hover-color;
+    }
+  }
+
+  &__total {
+    display: block;
+    padding-top: 30px;
+    text-align: right;
+  }
+}

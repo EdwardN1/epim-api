@@ -1,0 +1,96 @@
+.product-category {
+  padding-right: 10px;
+
+  &__title {
+    @extend %dropdown-title;
+
+    &::after {
+      @extend %sprite-plus;
+      display: none;
+      right: 5px;
+    }
+
+    &.active {
+      background: $product-category-hover-active-background;
+
+      &::after {
+        @extend %sprite-plus-active;
+      }
+
+      + .product-category__menu {
+        display: block;
+      }
+    }
+  }
+
+  &__item:not(.has-children).product-category__item--view-all {
+    background-color: rgba($product-category-second-child-background, .7);
+    color: $product-category-color;
+    display: none;
+  }
+
+  .has-children {
+    @extend %dropdown-title-icon;
+    display: block;
+    padding-right: 60px;
+    position: relative;
+    text-decoration: none;
+
+    &::after {
+      @extend %sprite-plus;
+      right: 5px;
+    }
+
+    + .product-category__sub-menu .product-category__item {
+      padding-left: 30px;
+    }
+
+    + .product-category__sub-menu .has-children {
+      background: $product-category-second-child-background;
+
+      + .product-category__sub-menu .product-category__item {
+        padding-left: 50px;
+      }
+
+      + .product-category__sub-menu .has-children {
+        background: $product-category-third-child-background;
+        color: $_color-off-white;
+
+        + .product-category__sub-menu .product-category__item {
+          padding-left: 70px;
+        }
+      }
+    }
+
+    &.active {
+      background: $product-category-hover-active-background;
+
+      &::after {
+        @extend %sprite-plus-active;
+      }
+
+      + .product-category__sub-menu {
+        display: block;
+      }
+    }
+  }
+
+  &__sub-menu {
+    display: none;
+    margin: 1px 0;
+  }
+
+  &__item:not(.has-children) {
+    background: $product-category-submenu-background;
+    color: $product-category-submenu-color;
+    display: block;
+    margin: 1px 0;
+    padding: 24px 20px;
+    text-decoration: none;
+    transition: color $global-transition-timing;
+
+    &:hover {
+      color: $product-category-submenu-hover-color;
+    }
+  }
+}

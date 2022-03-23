@@ -1,0 +1,124 @@
+@media only screen and (max-width: 1200px) {
+  .product-item {
+    &__overlay {
+      padding: 20px 10px;
+    }
+  }
+
+  .product-listing {
+    &__grid {
+      overflow: hidden;
+      padding: 40px 20px;
+    }
+  }
+}
+
+@media only screen and (max-width: 1100px) {
+  .product-item {
+    &__inner:hover .product-item__overlay {
+      display: none;
+    }
+  }
+}
+
+@media only screen and (max-width: 950px) {
+  .product-listing {
+    .col-9 {
+      width: 100%;
+    }
+
+    .col-push-3 {
+      margin-left: 0;
+    }
+
+    .product-pagination,
+    .product-pagination__total {
+      padding: 30px 30px 0;
+    }
+  }
+}
+
+@media only screen and (max-width: 850px) {
+  .product-grid .col-3 {
+    width: 33.33333%;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .product-listing .product-pagination {
+    &,
+    &__total {
+      padding: 30px 10px 0;
+    }
+
+    &__total {
+      text-align: center;
+    }
+
+    &__btn {
+      padding: 20px;
+      position: relative;
+      text-indent: -9999px;
+
+      &::after {
+        @include absolute-center(absolute);
+        display: block;
+        font-family: $_font-fontawesome;
+        text-indent: 0;
+      }
+
+      &[href="#first"],
+      &[href="#last"] {
+        &::after {
+          @include font-size(2.2);
+        }
+      }
+
+      &[href="#first"]::after {
+        content: '\f100';
+        margin-left: -1px;
+      }
+
+      &[href="#prev"]::after {
+        content: '\f053';
+      }
+
+      &[href="#next"]::after {
+        content: '\f054';
+      }
+
+      &[href="#last"]::after {
+        content: '\f101';
+        margin-right: -1px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 650px) {
+  .product-grid .col-4,
+  .product-grid .col-3 {
+    width: 50%;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .product-listing__grid {
+    padding: 0 0 40px;
+  }
+}
+
+@media only screen and (max-width: 420px) {
+  .product-grid .col-4,
+  .product-grid .col-3 {
+    width: 100%;
+  }
+
+  .product-item__outer {
+    margin-bottom: 5px;
+  }
+
+  .product-listing .product-pagination__btn {
+    padding: 15px;
+  }
+}

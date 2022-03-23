@@ -1,0 +1,38 @@
+@media only screen and (max-width: 1200px) {
+  .showcase {
+    background: $showcase-background;
+
+    &__hero {
+      height: 400px;
+      max-height: initial;
+      min-height: initial;
+    }
+
+    &__inner {
+      margin-top: 0;
+      padding: 70px 45px;
+    }
+  }
+}
+
+@media only screen and (max-width: 945px) {
+  .showcase__hero {
+    height: 300px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .showcase {
+    &__hero {
+      height: 200px;
+    }
+
+    &__inner {
+      padding: 30px 20px;
+    }
+
+    .subtitle {
+      @include font-size(2.4);
+    }
+  }
+}

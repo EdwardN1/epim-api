@@ -1,0 +1,61 @@
+.newsletter-signup {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+
+  &__text {
+    @include font-size(1.4);
+    color: $newsletter-signup-color;
+    display: inline;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+}
+
+.newsletter-form {
+  margin-left: 20px;
+  width: calc(100% - 204px);
+
+  .mc4wp-form {
+    align-items: center;
+    display: flex;
+  }
+
+  .mc4wp-form-fields {
+    position: relative;
+  }
+
+  .mc4wp-response {
+    padding-left: 10px;
+  }
+
+  .mc4wp-alert,
+  .mc4wp-error {
+    color: $_color-white;
+  }
+}
+
+.newsletter-input {
+  @include font-size(1.4);
+  background: $newsletter-input-background;
+  border: 0;
+  color: $newsletter-signup-color;
+  font-family: $newsletter-input-font-family;
+  outline: 0;
+  padding: 10px 45px;
+  width: 265px;
+}
+
+.newsletter-submit {
+  background: transparent;
+  border: 0;
+  bottom: 0;
+  color: $newsletter-submit;
+  cursor: pointer;
+  height: 40px;
+  left: 0;
+  outline: 0;
+  padding: 0 15px;
+  position: absolute;
+  top: 0;
+}

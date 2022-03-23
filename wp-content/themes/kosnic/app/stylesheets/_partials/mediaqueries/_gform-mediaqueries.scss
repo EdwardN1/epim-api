@@ -1,0 +1,46 @@
+@media only screen and (max-width: 980px) {
+  .form-page-container {
+    max-width: 90vw;
+  }
+}
+
+
+@media only screen and (max-width: 768px) {
+  .form-page-container  .col-6 {
+    width: 100%;
+  }
+
+  .gform_wrapper .gfield {
+    padding-right: 0;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .gform_wrapper {
+    label {
+      margin-bottom: 0;
+    }
+
+    .gform_title,
+    .gform_description {
+      margin-bottom: 0;
+    }
+
+    input {
+      height: 48px;
+      padding: 10px;
+    }
+
+    .gform_footer input[type=submit] {
+      margin-top: 15px;
+      padding: 12px 30px;
+    }
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .form-page-container {
+    margin-top: 40px;
+    max-width: 95vw;
+  }
+}

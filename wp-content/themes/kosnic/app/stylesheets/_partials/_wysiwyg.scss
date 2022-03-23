@@ -1,0 +1,78 @@
+.wysiwyg {
+  > *:not(:last-child):not(h1) {
+    margin-bottom: 30px;
+  }
+
+  h1 {
+    @include font-size(3);
+    color: $title-color;
+    margin-bottom: 15px;
+  }
+
+  h2 {
+    @include font-size(2.8);
+    color: $subtitle-color;
+  }
+
+  p {
+    color: $_color-grey-font;
+  }
+
+  &:not(.tabs-content):not(.tabs-content__accordion) {
+    ol,
+    ul {
+      li {
+        margin: 0 0 20px 20px;
+      }
+    }
+
+    ul li {
+      list-style: disc;
+    }
+
+    ol li {
+      list-style: decimal;
+
+      ol li {
+        list-style: lower-alpha;
+      }
+    }
+
+    a:not(.read-more) {
+      color: $standard-link-color;
+      transition: opacity $global-transition-timing;
+
+      &:hover {
+        opacity: .7;
+      }
+    }
+
+    .gform_wrapper {
+      ol,
+      ul {
+        li {
+          list-style: none;
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  strong {
+    font-weight: 700;
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  a[href*=".pdf"]:not('.disable-pdf-icon') {
+    position: relative;
+
+    &::after {
+      content: '\f1c1';
+      font-family: $_font-fontawesome;
+      padding: 0 5px 0 10px;
+    }
+  }
+}

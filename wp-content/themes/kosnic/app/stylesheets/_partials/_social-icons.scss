@@ -1,0 +1,43 @@
+.social-links {
+  align-self: center;
+  color: $social-links-color;
+  text-align: right;
+
+  &__items {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__item {
+    display: inline-block;
+    padding: 0 20px;
+    position: relative;
+
+    &:last-child {
+      padding-right: 0;
+    }
+
+    a {
+      transition: opacity $global-transition-timing;
+      color: inherit;
+      opacity: .3;
+      text-decoration: none;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    &::after {
+      @include vertical-center(absolute);
+      content: '\2022';
+      opacity: .3;
+      right: -14%;
+    }
+
+    &:first-child::after,
+    &:last-child::after {
+      display: none;
+    }
+  }
+}

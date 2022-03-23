@@ -1,0 +1,32 @@
+.connect-links {
+  @include font-size(1.4);
+  background: $newsletter-background;
+  font-family: $newsletter-font-family;
+  padding: 40px 0;
+}
+
+.page-footer {
+  @include font-size(1.4);
+  background: $footer-background;
+  color: $footer-font-color;
+  padding: 30px 0;
+}
+
+.page-footer__menu {
+  display: flex;
+  justify-content: flex-end;
+
+  li {
+    padding-left: 20px;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: color $global-transition-timing;
+
+    &:hover {
+      color: $footer-links-hover-color;
+    }
+  }
+}

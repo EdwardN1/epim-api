@@ -1,0 +1,127 @@
+.page-header {
+  @include font-size(1.4);
+  background: $header-background;
+  padding: 24px calc((100vw - 1200px) / 2);
+
+  &__nav {
+    align-self: center;
+  }
+
+  &__menu {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__logo {
+    @extend %sprite-logo;
+    display: block;
+  }
+
+  .menu-item {
+    color: $header-font-color;
+    padding-left: 60px;
+    position: relative;
+    text-transform: uppercase;
+
+    &:not(:last-child)::before {
+      @include vertical-center(absolute);
+      color: $header-divider-color;
+      content: '|';
+      right: -36px;
+    }
+  }
+
+  a:not(.page-header__logo) {
+    color: $header-font-color;
+    text-decoration: none;
+    transition: color $global-transition-timing,
+                opacity $global-transition-timing;
+
+    &:hover {
+      opacity: .7;
+    }
+
+    &.phone__link {
+      color: $header-phone-color;
+      position: relative;
+      text-decoration: none;
+
+      &:hover {
+        color: $header-phone-hover-color;
+      }
+    }
+  }
+}
+
+.page-header__mobile {
+  &-toggle {
+    align-self: center;
+    display: none;
+  }
+
+  &-menu-icons {
+    @include font-size(2.4);
+    color: $nav-menu-mobile-icons-color;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &-menu-icon {
+    cursor: pointer;
+    margin-left: 20px;
+    transition: opacity $global-transition-timing;
+
+    &.menu-active {
+      opacity: 0;
+    }
+  }
+
+  &-menu-bars {
+    position: relative;
+    width: 30px;
+  }
+
+  &-menu-bar {
+    @include vertical-center(absolute);
+    background: $header-menu-bars-color;
+    height: 4px;
+    transition: background $global-transition-timing;
+    width: 100%;
+
+    &::before,
+    &::after {
+      @include vertical-center(absolute);
+      background: $header-menu-bars-color;
+      content: '';
+      height: 100%;
+      transition: top $global-transition-timing,
+                  transform $global-transition-timing;
+      width: 100%;
+    }
+
+    &::before {
+      top: -6px;
+    }
+
+    &::after {
+      top: 10px;
+    }
+  }
+}
+
+.active > .page-header__mobile-menu-bar {
+  background: transparent;
+
+  &::before,
+  &::after {
+    top: 0;
+  }
+
+  &::before {
+    transform: rotate(45deg);
+  }
+
+  &::after {
+    transform: rotate(-45deg);
+  }
+}

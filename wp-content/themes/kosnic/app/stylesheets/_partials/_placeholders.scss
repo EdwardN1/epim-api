@@ -1,0 +1,44 @@
+%background-image-centered {
+  background-position: center center;
+  background-size: cover;
+}
+
+%dropdown-title {
+  background: $dropdown-title-background;
+  color: $dropdown-title-color;
+  margin-bottom: 1px;
+  padding: 24px 20px;
+  position: relative;
+  transition: background $global-transition-timing;
+}
+
+%dropdown-title-icon {
+  background: $dropdown-title-background;
+  color: $dropdown-title-color;
+  margin-bottom: 1px;
+  padding: 24px 20px;
+  position: relative;
+  transition: background $global-transition-timing;
+
+  &::after {
+    @extend %sprite-plus;
+    content: '';
+    right: 20px;
+  }
+
+  &:hover {
+    background: $dropdown-title-hover-active-background;
+
+    &::after {
+      @extend %sprite-plus-hover;
+    }
+  }
+
+  &.active {
+    background: $dropdown-title-hover-active-background;
+
+    &::after {
+      @extend %sprite-plus-active;
+    }
+  }
+}

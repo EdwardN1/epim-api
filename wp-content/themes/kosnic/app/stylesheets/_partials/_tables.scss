@@ -1,0 +1,48 @@
+table {
+  border-collapse: collapse;
+  width: 100%;
+
+  th {
+    background: $table-title-background;
+    color: $table-title-color;
+    text-align: left;
+  }
+
+  td,
+  th {
+    border-bottom: 2px solid $table-border-color;
+    padding: 20px;
+  }
+}
+
+@media only screen and (max-width: 700px) {
+  .product-table {
+    thead {
+      display: none;
+    }
+
+    td {
+      display: block;
+      position: relative;
+      text-align: right;
+      width: 100%;
+
+      &::before {
+        @include vertical-center(absolute);
+        content: attr(data-title);
+        height: 100%;
+        left: 0;
+        padding: 20px;
+      }
+
+      &:first-child {
+        background: $table-title-background;
+        color: $table-data-title-color;
+
+        &::before {
+          color: $table-data-title-color;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+.read-more {
+  @include font-size(1.8);
+  color: $read-more-color;
+  display: inline-block;
+  position: relative;
+  text-decoration: none;
+
+  &::after {
+    @extend %sprite-arrow;
+    right: -50px;
+    transition: transform $global-transition-timing;
+  }
+
+  &:hover::after {
+    transform: translate(10px, -50%) scale(.5);
+  }
+
+  &__content {
+    display: none;
+
+    > *:not(:last-child) {
+      margin-bottom: 30px;
+    }
+  }
+}

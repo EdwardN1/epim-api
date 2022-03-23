@@ -1,0 +1,226 @@
+$_color-white: #fff;
+$_color-off-white: #f7f7f7;
+$_color-grey1: #e9e9e9;
+$_color-grey2: #ccc;
+$_color-grey-font: #555;
+$_color-grey3: #999;
+$_color-off-black: #313131;
+$_color-black: #020202;
+$_color-dark-brown: #a57c41;
+$_color-light-brown: #ad9573;
+$_color-dark-blue: #134fa0;
+$_color-mid-blue: #1d75ea;
+$_color-pale-blue: #97bada;
+$_color-torch-red: #f40b19;
+
+$_font-futura: 'futura-pt', sans-serif;
+$_font-futura-medium-weight: 500;
+$_font-lato: Lato, sans-serif;
+$_font-lato-weight: 400;
+$_font-fontawesome: FontAwesome;
+
+$global-transition-timing: .3s;
+$global-transition-delay: .3s;
+
+$title-color: $_color-mid-blue;
+$subtitle-color: $_color-black;
+
+$body-font-family: $_font-futura;
+$body-font-family-weight: $_font-futura-medium-weight;
+$body-background: $_color-off-white;
+$body-color: $_color-black;
+
+$title-color: $_color-mid-blue;
+
+$accordion-border-color: $_color-white;
+
+$overlay-background: rgba($_color-off-white, .5);
+
+$standard-link-color: $_color-mid-blue;
+$read-more-color: $_color-black;
+$pagination-dot-color: $_color-off-white;
+$dropdown-title-background: $_color-dark-blue;
+$dropdown-title-hover-active-background: $_color-mid-blue;
+$dropdown-title-color: $_color-white;
+
+$table-title-background: $_color-grey2;
+$table-title-color: $_color-off-black;
+$table-border-color: $_color-grey2;
+$table-data-title-color: $_color-black;
+
+$header-background: $_color-white;
+$header-font-color: $_color-black;
+$header-divider-color: $_color-dark-brown;
+$header-phone-color: $_color-dark-brown;
+$header-phone-hover-color: $_color-dark-blue;
+$header-responsive-phone-background: $_color-grey2;
+$header-responsive-phone-color: $_color-black;
+$header-menu-bars-color: $_color-mid-blue;
+
+$footer-background: $_color-black;
+$footer-font-color: rgba($_color-off-white, .5);
+$footer-links-hover-color: $_color-white;
+$footer-divider-background: $_color-black;
+
+$newsletter-font-family: $_font-futura;
+$newsletter-input-font-family: $_font-lato;
+$newsletter-background: $_color-off-black;
+$newsletter-signup-color: $_color-white;
+$newsletter-input-background: rgba($_color-white, .2);
+$newsletter-submit: rgba($_color-white, .3);
+
+$social-links-color: $_color-white;
+
+$nav-menu-background: $_color-grey2;
+$nav-menu-color: $_color-grey-font;
+$nav-menu-hover-color: $_color-black;
+
+$nav-menu-mobile-background: $_color-white;
+$nav-menu-mobile-hover-active-background: $_color-mid-blue;
+$nav-menu-mobile-hover-active-color: $_color-white;
+$nav-menu-phone-background: $_color-dark-blue;
+$nav-menu-phone-color: $_color-white;
+$nav-menu-mobile-icons-color: $_color-mid-blue;
+
+$sub-menu-background: $_color-white;
+$sub-menu-dots-color: $_color-white;
+$sub-menu-color: $_color-black;
+$sub-menu-item-color: $_color-black;
+$sub-menu-hover-color: $_color-dark-brown;
+$sub-menu-item-hover-color: $_color-mid-blue;
+
+$search-input-font-family: $_font-futura;
+$search-background: $_color-grey2;
+$search-input-background: $_color-white;
+$search-submit-color: $_color-black;
+
+$breadcrumbs-background: $_color-dark-blue;
+$breadcrumbs-color: $_color-white;
+
+$hero-banner-color: $_color-white;
+$hero-banner-nav-menu: $_color-white;
+$hero-banner-nav-menu-background: rgba($_color-grey2, .5);
+
+$hero-banner-btn-border: $_color-white;
+$hero-banner-btn-color: $_color-white;
+$hero-banner-btn-hover-background: $_color-white;
+$hero-banner-btn-hover-color: $_color-mid-blue;
+
+$owl-dots-color: $_color-white;
+
+$block-background: $_color-dark-blue;
+$block-title-background: rgba($_color-white, .2);
+$block-color: $_color-white;
+
+$article-list-background: $_color-grey1;
+$article-list-color: $_color-grey-font;
+$article-list-title-color: $_color-black;
+$article-list-text-background: $_color-white;
+$article-list-date-color: $_color-mid-blue;
+
+$terms-background: $_color-grey1;
+$terms-inner-background: $_color-white;
+$terms-color: $_color-off-white;
+$terms-btn-color: $_color-mid-blue;
+$terms-btn-border: $_color-mid-blue;
+$terms-btn-hover-background: $_color-mid-blue;
+$terms-btn-hover-color: $_color-white;
+
+$showcase-background: $_color-grey1;
+$showcase-inner-background: $_color-white;
+
+$related-view-all-color: $_color-black;
+$related-background: $_color-white;
+$related-title-color: $_color-black;
+$related-item-title-color: $_color-mid-blue;
+$related-item-title-hover-color: $_color-black;
+
+$page-intro-background-color: $_color-mid-blue;
+$page-intro-color: $_color-white;
+
+$form-links-color: $_color-light-brown;
+$form-input-background: $_color-grey2;
+$form-input-color: $_color-grey3;
+$form-label-color: $_color-black;
+$form-checkbox-border-color: $_color-light-brown;
+$form-checkbox-tick-color: $_color-black;
+$form-btn-color: $_color-mid-blue;
+$form-btn-border: $_color-mid-blue;
+$form-btn-hover-background: $_color-mid-blue;
+$form-btn-hover-color: $_color-white;
+$form-paragraph-color: $_color-off-white;
+$form-error-background: $_color-pale-blue;
+$form-error-color: $_color-torch-red;
+
+$product-bar-background: $_color-dark-blue;
+$product-bar-color: $_color-white;
+
+$product-filter-toggle-bar: $_color-mid-blue;
+$product-filter-toggle-background: $_color-white;
+$product-filter-toggle-border: $_color-mid-blue;
+
+$product-category-background: $_color-dark-blue;
+$product-category-hover-active-background: $_color-mid-blue;
+$product-category-second-child-background: $_color-mid-blue;
+$product-category-third-child-background: $_color-pale-blue;
+$product-category-color: $_color-white;
+$product-category-submenu-background: $_color-white;
+$product-category-submenu-color: $_color-off-black;
+$product-category-submenu-hover-color: $_color-black;
+
+$product-filter-background: $_color-white;
+$product-filter-color: $_color-off-black;
+$product-filter-placeholder-color: $_color-black;
+$product-filter-option-background: $_color-mid-blue;
+$product-filter-option-color: $_color-white;
+$product-filter-hover-color: $_color-dark-blue;
+$product-filter-disabled-background: $_color-off-white;
+$product-filter-background: $_color-white;
+$product-filter-color: $_color-black;
+$product-filter-hover-background: $_color-grey2;
+
+$product-item-background: $_color-white;
+$product-item-title: $_color-dark-blue;
+$product-item-overlay-background: rgba($_color-dark-blue, .9);
+$product-item-overlay-color: $_color-white;
+
+$product-background: $_color-grey1;
+$product-title-color: $_color-black;
+
+$product-image-background: $_color-white;
+$product-image-border: $_color-grey1;
+$product-image-hover-background: rgba($_color-dark-blue, .2);
+
+$product-table-background: $_color-white;
+
+$select2-background: $_color-grey1;
+$select2-highlight-background: $_color-grey2;
+$select2-color: $_color-grey3;
+$select2-option-color: $_color-black;
+$select2-border-color: $_color-grey3;
+
+$product-load-more-border: $_color-dark-blue;
+$product-load-more-color: $_color-dark-blue;
+$product-load-more-hover-background: $_color-dark-blue;
+$product-load-more-hover-color: $_color-white;
+
+$tabs-title-background: $_color-dark-blue;
+$tabs-title-color: $_color-white;
+$tabs-title-hover-background: $_color-white;
+$tabs-title-hover-color: $_color-dark-blue;
+$tabs-title-border-color: $_color-white;
+$tabs-title-border-bottom-color: $_color-grey1;
+$tabs-title-border-bottom-active-color: $_color-grey1;
+
+$tabs-content-background: $_color-white;
+$tabs-content-title-color: $_color-black;
+$tabs-content-list-color: $_color-grey3;
+$tabs-content-list-bullets-color: $_color-dark-blue;
+$tabs-download-item-color: $_color-grey3;
+$tabs-download-item-hover-color: $_color-mid-blue;
+$tabs-download-view-color: $_color-black;
+
+$product-pagination-btn-color: $_color-dark-blue;
+$product-pagination-btn-hover-color: $_color-mid-blue;
+$product-component-link-color: $_color-black;
+$product-component-link-hover-color: $_color-off-black;

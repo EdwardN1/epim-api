@@ -1,0 +1,46 @@
+@import 'owl.carousel/dist/assets/owl.carousel.min.css';
+
+.owl-item {
+  backface-visibility: hidden;
+  transform: translateZ(0), scale(1);
+}
+
+.owl-prev,
+.owl-next {
+  @include vertical-center(absolute);
+  cursor: pointer;
+  transition: opacity $global-transition-timing;
+  z-index: 100;
+
+  &:hover {
+    opacity: .6;
+  }
+}
+
+.owl-prev {
+  left: 52px;
+  @extend %sprite-chevron-left;
+}
+
+.owl-next {
+  @extend %sprite-chevron-right;
+  right: 52px;
+}
+
+.owl-dots {
+  bottom: -50px;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+
+.owl-dot {
+  background: transparent;
+  border-color: $owl-dots-color;
+  transition: background $global-transition-timing,
+              opacity $global-transition-timing;
+
+  &.active {
+    background: $owl-dots-color;
+  }
+}

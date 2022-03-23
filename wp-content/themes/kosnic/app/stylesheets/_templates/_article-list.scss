@@ -1,0 +1,64 @@
+.article-list {
+  background: $article-list-background;
+
+  &__grid {
+    color: $article-list-color;
+    padding: 30px 0;
+  }
+
+  &__item {
+    margin-bottom: 50px;
+    min-height: 340px;
+  }
+
+  &__image {
+    @extend %background-image-centered;
+    width: 340px;
+  }
+
+  &__text {
+    background: $article-list-text-background;
+    flex-grow: 1;
+    padding: 50px 100px 50px 50px;
+    width: calc(100% - 340px);
+  }
+
+  &__title {
+    @include font-size(2.4);
+    color: $article-list-title-color;
+    line-height: 1.4;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: opacity $global-transition-timing;
+
+      &:hover {
+        opacity: .7;
+      }
+    }
+  }
+
+  &__date {
+    @include font-size(1.4);
+    color: $article-list-date-color;
+    display: block;
+    margin: 10px 0 30px;
+  }
+
+  &__description {
+    @include font-size(1.8);
+    line-height: 1.4;
+    margin-bottom: 50px;
+  }
+
+  .wp-pagenavi {
+    display: flex;
+    justify-content: center;
+
+    .page,
+    .current {
+      @include font-size(0);
+    }
+  }
+}

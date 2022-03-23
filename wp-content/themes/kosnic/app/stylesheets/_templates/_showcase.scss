@@ -1,0 +1,17 @@
+.showcase {
+  background: $showcase-background;
+
+  &__hero {
+    @extend %background-image-centered;
+    height: calc(100vh - 286px);
+    max-height: 700px;
+    min-height: 400px;
+  }
+
+  &__inner {
+    background: $showcase-inner-background;
+    margin-top: -200px;
+    padding: 100px 150px;
+    position: relative;
+  }
+}
