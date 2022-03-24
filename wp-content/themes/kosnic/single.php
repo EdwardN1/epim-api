@@ -13,10 +13,75 @@
 
             <?php
             $currentCat = $wp_query->get_queried_object()->term_id;
-            if($currentCat) {
-                echo do_shortcode('[product_categories number="0" parent="'.$currentCat.'"]');
+            if ($currentCat) {
+                echo do_shortcode('[product_categories number="0" parent="' . $currentCat . '"]');
             } else {
-                echo do_shortcode('[product_categories number="0" parent="0"]');
+                //echo do_shortcode('[product_categories number="0" parent="0"]');
+                /*$args = array(
+                    'taxonomy' => 'product_cat',
+                    'orderby' => 'name',
+                    'order' => 'ASC',
+                    'hide_empty' => true,
+                    'parent' => 0
+                );
+                $accordion = '';
+                $parentCategories = get_categories($args);
+                if ($parentCategories) {
+                    $accordion = '<ul class="vertical menu accordion-menu" data-accordion-menu data-submenu-toggle="true">';
+                    foreach ($parentCategories as $parentCategory) {
+                        $accordion .= '<li>';
+                        $parent_cat_id = $parentCategory->term_id;
+                        $parent_cat_name = $parentCategory->name;
+                        $parent_cat_slug = $parentCategory->slug;
+                        $parent_cat_link = get_term_link($parent_cat_slug, 'product_cat');
+                        $accordion .= '<a href="' . $parent_cat_link . '">' . $parent_cat_name . '</a>';
+                        $args = array(
+                            'taxonomy' => 'product_cat',
+                            'orderby' => 'name',
+                            'order' => 'ASC',
+                            'hide_empty' => true,
+                            'parent' => $parent_cat_id
+                        );
+                        $firstNestCategories = get_categories($args);
+                        if ($firstNestCategories) {
+                            $accordion .= '<ul class="menu vertical nested first-nest">';
+                            foreach ($firstNestCategories as $firstNestCategory) {
+                                $accordion .= '<li>';
+                                $first_cat_id = $firstNestCategory->term_id;
+                                $first_cat_name = $firstNestCategory->name;
+                                $first_cat_slug = $firstNestCategory->slug;
+                                $first_cat_link = get_term_link($first_cat_slug, 'product_cat');
+                                $accordion .= '<a href="' . $first_cat_link . '">' . $first_cat_name . '</a>';
+                                $args = array(
+                                    'taxonomy' => 'product_cat',
+                                    'orderby' => 'name',
+                                    'order' => 'ASC',
+                                    'hide_empty' => true,
+                                    'parent' => $first_cat_id
+                                );
+                                $secondNestCategories = get_categories($args);
+                                if ($secondNestCategories) {
+                                    $accordion .= '<ul class="menu vertical nested second-nest">';
+                                    foreach ($secondNestCategories as $secondNestCategory) {
+                                        $accordion .= '<li>';
+                                        $second_cat_id = $secondNestCategory->term_id;
+                                        $second_cat_name = $secondNestCategory->name;
+                                        $second_cat_slug = $secondNestCategory->slug;
+                                        $second_cat_link = get_term_link($second_cat_slug, 'product_cat');
+                                        $accordion .= '<a href="' . $second_cat_link . '">' . $second_cat_name . '</a>';
+
+                                        $accordion .= '</li>';
+                                    }
+                                    $accordion .= '</ul>';
+                                    $accordion .= '</li>';
+                                }
+                                $accordion .= '</ul>';
+                            }
+                            $accordion .= '</li>';
+                        }
+                        $accordion .= '</ul>';
+                    }
+                    echo $accordion;*/
             }
             the_content();
             $read_more_content = $full_width_fields->field('read_more_content');
