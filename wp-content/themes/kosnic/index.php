@@ -10,16 +10,37 @@
             <h1 class="title">
                 <?php the_title(); ?>
             </h1>
+            <div class="grid-x">
+                <div class="cell shrink">
+                    <?php
+                    $currentCat = $wp_query->get_queried_object()->term_id;
+                    if ($currentCat) {
+                        echo kosnic_cat_nav($currentCat);
+                        //echo do_shortcode('[product_categories number="0" parent="'.$currentCat.'"]');
+                    } else {
+                        echo kosnic_cat_nav();
+                    } ?>
+                </div>
+                <div class="cell auto">
+                    <?php if($currentCat):?>
+                        <div class="kosnic-cats">
+                            <?php echo do_shortcode('[product_categories number="0" parent="'.$currentCat.'" columns="3"]');?>
+                        </div>
+                        <div class="kosnic-prods">
+                            <?php the_content(); ?>
+                        </div>
+                    <?php else: ?>
+                        <div class="kosnic-cats">
+                            <?php echo do_shortcode('[product_categories number="0" parent="0" columns="3"]');?>
+                        </div>
+                        <div class="kosnic-prods">
+                            <?php the_content(); ?>
+                        </div>
+                    <?php endif; ?>
 
+                </div>
+            </div>
             <?php
-            $currentCat = $wp_query->get_queried_object()->term_id;
-            if($currentCat) {
-                echo do_shortcode('[product_categories number="0" parent="'.$currentCat.'"]');
-            } else {
-                echo do_shortcode('[product_categories number="0" parent="0"]');
-            }
-
-            the_content();
             $read_more_content = $full_width_fields->field('read_more_content');
             if ($read_more_content):
                 ?>
