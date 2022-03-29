@@ -4,6 +4,8 @@
 
     > li.has-submenu-toggle {
       position: relative;
+      padding-right: 40px;
+      background: $blue;
       button.submenu-toggle {
         position: absolute;
         right: 5px;
@@ -28,6 +30,7 @@
         color: #fff;
         background: $blue;
         transition: background 0.3s;
+        max-width: 250px;
       }
     }
   }
