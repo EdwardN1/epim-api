@@ -4,8 +4,8 @@
 
     > li.has-submenu-toggle {
       position: relative;
-      padding-right: 40px;
       background: $blue;
+      transition: background 0.3s;
       button.submenu-toggle {
         position: absolute;
         right: 5px;
@@ -20,6 +20,11 @@
         background-image: url("../images/sprite.png");
         border: none;
       }
+
+      button.submenu-toggle[aria-expanded="true"] {
+        background-position: -300px 0;
+      }
+
       > a {
         display: block;
         padding-right: 60px;
@@ -30,7 +35,77 @@
         color: #fff;
         background: $blue;
         transition: background 0.3s;
-        max-width: 250px;
+        max-width: 240px;
+        margin-right: 60px;
+      }
+
+      &:hover {
+        background-color: $light-blue;
+
+        > a {
+          background-color: $light-blue;
+        }
+
+        button.submenu-toggle {
+          background-position: 0 0;
+        }
+        button.submenu-toggle[aria-expanded="true"] {
+          background-position: -200px 0;
+        }
+      }
+
+      ul {
+        > li {
+          position: relative;
+          background: #fff;
+
+          > a {
+            display: block;
+            padding-right: 60px;
+            position: relative;
+            text-decoration: none;
+            margin-bottom: 1px;
+            padding: 24px 20px;
+            padding-left: 30px;
+            color: #000;
+            background: #fff;
+          }
+
+          &.has-submenu-toggle {
+            background: $week-blue;
+            a {
+              background: $week-blue;
+              color: #fff;
+            }
+            ul {
+              > li {
+                position: relative;
+                background: #fff;
+
+                > a {
+                  display: block;
+                  padding-right: 60px;
+                  position: relative;
+                  text-decoration: none;
+                  margin-bottom: 1px;
+                  padding: 24px 20px;
+                  padding-left: 40px;
+                  color: #000;
+                  background: #fff;
+                }
+
+                &.has-submenu-toggle {
+                  background: $week-blue;
+
+                  a {
+                    background: $week-blue;
+                    color: #fff;
+                  }
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
