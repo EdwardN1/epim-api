@@ -6,7 +6,7 @@
     ?>
 
     <section class="full-width">
-        <article class="full-width__inner full-width__container wysiwyg">
+        <article class="kosnic-listing">
             <h1 class="title">
                 <?php the_title(); ?>
             </h1>

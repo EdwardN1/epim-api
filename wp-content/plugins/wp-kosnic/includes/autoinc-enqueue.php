@@ -12,5 +12,6 @@ function kosnic_site_scripts() {
 
 	// Register main stylesheet
 	wp_enqueue_style( 'foundation-css', kosnic_PLUGINURI . 'css/style.css', array(), filemtime(kosnic_PLUGINPATH . 'css/style.css'), 'all' );
+	wp_enqueue_style( 'kosnic-css', kosnic_PLUGINURI . 'assets/styles/style.css', array('foundation-css'), filemtime(kosnic_PLUGINPATH . 'assets/styles/style.css'), 'all' );
 
 }
