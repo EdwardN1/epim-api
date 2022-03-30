@@ -60,8 +60,9 @@ function kosnic_cat_nav($active = 0)
                                     );
                                     $secondNestCategories = get_categories($args);
                                     if ($secondNestCategories):
+                                        $snActive = '';
                                         ?>
-                                        <ul class="menu vertical nested second-nest">
+                                        <ul class="menu vertical nested second-nest is-active">
                                             <?php foreach ($secondNestCategories as $secondNestCategory): ?>
                                                 <li>
                                                     <?php
