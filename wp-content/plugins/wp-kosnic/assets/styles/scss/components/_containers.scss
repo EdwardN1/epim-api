@@ -5,14 +5,41 @@
   margin-right: auto;
 }
 
+.woocommerce ul.products li.product a {
+  min-height: 267px;
+  max-height: 267px;
+  display: block;
+  position: relative;
+  img {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: 180px;
+    max-width: 225px;
+    width: auto;
+    height: auto;
+  }
+  h2 {
+    min-height: 75px;
+  }
+}
+
+.woocommerce div.product div.images .woocommerce-product-gallery__wrapper {
+  padding: 1em;
+}
+
 .kosnic-cats, .kosnic-prods, .kosnic-related {
   padding-left: 10px;
+
   ul.products li.product, ul.products li.product {
     margin-right: 10px;
   }
+
   ul.products li.last, ul.products li.last {
     margin-right: 0;
   }
+
 }
 
 .kosnic-cats {
@@ -20,6 +47,7 @@
     margin-right: 10px;
     background: #fff;
   }
+
   .woocommerce ul.products li.last, .woocommerce-page ul.products li.last {
     margin-right: 0;
   }
@@ -29,21 +57,37 @@
     color: #fff;
     text-align: center;
     min-height: 3em;
+
     mark {
       color: #fff;
       background-color: transparent;
     }
   }
+
+  .woocommerce ul.products li.product a {
+    img {
+      margin: 0;
+      margin-left: auto;
+      margin-right: auto;
+      max-height: none;
+      max-width: none;
+      width: auto;
+      height: auto;
+    }
+  }
+
 }
 
 .kosnic-prods, .kosnic-related {
   ul.products li.product, ul.products li.product {
     margin-right: 10px;
     background: #fff;
+
     a.button {
       display: none;
     }
   }
+
   ul.products li.product .woocommerce-loop-category__title, ul.products li.product .woocommerce-loop-product__title, ul.products li.product h3 {
     padding-left: 1em;
     padding-right: 1em;

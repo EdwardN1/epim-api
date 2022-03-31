@@ -22,7 +22,7 @@
                 ?>
                 <div id="product-<?php the_ID(); ?>" <?php wc_product_class('', $product); ?>>
                     <h1 class="kosnic-h1"><?php the_title(); ?></h1>
-                    <div class="grid-x" >
+                    <div class="grid-x main-product" >
                         <div class="cell large-4 medium-3 small-12 image-gallery">
                             <div >
                                 <?php do_action('woocommerce_before_single_product_summary'); ?>
@@ -106,7 +106,7 @@
                     <div class="cell auto">
                         <?php if ($currentCat): ?>
                             <div class="kosnic-cats">
-                                <?php echo do_shortcode('[product_categories number="0" parent="' . $currentCat . '" columns="3"]'); ?>
+                                <?php //echo do_shortcode('[product_categories number="0" parent="' . $currentCat . '" columns="3"]'); ?>
                             </div>
                             <div class="kosnic-prods">
                                 <?php //the_content();
