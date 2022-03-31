@@ -3,8 +3,85 @@
   max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  div.product div.images, div.product div.images, div.product div.images, div.product div.images {
-    float: none;
-    width: auto;
+
+  div.product {
+    .image-gallery {
+      padding-right: 10px;
+      div.images {
+        float: none;
+        width: auto;
+        background: #fff;
+        img {
+          max-height: 300px;
+          width: auto;
+          display: block;
+          margin-left: auto;
+          margin-right: auto;
+        }
+      }
+    }
+    .details {
+      background: #fff;
+      .woocommerce-tabs ul.tabs {
+        padding: 0;
+        &:before {
+          content: "";
+          border: none;
+        }
+        li {
+          background: $blue;
+          border: none;
+          border-radius: 0;
+          padding: 10px;
+          color: #fff;
+          position: relative;
+          margin-right: 1px;
+          &:before {
+            content: "";
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+          }
+          &:after {
+            content: " ";
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: #fff;
+            height: 100%
+          }
+          a {
+            color: #fff;
+            padding-left: 10px;
+            padding-right: 10px;
+          }
+          &.active {
+            background: #fff;
+            color: $blue;
+            a {
+              color: $blue;
+            }
+          }
+        }
+      }
+      #tab-description, .wc-tab {
+        padding: 20px;
+        h2 {
+          font-size: 28px;
+          margin-bottom: 1em;
+        }
+      }
+    }
   }
+
+}
+
+.kosnic-h1 {
+  font-size: 18px;
+  margin-bottom: 1em;
 }

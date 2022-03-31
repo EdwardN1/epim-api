@@ -576,13 +576,19 @@ function ajax_epimaapi_create_category()
     if (!empty($_POST['ID'])) {
         if (!empty($_POST['name'])) {
             $WebPath = '';
-            $Picture_ids = '';
+            $Picture_ids = array();
             if (isset($_POST['WebPath'])) {
                 $WebPath = sanitize_text_field($_POST['WebPath']);
             }
             if (isset($_POST['picture_ids'])) {
-                $Picture_ids = sanitize_text_field($_POST['picture_ids']);
+                if(is_array($_POST['picture_ids'])) {
+                    foreach ($_POST['picture_ids'] as $picture_id) {
+                        $Picture_ids[] = sanitize_text_field($picture_id);
+                    }
+                }
             }
+            /*error_log('$_POST["picture_ids"] = '.print_r($_POST['picture_ids'],true));
+            error_log('$Picture_ids = '.print_r($Picture_ids,true ));*/
             $response = epimaapi_create_category(
                 sanitize_text_field($_POST['ID']),
                 sanitize_text_field($_POST['name']),

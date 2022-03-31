@@ -9,102 +9,74 @@
                 global $product;
 
                 /**
-                * Hook: woocommerce_before_single_product.
-                *
-                * @hooked wc_print_notices - 10
-                */
-                do_action( 'woocommerce_before_single_product' );
+                 * Hook: woocommerce_before_single_product.
+                 *
+                 * @hooked wc_print_notices - 10
+                 */
+                do_action('woocommerce_before_single_product');
 
-                if ( post_password_required() ) {
-                echo get_the_password_form(); // WPCS: XSS ok.
-                return;
+                if (post_password_required()) {
+                    echo get_the_password_form(); // WPCS: XSS ok.
+                    return;
                 }
                 ?>
-                <div id="product-<?php the_ID(); ?>" <?php wc_product_class( '', $product ); ?>>
-                    <div class="grid-x">
+                <div id="product-<?php the_ID(); ?>" <?php wc_product_class('', $product); ?>>
+                    <h1 class="kosnic-h1"><?php the_title(); ?></h1>
+                    <div class="grid-x" >
                         <div class="cell large-4 medium-3 small-12 image-gallery">
-                            <?php do_action( 'woocommerce_before_single_product_summary' );?>
+                            <div >
+                                <?php do_action('woocommerce_before_single_product_summary'); ?>
+                            </div>
                         </div>
                         <div class="cell large-8 medium-9 small-12 details">
-                            <?php
-                            //do_action( 'woocommerce_after_single_product_summary' );
-                            $product_tabs = apply_filters( 'woocommerce_product_tabs', array() );
+                            <div >
+                                <?php
+                                //do_action( 'woocommerce_after_single_product_summary' );
+                                $product_tabs = apply_filters('woocommerce_product_tabs', array());
 
-                            if ( ! empty( $product_tabs ) ) : ?>
+                                if (!empty($product_tabs)) : ?>
 
-                                <div class="woocommerce-tabs wc-tabs-wrapper">
-                                    <ul class="tabs wc-tabs" role="tablist">
-			                            <?php foreach ( $product_tabs as $key => $product_tab ) : ?>
-                                            <li class="<?php echo esc_attr( $key ); ?>_tab" id="tab-title-<?php echo esc_attr( $key ); ?>" role="tab" aria-controls="tab-<?php echo esc_attr( $key ); ?>">
-                                                <a href="#tab-<?php echo esc_attr( $key ); ?>">
-						                            <?php echo wp_kses_post( apply_filters( 'woocommerce_product_' . $key . '_tab_title', $product_tab['title'], $key ) ); ?>
-                                                </a>
-                                            </li>
-			                            <?php endforeach; ?>
-                                    </ul>
-		                            <?php foreach ( $product_tabs as $key => $product_tab ) : ?>
-                                        <div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--<?php echo esc_attr( $key ); ?> panel entry-content wc-tab" id="tab-<?php echo esc_attr( $key ); ?>" role="tabpanel" aria-labelledby="tab-title-<?php echo esc_attr( $key ); ?>">
-				                            <?php
-				                            if ( isset( $product_tab['callback'] ) ) {
-					                            call_user_func( $product_tab['callback'], $key, $product_tab );
-				                            }
-				                            ?>
-                                        </div>
-		                            <?php endforeach; ?>
+                                    <div class="woocommerce-tabs wc-tabs-wrapper">
+                                        <ul class="tabs wc-tabs" role="tablist">
+                                            <?php foreach ($product_tabs as $key => $product_tab) : ?>
+                                                <li class="<?php echo esc_attr($key); ?>_tab"
+                                                    id="tab-title-<?php echo esc_attr($key); ?>" role="tab"
+                                                    aria-controls="tab-<?php echo esc_attr($key); ?>">
+                                                    <a href="#tab-<?php echo esc_attr($key); ?>">
+                                                        <?php echo wp_kses_post(apply_filters('woocommerce_product_' . $key . '_tab_title', $product_tab['title'], $key)); ?>
+                                                    </a>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                        <?php foreach ($product_tabs as $key => $product_tab) : ?>
+                                            <div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--<?php echo esc_attr($key); ?> panel entry-content wc-tab"
+                                                 id="tab-<?php echo esc_attr($key); ?>" role="tabpanel"
+                                                 aria-labelledby="tab-title-<?php echo esc_attr($key); ?>">
+                                                <?php
+                                                if (isset($product_tab['callback'])) {
+                                                    call_user_func($product_tab['callback'], $key, $product_tab);
+                                                }
+                                                ?>
+                                            </div>
+                                        <?php endforeach; ?>
 
-		                            <?php do_action( 'woocommerce_product_after_tabs' ); ?>
-                                </div>
+                                        <?php do_action('woocommerce_product_after_tabs'); ?>
+                                    </div>
 
-                            <?php endif; ?>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
 
                     <div class="kosnic-related">
-	                <?php
-	                echo do_shortcode('[related_products limit="12"]');
-                    ?>
-                    </div>
-                    <?php
-                    /**
-                     * Hook: woocommerce_before_single_product_summary.
-                     *
-                     * @hooked woocommerce_show_product_sale_flash - 10
-                     * @hooked woocommerce_show_product_images - 20
-                     */
-                    //do_action( 'woocommerce_before_single_product_summary' );
-                    ?>
-
-                    <!--<div class="summary entry-summary">-->
                         <?php
-                        /**
-                         * Hook: woocommerce_single_product_summary.
-                         *
-                         * @hooked woocommerce_template_single_title - 5
-                         * @hooked woocommerce_template_single_rating - 10
-                         * @hooked woocommerce_template_single_price - 10
-                         * @hooked woocommerce_template_single_excerpt - 20
-                         * @hooked woocommerce_template_single_add_to_cart - 30
-                         * @hooked woocommerce_template_single_meta - 40
-                         * @hooked woocommerce_template_single_sharing - 50
-                         * @hooked WC_Structured_Data::generate_product_data() - 60
-                         */
-                        //do_action( 'woocommerce_single_product_summary' );
+                        echo do_shortcode('[related_products limit="4"]');
                         ?>
-                    <!--</div>-->
+                    </div>
 
-                    <?php
-                    /**
-                     * Hook: woocommerce_after_single_product_summary.
-                     *
-                     * @hooked woocommerce_output_product_data_tabs - 10
-                     * @hooked woocommerce_upsell_display - 15
-                     * @hooked woocommerce_output_related_products - 20
-                     */
-                    //do_action( 'woocommerce_after_single_product_summary' );
-                    ?>
                 </div>
 
-                <?php do_action( 'woocommerce_after_single_product' ); ?>
+                <?php do_action('woocommerce_after_single_product'); ?>
             </div>
         </section>
         <?php get_footer(); ?>
@@ -137,14 +109,18 @@
                                 <?php echo do_shortcode('[product_categories number="0" parent="' . $currentCat . '" columns="3"]'); ?>
                             </div>
                             <div class="kosnic-prods">
-                                <?php the_content(); ?>
+                                <?php //the_content();
+                                echo do_shortcode('[products limit="6" paginate="true" columns="3" category="' . $wp_query->get_queried_object()->slug . '"]');
+                                ?>
                             </div>
                         <?php else: ?>
                             <div class="kosnic-cats">
                                 <?php echo do_shortcode('[product_categories number="0" parent="0" columns="3"]'); ?>
                             </div>
                             <div class="kosnic-prods">
-                                <?php the_content(); ?>
+                                <?php //the_content();
+                                echo do_shortcode('[products limit="6" paginate="true" columns="3" category="' . $wp_query->get_queried_object()->slug . '"]');
+                                ?>
                             </div>
                         <?php endif; ?>
 

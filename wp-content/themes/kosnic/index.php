@@ -34,7 +34,7 @@
                             <?php echo do_shortcode('[product_categories number="0" parent="0" columns="3"]');?>
                         </div>
                         <div class="kosnic-prods">
-                            <?php the_content(); ?>
+                            <?php //the_content(); ?>
                         </div>
                     <?php endif; ?>
 

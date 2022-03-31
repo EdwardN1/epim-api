@@ -211,7 +211,7 @@ function kosnic_override_yoast_breadcrumb_trail($links) {
                 $shopLinks = array();
                 $shopLink = array();
                 $shopLink['url'] = '/shop/';
-                $shopLink['text'] = 'Shop';
+                $shopLink['text'] = 'Products';
                 $shopLinks[] = $shopLink;
                 foreach ($links as $link) {
                     if($count>0) {
