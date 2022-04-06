@@ -11,17 +11,19 @@
                 <?php the_title(); ?>
             </h1>
             <div class="grid-x">
-                <div class="cell shrink">
+                <div class="cell medium-shrink large-shrink small-12">
                     <?php
                     $currentCat = $wp_query->get_queried_object()->term_id;
+                    $kosnic_menu = '';
                     if ($currentCat) {
-                        echo kosnic_cat_nav($currentCat);
+	                    $kosnic_menu = kosnic_cat_nav($currentCat);
                         //echo do_shortcode('[product_categories number="0" parent="'.$currentCat.'"]');
                     } else {
-                        echo kosnic_cat_nav();
-                    } ?>
+	                    $kosnic_menu = kosnic_cat_nav();
+                    }
+                    ?>
                 </div>
-                <div class="cell auto">
+                <div class="cell medium-auto large-auto small-12">
                     <?php if($currentCat):?>
                         <div class="kosnic-cats">
                             <?php echo do_shortcode('[product_categories number="0" parent="'.$currentCat.'" columns="3"]');?>
