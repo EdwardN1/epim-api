@@ -8,11 +8,14 @@ function kosnic_cat_nav($active = 0)
         'hide_empty' => true,
         'parent' => 0
     );
+    $res = array();
+    $res['desktop'] = '';
+    $res['mobile'] = '';
     ob_start();
     $parentCategories = get_categories($args);
     if ($parentCategories):
         ?>
-        <ul class="vertical menu accordion-menu" data-accordion-menu data-submenu-toggle="true">
+
             <?php foreach ($parentCategories as $parentCategory):
                 $parent_cat_id = $parentCategory->term_id;
                 $parent_cat_name = $parentCategory->name;
@@ -82,8 +85,11 @@ function kosnic_cat_nav($active = 0)
                     <?php endif; ?>
                 </li>
             <?php endforeach; ?>
-        </ul>
+
     <?php
     endif;
-    return ob_get_clean();
+    $menu = ob_get_clean();
+    $res['desktop'] = '<ul class="vertical menu accordion-menu" data-accordion-menu data-submenu-toggle="true">'.$menu.'</ul>';
+    $res['mobile'] = '<ul class="vertical menu accordion-menu" data-accordion-menu data-submenu-toggle="true"><li><a href="/shop/">Products</a><ul  class="menu vertical nested">'.$menu.'</li></ul></ul>';
+    return $res;
 }

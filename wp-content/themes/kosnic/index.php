@@ -22,6 +22,7 @@
 	                    $kosnic_menu = kosnic_cat_nav();
                     }
                     ?>
+                    <div class="show-for-large"></div>
                 </div>
                 <div class="cell medium-auto large-auto small-12">
                     <?php if($currentCat):?>
