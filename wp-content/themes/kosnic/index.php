@@ -7,7 +7,7 @@
 
     <section class="full-width">
         <article class="kosnic-listing">
-            <h1 class="title">
+            <h1 class="title show-for-large">
                 <?php the_title(); ?>
             </h1>
             <div class="grid-x">
@@ -22,7 +22,8 @@
 	                    $kosnic_menu = kosnic_cat_nav();
                     }
                     ?>
-                    <div class="show-for-large"></div>
+                    <div class="show-for-large"><?php echo $kosnic_menu['desktop'];?></div>
+                    <div class="hide-for-large"><?php echo $kosnic_menu['mobile'];?></div>
                 </div>
                 <div class="cell medium-auto large-auto small-12">
                     <?php if($currentCat):?>

@@ -46,6 +46,11 @@
   .woocommerce ul.products li.product, .woocommerce-page ul.products li.product {
     margin-right: 10px;
     background: #fff;
+    @media screen and (max-width: 1024px) {
+      margin-right: 0;
+      width: 100%;
+      float: none;
+    }
   }
 
   .woocommerce ul.products li.last, .woocommerce-page ul.products li.last {

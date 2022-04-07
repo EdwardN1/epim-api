@@ -86,6 +86,13 @@
 
 }
 
+.woocommerce ul.products[class*=columns-] li.product, .woocommerce-page ul.products[class*=columns-] li.product {
+  @media screen and (max-width: 1024px) {
+    float: none;
+    width: 100%;
+  }
+}
+
 .kosnic-h1 {
   font-size: 18px;
   margin-bottom: 1em;
