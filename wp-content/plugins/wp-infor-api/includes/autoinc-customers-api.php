@@ -14,9 +14,9 @@ function createCustomersAPIRequest($user_id,$company_name,$email,$phone,$address
 	$request .= '{"setNo": 1,"seqNo": 7,"updateMode": "add","fieldName": "phoneno","fieldValue": "'.$phone.'"},';
 	$request .= '{"setNo": 1,"seqNo": 8,"updateMode": "add","fieldName": "email","fieldValue": "'.$email.'"},';
 	$request .= '{"setNo": 1,"seqNo": 9,"updateMode": "add","fieldName": "user4","fieldValue": "'.$user_id.'"},';
-	$request .= '{"setNo": 1,"seqNo": 10,"updateMode": "add","fieldName": "whse","fieldValue": "FCC"},';
+	$request .= '{"setNo": 1,"seqNo": 10,"updateMode": "add","fieldName": "whse","fieldValue": "WEB"},';
 	$request .= '{"setNo": 1,"seqNo": 11,"updateMode": "add","fieldName": "statecd","fieldValue": "gb"},';
-	$request .= '{"setNo": 1,"seqNo": 12,"updateMode": "add","fieldName": "divno","fieldValue": "09"},';
+	$request .= '{"setNo": 1,"seqNo": 12,"updateMode": "add","fieldName": "divno","fieldValue": "04"},';
 	$request .= '{"setNo": 1,"seqNo": 13,"updateMode": "add","fieldName": "selltype","fieldValue": "c"},';
 	$request .= '{"setNo": 1,"seqNo": 14,"updateMode": "add","fieldName": "slsrepin","fieldValue": "MA99"},';
 	$request .= '{"setNo": 1,"seqNo": 15,"updateMode": "add","fieldName": "slsrepout","fieldValue": "MA99"},';
