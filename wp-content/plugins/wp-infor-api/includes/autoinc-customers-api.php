@@ -4,13 +4,13 @@ function createCustomersAPIRequest($user_id,$company_name,$email,$phone,$address
 	if($credit_check) {
 		$cc = '1';
 	}
-	$request = '{"request": {"companyNumber": 1,"operatorInit": "JR2","tMntTt": {"t-mnt-tt": [';
+	$request = '{"request": {"companyNumber": 1,"operatorInit": "woo","tMntTt": {"t-mnt-tt": [';
 	$request .= '{"setNo": 1,"seqNo": 1,"updateMode": "add","fieldName": "addr1","fieldValue": "'.$address_1.'"},';
 	$request .= '{"setNo": 1,"seqNo": 2,"updateMode": "add","fieldName": "addr2","fieldValue": "'.$address_2.'"},';
 	$request .= '{"setNo": 1,"seqNo": 3,"updateMode": "add","fieldName": "city","fieldValue": "'.$city.'"},';
 	$request .= '{"setNo": 1,"seqNo": 4,"updateMode": "add","fieldName": "zipcd","fieldValue": "'.$post_code.'"},';
 	$request .= '{"setNo": 1,"seqNo": 5,"updateMode": "add","fieldName": "name","fieldValue": "'.$company_name.'"},';
-	$request .= '{"setNo": 1,"seqNo": 6,"updateMode": "add","fieldName": "custtype","fieldValue": "DI"},';
+	$request .= '{"setNo": 1,"seqNo": 6,"updateMode": "add","fieldName": "custtype","fieldValue": "WEB"},';
 	$request .= '{"setNo": 1,"seqNo": 7,"updateMode": "add","fieldName": "phoneno","fieldValue": "'.$phone.'"},';
 	$request .= '{"setNo": 1,"seqNo": 8,"updateMode": "add","fieldName": "email","fieldValue": "'.$email.'"},';
 	$request .= '{"setNo": 1,"seqNo": 9,"updateMode": "add","fieldName": "user4","fieldValue": "'.$user_id.'"},';
@@ -18,8 +18,8 @@ function createCustomersAPIRequest($user_id,$company_name,$email,$phone,$address
 	$request .= '{"setNo": 1,"seqNo": 11,"updateMode": "add","fieldName": "statecd","fieldValue": "gb"},';
 	$request .= '{"setNo": 1,"seqNo": 12,"updateMode": "add","fieldName": "divno","fieldValue": "04"},';
 	$request .= '{"setNo": 1,"seqNo": 13,"updateMode": "add","fieldName": "selltype","fieldValue": "c"},';
-	$request .= '{"setNo": 1,"seqNo": 14,"updateMode": "add","fieldName": "slsrepin","fieldValue": "MA99"},';
-	$request .= '{"setNo": 1,"seqNo": 15,"updateMode": "add","fieldName": "slsrepout","fieldValue": "MA99"},';
+	$request .= '{"setNo": 1,"seqNo": 14,"updateMode": "add","fieldName": "slsrepin","fieldValue": "WEB1"},';
+	$request .= '{"setNo": 1,"seqNo": 15,"updateMode": "add","fieldName": "slsrepout","fieldValue": "WEB1"},';
 	$request .= '{"setNo": 1,"seqNo": 16,"updateMode": "add","fieldName": "taxablety","fieldValue": "y"},';
 	$request .= '{"setNo": 1,"seqNo": 17,"updateMode": "add","fieldName": "bankno","fieldValue": "1"},';
 	$request .= '{"setNo": 1,"seqNo": 18,"updateMode": "add","fieldName": "termstype","fieldValue": "01"},';
@@ -29,7 +29,9 @@ function createCustomersAPIRequest($user_id,$company_name,$email,$phone,$address
 	$request .= '{"setNo": 1,"seqNo": 22,"updateMode": "add","fieldName": "wodisccd","fieldValue": "1"},';
 	$request .= '{"setNo": 1,"seqNo": 23,"updateMode": "add","fieldName": "einvtype","fieldValue": "M"},';
 	$request .= '{"setNo": 1,"seqNo": 24,"updateMode": "add","fieldName": "einvto","fieldValue": "'.$email.'"},';
-	$request .= '{"setNo": 1,"seqNo": 25,"updateMode": "add","fieldName": "user6","fieldValue": "'.$cc.'"}';
+	$request .= '{"setNo": 1,"seqNo": 25,"updateMode": "add","fieldName": "user6","fieldValue": "'.$cc.'"},';
+    $request .= '{"setNo": 1,"seqNo": 26,"updateMode": "add","fieldName": "pricetype","fieldValue": "ESS1"},';
+    $request .= '{"setNo": 1,"seqNo": 25,"updateMode": "add","fieldName": "holdpercd","fieldValue": "0"}';
 	$request .= ' ]},"extraData": "string"}}';
 	wp_mail('edward@technicks.com','Infor Customer Request',$request,array('Content-Type: text/html; charset=UTF-8'));
 	return $request;
