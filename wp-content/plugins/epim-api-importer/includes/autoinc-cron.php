@@ -22,6 +22,9 @@ function epimaapi_cron_activation() {
 	if ( ! wp_next_scheduled( 'epimaapi_update_branch_stock_daily_action' ) ) {
 		wp_schedule_event( strtotime( '22:20:00' ), 'daily', 'epimaapi_update_branch_stock_daily_action' );
 	}
+    if ( ! wp_next_scheduled( 'epimaapi_update_luckins_daily_action' ) ) {
+        wp_schedule_event( strtotime( '04:00:00' ), 'daily', 'epimaapi_update_luckins_daily_action' );
+    }
 	if ( ! wp_next_scheduled( 'epimaapi_update_branch_stock_minutes_action' ) ) {
 		wp_schedule_event( time(), 'minutes_10', 'epimaapi_update_branch_stock_minutes_action' );
 	}
@@ -33,6 +36,11 @@ function epimaapi_cron_activation() {
 add_action( 'epimaapi_update_branch_stock_minutes_action', 'epimaapi_update_branch_stock_minutes' );
 add_action( 'epimaapi_update_every_minute_minute_action', 'epimaapi_update_every_minute' );
 add_action( 'epimaapi_update_branch_stock_daily_action', 'epimaapi_update_branch_stock_daily' );
+add_action('epimaapi_update_luckins_daily_action','epimaapi_update_luckins_daily');
+
+function epimaapi_update_luckins_daily() {
+    epimaapi_update_branch_stock_cron();
+}
 
 function epimaapi_update_branch_stock_daily() {
 	if ( ! wp_next_scheduled( 'epimaapi_update_branch_stock_minutes_action' ) ) {
@@ -41,6 +49,9 @@ function epimaapi_update_branch_stock_daily() {
 	if ( ! wp_next_scheduled( 'epimaapi_update_every_minute_minute_action' ) ) {
 		wp_schedule_event( time(), 'minutes_1', 'epimaapi_update_every_minute_minute_action' );
 	}
+    if ( ! wp_next_scheduled( 'epimaapi_update_luckins_daily_action' ) ) {
+        wp_schedule_event( strtotime( '04:00:00' ), 'daily', 'epimaapi_update_luckins_daily_action' );
+    }
 	$epim_enable_scheduled_updates        = false;
 	$epim_enable_scheduled_updates_option = get_option( 'epim_enable_scheduled_updates' );
 	if ( is_array( $epim_enable_scheduled_updates_option ) ) {
@@ -78,6 +89,9 @@ function epimaapi_update_every_minute() {
 	if ( ! wp_next_scheduled( 'epimaapi_update_branch_stock_minutes_action' ) ) {
 		wp_schedule_event( time(), 'minutes_10', 'epimaapi_update_branch_stock_minutes_action' );
 	}
+    if ( ! wp_next_scheduled( 'epimaapi_update_luckins_daily_action' ) ) {
+        wp_schedule_event( strtotime( '04:00:00' ), 'daily', 'epimaapi_update_luckins_daily_action' );
+    }
 	set_time_limit(0);
 	$epim_update_running = get_option( '_epim_update_running' );
 	if($epim_update_running=='') {
