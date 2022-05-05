@@ -40,6 +40,9 @@ add_action('epimaapi_update_luckins_daily_action','epimaapi_update_luckins_daily
 
 function epimaapi_update_luckins_daily() {
     epimaapi_update_branch_stock_cron();
+    /*if ( ! ( false === get_option( 'epim_schedule_log' ) ) ) {
+        update_option( 'epim_schedule_log', $log );
+    }*/
 }
 
 function epimaapi_update_branch_stock_daily() {
@@ -319,6 +322,8 @@ function epimaapi_update_branch_stock_minutes() {
 }
 
 function epimaapi_update_branch_stock_cron() {
+    /*define( 'WP_USE_THEMES', false );
+    require( $_SERVER['DOCUMENT_ROOT'] .'/wp-load.php' );*/
 	$log   = '';
 	$start = microtime( true );
 	//error_log('epimaapi_update_branch_stock_cron started');
@@ -332,7 +337,10 @@ function epimaapi_update_branch_stock_cron() {
 					$stockLevels = json_decode( get_epimaapi_get_branch_stock_since( $Id, $yesterday ), true );
 					if ( is_array( $stockLevels ) ) {
 						foreach ( $stockLevels as $stock_level ) {
-							$log .= epimaapi_update_branch_stock( $Id, $stock_level['VariationId'], $stock_level['Stock'] ) . '</br>';
+                            $datetime_now = date('d/m/Y h:i:s a', time());
+                            $this_log = $datetime_now . ': '.epimaapi_update_branch_stock( $Id, $stock_level['VariationId'], $stock_level['Stock'] );
+							$log .= $this_log . '</br>';
+                            //error_log($this_log);
 						}
 					} else {
 						//error_log('epim daily cron - No stock to update for Branch: '.$Id);
@@ -377,9 +385,11 @@ function epimaapi_update_branch_stock_cron() {
 	}
 	$time_elapsed_secs = microtime( true ) - $start;
 	$log               .= 'Import took ' . $time_elapsed_secs . ' seconds.';
-	//error_log('epimaapi_update_branch_stock_daily Import Took '.$time_elapsed_secs.' seconds');
+
 	if ( ! ( false === get_option( 'epim_schedule_log' ) ) ) {
+        //error_log('epimaapi_update_branch_stock_daily Import Took '.$time_elapsed_secs.' seconds');
 		update_option( 'epim_schedule_log', $log );
+        //error_log(get_option('epim_schedule_log'));
 	}
 }
 
