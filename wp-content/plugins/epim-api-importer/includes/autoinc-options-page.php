@@ -43,7 +43,7 @@ function epim_register_settings() {
 	add_option( 'epim_exclude_luckins_data', '1' );
 	register_setting( 'epim_options_group', 'epim_exclude_luckins_data' );
 	add_option( 'epim_prioritise_epim_images', '1' );
-	register_setting( 'epim_options_group', '' );
+	register_setting( 'epim_options_group', 'epim_prioritise_epim_images' );
     add_option( 'epim_background_updates_max_run_time', '23' );
     register_setting( 'epim_options_group', 'epim_background_updates_max_run_time' );
 
