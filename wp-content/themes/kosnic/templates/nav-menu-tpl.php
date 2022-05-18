@@ -19,14 +19,15 @@
         ?>
 
       </div>
-      <form action="/product-search" method="post" class="search-form js-search-form">
-        <input type="search"
-               class="search-form__input"
-               name="product_search"
-               placeholder="Search Products" />
-        <button type="submit" class="search-form__submit">
-          <i class="fa fa-search"></i>
-        </button>
-      </form>
+        <?php get_product_search_form(); ?>
+        <!--<form action="/product-search" method="post" class="search-form js-search-form">
+          <input type="search"
+                 class="search-form__input"
+                 name="product_search"
+                 placeholder="Search Products" />
+          <button type="submit" class="search-form__submit">
+            <i class="fa fa-search"></i>
+          </button>
+        </form>-->
     </nav>
   </section>
