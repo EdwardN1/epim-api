@@ -20,6 +20,7 @@ $grid_columns = 4; ?>
         <article id="post-<?php the_ID(); ?>" <?php post_class(''); ?> role="article">
 
             <section class="featured-image" itemprop="text">
+                <a href="<?php the_permalink() ?>" class="image-link">
                 <?php
                 if (get_post_type() == 'product') {
                     if(has_post_thumbnail()) {
@@ -30,13 +31,14 @@ $grid_columns = 4; ?>
                 } else {
                     the_post_thumbnail('full');
                 } ?>
+                </a>
             </section> <!-- end article section -->
 
             <header class="article-header">
                 <h3 class="title"><a href="<?php the_permalink() ?>" rel="bookmark"
                                      title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h3>
                 <?php //get_template_part('parts/content', 'byline'); ?>
-                <a href="<?php the_permalink() ?>" class="button product_type_simple" rel="nofollow">Read more</a>
+                <!--<a href="<?php /*the_permalink() */?>" class="button product_type_simple" rel="nofollow">Read more</a>-->
             </header> <!-- end article header -->
 
             <section class="entry-content" itemprop="text">
