@@ -21,7 +21,21 @@
                 }
                 ?>
                 <div id="product-<?php the_ID(); ?>" <?php wc_product_class('', $product); ?>>
-                    <h1 class="kosnic-h1"><?php the_title(); ?></h1>
+                    <?php
+                    $product_attributes = $product->get_attributes();
+                    $web_description_id = $product_attributes['pa_web-description']['options']['0'];
+                    if($web_description_id) {
+                        $web_description = get_term( $web_description_id )->name;
+                        if($web_description) {
+                            echo '<h1 class="kosnic-h1">' . esc_html( $web_description ) . '</h1>';
+                        } else {
+                            echo '<h1 class="kosnic-h1">' . esc_html( $product->get_title() ) . '</h1>';
+                        }
+                    } else {
+                        echo '<h1 class="kosnic-h1">' . esc_html( $product->get_title() ) . '</h1>';
+                    }
+                    ?>
+                    <!--<h1 class="kosnic-h1"><?php /*the_title(); */?></h1>-->
                     <div class="grid-x main-product" >
                         <div class="cell large-4 medium-3 small-12 image-gallery">
                             <div >
