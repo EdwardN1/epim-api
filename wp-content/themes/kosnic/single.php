@@ -35,6 +35,7 @@
                         echo '<h1 class="kosnic-h1">' . esc_html( $product->get_title() ) . '</h1>';
                     }
                     ?>
+                    <h2 style="padding-bottom: 1em;">SKU: <?php echo $product->get_sku(); ?></h2>
                     <!--<h1 class="kosnic-h1"><?php /*the_title(); */?></h1>-->
                     <div class="grid-x main-product" >
                         <div class="cell large-4 medium-3 small-12 image-gallery">
