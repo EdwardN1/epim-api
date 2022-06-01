@@ -690,4 +690,12 @@ adminJQ(function ($) {
     if($('#GetCurrentUpdateData').length) {
         $('#GetCurrentUpdateData').click();
     }
+
+    $('#epim_use_dynamic_data_sheets').click(function () {
+        $('.visible-for-datasheets').toggleClass('revealed');
+    });
+
+    if(document.getElementById('epim_use_dynamic_data_sheets').checked) {
+        $('.visible-for-datasheets').toggleClass('revealed');
+    }
 });
