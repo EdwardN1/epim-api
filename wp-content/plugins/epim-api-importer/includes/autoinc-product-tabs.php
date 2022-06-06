@@ -18,6 +18,15 @@ function epimaapi_product_tab($tabs)
                 'callback' => 'epimaapi_product_tab_content'
             );
         }
+    } else {
+        $use_dynamic_data_sheets = get_option('epim_use_dynamic_data_sheets');
+        if($use_dynamic_data_sheets['checkbox_value'] == '1') {
+            $tabs['epimaapi_tab'] = array(
+                'title' => __('Data Sheets', 'epimaapi'),
+                'priority' => 50,
+                'callback' => 'epimaapi_product_tab_content'
+            );
+        }
     }
 
     return $tabs;
