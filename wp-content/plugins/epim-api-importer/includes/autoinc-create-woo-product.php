@@ -297,7 +297,16 @@ function epimaapi_wooCreateProduct_ex( $pid, $productArray ) {
 
 			//in case we have more than 1 image, then add them to product gallery.
 			if ( count( $productImagesIDs ) > 1 ) {
-				$objProduct->set_gallery_image_ids( $productImagesIDs );
+                //shift array down
+                $productGallery = array();
+                $i = 0;
+                foreach ($productImagesIDs as $productImagesID) {
+                    if($i != 0) {
+                        $productGallery[] = $productImagesID;
+                    }
+                    $i++;
+                }
+				$objProduct->set_gallery_image_ids( $productGallery );
 			}
 		}
 
