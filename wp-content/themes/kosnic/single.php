@@ -129,7 +129,7 @@
                             </div>
                             <div class="kosnic-prods">
                                 <?php //the_content();
-                                echo do_shortcode('[products limit="6" paginate="true" columns="3" category="' . $wp_query->get_queried_object()->slug . '"]');
+                                echo do_shortcode('[products limit="12" paginate="true" columns="3" category="' . $wp_query->get_queried_object()->slug . '"]');
                                 ?>
                             </div>
                         <?php else: ?>
@@ -138,7 +138,7 @@
                             </div>
                             <div class="kosnic-prods">
                                 <?php //the_content();
-                                echo do_shortcode('[products limit="6" paginate="true" columns="3" category="' . $wp_query->get_queried_object()->slug . '"]');
+                                echo do_shortcode('[products limit="12" paginate="true" columns="3" category="' . $wp_query->get_queried_object()->slug . '"]');
                                 ?>
                             </div>
                         <?php endif; ?>
