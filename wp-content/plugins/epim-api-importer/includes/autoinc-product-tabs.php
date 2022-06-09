@@ -20,7 +20,7 @@ function epimaapi_product_tab($tabs)
         }
     } else {
         $use_dynamic_data_sheets = get_option('epim_use_dynamic_data_sheets');
-        if($use_dynamic_data_sheets['checkbox_value'] == '1') {
+        if ($use_dynamic_data_sheets['checkbox_value'] == '1') {
             $tabs['epimaapi_tab'] = array(
                 'title' => __('Data Sheets', 'epimaapi'),
                 'priority' => 50,
@@ -50,16 +50,30 @@ function epimaapi_product_tab_content()
                     $i = 0;
                     foreach ($dynamic_data_sheets_templates as $data_sheets_template) {
                         $data_sheet_name = 'Data Sheet';
-                        if($dynamic_data_sheets_names[$i]) {
+                        if ($dynamic_data_sheets_names[$i]) {
                             $data_sheet_name = $dynamic_data_sheets_names[$i];
                         }
                         ?>
                         <tr>
-                            <td><a href="<?php echo $dynamic_data_sheets_url.'?part='.$product->get_sku().'&template='.$data_sheets_template; ?>" target="_blank"><?php echo $data_sheet_name; ?></a> </td>
+                            <td>
+                                <a href="<?php echo $dynamic_data_sheets_url . '?part=' . $product->get_sku() . '&template=' . $data_sheets_template; ?>"
+                                   target="_blank"><?php echo $data_sheet_name; ?></a></td>
                         </tr>
                         <?php
                     }
                     $i++;
+                }
+                if (in_array('kosnic_flipbook_page', get_post_custom_keys($product->get_id()))) {
+                    $kosnic_flipbook_page = get_post_meta($product->get_id(), 'kosnic_flipbook_page', true);
+                    if ($kosnic_flipbook_page) {
+                        ?>
+                        <tr>
+                            <td>
+                                <a href="https://flipbooks.making.me.uk/kosnic#p=<?php echo $kosnic_flipbook_page;?>"
+                                   target="_blank">View in Catalogue</a></td>
+                        </tr>
+                        <?php
+                    }
                 }
                 ?>
 
