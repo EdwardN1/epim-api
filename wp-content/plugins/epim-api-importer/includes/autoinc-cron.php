@@ -97,7 +97,7 @@ function epimaapi_update_every_minute() {
     }
 	set_time_limit(0);
 	$epim_update_running = get_option( '_epim_update_running' );
-	error_log('_epim_update_running: '.$epim_update_running);
+	//error_log('_epim_update_running: '.$epim_update_running);
 	if($epim_update_running=='') {
 		return;
 	}
@@ -265,7 +265,7 @@ function epimaapi_update_every_minute() {
 							}
 							catch (SomeException $ignored) {
 								cron_log($ignored->getMessage());
-								error_log('Exception Caught: '.$ignored->getMessage());
+								//error_log('Exception Caught: '.$ignored->getMessage());
 							}
 
 						}
@@ -295,7 +295,7 @@ function epimaapi_update_branch_stock_minutes() {
 	$epim_update_running = get_option('_epim_update_running');
 	if($epim_update_running != '') {
 		cron_log('Branch Stock Update Cancelled - other updates running(10 minute update)');
-		error_log('Branch Stock Update Cancelled - other updates running(10 minute update)');
+		//error_log('Branch Stock Update Cancelled - other updates running(10 minute update)');
 		return;
 	}
 	if ( ! wp_next_scheduled( 'epimaapi_update_branch_stock_daily_action' ) ) {
