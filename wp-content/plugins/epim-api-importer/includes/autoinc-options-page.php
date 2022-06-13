@@ -420,7 +420,7 @@ function epim_options_page()
                             } ?>/>
                         </td>
                     </tr>
-                    //epim_use_dynamic_data_sheets
+                    <?php //epim_use_dynamic_data_sheets ?>
                     <style>
                         .visible-for-datasheets {
                             display: none;
@@ -480,7 +480,7 @@ function epim_options_page()
                         <td><input type="text" id="epim_background_updates_max_run_time"
                                    name="epim_background_updates_max_run_time"
                                    value="<?php echo get_option('epim_background_updates_max_run_time'); ?>"
-                                   class="regular-text"/></td>
+                                   class="regular-text"/><p>Maximum recommended setting 450</p></td>
                     </tr>
                     <tr>
                         <td colspan="2">

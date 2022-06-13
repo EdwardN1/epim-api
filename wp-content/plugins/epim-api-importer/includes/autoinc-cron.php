@@ -97,6 +97,7 @@ function epimaapi_update_every_minute() {
     }
 	set_time_limit(0);
 	$epim_update_running = get_option( '_epim_update_running' );
+	error_log('_epim_update_running: '.$epim_update_running);
 	if($epim_update_running=='') {
 		return;
 	}
@@ -259,11 +260,21 @@ function epimaapi_update_every_minute() {
 					if ( is_array( $variation ) ) {
 						if ( array_key_exists( 'variationID', $variation ) ) {
 							cron_log('Importing variation ID: '.$variation['variationID']);
-							cron_log( epimaapi_create_product( $variation['productID'], $variation['variationID'], $variation['productBulletText'], $variation['productName'], $variation['categoryIds'], $variation['pictureIds'] ) );
+							try {
+								cron_log( epimaapi_create_product( $variation['productID'], $variation['variationID'], $variation['productBulletText'], $variation['productName'], $variation['categoryIds'], $variation['pictureIds'] ) );
+							}
+							catch (SomeException $ignored) {
+								cron_log($ignored->getMessage());
+								error_log('Exception Caught: '.$ignored->getMessage());
+							}
+
 						}
 					}
 					update_option( '_epim_background_current_index', $i-1 );
 				}
+
+
+
 
 				$i++;
 				$time_now = microtime(true);
@@ -281,6 +292,12 @@ function epimaapi_update_every_minute() {
 }
 
 function epimaapi_update_branch_stock_minutes() {
+	$epim_update_running = get_option('_epim_update_running');
+	if($epim_update_running != '') {
+		cron_log('Branch Stock Update Cancelled - other updates running(10 minute update)');
+		error_log('Branch Stock Update Cancelled - other updates running(10 minute update)');
+		return;
+	}
 	if ( ! wp_next_scheduled( 'epimaapi_update_branch_stock_daily_action' ) ) {
 		wp_schedule_event( strtotime( '22:20:00' ), 'daily', 'epimaapi_update_branch_stock_daily_action' );
 	}
