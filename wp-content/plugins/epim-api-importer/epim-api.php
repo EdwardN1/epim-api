@@ -37,7 +37,7 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins ) ) {
 		}
 	}
     $divi_theme = wp_get_theme();
-    if('Divi' == $divi_theme->name()) {
+    if('Divi' == $divi_theme->name) {
         foreach (glob(epimaapi_FUNCTIONSPATH.'autoinc-divi-*.php') as $filename)
         {
             require_once ($filename);
