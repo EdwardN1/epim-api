@@ -36,11 +36,20 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins ) ) {
 			require_once ($filename);
 		}
 	}
+    $divi_theme = wp_get_theme();
+    if('Divi' == $divi_theme->name()) {
+        foreach (glob(epimaapi_FUNCTIONSPATH.'autoinc-divi-*.php') as $filename)
+        {
+            require_once ($filename);
+        }
+    }
 	foreach (glob(epimaapi_FUNCTIONSPATH.'autoinc-*.php') as $filename)
 	{
 		if(strpos($filename,'autoinc-wpoa')===false) {
 			if(strpos($filename,'autoinc-candc')===false) {
-				require_once ($filename);
+                if(strpos($filename,'autoinc-divi-')===false) {
+                    require_once ($filename);
+                }
 			}
 		}
 	}
