@@ -2,21 +2,21 @@
 /*------Replace the Search Button with an Icon------*/
 /*---------------------------------------------------------------*/
 /*Hide the search button*/
-/*.ds-icon-search input.et_pb_searchsubmit,
+.ds-icon-search input.et_pb_searchsubmit,
 .widget_search input#searchsubmit {
     background: transparent;
     color: transparent;
     border: none;
     width: 55px;
     z-index: 2;
-}*/
+}
 /*Add padding to the search input field*/
-/*.ds-icon-search input.et_pb_s,
+.ds-icon-search input.et_pb_s,
 .widget_search input#s {
     padding-right: 55px !important;
-}*/
+}
 /*Add the icon*/
-/*.ds-icon-search .et_pb_searchform:before,
+.ds-icon-search .et_pb_searchform:before,
 .widget_search::before {
     content: '\55';
     position: absolute;
@@ -26,7 +26,7 @@
     font-size: 20px;
     padding-top: 0.85em;
     padding-right: 1em;
-}*/
+}
 /*---------------------------------------------------------------*/
 /*---End - Replace the Search Button with an Icon---*/
 /*---------------------------------------------------------------*/

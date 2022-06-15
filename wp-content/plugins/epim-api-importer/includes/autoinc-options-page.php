@@ -144,6 +144,13 @@ function epim_options_page()
                                        value="<?php echo get_option('epim_divi_secondary_color'); ?>"
                                        class="ir"/></td>
                         </tr>
+
+                        <tr>
+                            <td>
+                            <button id="WriteDiviCss" class="button">Set these colours live</button>&nbsp;
+                            </td>
+                        </tr>
+
                     </table>
                     <?php submit_button(); ?>
                 </form>

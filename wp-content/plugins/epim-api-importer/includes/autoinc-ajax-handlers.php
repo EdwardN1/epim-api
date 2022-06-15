@@ -62,8 +62,19 @@ add_action('wp_ajax_get_background_changed_products_since', 'ajax_get_epimaapi_b
 add_action('wp_ajax_force_background_update', 'ajax_epimaapi_force_background_update');
 add_action('wp_ajax_unfreeze_queue', 'ajax_epimaapi_unfreeze_queue');
 
+add_action('wp_ajax_divi_write_css_file', 'ajax_epimaapi_divi_write_css_file');
+
 
 add_action('wp_ajax_cron_tail', 'ajax_epimaapi_cron_tail');
+
+function ajax_epimaapi_divi_write_css_file() {
+	epimaapi_checkSecure();
+	if (!empty($_POST['primary'])) {
+		if (!empty($_POST['secondary'])) {
+			epim_write_css_file( $_POST['primary'], $_POST['secondary'] );
+		}
+	}
+}
 
 function ajax_epimaapi_cron_tail()
 {

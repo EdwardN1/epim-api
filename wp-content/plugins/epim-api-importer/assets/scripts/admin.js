@@ -687,6 +687,20 @@ adminJQ(function ($) {
         });
     }
 
+    $('#WriteDiviCss').on('click',function (){
+        let $sec = epim_ajax_object.security;
+        let $primary = $('#epim_divi_primary_color').val();
+        let $secondary = $('#epim_divi_secondary_color').val();
+        jQuery.ajax({
+            data:{security: $sec, action: 'divi_write_css_file', primary: $primary, secondary: $secondary},
+            type: "POST",
+            url: ajaxurl,
+            success: function (data) {
+                alert('Colours set to live');
+            }
+        });
+    });
+
     if($('#GetCurrentUpdateData').length) {
         $('#GetCurrentUpdateData').click();
     }
