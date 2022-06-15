@@ -65,6 +65,12 @@ function epim_register_settings()
     add_option('epim_schedule_log', '');
     register_setting('epim_schedule_options_group', 'epim_schedule_log');
 
+    add_option('epim_divi_primary_color', '');
+    register_setting('epim_divi_options_group', 'epim_divi_primary_color');
+    add_option('epim_divi_secondary_color', '');
+    register_setting('epim_divi_options_group', 'epim_divi_secondary_color');
+
+
     add_option('_epim_update_running', '');
     add_option('_epim_background_process_data', '');
     add_option('_epim_background_last_process_data', '');
@@ -80,6 +86,7 @@ add_action('admin_init', 'epim_register_settings');
 
 function epim_options_page()
 {
+    global $is_divi;
     ?>
     <div class="wrap">
         <?php screen_icon(); ?>
@@ -110,7 +117,44 @@ function epim_options_page()
                    class="nav-tab <?php echo $active_tab == 'epim_restricted_settings' ? 'nav-tab-active' : ''; ?>">ePim
                     Restricted Settings</a>
             <?php endif; ?>
+
+            <?php if ($is_divi) : ?>
+                <a href="?page=epim&tab=epim_divi_settings"
+                   class="nav-tab <?php echo $active_tab == 'epim_divi_settings' ? 'nav-tab-active' : ''; ?>">Divi
+                    options</a>
+            <?php endif; ?>
+
         </h2>
+
+        <?php if ($active_tab == 'epim_divi_settings'): ?>
+            <div class="wrap">
+                <h1>Divi Options</h1>
+                <form method="post" action="options.php">
+                    <?php settings_fields('epim_divi_options_group'); ?>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="epim_divi_primary_color">Primary Colour</label></th>
+                            <td><input type="text" id="epim_divi_primary_color" name="epim_divi_primary_color"
+                                       value="<?php echo get_option('epim_divi_primary_color'); ?>"
+                                       class="ir"/></td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="epim_divi_secondary_color">Secondary Colour</label></th>
+                            <td><input type="text" id="epim_divi_secondary_color" name="epim_divi_secondary_color"
+                                       value="<?php echo get_option('epim_divi_secondary_color'); ?>"
+                                       class="ir"/></td>
+                        </tr>
+                    </table>
+                    <?php submit_button(); ?>
+                </form>
+            </div>
+            <script>
+                jQuery(document).ready(function ($) {
+                    $('.ir').wpColorPicker();
+                });
+            </script>
+        <?php endif; ?>
+
         <?php if ($active_tab == 'epim_background_updates'): ?>
             <style>
                 .modal {
@@ -425,6 +469,7 @@ function epim_options_page()
                         .visible-for-datasheets {
                             display: none;
                         }
+
                         .visible-for-datasheets.revealed {
                             display: table-row;
                         }
@@ -446,7 +491,6 @@ function epim_options_page()
                                    value="<?php echo get_option('epim_dynamic_data_sheets_url'); ?>"
                                    class="regular-text"/></td>
                     </tr>
-                    //epim_dynamic_data_sheets_templates
                     <tr class="visible-for-datasheets">
                         <th scope="row"><label for="epim_dynamic_data_sheets_templates">List of Templates to
                                 Retrieve</label></th>
@@ -480,7 +524,8 @@ function epim_options_page()
                         <td><input type="text" id="epim_background_updates_max_run_time"
                                    name="epim_background_updates_max_run_time"
                                    value="<?php echo get_option('epim_background_updates_max_run_time'); ?>"
-                                   class="regular-text"/><p>Maximum recommended setting 450</p></td>
+                                   class="regular-text"/>
+                            <p>Maximum recommended setting 450</p></td>
                     </tr>
                     <tr>
                         <td colspan="2">

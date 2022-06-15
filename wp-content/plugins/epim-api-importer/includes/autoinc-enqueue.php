@@ -11,6 +11,8 @@ function epim_admin_enqueue($hook) {
     wp_enqueue_script('jquery-ui-datepicker');
     wp_register_style('jquery-ui', plugins_url('assets/css/jquery-ui-1-8-2.css',__DIR__));
     wp_enqueue_style('jquery-ui');
+    wp_enqueue_style( 'wp-color-picker');
+    wp_enqueue_script( 'wp-color-picker');
     wp_enqueue_script('epim_process_queue_script', plugins_url('assets/scripts/processQueue.js',__DIR__));
     wp_enqueue_script('epim_admin_scripts', plugins_url('assets/scripts/admin.js',__DIR__),'epim_process_queue_script');
     wp_localize_script(
@@ -21,4 +23,16 @@ function epim_admin_enqueue($hook) {
             'security'  => wp_create_nonce( 'epim-security-nonce' ),
         ]
     );
+
+
+
+}
+
+add_action('wp_enqueue_scripts', 'epim_site_scripts', 999);
+
+function epim_site_scripts() {
+    global $divi_theme;
+    if($divi_theme) {
+        wp_enqueue_style( 'epim-css', plugins_url('assets/css/divi-overrides.css',__DIR__), array(), filemtime(plugins_url('assets/css/divi-overrides.css'), 'all' ));
+    }
 }

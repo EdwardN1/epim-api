@@ -17,6 +17,10 @@ define('epimaapi_FUNCTIONSPATH', plugin_dir_path( __FILE__ ) . '/includes/');
 define('epimaapi_PLUGINPATH', plugin_dir_path( __FILE__ ) );
 define('epimaapi_PLUGINURI', plugin_dir_url(__FILE__));
 define('epimaapi_PLUGINFILE',__FILE__);
+
+global $is_divi;
+$is_divi = false;
+
 $active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
 
 if ( in_array( 'woocommerce/woocommerce.php', $active_plugins ) ) {
@@ -38,6 +42,7 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins ) ) {
 	}
     $divi_theme = wp_get_theme();
     if('Divi' == $divi_theme->name) {
+        $is_divi = true;
         foreach (glob(epimaapi_FUNCTIONSPATH.'autoinc-divi-*.php') as $filename)
         {
             require_once ($filename);
