@@ -701,6 +701,26 @@ adminJQ(function ($) {
         });
     });
 
+    $('#BuildDiviCategoryMenu').on('click',function (){
+        let $sec = epim_ajax_object.security;
+        let $epim_divi_number_menu_items = $('#epim_divi_number_menu_items').val();
+        jQuery.ajax({
+            data:{security: $sec, action: 'divi_build_category_menu', numItems: $epim_divi_number_menu_items},
+            type: "POST",
+            url: ajaxurl,
+            dataType:'text',
+            success: function (data) {
+                alert('Category Menu Completed Successfully');
+            },
+            complete: function (data) {
+                alert('Category Menu Completed');
+            },
+            error: function (data) {
+                alert('Category Menu Completed Error');
+            }
+        });
+    });
+
     if($('#GetCurrentUpdateData').length) {
         $('#GetCurrentUpdateData').click();
     }
@@ -709,7 +729,9 @@ adminJQ(function ($) {
         $('.visible-for-datasheets').toggleClass('revealed');
     });
 
-    if(document.getElementById('epim_use_dynamic_data_sheets').checked) {
-        $('.visible-for-datasheets').toggleClass('revealed');
+    if(document.getElementById('epim_use_dynamic_data_sheets')) {
+        if (document.getElementById('epim_use_dynamic_data_sheets').checked) {
+            $('.visible-for-datasheets').toggleClass('revealed');
+        }
     }
 });

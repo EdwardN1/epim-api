@@ -24,12 +24,14 @@
 .et_mobile_menu { border-color: #9dc133;}
 
 
+
 /* ======================= Secondary Color Elements =====================*/
 .epim-divi .secondary-background {background-color: #056631;}
 .epim-divi .secondary-colour {color: #056631;}
 .epim-divi .secondary-border {border-color: #056631;}
 
 .entry-summary p.price ins {color: #056631;}
+.et-db #et-boc .et-l .nav li ul {border-color: #056631;}
 .woocommerce div.product span.price {color: #056631;}
 .woocommerce-page div.product span.price {color: #056631;}
 .woocommerce #content div.product span.price {color: #056631;}

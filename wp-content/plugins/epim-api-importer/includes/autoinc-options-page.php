@@ -69,6 +69,8 @@ function epim_register_settings()
     register_setting('epim_divi_options_group', 'epim_divi_primary_color');
     add_option('epim_divi_secondary_color', '');
     register_setting('epim_divi_options_group', 'epim_divi_secondary_color');
+    add_option('epim_divi_number_menu_items', '');
+    register_setting('epim_divi_options_group', 'epim_divi_number_menu_items','10');
 
 
     add_option('_epim_update_running', '');
@@ -146,9 +148,28 @@ function epim_options_page()
                         </tr>
 
                         <tr>
-                            <td>
+                            <td colspan="2">
                             <button id="WriteDiviCss" class="button">Set these colours live</button>&nbsp;
                             </td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2"><hr/></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row" colspan="2"><label for="epim_divi_secondary_color">Category Menu</label></th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label for="epim_divi_number_menu_items">Number of top level menu items to create:</label><br>
+                                <input type="text" id="epim_divi_number_menu_items" name="epim_divi_number_menu_items"
+                                       value="<?php echo get_option('epim_divi_number_menu_items'); ?>" class="regular-text"/>
+                            </td>
+                            <td><button id="BuildDiviCategoryMenu" class="button">Build Now</button>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><hr/></td>
                         </tr>
 
                     </table>

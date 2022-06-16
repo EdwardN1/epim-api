@@ -14,7 +14,7 @@ function epim_admin_enqueue($hook) {
     wp_enqueue_style( 'wp-color-picker');
     wp_enqueue_script( 'wp-color-picker');
     wp_enqueue_script('epim_process_queue_script', plugins_url('assets/scripts/processQueue.js',__DIR__));
-    wp_enqueue_script('epim_admin_scripts', plugins_url('assets/scripts/admin.js',__DIR__),'epim_process_queue_script');
+    wp_enqueue_script('epim_admin_scripts', plugins_url('assets/scripts/admin.js',__DIR__),'epim_process_queue_script',filemtime(epimaapi_PLUGINPATH.'/assets/scripts/admin.js' ));
     wp_localize_script(
         'epim_process_queue_script',
         'epim_ajax_object',
@@ -33,7 +33,7 @@ add_action('wp_enqueue_scripts', 'epim_site_scripts', 999);
 function epim_site_scripts() {
     global $divi_theme;
     if($divi_theme) {
-        wp_enqueue_style( 'epim-default-css', plugins_url('assets/css/divi-overrides.css',__DIR__), array(), filemtime(plugins_url('assets/css/divi-overrides.css'), 'all' ));
-	    wp_enqueue_style( 'epim-override-css', plugins_url('assets/css/divi-overrides-set.css',__DIR__), array('epim-default-css'), filemtime(plugins_url('assets/css/divi-overrides.css'), 'all' ));
+        wp_enqueue_style( 'epim-default-css', plugins_url('assets/css/divi-overrides.css',__DIR__), array(), filemtime(epimaapi_PLUGINPATH.'/assets/css/divi-overrides.css' ));
+	    wp_enqueue_style( 'epim-override-css', plugins_url('assets/css/divi-overrides-set.css',__DIR__), array('epim-default-css'), filemtime(epimaapi_PLUGINPATH.'/assets/css/divi-overrides.css') );
     }
 }

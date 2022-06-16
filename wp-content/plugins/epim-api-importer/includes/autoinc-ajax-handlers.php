@@ -63,9 +63,26 @@ add_action('wp_ajax_force_background_update', 'ajax_epimaapi_force_background_up
 add_action('wp_ajax_unfreeze_queue', 'ajax_epimaapi_unfreeze_queue');
 
 add_action('wp_ajax_divi_write_css_file', 'ajax_epimaapi_divi_write_css_file');
+add_action('wp_ajax_divi_build_category_menu', 'ajax_epimaapi_divi_build_category_menu');
 
 
 add_action('wp_ajax_cron_tail', 'ajax_epimaapi_cron_tail');
+
+function ajax_epimaapi_divi_build_category_menu() {
+    epimaapi_checkSecure();
+    if(!empty($_POST['numItems'])) {
+        //error_log($_POST['numItems']);
+        if(ctype_digit($_POST['numItems'])) {
+            epim_generate_category_menu($_POST['numItems']);
+        } else {
+            epim_generate_category_menu();
+        }
+    } else {
+        epim_generate_category_menu();
+    }
+    echo 'Menu Created';
+    exit;
+}
 
 function ajax_epimaapi_divi_write_css_file() {
 	epimaapi_checkSecure();
@@ -74,6 +91,7 @@ function ajax_epimaapi_divi_write_css_file() {
 			epim_write_css_file( $_POST['primary'], $_POST['secondary'] );
 		}
 	}
+    exit;
 }
 
 function ajax_epimaapi_cron_tail()

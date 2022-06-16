@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 global $is_divi;
 
 function epim_write_css_file( $primary, $secondary ) {

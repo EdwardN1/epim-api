@@ -20,12 +20,16 @@ function epimaapi_product_tab($tabs)
         }
     } else {
         $use_dynamic_data_sheets = get_option('epim_use_dynamic_data_sheets');
-        if ($use_dynamic_data_sheets['checkbox_value'] == '1') {
-            $tabs['epimaapi_tab'] = array(
-                'title' => __('Data Sheets', 'epimaapi'),
-                'priority' => 50,
-                'callback' => 'epimaapi_product_tab_content'
-            );
+        if(is_array($use_dynamic_data_sheets)) {
+            if (array_key_exists('checkbox_value', $use_dynamic_data_sheets)) {
+                if ($use_dynamic_data_sheets['checkbox_value'] == '1') {
+                    $tabs['epimaapi_tab'] = array(
+                        'title' => __('Data Sheets', 'epimaapi'),
+                        'priority' => 50,
+                        'callback' => 'epimaapi_product_tab_content'
+                    );
+                }
+            }
         }
     }
 
@@ -37,8 +41,15 @@ function epimaapi_product_tab_content()
 {
     global $product;
     $use_dynamic_data_sheets = get_option('epim_use_dynamic_data_sheets');
+    $udds = false;
 
-    if ($use_dynamic_data_sheets['checkbox_value'] == '1') {
+    if(is_array($use_dynamic_data_sheets)) {
+        if(array_key_exists('checkbox_value',$use_dynamic_data_sheets)) {
+            $udds = true;
+        }
+    }
+
+    if ($udds) {
         $dynamic_data_sheets_url = get_option('epim_dynamic_data_sheets_url');
         $dynamic_data_sheets_templates = preg_split('/\r\n|[\r\n]/', get_option('epim_dynamic_data_sheets_templates'));
         $dynamic_data_sheets_names = preg_split('/\r\n|[\r\n]/', get_option('epim_dynamic_data_sheets_names'));
