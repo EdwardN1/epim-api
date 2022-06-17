@@ -26,12 +26,19 @@
 
 
 /* ======================= Secondary Color Elements =====================*/
+a {color: #056631;}
 .epim-divi .secondary-background {background-color: #056631;}
 .epim-divi .secondary-colour {color: #056631;}
 .epim-divi .secondary-border {border-color: #056631;}
 
 .entry-summary p.price ins {color: #056631;}
 .et-db #et-boc .et-l .nav li ul {border-color: #056631;}
+
+.epim-divi .et_pb_menu_0_tb_header .mobile_nav .mobile_menu_bar:before {color: #056631;}
+.epim-divi .et_pb_menu_0_tb_header .et_pb_menu__icon.et_pb_menu__search-button {color: #056631;}
+.epim-divi .et_pb_menu_0_tb_header .et_pb_menu__icon.et_pb_menu__close-search-button {color: #056631;}
+.epim-divi .et_pb_menu_0_tb_header .et_pb_menu__icon.et_pb_menu__cart-button {color: #056631;}
+
 .woocommerce div.product span.price {color: #056631;}
 .woocommerce-page div.product span.price {color: #056631;}
 .woocommerce #content div.product span.price {color: #056631;}
@@ -85,6 +92,7 @@
 .woocommerce #respond input#submit:hover {color: #056631;}
 .woocommerce-page #respond input#submit:hover {color: #056631;}
 .woocommerce #content input.button:hover {color: #056631;}
+.woocommerce a.button.alt, .woocommerce-page a.button.alt {border-color: #056631;}
 .posted_in a {color: #056631;}
 .tagged_as a {color: #056631;}
 .mobile_menu_bar:before {color: #056631;}
