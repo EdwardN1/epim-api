@@ -726,4 +726,45 @@ adminJQ(function ($) {
         });
     });
 
+    function _osku(text) {
+        $('#ajax-response').prepend(text + '<br>');
+    }
+
+    let deleteSkuQueue = new ts_execute_queue('#ePimResult', function () {
+        /*_o('Current Status Retrieved');*/
+        _osku
+        $('#deleteSkuList').prop('disabled',false);
+    }, function (action, request, data) {
+        _osku(data);
+    });
+
+    $('#deleteSkuList').on('click', function () {
+        $('#ajax-response').html('Working...');
+        let security = wpiai_ajax_object.security;
+        let url = wpiai_ajax_object.ajax_url;
+        $('#deleteSkuList').prop('disabled',true);
+        let lines = $('#wpiai_sku_list').val().split('/n');
+        for(var i = 0;i < lines.length;i++){
+            //code here using lines[i] which will give you each line
+            $resp = $('#ajax-response').html();
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: {action: 'wpiai_get_infor_ping', security: security},
+                success: function (data) {
+                    try {
+                        let resp = JSON.parse(data.body);
+                        let rstr = JSON.stringify(resp, undefined, 4);
+                        $('#ajax-response').html(syntaxHighlight(rstr));
+                        $('.modal.PingInfor').hide();
+                    }
+                    catch (e) {
+
+                        $('.modal.PingInfor').hide();
+                    }
+                }
+            });
+        }
+    });
+
 });
