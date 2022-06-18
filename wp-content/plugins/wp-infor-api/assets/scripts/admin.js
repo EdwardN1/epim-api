@@ -732,7 +732,7 @@ adminJQ(function ($) {
 
     let deleteSkuQueue = new ts_execute_queue('#ePimResult', function () {
         /*_o('Current Status Retrieved');*/
-        _osku
+        _osku('finished');
         $('#deleteSkuList').prop('disabled',false);
     }, function (action, request, data) {
         _osku(data);
@@ -744,27 +744,12 @@ adminJQ(function ($) {
         let url = wpiai_ajax_object.ajax_url;
         $('#deleteSkuList').prop('disabled',true);
         let lines = $('#wpiai_sku_list').val().split('/n');
+        deleteSkuQueue.reset();
         for(var i = 0;i < lines.length;i++){
             //code here using lines[i] which will give you each line
-            $resp = $('#ajax-response').html();
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: {action: 'wpiai_get_infor_ping', security: security},
-                success: function (data) {
-                    try {
-                        let resp = JSON.parse(data.body);
-                        let rstr = JSON.stringify(resp, undefined, 4);
-                        $('#ajax-response').html(syntaxHighlight(rstr));
-                        $('.modal.PingInfor').hide();
-                    }
-                    catch (e) {
-
-                        $('.modal.PingInfor').hide();
-                    }
-                }
-            });
+            deleteSkuQueue.queue(url,{action: 'wpiai_delete_sku',sku: lines[i]});
         }
+        deleteSkuQueue.process();
     });
 
 });

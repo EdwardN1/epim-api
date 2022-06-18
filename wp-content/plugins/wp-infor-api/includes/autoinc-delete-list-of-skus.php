@@ -2,7 +2,7 @@
 
 function wpiai_delete_product_by_sku($sku) {
 	$id = wc_get_product_id_by_sku( $sku );
-	wpiai_deleteProduct($id);
+	return wpiai_deleteProduct($id);
 }
 
 function wpiai_deleteProduct($id, $force = FALSE)

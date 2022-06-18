@@ -42,6 +42,24 @@ add_action( 'wp_ajax_wpiai_get_invoices_api_response', 'ajax_wpiai_get_invoices_
 add_action( 'wp_ajax_wpiai_get_single_invoice_api_response', 'wpiai_get_single_invoice_api_response' );
 add_action( 'wp_ajax_wpiai_get_single_invoice_api_response_test', 'wpiai_get_single_invoice_api_response_test' );
 
+add_action( 'wp_ajax_wpiai_delete_sku', 'wpiai_delete_sku' );
+
+function wpiai_delete_sku() {
+    wpiai_api_checkSecure();
+    $sku = $_POST['sku'];
+    if($sku) {
+        $res = wpiai_delete_product_by_sku($sku);
+        if(is_wp_error($res)) {
+            echo $res->get_error_message();
+        } else {
+            echo $sku. ' deleted';
+        }
+    } else {
+        echo 'Blank SKU';
+    }
+    exit;
+}
+
 function ajax_wpiai_test_get_infor_prices () {
 	wpiai_api_checkSecure();
 	header( "Content-Type: application/json" );
