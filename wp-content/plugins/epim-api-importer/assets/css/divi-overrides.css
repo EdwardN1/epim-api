@@ -1,6 +1,7 @@
 /* ======================= Primary Color Elements =====================*/
 
 .epim-divi .primary-background {background-color: #9dc133;}
+.epim-divi.et-db #et-boc .primary-background {background-color: #9dc133;}
 .epim-divi .primary-colour {color: #9dc133;}
 .epim-divi .primary-border {border-color: #9dc133;}
 
@@ -28,6 +29,7 @@
 /* ======================= Secondary Color Elements =====================*/
 a {color: #056631;}
 .epim-divi .secondary-background {background-color: #056631;}
+.epim-divi.et-db #et-boc .secondary-background {background-color: #056631;}
 .epim-divi .secondary-colour {color: #056631;}
 .epim-divi .secondary-border {border-color: #056631;}
 
@@ -102,3 +104,27 @@ a {color: #056631;}
 .woocommerce .woocommerce-error {background-color: #056631;}
 .woocommerce .woocommerce-info {background-color: #056631;}
 .woocommerce .woocommerce-message {background-color: #056631;}
+
+/* ================================ media queries ==============================*/
+@media screen and (max-device-width: 1440px) {
+    .padded-row {
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+    }
+}
+@media screen and (max-device-width: 1200px) {
+    .epim-divi.et-db #page-container #et-boc #desktop-header-phone {
+        font-size: 26px;
+    }
+
+    .epim-divi.et-db #page-container #et-boc #desktop-header-email {
+        font-size: 20px;
+        padding-left: 1em !important;
+        padding-right: 1em !important;
+        padding-top: 12px !important;
+    }
+
+    .epim-divi.et-db #page-container #et-boc #desktop-site-logo {
+        max-width: 190px;
+    }
+}
