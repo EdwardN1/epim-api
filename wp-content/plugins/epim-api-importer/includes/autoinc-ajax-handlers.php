@@ -219,7 +219,30 @@ function ajax_epimaapi_delete_categories()
 function ajax_epimaapi_delete_epim_images()
 {
     epimaapi_checkSecure();
-    echo 'delete_images_function_not_done_yet';
+    $args = array(
+        'post_type' => 'attachment',
+        'numberposts' => -1,
+        'post_status' => null,
+        'post_parent' => null, // any parent
+    );
+    $attachments = get_posts($args);
+    $i = 0;
+    $epI = 0;
+    if ($attachments) {
+        foreach ($attachments as $post) {
+           $i++;
+            /*setup_postdata($post);
+            the_title();
+            the_attachment_link($post->ID, false);
+            the_excerpt();*/
+            if(get_post_meta($post->ID,'epim_api_id',true)||get_post_meta($post->ID,'epim_luckins_path',true)) {
+                if(wp_delete_attachment($post->ID,true)) {
+                    $epI++;
+                }
+            }
+        }
+    }
+    echo ' Number of imported images deleted = '.$epI;
     exit;
 }
 
