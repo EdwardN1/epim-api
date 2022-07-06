@@ -2,7 +2,7 @@
 /* Add sku to product search */
 //====================================================================
 
-function epsm_search_by_sku( $search, &$query_vars ) {
+function epsm_search_by_sku( $search, $query_vars ) {
     global $wpdb;
     if(isset($query_vars->query['s']) && !empty($query_vars->query['s'])){
         $args = array(

@@ -977,8 +977,8 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 			}
 		}
 
-        if($variation->PictureIdsGrouped->Image) {
-            foreach ( $variation->PictureIdsGrouped->Image as $pictureId ) {
+		if ( $variation->PictureIds ) {
+			foreach ( $variation->PictureIds as $pictureId ) {
                 if(!in_array($pictureId, $chk_picture_ids)) {
                     $jsonPicture = get_epimaapi_picture($pictureId);
                     $picture = json_decode($jsonPicture);
@@ -991,25 +991,9 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
                     }
                     $chk_picture_ids[] = $pictureId;
                 }
-            }
-        } else {
-            if ( $variation->PictureIds ) {
-                foreach ( $variation->PictureIds as $pictureId ) {
-                    if(!in_array($pictureId, $chk_picture_ids)) {
-                        $jsonPicture = get_epimaapi_picture($pictureId);
-                        $picture = json_decode($jsonPicture);
-                        $res .= epimaapi_importPicture($picture->Id, $picture->WebPath) . '<br>';
-                        $attachmentID = epimaapi_imageIDfromAPIID($picture->Id);
-                        if ($attachmentID) {
-                            if (!in_array($attachmentID, $imageAttachmentIDS)) {
-                                $imageAttachmentIDS[] = $attachmentID;
-                            }
-                        }
-                        $chk_picture_ids[] = $pictureId;
-                    }
-                }
-            }
-        }
+			}
+		}
+
 
 		if ( count( $imageAttachmentIDS ) == 0 ) {
 			$LuckinsAssets = $variation->LuckinsAssets;
@@ -1075,8 +1059,8 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 		}
 
 		if ( count( $imageAttachmentIDS ) == 0 ) {
-            if($variation->PictureIdsGrouped->Image) {
-                foreach ( $variation->PictureIdsGrouped->Image as $pictureId ) {
+			if ( $variation->PictureIds ) {
+				foreach ( $variation->PictureIds as $pictureId ) {
                     if(!in_array($pictureId, $chk_picture_ids)) {
                         $jsonPicture = get_epimaapi_picture($pictureId);
                         $picture = json_decode($jsonPicture);
@@ -1089,26 +1073,8 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
                         }
                         $chk_picture_ids[] = $pictureId;
                     }
-                }
-            } else {
-                if ( $variation->PictureIds ) {
-                    foreach ( $variation->PictureIds as $pictureId ) {
-                        if(!in_array($pictureId, $chk_picture_ids)) {
-                            $jsonPicture = get_epimaapi_picture($pictureId);
-                            $picture = json_decode($jsonPicture);
-                            $res .= epimaapi_importPicture($picture->Id, $picture->WebPath) . '<br>';
-                            $attachmentID = epimaapi_imageIDfromAPIID($picture->Id);
-                            if ($attachmentID) {
-                                if (!in_array($attachmentID, $imageAttachmentIDS)) {
-                                    $imageAttachmentIDS[] = $attachmentID;
-                                }
-                            }
-                            $chk_picture_ids[] = $pictureId;
-                        }
-                    }
-                }
-            }
-
+				}
+			}
 		}
 	}
 
