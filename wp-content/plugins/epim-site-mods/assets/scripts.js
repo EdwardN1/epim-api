@@ -14,4 +14,8 @@ jQuery(document).ready(function ($) {
             $this.next().slideToggle(350);
         }
     });
+
+    $("input[name=et_pb_searchform_submit]").remove();
+    $("input[name=et_pb_include_posts]").remove();
+    $("input[name=et_pb_include_pages]").remove();
 });
