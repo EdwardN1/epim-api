@@ -1,5 +1,9 @@
 <?php
-add_action('woocommerce_single_product_summary', 'woocommerce_template_single_price_override', 40);
+add_action('woocommerce_single_product_summary', 'epsm_woocommerce_template_single_price_override', 40);
+
+function epsm_woocommerce_template_single_price_override () {
+
+}
 
 function woocommerce_template_single_price_override()
 {
@@ -28,4 +32,11 @@ function woocommerce_template_single_price_override()
 		</p>
 		<?php
 	}
+}
+
+add_filter( 'woocommerce_get_price_html', 'epsm_custom_price_html', 100, 2 );
+
+function epsm_custom_price_html($price, $product ){
+ $price = '';
+ return $price;
 }
