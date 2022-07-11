@@ -1,54 +1,45 @@
 <?php
-//add_action( 'woocommerce_single_product_summary', 'epsm_woocommerce_template_single_price_override', 40 );
+add_action('woocommerce_single_product_summary', 'epsm_woocommerce_template_single_price_override', 40);
 
-function epsm_woocommerce_template_single_price_override() {
-	?>
-    <div id="epsm_container">Hello World</div>
-	<?php
+function epsm_woocommerce_template_single_price_override()
+{
+    global $product;
+    $price_excl_tax = wc_get_price_excluding_tax($product);
+    $currentTaxIDs = $product->get_category_ids();
+    $poa = false;
+    foreach ($currentTaxIDs as $currentTaxID) {
+        $epim_api_exclude_from_category_menu = get_term_meta($currentTaxID, 'epim_api_exclude_from_category_menu', true);
+        if ($epim_api_exclude_from_category_menu == 'on') {
+            $poa = true;
+        }
+    }
+    if ($poa) {
+        ?>
+        <script>
+            jQuery(document).ready(function ($) {
+                $('.woocommerce-page div.product p.price .amount').hide();
+                $('.woocommerce-page div.product p.price').html('<span class="poa">POA</span>');
+                $('.woocommerce div.product form.cart').hide();
+            });
+        </script>
+        <?php
+    }
 }
 
-//add_action('woocommerce_before_add_to_cart_form','epsm_woocommerce_before_add_to_cart_form',40);
+add_action('woocommerce_after_shop_loop_item_title', 'epsm_after_shop_loop_item_title',99);
 
-function epsm_woocommerce_before_add_to_cart_form() {
+function epsm_after_shop_loop_item_title()
+{
+    global $product;
     ?>
-    </div>
+    <div>epsm_after_shop_loop_item_title</div>
+    <script>
+        jQuery(document).ready(function ($) {
+            $('.woocommerce-page div.product.post-<?php echo $product->get_id();?> p.price .amount').hide();
+            $('.woocommerce-page div.product.post-<?php echo $product->get_id();?> p.price').html('<span class="poa">POA</span>');
+            $('.woocommerce div.product.post-<?php echo $product->get_id();?> .add-to-basket-loop').hide();
+        });
+    </script>
     <?php
 }
 
-function woocommerce_template_single_price_override() {
-	global $product;
-	$price_excl_tax = wc_get_price_excluding_tax( $product );
-	$currentTaxIDs  = $product->get_category_ids();
-	$POACats        = get_field( 'poa_categories', 'option' );
-	if ( $POACats ) {
-		foreach ( $POACats as $POACat ) {
-			foreach ( $currentTaxIDs as $currentTaxID ) {
-				if ( $POACat == $currentTaxID ) {
-					$price_excl_tax = 0;
-				}
-			}
-		}
-	}
-	if ( ( ! $price_excl_tax ) || ( $price_excl_tax == 0 ) ) {
-		?>
-        <p class="price"><span class="only">POA</span><span class="vat">Call for price</span></p>
-		<?php
-	} else {
-		?>
-        <p class="<?php echo esc_attr( apply_filters( 'woocommerce_product_price_class', 'price' ) ); ?>">
-            <span class="only">ONLY</span>
-            <span class="display-price"><?php echo $product->get_price_html(); ?></span>
-            <span class="vat ex-tax" style="display: none;">Excl.VAT</span><span class="vat inc-tax"
-                                                                                 style="display: none;">Incl.VAT</span>
-        </p>
-		<?php
-	}
-}
-
-//add_filter( 'woocommerce_get_price_html', 'epsm_custom_price_html', 100, 2 );
-
-function epsm_custom_price_html( $price, $product ) {
-	$price = '';
-
-	return $price;
-}
