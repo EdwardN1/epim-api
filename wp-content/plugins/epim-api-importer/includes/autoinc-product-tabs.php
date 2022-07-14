@@ -9,11 +9,13 @@ function epimaapi_product_tab($tabs)
     // Adds the new tab
 
     $datasheets = get_post_meta(get_the_ID(), '_epim_data_sheets', true);
+    $datasheets_tab_name = get_option('epim_dynamic_data_sheets_tab_name');
+    if(!$datasheets_tab_name) $datasheets_tab_name = 'Data Sheets';
 
     if ($datasheets) {
         if (is_array($datasheets)) {
             $tabs['epimaapi_tab'] = array(
-                'title' => __('Data Sheets', 'epimaapi'),
+                'title' => __($datasheets_tab_name, 'epimaapi'),
                 'priority' => 50,
                 'callback' => 'epimaapi_product_tab_content'
             );
@@ -24,7 +26,7 @@ function epimaapi_product_tab($tabs)
             if (array_key_exists('checkbox_value', $use_dynamic_data_sheets)) {
                 if ($use_dynamic_data_sheets['checkbox_value'] == '1') {
                     $tabs['epimaapi_tab'] = array(
-                        'title' => __('Data Sheets', 'epimaapi'),
+                        'title' => __($datasheets_tab_name, 'epimaapi'),
                         'priority' => 50,
                         'callback' => 'epimaapi_product_tab_content'
                     );

@@ -57,6 +57,8 @@ function epim_register_settings()
     register_setting('epim_options_group', 'epim_dynamic_data_sheets_templates');
     add_option('epim_dynamic_data_sheets_names', '');
     register_setting('epim_options_group', 'epim_dynamic_data_sheets_names');
+    add_option('epim_dynamic_data_sheets_tab_name', 'Data Sheets');
+    register_setting('epim_options_group', 'epim_dynamic_data_sheets_tab_name');
 
     add_option('epim_enable_scheduled_updates', '0');
     register_setting('epim_schedule_options_group', 'epim_enable_scheduled_updates');
@@ -571,6 +573,12 @@ function epim_options_page()
                                       value=""
                                       class="regular-text"><?php echo get_option('epim_dynamic_data_sheets_names'); ?></textarea>
                         </td>
+                    </tr>
+                    <tr class="visible-for-datasheets">
+                        <th scope="row"><label for="epim_dynamic_data_sheets_tab_name">Dynamic Data Sheets Tab Name</label></th>
+                        <td><input type="text" id="epim_dynamic_data_sheets_tab_name" name="epim_dynamic_data_sheets_tab_name"
+                                   value="<?php echo get_option('epim_dynamic_data_sheets_tab_name'); ?>"
+                                   class="regular-text"/></td>
                     </tr>
                     <tr>
                         <th scope="row"><label for="epim_prioritise_epim_images">Prioritise ePim images</label></th>
