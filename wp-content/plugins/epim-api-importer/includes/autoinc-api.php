@@ -247,7 +247,7 @@ function epimaapi_background_import_products_from( $timecode ) {
 			}
 		}
 	} else {
-		cron_log( 'ePim is returning garbage, getting products.' );
+		cron_log( 'ePim is not returning valid JSON, getting products.' );
 	}
 	update_option( '_epim_background_process_data', $variations );
 	update_option( '_epim_update_running', 'Preparing to import products' );
@@ -265,7 +265,7 @@ function epimaapi_background_import_all_start() {
 
 		return $epim_update_running;
 	} else {
-		return 'ePim is returning garbage, getting all categories.';
+		return 'ePim is not returning valid JSON, getting all categories.';
 	}
 }
 
