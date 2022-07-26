@@ -31,8 +31,8 @@ function epim_admin_enqueue($hook) {
 add_action('wp_enqueue_scripts', 'epim_site_scripts', 999);
 
 function epim_site_scripts() {
-    global $divi_theme;
-    if($divi_theme) {
+    global $is_divi;
+    if($is_divi) {
         wp_enqueue_style( 'epim-default-css', plugins_url('assets/css/divi-overrides.css',__DIR__), array(), filemtime(epimaapi_PLUGINPATH.'/assets/css/divi-overrides.css' ));
 	    wp_enqueue_style( 'epim-override-css', plugins_url('assets/css/divi-overrides-set.css',__DIR__), array('epim-default-css'), filemtime(epimaapi_PLUGINPATH.'/assets/css/divi-overrides.css') );
     }
