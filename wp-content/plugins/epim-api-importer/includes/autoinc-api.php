@@ -906,9 +906,13 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 		foreach ( $variation->AttributeValues as $attribute_value ) {
 			$atName = $attribute_value->AttributeHeaderName;
 			if ( $atName == 'Type' ) {
-				$atName = 'Product Type';
+				$atName = 'Bad attribute Type';
+			}
+			if ( $atName == 'Product' ) {
+				$atName = 'Bad attribute Product';
 			}
 			if ( $atName ) {
+				error_log($atName);
 				$slugName = substr( $atName, 0, 27 );
 				if ( ! wc_check_if_attribute_name_is_reserved( $atName ) ) {
 					if ( ! in_array( $atName, $currentAttributes ) ) {
@@ -935,10 +939,13 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 						$aCounter ++;
 					}
 				}
+			} else {
+				error_log('No $atName');
 			}
 		}
 	}
 	$productArray['attributes'] = $productAttributes;
+	//error_log(print_r($productAttributes,true));
 
 	/*
 	 * Image processing
@@ -1099,12 +1106,13 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 			$res .= 'There was a problem creating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
 		}
 	} else {
+		$blank_attributes = array();
+		update_post_meta( $id, '_product_attributes', $blank_attributes);
+		//error_log(print_r(get_post_meta($id,'_product_attributes',true),true));
 		if ( epimaapi_wooUpdateProduct( $id, $productArray ) ) {
             if($dataSheets) {
-                //error_log(print_r($dataSheets,true));
                 update_post_meta($id,'_epim_data_sheets',$dataSheets);
             } else {
-                //error_log($id.' no datasheets found');
             }
 			$res .= $variation->name . ' (' . $variation->SKU . ') Created<br>';
 		} else {
