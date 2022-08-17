@@ -6,3 +6,4 @@ npm-debug.log
 package-lock.json
 yarn.lock
 /wp-content/themes/Divi/
+/wp-content/plugins/advanced-custom-fields-pro/

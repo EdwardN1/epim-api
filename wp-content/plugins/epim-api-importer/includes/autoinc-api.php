@@ -912,7 +912,7 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 				$atName = 'Bad attribute Product';
 			}
 			if ( $atName ) {
-				error_log($atName);
+				//error_log($atName);
 				$slugName = substr( $atName, 0, 27 );
 				if ( ! wc_check_if_attribute_name_is_reserved( $atName ) ) {
 					if ( ! in_array( $atName, $currentAttributes ) ) {
