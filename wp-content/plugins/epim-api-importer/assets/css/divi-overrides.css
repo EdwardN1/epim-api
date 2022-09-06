@@ -107,6 +107,16 @@ a {color: #056631;}
 .woocommerce .woocommerce-info {background-color: #056631;}
 .woocommerce .woocommerce-message {background-color: #056631;}
 
+.woocommerce div.product div.images img,
+.woocommerce-page div.product div.images img,
+.woocommerce #content div.product div.images img,
+.woocommerce-page #content div.product div.images img {
+    max-height: 400px;
+    max-width: 100%;
+    height: auto;
+    width: auto;
+}
+
 /* ================================ media queries ==============================*/
 @media screen and (max-device-width: 1440px) {
     .padded-row {
