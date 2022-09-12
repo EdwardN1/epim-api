@@ -5,6 +5,20 @@
 add_filter('woocommerce_product_tabs', 'epimaapi_product_tab');
 function epimaapi_product_tab($tabs)
 {
+    //Filter Bad Attribute Label
+
+	add_filter( 'woocommerce_attribute_label', 'custom_attribute_label', 10, 3 );
+	function custom_attribute_label( $label, $name, $product ) {
+		// For "pa_farge" attribute taxonomy on single product pages.
+        $needle = 'Bad attribute ';
+        if(is_product()) {
+	        if(strpos($label,$needle)!==false) {
+                $new_label = str_replace($needle,'',$label);
+                $label = __($new_label,'woocomerce');
+	        }
+        }
+		return $label;
+	}
 
     // Adds the new tab
 
