@@ -17,42 +17,68 @@ ob_start(); ?>
     return $content;
 }
 
+function epsm_get_categories($term_id) {
+    $taxonomy = 'product_cat';
+
+    $args = array(
+        'show_option_all'    => '',
+        'orderby'            => 'name',
+        'order'              => 'ASC',
+        'style'              => '',
+        'show_count'         => 0,
+        'hide_empty'         => 1,
+        'use_desc_for_title' => 1,
+        'parent'           => $term_id,
+        'feed'               => '',
+        'feed_type'          => '',
+        'feed_image'         => '',
+        'exclude'            => '',
+        'exclude_tree'       => '',
+        'include'            => '',
+        'hierarchical'       => 1,
+        'title_li'           => __( '' ),
+        'show_option_none'   => __( '' ),
+        'number'             => null,
+        'echo'               => 0,
+        'depth'              => 0,
+        'current_category'   => 0,
+        'pad_counts'         => 0,
+        'taxonomy'           => $taxonomy,
+        'walker'             => null
+    );
+
+    return get_categories($args);
+}
+
 function epsm_vertical_filter()
 {
     $term_id = get_queried_object_id();
-    $taxonomy = 'product_cat';
 
-    $terms = get_terms([
-        'taxonomy' => $taxonomy,
-        'hide_empty' => true,
-        'parent' => get_queried_object_id()
-    ]);
+    $parents = epsm_get_categories($term_id);
 
-    if (count($terms) > 0) {
-
+    if(count($parents) > 0) {
         $output = '<ul class="epsm accordion">';
-
-        foreach ($terms as $term) {
-            $term_link = get_term_link($term, $taxonomy);
-            $children = get_term_children($term->term_id, $taxonomy);
-            if (count($children) > 0) {
-                $output .= '<li class="has-children">';
-                $output .= '<a href="' . $term_link . '">' . $term->name . '</a><a class="toggle-menu" href="javascript:void(0);"><span class="toggle-menu-text">Toggle menu</span></a>';
+        foreach ($parents as $parent) {
+            $children1 = epsm_get_categories($parent->term_id);
+            if(count($children1) > 0) {
+                $output .= '<li class="has-children"><a href="' . get_term_link($parent, 'product_cat') . '" >' . $parent->name . '</a>';
+                $output .= '<a class="toggle-menu" href="javascript:void(0);"><span class="toggle-menu-text">Toggle menu</span></a>';
                 $output .= '<ul class="inner">';
-                foreach ($children as $child_id) {
-                    $child = get_term($child_id);
-                    $child_term_link = get_term_link($child, $taxonomy);
-                    $output .= '<li><a href="' . $child_term_link . '">' . $child->name . '</a></li>';
+                foreach ($children1 as $child1) {
+                    $children2 = epsm_get_categories($child1->term_id);
+                    $output .= '<li><a href="' . get_term_link($child1, 'product_cat') . '" >' . $child1->name . '</a></li>';
                 }
+
                 $output .= '</ul>';
                 $output .= '</li>';
             } else {
-                $output .= '<li><a href="' . $term_link . '">' . $term->name . '</a></li>';
+                $output .= '<li><a href="' . get_term_link($parent, 'product_cat') . '" >' . $parent->name . '</a></li>';
             }
-            $output .= '';
         }
-
-        return $output . '</ul>';
+        $output .= '</ul>';
     }
+
+    return $output;
+
 
 }
