@@ -166,7 +166,7 @@ function get_epimaapi_variation( $id ) {
 			$url .= $queryChar . 'includeLuckins=false';
 		}
 	}
-
+    $url .= $queryChar . 'sanitizeNames=true';
 	//error_log('$url = '.$url);
 	return epimaapi_make_api_call( $url );
 }
@@ -984,8 +984,48 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 			}
 		}
 
-		if ( $variation->PictureIds ) {
-			foreach ( $variation->PictureIds as $pictureId ) {
+        $variationPictureIds = array();
+
+        $PictureIdsGroupedImages = $variation->PictureIdsGrouped->Image;
+        if(is_array($PictureIdsGroupedImages)) {
+            foreach ($PictureIdsGroupedImages as $pictureIdsGroupedImage) {
+                $variationPictureIds[] = $pictureIdsGroupedImage;
+            }
+        } else {
+            if ( $variation->PictureIds ) {
+                foreach ( $variation->PictureIds as $pictureId ) {
+                    $variationPictureIds[] = $pictureId;
+                }
+            }
+        }
+
+        $PictureIdsGrouped = $variation->PictureIdsGrouped;
+
+        if($PictureIdsGrouped) {
+            if(is_object($PictureIdsGrouped)) {
+                foreach ($PictureIdsGrouped as $PictureIdsGroupedKey => $PictureIdsGroupedValue) {
+                    if(is_array($PictureIdsGroupedValue)) {
+                        if($PictureIdsGroupedKey != 'Image') {
+                            foreach ($PictureIdsGroupedValue as $pictureId) {
+                                $jsonPicture = get_epimaapi_picture($pictureId);
+                                $picture = json_decode($jsonPicture);
+                                $dataSheet = array();
+                                $dataSheet['Name'] = str_replace('_',' ',$PictureIdsGroupedKey);
+                                $dataSheet['URL'] = $picture->WebPath;
+                                $dataSheets[] = $dataSheet;
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+        //error_log(print_r($dataSheets,true));
+
+		if ( $variationPictureIds ) {
+
+			foreach ( $variationPictureIds as $pictureId ) {
+
                 if(!in_array($pictureId, $chk_picture_ids)) {
                     $jsonPicture = get_epimaapi_picture($pictureId);
                     $picture = json_decode($jsonPicture);

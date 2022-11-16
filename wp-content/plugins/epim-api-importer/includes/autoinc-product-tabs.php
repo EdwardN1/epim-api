@@ -105,6 +105,24 @@ function epimaapi_product_tab_content()
                         <?php
                     }
                 }
+                $datasheets = get_post_meta(get_the_ID(), '_epim_data_sheets', true);
+
+                if ($datasheets) {
+                    if (is_array($datasheets)) {
+                        ?>
+                            <?php
+                            foreach ($datasheets as $datasheet) {
+                                ?>
+                                <tr>
+                                    <td><a href="<?php echo $datasheet['URL']; ?>"
+                                           target="_blank"><?php echo $datasheet['Name']; ?></a></td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
+                        <?php
+                    }
+                }
                 ?>
 
             </table>
