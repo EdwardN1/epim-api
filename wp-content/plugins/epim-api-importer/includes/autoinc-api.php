@@ -1011,7 +1011,7 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
                                 $picture = json_decode($jsonPicture);
                                 $dataSheet = array();
                                 $dataSheet['Name'] = str_replace('_',' ',$PictureIdsGroupedKey);
-                                $dataSheet['URL'] = $picture->WebPath;
+                                $dataSheet['URL'] = $picture->Path;
                                 $dataSheets[] = $dataSheet;
                             }
 
