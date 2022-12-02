@@ -1,0 +1,177 @@
+/**
+ * Print stylesheet for DH Stainless by 21Digital
+ * @version         1.0
+ * @lastmodified    07.03.19
+*/
+
+@media print {
+
+  *:not(.logo),
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact;
+    box-shadow: none !important;
+    color: #000 !important;
+    print-color-adjust: exact;
+    text-shadow: none !important;
+  }
+
+  body, article {
+    background: transparent;
+    font: 10pt Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    width: 100%
+  }
+
+  /* Reset Styles */
+
+  div, span, applet, object, iframe, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+   border: 0;
+   font-size: 100%;
+   margin: 0;
+   outline: 0;
+   padding: 0;
+   vertical-align: baseline;
+  }
+
+  table {
+   border-collapse: collapse;
+   border-spacing: 0;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  article {
+    page-break-before: always;
+  }
+
+  ul, img {
+    page-break-inside: avoid;
+  }
+
+  /* Remove unwanted content */
+
+  .main-nav, .breadcrumbs, .big-info-button, .woocommerce-product-gallery__trigger, .home-boxes, .customer-services, .accreditations, .flex-control-nav {
+    display: none;
+  }
+
+  /* Text Styles */
+
+  h1, h2, h3, h4, h5, h6 {
+   font-family: Helvetica, Arial, Tahoma;
+   margin: 0;
+   padding: 5px 0;
+   page-break-after: avoid;
+  }
+
+  h1 {
+   font: bold 18pt/26px Helvetica, Arial, sans-serif;
+  }
+
+  h2 {
+   font: normal 16pt/24px Helvetica, Arial, sans-serif;
+  }
+
+  h3 {
+   font: normal 14pt/24px Helvetica, Arial, sans-serif;
+  }
+
+  h6 {
+   font: bold 14pt/18px Helvetica, Arial, sans-serif;
+  }
+
+  p, ul {
+   line-height: 22px;
+   margin: 0;
+   padding: 5px 0;
+  }
+
+  /*  Table styles */
+
+  #tab-technical {
+    padding: 6px;
+  }
+
+  #tab-technical table {
+    border: 1px solid #eee;
+    margin-bottom: 50px;
+    text-align: center;
+    width: 100%;
+  }
+
+  #tab-technical tr[class="top-row"] {
+    background: #000 !important;
+    text-transform: uppercase;
+  }
+
+  #tab-technical .top-row td {
+    color: #fff !important;
+    padding: 12px 0;
+    border: 0 !important;
+  }
+
+  #tab-technical td {
+		padding: 6px 0 !important;
+	}
+
+  #tab-technical tr:nth-of-type(even) {
+		background: #eee !important;
+	}
+
+  /* Other styling */
+
+  .top-image-push {
+    height: 125px;
+  }
+
+  .logo {
+    background: url('http://www.21digital.agency/test-area/dh-stainless/wp-content/themes/dhstainless/img/dhstainless-logo@2x.png') !important;
+    background-repeat: no-repeat !important;
+    background-size: 100% auto !important;
+    float: left;
+    display: block;
+  }
+
+  .nav-tabs .active {
+    padding: 10px 6px;
+  }
+
+  .nav-tabs .active a {
+    padding: 0;
+  }
+
+  .footer-logo {
+    max-width: 250px !important;
+  }
+
+  .tab-content,
+  .copyright p,
+  .tabbed-panels-2,
+  .product-details p {
+    margin: 0 !important;
+  }
+
+  .footer-bottom h4 {
+    margin-top: 32px;
+  }
+
+  .footer-bottom .col-md-3:not(.customer-services),
+  .footer-logo,
+  .woocommerce-product-gallery__image a::after,
+  .header-bottom .container a::after {
+    display: none;
+  }
+
+  .woocommerce-product-gallery__image,
+  .woocommerce-product-gallery__image img {
+    max-width: 50% !important;
+    float: left;
+  }
+
+  .woocommerce-product-gallery {
+    max-height: 150px !important;
+  }
+}
