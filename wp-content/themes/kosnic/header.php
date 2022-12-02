@@ -6,10 +6,10 @@
     <link rel="shortcut icon" href="<?php echo get_stylesheet_directory_uri(); ?>/favicon.ico">
     <?php wp_head(); ?>
     <?php
-      if (date('n') == 12) {
-          ?><link rel="stylesheet" href="https://kosnic.com/wp-content/themes/kosnic/public/css/xmas.css" type="text/css" media="all" /><?php
-      }
-    ?>
+/*      if (date('n') == 12) {
+          */?><!--<link rel="stylesheet" href="https://kosnic.com/wp-content/themes/kosnic/public/css/xmas.css" type="text/css" media="all" />--><?php
+/*      }
+    */?>
 	  <style>
 		  .wp-block-gallery.is-cropped .blocks-gallery-item img {
 			flex: initial;
