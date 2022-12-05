@@ -19,7 +19,7 @@ define('dhstainless_PLUGINURI', plugin_dir_url(__FILE__));
 define('dhstainless_PLUGINFILE',__FILE__);
 $active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
 if ( in_array( 'woocommerce/woocommerce.php', $active_plugins ) ) {
-	foreach (glob(kosnic_FUNCTIONSPATH.'autoinc-*.php') as $filename)
+	foreach (glob(dhstainless_FUNCTIONSPATH.'autoinc-*.php') as $filename)
 	{
 		require_once ($filename);
 	}
