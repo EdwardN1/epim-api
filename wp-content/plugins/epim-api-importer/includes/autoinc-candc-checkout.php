@@ -25,13 +25,21 @@ function jeroensormani_add_checkout_fields( $fields ) {
 
     wp_reset_postdata();
 
+    $fRequired = true;
+
+    $Ioptions = get_option('epim_no_price_or_stocks');
+
+    //error_log('$Ioptions = '.print_r($Ioptions,true));
+
+    if($Ioptions['checkbox_value'] == 1) $fRequired = false;
+
     $fields['shipping_COLLECTION_BRANCH'] = array(
         'label'        => __( 'Collection Branch' ),
         'type'        => 'select',
         'options' => $fieldOptions,
         'class'        => array( 'form-row-wide', 'update_totals_on_change' ),
         'priority'     => 1,
-        'required'     => true,
+        'required'     => $fRequired,
     );
 
     return $fields;
