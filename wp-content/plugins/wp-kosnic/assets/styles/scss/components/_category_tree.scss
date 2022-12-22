@@ -11,7 +11,7 @@
         right: 5px;
         color: transparent;
         font-size: 1px;
-        top: 5px;
+        top: 0;
         background-position: -100px 0;
         height: 60px;
         width: 60px;
@@ -31,7 +31,7 @@
         position: relative;
         text-decoration: none;
         margin-bottom: 1px;
-        padding: 24px 20px;
+        padding: 20px 20px;
         color: #fff;
         background: $blue;
         transition: background 0.3s;
@@ -65,7 +65,7 @@
             position: relative;
             text-decoration: none;
             margin-bottom: 1px;
-            padding: 24px 20px;
+            padding: 20px 20px;
             padding-left: 30px;
             color: #000;
             background: #fff;
