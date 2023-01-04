@@ -116,7 +116,12 @@ function epim_options_page()
             <?php
             $current_user = wp_get_current_user();
             $email = (string)$current_user->user_email;
-            if ($email === 'edward@technicks.com'):?>
+            $restrictedTab = $email === 'edward@technicks.com';
+            if(!$restrictedTab) {
+                $length = strlen('@ng15.co.uk');
+	            $restrictedTab = substr($email,-$length) === '@ng15.co.uk';
+            }
+            if ($restrictedTab):?>
                 <a href="?page=epim&tab=epim_restricted_settings"
                    class="nav-tab <?php echo $active_tab == 'epim_restricted_settings' ? 'nav-tab-active' : ''; ?>">ePim
                     Restricted Settings</a>
@@ -689,7 +694,7 @@ function epim_options_page()
         <?php
         $current_user = wp_get_current_user();
         $email = (string)$current_user->user_email;
-        if ($email === 'edward@technicks.com'):
+        if ($restrictedTab):
             if ($active_tab == 'epim_restricted_settings'):?>
                 <style>
                     .modal {
