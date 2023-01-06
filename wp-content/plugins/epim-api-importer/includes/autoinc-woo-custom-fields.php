@@ -25,9 +25,9 @@ function epim_taxonomy_add_new_meta_field() {
         <input type="text" name="epim_api_picture_link" id="epim_api_picture_link">
         <p class="description"><?php _e('Enter API PICTURE LINK', 'epim'); ?></p>
 
-        <label for="epim_api_exclude_from_category_menu"><?php _e('POA Pricing', 'epim'); ?></label>
+        <label for="epim_api_exclude_from_category_menu"><?php _e('Exclude From Category Menu', 'epim'); ?></label>
         <input type="checkbox" name="epim_api_exclude_from_category_menu" id="epim_api_exclude_from_category_menu">
-        <p class="description"><?php _e('Products in the category are flagged as Price on application', 'epim'); ?></p>
+        <p class="description"><?php _e('Choose if this category shows in the category menu', 'epim'); ?></p>
 
         <!--<label for="epim_api_Qty_Break_1"><?php /*_e('Qty_Break_1', 'epim'); */?></label>
         <input type="text" name="epim_api_Qty_Break_1" id="epim_api_Qty_Break_1">
@@ -107,10 +107,10 @@ function epim_taxonomy_edit_meta_field($term) {
     </tr>
 
     <tr class="form-field">
-        <th scope="row" valign="top"><label for="epim_api_exclude_from_category_menu"><?php _e('POA Pricing', 'epim'); ?></label></th>
+        <th scope="row" valign="top"><label for="epim_api_exclude_from_category_menu"><?php _e('Exclude From Category Menu', 'epim'); ?></label></th>
         <td>
             <input type="checkbox" name="epim_api_exclude_from_category_menu" id="epim_api_exclude_from_category_menu" <?php _e($epim_api_exclude_from_category_menu_checked,'epim');?>/>
-            <p class="description"><?php _e('Products in the category are flagged as Price on application', 'epim'); ?></p>
+            <p class="description"><?php _e('Choose if this category shows in the category menu', 'epim'); ?></p>
         </td>
     </tr>
     <?php

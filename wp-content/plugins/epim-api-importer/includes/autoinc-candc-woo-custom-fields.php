@@ -11,7 +11,7 @@ function add_cac_product_data_tab($product_data_tabs)
     return $product_data_tabs;
 }
 
-add_action('woocommerce_product_data_panels', 'add_cac_product_data_fields');
+add_action('woocommerce_product_data_panels', 'add_cac_product_data_fields',999999);
 function add_cac_product_data_fields()
 {
     ?>
