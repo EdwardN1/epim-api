@@ -61,7 +61,10 @@
     background: $blue;
     color: #fff;
     text-align: center;
-    min-height: 3em;
+    min-height: 2em;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
 
     mark {
       color: #fff;
@@ -100,5 +103,11 @@
     text-align: center;
     text-transform: uppercase;
     color: $blue;
+  }
+  .woocommerce-loop-product__title {
+    display: none;
+    &.sku-title {
+      display: block;
+    }
   }
 }

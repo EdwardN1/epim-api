@@ -16,12 +16,12 @@ function kosnic_woocommerce_template_loop_product_title() {
 		if ( $web_description_id ) {
 			$web_description = get_term( $web_description_id )->name;
 			if ( $web_description ) {
-				echo '<h2 class="woocommerce-loop-product__title">SKU: ' . $product->get_sku(). '<br>' . esc_html( $web_description ) . '</h2>';
+				echo '<h2 class="woocommerce-loop-product__title sku-title">SKU: ' . $product->get_sku(). '<br>' . esc_html( $web_description ) . '</h2>';
 			} else {
-				echo '<h2 class="woocommerce-loop-product__title">SKU: ' . $product->get_sku(). '<br>' . esc_html( $product->get_title() ) . '</h2>';
+				echo '<h2 class="woocommerce-loop-product__title sku-title">SKU: ' . $product->get_sku(). '<br>' . esc_html( $product->get_title() ) . '</h2>';
 			}
 		} else {
-			echo '<h2 class="woocommerce-loop-product__title">SKU: ' . $product->get_sku(). '<br>' . esc_html( $product->get_title() ) . '</h2>';
+			echo '<h2 class="woocommerce-loop-product__title sku-title">SKU: ' . $product->get_sku(). '<br>' . esc_html( $product->get_title() ) . '</h2>';
 		}
 	}
 }

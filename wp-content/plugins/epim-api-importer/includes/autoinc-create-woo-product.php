@@ -324,6 +324,7 @@ function epimaapi_wooCreateProduct_ex( $pid, $productArray ) {
 				if ( $attribute["options"] ) {
 					foreach ( $attribute["options"] as $option ) {
 						//error_log('Attribute = '.$attr.' | Option = '.$option);
+						wp_delete_object_term_relationships( $product_id, $attr );
 						wp_set_object_terms( $product_id, $option, $attr, true ); // save the possible option value for the attribute which will be used for variation later
 					}
 				}
