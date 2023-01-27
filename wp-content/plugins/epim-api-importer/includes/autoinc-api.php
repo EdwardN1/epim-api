@@ -843,8 +843,12 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 	$Qty_Break_1                             = $variation->Qty_Break_1;
 	$Qty_Break_2                             = $variation->Qty_Break_2;
 	$Qty_Break_3                             = $variation->Qty_Break_3;
-	$productArray['productDescription']      = $variation->Table_Heading;
-	$productArray['productShortDescription'] = $productBulletText;
+	$productArray['productDescription']      = (string)$variation->Table_Heading;
+	$productArray['productShortDescription'] = (string)$productBulletText;
+
+	if(!$productArray['productTitle'])       $productArray['productTitle'] = $variationID . ' Null Name Provided by API';
+	if(!$productArray['productSKU'])       $productArray['productSKU'] = $variationID . ' Null SKU Provided by API';
+
 
 	if ( ( $productArray['price'] == '' ) || ( $productArray['price'] == 0 ) ) {
 		$productArray['price'] = $Qty_Price_1;
