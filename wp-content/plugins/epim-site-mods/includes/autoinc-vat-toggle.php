@@ -47,8 +47,8 @@ function epsm_get_price_html_override( $price, $product ) {
         <span class="woocommerce-Price-amount amount">
         <span>
             <span class="woocommerce-Price-currencySymbol"><?php echo get_woocommerce_currency_symbol(); ?></span>
-            <span class="ex-tax" style="display: none;"><?php echo number_format( $price_excl_tax, 2 ); ?></span>
-            <span class="inc-tax" style="display: none;"><?php echo number_format( $price_incl_tax, 2 ); ?></span>
+            <span class="ex-tax" style="display: none;"><?php echo number_format( $price_excl_tax, 2 ); ?> ex. VAT</span>
+            <span class="inc-tax" style="display: none;"><?php echo number_format( $price_incl_tax, 2 ); ?> inc. VAT</span>
         </span>
     </span>
 		<?php

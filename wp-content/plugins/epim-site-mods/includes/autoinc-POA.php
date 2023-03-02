@@ -32,7 +32,7 @@ function epsm_after_shop_loop_item_title()
 {
     global $product;
     ?>
-    <div>epsm_after_shop_loop_item_title</div>
+    <div></div>
     <script>
         jQuery(document).ready(function ($) {
             $('.woocommerce-page div.product.post-<?php echo $product->get_id();?> p.price .amount').hide();
