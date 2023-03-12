@@ -138,15 +138,25 @@ function get_epimaapi_picture( $id ) {
 	return $res;
 }
 
-function get_epimaapi_all_products() {
-	$apiCall      = epimaapi_make_api_call( 'Products/' );
-	$allProducts  = json_decode( $apiCall );
-	$TotalResults = $allProducts->TotalResults;
-	//error_log('$TotalResults = '. $TotalResults);
-	$res = epimaapi_make_api_call( 'Products/?limit=' . $TotalResults );
+function get_epimaapi_all_products_count() {
+    $apiCall      = epimaapi_make_api_call( 'Products/' );
+    $allProducts  = json_decode( $apiCall );
+    return $allProducts->TotalResults;
+}
 
-	//error_log('$res->TotalResults = '. $res->TotalResults);
-	return $res;
+function get_epimaapi_all_products() {
+    /*$apiCall      = epimaapi_make_api_call( 'Products/' );
+    $allProducts  = json_decode( $apiCall );*/
+    $TotalResults = get_epimaapi_all_products_count();
+    //error_log('$TotalResults = '. $TotalResults);
+    $res = epimaapi_make_api_call( 'Products/?limit=' . $TotalResults );
+
+    //error_log('$res->TotalResults = '. $res->TotalResults);
+    return $res;
+}
+
+function get_epimaapi_some_products($limit, $start) {
+    return epimaapi_make_api_call( 'Products/?start='.$start.'&limit=' . $limit );
 }
 
 function get_epimaapi_variation( $id ) {
