@@ -245,9 +245,18 @@ function epimaapi_update_every_minute() {
 
 	if(($epim_update_running == 'Preparing to import products')||(substr( $epim_update_running, 0, 41 ) === "Importing Products - Restarting at Index:")) {
 		$time_start = microtime(true);
-		$variations = get_option('_epim_background_process_data');
-		$i = 1;
-		$c = count($variations);
+		$all_variations = get_option('_epim_background_process_data');
+        $i = 1;
+        $c = count($all_variations);
+		if($epim_update_running == 'Preparing to import products') {
+		    $variations = $all_variations;
+        } else {
+		    $i = get_option('_epim_background_current_index')-1;
+		    $variations = array_slice($all_variations,$i);
+		    $cLeft = count($variations);
+		    cron_log('Restarting at index: '.$i.' There are '. $cLeft .' variations still to process');
+        }
+
 		update_option('_epim_update_running','Importing '.$c.' Products');
 		cron_log('Importing '.$c.' Products');
 		if(is_array($variations)) {
