@@ -175,7 +175,7 @@ adminJQ(function ($) {
                         if (timeCodeStart>-1){
                             timeCodeStart += 9;
                             timeCode = request.substr(timeCodeStart,24);
-                            window.console.log(timeCode);
+                            //window.console.log(timeCode);
                         }
                         if (timeCode != '') {
                             for (let i = 1; i<= pages; i++){

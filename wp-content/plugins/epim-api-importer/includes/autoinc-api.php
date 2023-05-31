@@ -139,7 +139,7 @@ function get_epimaapi_picture( $id ) {
 }
 
 function get_epimaapi_all_products_count() {
-    $apiCall      = epimaapi_make_api_call( 'Products/' );
+    $apiCall      = epimaapi_make_api_call( 'Products/?showUnApproved=true&showArchived=true' );
     $allProducts  = json_decode( $apiCall );
     return $allProducts->TotalResults;
 }
@@ -149,14 +149,14 @@ function get_epimaapi_all_products() {
     $allProducts  = json_decode( $apiCall );*/
     $TotalResults = get_epimaapi_all_products_count();
     //error_log('$TotalResults = '. $TotalResults);
-    $res = epimaapi_make_api_call( 'Products/?limit=' . $TotalResults );
+    $res = epimaapi_make_api_call( 'Products/?limit=' . $TotalResults.'&showUnApproved=true&showArchived=true' );
 
     //error_log('$res->TotalResults = '. $res->TotalResults);
     return $res;
 }
 
 function get_epimaapi_some_products($limit, $start) {
-    return epimaapi_make_api_call( 'Products/?start='.$start.'&limit=' . $limit );
+    return epimaapi_make_api_call( 'Products/?start='.$start.'&limit=' . $limit.'&showUnApproved=true&showArchived=true' );
 }
 
 function get_epimaapi_variation( $id ) {
@@ -176,7 +176,7 @@ function get_epimaapi_variation( $id ) {
 			$url .= $queryChar . 'includeLuckins=false';
 		}
 	}
-    $url .= $queryChar . 'sanitizeNames=true';
+    $url .= $queryChar . 'sanitizeNames=true'. $queryChar.'showUnApproved=true&showArchived=true';
 	//error_log('$url = '.$url);
 	return epimaapi_make_api_call( $url );
 }
@@ -186,20 +186,20 @@ function get_epimaapi_all_attributes() {
 }
 
 function get_epimaapi_product( $id ) {
-	return epimaapi_make_api_call( 'Products/' . $id );
+	return epimaapi_make_api_call( 'Products/' . $id.'?showUnApproved=true&showArchived=true' );
 }
 
 function get_epimaapi_all_changed_products_since( $datetime = '2002-10-02T10:00:00-00:00' ) {
 	$xdatetime = substr( $datetime, 0, 10 ) . 'T10:00:00-00:00';
 	//error_log('ProductsUpdatedSince?ChangedSinceUTC=' . $xdatetime);
-	$i         = epimaapi_make_api_call( 'ProductsUpdatedSince?ChangedSinceUTC=' . $xdatetime );
+	$i         = epimaapi_make_api_call( 'ProductsUpdatedSince?ChangedSinceUTC=' . $xdatetime .'&showUnApproved=true&showArchived=true' );
 
 	return $i;
 }
 
 function get_epimaapi_all_changed_products_since_starting( $start, $datetime = '2002-10-02T10:00:00-00:00' ) {
 	$xdatetime = substr( $datetime, 0, 10 ) . 'T10:00:00-00:00';
-	$i         = epimaapi_make_api_call( 'ProductsUpdatedSince?ChangedSinceUTC=' . $xdatetime . '&start=' . $start );
+	$i         = epimaapi_make_api_call( 'ProductsUpdatedSince?ChangedSinceUTC=' . $xdatetime . '&start=' . $start .'&showUnApproved=true&showArchived=true' );
 
 	return $i;
 }
@@ -808,21 +808,52 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 	/*
 	 * Get Variation Details
 	 */
-	$productArray  = array();
-	$jsonVariation = get_epimaapi_variation( $variationID );
-	$variation     = json_decode( $jsonVariation );
-	if ( ! $variation ) {
-		return $variationID . ' returns no result from API';
-	}
+    $jsonProductGroup = get_epimaapi_product($productID);
 
-	$IsArchived = $variation->IsArchived;
+    if (!$jsonProductGroup) {
+        return $productID . ' returns no product group result from API';
+    }
 
-	if ( $IsArchived ) {
-		$res = $variationID . ' ' . $productName . ' is achived removing product from WooCommerce';
-		epimaapi_delete_variation( $variationID );
+    $ProductGroup = json_decode($jsonProductGroup);
 
-		return $res;
-	}
+    /*$res = $ProductGroup->IsApprovedForPublishing;
+    return $res;*/
+
+    $IsPGApprovedForPublishing = $ProductGroup->IsApprovedForPublishing;
+
+    $productArray  = array();
+    $jsonVariation = get_epimaapi_variation( $variationID );
+    $variation     = json_decode( $jsonVariation );
+
+    if ( ! $variation ) {
+        return $variationID . ' returns no variation result from API';
+    }
+
+    if($IsPGApprovedForPublishing === true) {
+
+        $varIsApprovedForPublishing = $variation->IsApprovedForPublishing;
+
+        if ( $varIsApprovedForPublishing === true ) {
+            $IsArchived = $variation->IsArchived;
+            if ( $IsArchived === true) {
+                $res = $variationID . ' ' . $productName . ' is archived removing product from WooCommerce';
+                epimaapi_delete_variation( $variationID );
+
+                return $res;
+            }
+        } else {
+            $res = $variationID . ' ' . $productName . ' is not approved for publishing removing product from WooCommerce';
+            epimaapi_delete_variation( $variationID );
+
+            return $res;
+        }
+    } else {
+        $res = $productID . ' Product Group is not approved for publishing. Removing variation '.$variationID. ' ' . $productName. ' $IsPGApprovedForPublishing = '. $IsPGApprovedForPublishing;
+        epimaapi_delete_variation( $variationID );
+        return $res;
+    }
+
+
 
 
 	/*
