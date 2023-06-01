@@ -169,6 +169,7 @@ adminJQ(function ($) {
                     if(results){
                         let totalResults = products.TotalResults;
                         let limit = products.Limit;
+                        if(limit==0) limit = 1;
                         let pages = Math.ceil(totalResults/limit);
                         let timeCodeStart = request.indexOf('timeCode=');
                         let timeCode = '';

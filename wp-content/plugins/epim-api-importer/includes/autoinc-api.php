@@ -826,7 +826,8 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
     $variation     = json_decode( $jsonVariation );
 
     if ( ! $variation ) {
-        return $variationID . ' returns no variation result from API';
+        epimaapi_delete_variation( $variationID );
+        return $variationID . ' returns no variation result from API. Variation Deleted if it exists in WooCommerce.';
     }
 
     if($IsPGApprovedForPublishing === true) {
@@ -835,7 +836,7 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 
         if ( $varIsApprovedForPublishing === true ) {
             $IsArchived = $variation->IsArchived;
-            if ( $IsArchived === true) {
+            if ( ($IsArchived === true)) {
                 $res = $variationID . ' ' . $productName . ' is archived removing product from WooCommerce';
                 epimaapi_delete_variation( $variationID );
 
