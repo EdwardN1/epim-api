@@ -1,5 +1,5 @@
 <?php
-add_action('woocommerce_single_product_summary', 'epsm_woocommerce_template_single_price_override', 40);
+//add_action('woocommerce_single_product_summary', 'epsm_woocommerce_template_single_price_override', 40);
 
 function epsm_woocommerce_template_single_price_override()
 {

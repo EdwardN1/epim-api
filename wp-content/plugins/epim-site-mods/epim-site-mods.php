@@ -9,7 +9,7 @@ Plugin URI: https://e-pim.co.uk
 Description: General Additions for ePim default site
 Author: Edward Nickerson
 License: GPLv2 or later
-Version: 1.0.0
+Version: 1.0.1
 Author URI: https://www.technicks.com
 */
 
