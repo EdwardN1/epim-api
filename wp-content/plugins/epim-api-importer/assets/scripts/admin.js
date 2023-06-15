@@ -376,6 +376,7 @@ adminJQ(function ($) {
         $('.modal.deleteImages').removeClass('active');
         $('.modal.deleteProducts').removeClass('active');
         $('.modal.ClearProducts').removeClass('active');
+        $('.modal.deleteOrphanedImages').removeClass('active');
         $('#ClearProducts').prop('disabled',false);
     }, function (action, request, data) {
         _o('Action Completed: ' + action);
@@ -638,6 +639,14 @@ adminJQ(function ($) {
         $('.modal.deleteImages').addClass('active');
         customQueue.reset();
         customQueue.queue(ajaxurl, {action: 'delete_epim_images'});
+        customQueue.process();
+    });
+
+    $('#deleteOrphanedImages').on('click',function(){
+        _o('Deleting Orphaned Images..');
+        $('.modal.deleteOrphanedImages').addClass('active');
+        customQueue.reset();
+        customQueue.queue(ajaxurl, {action: 'delete_epim_orphaned_images'});
         customQueue.process();
     });
 

@@ -740,6 +740,13 @@ function epim_options_page()
                     </tr>
                     <tr>
                         <td colspan="2">
+                            <button id="deleteOrphanedImages" class="button">Delete All Orphaned Images</button> &nbsp;<span
+                                    class="modal deleteOrphanedImages"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
                             <button id="deleteProducts" class="button">Delete All Products</button> &nbsp;<span
                                     class="modal deleteProducts"><img
                                         src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>

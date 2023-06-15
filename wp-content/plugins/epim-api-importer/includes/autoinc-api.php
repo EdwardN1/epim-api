@@ -279,6 +279,25 @@ function epimaapi_background_import_all_start() {
 	}
 }
 
+function epim_api_background_remove_epim_images_start() {
+    $args = array(
+        'post_type' => 'attachment',
+        'numberposts' => -1,
+        'post_status' => null,
+        'post_parent' => null, // any parent
+    );
+    $attachments = get_posts($args);
+    if ($attachments) {
+        $epim_update_running = 'Preparing to delete ePim images';
+        update_option( '_epim_update_running', $epim_update_running );
+        update_option( '_epim_background_process_data', $attachments );
+        return $epim_update_running;
+    } else {
+        return 'No images found to delete';
+    }
+
+}
+
 function epimaapi_getAPIIDFromCode( $code ) {
 	$res = false;
 
