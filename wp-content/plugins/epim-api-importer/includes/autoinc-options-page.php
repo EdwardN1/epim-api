@@ -73,6 +73,9 @@ function epim_register_settings()
     register_setting('epim_divi_options_group', 'epim_divi_secondary_color');
     add_option('epim_divi_number_menu_items', '');
     register_setting('epim_divi_options_group', 'epim_divi_number_menu_items', '10');
+    add_option('epim_use_qty_price_breaks', '0');
+    register_setting('epim_divi_options_group', 'epim_use_qty_price_breaks');
+
 
 
     add_option('_epim_update_running', '');
@@ -180,6 +183,23 @@ function epim_options_page()
                             </td>
                             <td>
                                 <button id="BuildDiviCategoryMenu" class="button">Build Now</button>&nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <hr/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="epim_use_qty_price_breaks">Use ePim Quantity Price Breaks</label>
+                            </th>
+                            <?php $options = get_option('epim_use_qty_price_breaks'); ?>
+                            <td>
+                                <input type="checkbox" id="epim_use_qty_price_breaks"
+                                       name="epim_use_qty_price_breaks[checkbox_value]"
+                                       value="1" <?php if (is_array($options)) {
+                                    echo checked('1', $options['checkbox_value'], false);
+                                } ?>/>
                             </td>
                         </tr>
                         <tr>
