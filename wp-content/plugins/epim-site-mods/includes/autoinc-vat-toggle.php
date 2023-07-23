@@ -1,5 +1,45 @@
 <?php
 
+add_action('woocommerce_before_calculate_totals','epsm_before_calculate_totals',9999);
+
+function epsm_before_calculate_totals($cart) {
+    if ( is_admin() && ! defined( 'DOING_AJAX' ) ) return;
+    if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 ) return;
+
+    $epim_use_qty_price_breaks = get_option('epim_use_qty_price_breaks');
+    if(!(is_array($epim_use_qty_price_breaks)&&($epim_use_qty_price_breaks['checkbox_value']=='1'))) return;
+
+    $user = wp_get_current_user();
+    $price_customer_1 = in_array('price_customer_1', $user->roles);
+    $price_customer_2 = in_array('price_customer_2', $user->roles);
+    $price_customer_3 = in_array('price_customer_3', $user->roles);
+
+    if((!$price_customer_1)&&(!$price_customer_2)&&(!$price_customer_3)&&(! wc_current_user_has_role( 'customer' ))) return;
+
+    foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
+        $product = $cart_item['data'];
+        if ($price_customer_1) {
+            $p1 = get_post_meta($product->get_id(), 'epim_Qty_Price_1', true);
+            if ($p1) {
+                $cart_item['data']->set_price( $p1 );
+            }
+        }
+        if ($price_customer_2) {
+            $p2 = get_post_meta($product->get_id(), 'epim_Qty_Price_2', true);
+            if ($p2) {
+                $cart_item['data']->set_price( $p2 );
+            }
+        }
+        if ($price_customer_3) {
+            $p3 = get_post_meta($product->get_id(), 'epim_Qty_Price_3', true);
+            if ($p3) {
+                $cart_item['data']->set_price( $p3 );
+            }
+        }
+    }
+
+}
+
 add_filter( 'woocommerce_get_price_html', 'epsm_get_price_html_override', 100, 2 );
 
 function epsm_get_price_html_override( $price, $product ) {
@@ -15,8 +55,51 @@ function epsm_get_price_html_override( $price, $product ) {
 		}
 	}*/
 
-	$price_excl_tax = wc_get_price_excluding_tax( $product );
-	$price_incl_tax = wc_get_price_including_tax( $product );
+    $price_excl_tax = wc_get_price_excluding_tax( $product);
+    $price_incl_tax = wc_get_price_including_tax( $product );
+
+    $epim_use_qty_price_breaks = get_option('epim_use_qty_price_breaks');
+
+    if(is_array($epim_use_qty_price_breaks)&&($epim_use_qty_price_breaks['checkbox_value']=='1')) {
+        $user = wp_get_current_user();
+        $price_customer_1 = in_array('price_customer_1', $user->roles);
+        $price_customer_2 = in_array('price_customer_2', $user->roles);
+        $price_customer_3 = in_array('price_customer_3', $user->roles);
+        if ($price_customer_1) {
+            $p1 = get_post_meta(get_the_ID(), 'epim_Qty_Price_1', true);
+            if ($p1) {
+                $a1 = array(
+                    'qty' => '',
+                    'price' => $p1,
+                );
+                $price_excl_tax = wc_get_price_excluding_tax($product, $a1);
+                $price_incl_tax = wc_get_price_including_tax($product, $a1);
+            }
+        }
+        if ($price_customer_2) {
+            $p2 = get_post_meta(get_the_ID(), 'epim_Qty_Price_2', true);
+            if ($p2) {
+                $a2 = array(
+                    'qty' => '',
+                    'price' => $p2,
+                );
+                $price_excl_tax = wc_get_price_excluding_tax($product, $a2);
+                $price_incl_tax = wc_get_price_including_tax($product, $a2);
+            }
+        }
+        if ($price_customer_3) {
+            $p3 = get_post_meta(get_the_ID(), 'epim_Qty_Price_3', true);
+            if ($p3) {
+                $a3 = array(
+                    'qty' => '',
+                    'price' => $p3,
+                );
+                $price_excl_tax = wc_get_price_excluding_tax($product, $a3);
+                $price_incl_tax = wc_get_price_including_tax($product, $a3);
+            }
+        }
+    }
+
 	if ( ! $price_excl_tax ) {
 		$price_excl_tax = 0;
 	}
