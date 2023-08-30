@@ -38,7 +38,15 @@
           <p><a href="tel:01254237409" class="underline">01254 237 409</a><br><a href="mailto:sales@dhstainless.co.uk" class="underline">sales@dhstainless.co.uk</a></p>
         </div>
         <div class="col-md-2 accreditations">
+            <div style="text-align: center;padding-bottom: 20px;">
+                <h4>Connect with us on</h4>
+                <a href="https://www.linkedin.com/company/68212543/admin/feed/posts/" target="_blank">
+                    <img src="<?php bloginfo('template_directory'); ?>/img/LinkedIn_logo_initials.png" alt="" style="max-width: 60px; height: auto;">
+                </a>
+            </div>
+            <div>
           <img src="<?php bloginfo('template_directory'); ?>/img/accreditations.png" alt="">
+            </div>
         </div>
       </div>
     </div>
