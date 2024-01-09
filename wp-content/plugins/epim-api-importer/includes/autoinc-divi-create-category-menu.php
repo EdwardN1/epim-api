@@ -50,7 +50,49 @@ function epim_generate_category_menu( $max_parents = 10 ) {
 							) );
 							if ( is_wp_error( $Sub_parent_menu_id ) ) {
 								error_log( $Sub_parent_menu_id->get_error_message() );
-							}
+							} else {
+                                $sub_two_categories = get_terms( [ 'taxonomy' => 'product_cat', 'hide_empty' => true, 'parent' => $sub_category->term_id ] );
+                                foreach ( $sub_two_categories as $sub_two_category ) {
+                                    $Sub_two_parent_menu_id = wp_update_nav_menu_item($menu->term_id, 0, array(
+                                        'menu-item-title' => __($sub_two_category->name),
+                                        'menu-item-classes' => 'epim_sub_menu_item',
+                                        'menu-item-url' => get_category_link($sub_two_category->term_id),
+                                        'menu-item-parent-id' => $Sub_parent_menu_id,
+                                        'menu-item-status' => 'publish'
+                                    ));
+                                };
+                                if ( is_wp_error( $Sub_two_parent_menu_id ) ) {
+                                    error_log( $Sub_two_parent_menu_id->get_error_message() );
+                                } else {
+                                    $sub_three_categories = get_terms( [ 'taxonomy' => 'product_cat', 'hide_empty' => true, 'parent' => $sub_two_category->term_id ] );
+                                    foreach ( $sub_three_categories as $sub_three_category ) {
+                                        $Sub_three_parent_menu_id = wp_update_nav_menu_item($menu->term_id, 0, array(
+                                            'menu-item-title' => __($sub_three_category->name),
+                                            'menu-item-classes' => 'epim_sub_menu_item',
+                                            'menu-item-url' => get_category_link($sub_three_category->term_id),
+                                            'menu-item-parent-id' => $Sub_two_parent_menu_id,
+                                            'menu-item-status' => 'publish'
+                                        ));
+                                    };
+                                    if ( is_wp_error( $Sub_three_parent_menu_id ) ) {
+                                        error_log( $Sub_three_parent_menu_id->get_error_message() );
+                                    } else {
+                                        $sub_four_categories = get_terms( [ 'taxonomy' => 'product_cat', 'hide_empty' => true, 'parent' => $sub_three_category->term_id ] );
+                                        foreach ( $sub_four_categories as $sub_four_category ) {
+                                            $Sub_four_parent_menu_id = wp_update_nav_menu_item($menu->term_id, 0, array(
+                                                'menu-item-title' => __($sub_four_category->name),
+                                                'menu-item-classes' => 'epim_sub_menu_item',
+                                                'menu-item-url' => get_category_link($sub_four_category->term_id),
+                                                'menu-item-parent-id' => $Sub_three_parent_menu_id,
+                                                'menu-item-status' => 'publish'
+                                            ));
+                                        };
+                                        if ( is_wp_error( $Sub_four_parent_menu_id ) ) {
+                                            error_log( $Sub_four_parent_menu_id->get_error_message() );
+                                        }
+                                    }
+                                }
+                            }
 						}
 					}
 				}
