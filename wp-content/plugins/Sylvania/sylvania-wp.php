@@ -17,7 +17,10 @@ define('swp_FUNCTIONSPATH', plugin_dir_path( __FILE__ ) . '/includes/');
 define('swp_PLUGINPATH', plugin_dir_path( __FILE__ ) );
 define('swp_PLUGINURI', plugin_dir_url(__FILE__));
 define('swp_PLUGINFILE',__FILE__);
-$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
+/*$active_plugins = apply_filters( 'active_plugins', get_option( 'active_plugins' ) );
+if ( in_array( 'woocommerce/woocommerce.php', $active_plugins ) ) {
+
+}*/
 foreach (glob(swp_FUNCTIONSPATH.'autoinc-*.php') as $filename)
 {
     require_once ($filename);
