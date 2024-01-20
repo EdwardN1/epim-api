@@ -1210,7 +1210,12 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
             } else {
                 //error_log($newProductID.' no datasheets found');
             }
-			$res .= $variation->name . ' (' . $variation->SKU . ') Created<br>';
+            if(property_exists($variation,'SKU')) {
+                $res .= $variation->name . ' (' . $variation->SKU . ') Created<br>';
+            } else {
+                $res .= $variation->name . ' Created<br>';
+            }
+
 		} else {
 			$res .= 'There was a problem creating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
 		}
@@ -1223,7 +1228,12 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
                 update_post_meta($id,'_epim_data_sheets',$dataSheets);
             } else {
             }
-			$res .= $variation->name . ' (' . $variation->SKU . ') Created<br>';
+            if(property_exists($variation,'SKU')) {
+
+                $res .= $variation->name . ' (' . $variation->SKU . ') Created<br>';
+            } else {
+                $res .= $variation->name . ' Created<br>';
+            }
 		} else {
 			$res .= 'There was a problem updating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
 		}
