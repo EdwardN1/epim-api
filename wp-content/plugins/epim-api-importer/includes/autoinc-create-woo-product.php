@@ -65,6 +65,10 @@ function epimaapi_wooCreateProduct_ex( $pid, $productArray ) {
                 }
             }
         }
+        if(!is_array($productArray)) {
+            error_log( 'epimaapi_wooCreatProduct - null or invalid product array $productArray' );
+            return $product_id;
+        }
 		if ( array_key_exists( 'productTitle', $productArray ) ) {
 			$productTitle = $productArray['productTitle'];
 			if ( $productTitle == '' ) {

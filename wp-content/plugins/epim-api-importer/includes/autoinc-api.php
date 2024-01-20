@@ -223,39 +223,43 @@ function epimaapi_background_import_products_from( $timecode ) {
 	$allProductsResponse = json_decode( get_epimaapi_all_changed_products_since( $timecode ), true );
 	$variations          = array();
 	if ( json_last_error() == JSON_ERROR_NONE ) {
-		if ( array_key_exists( 'Results', $allProductsResponse ) ) {
-			foreach ( $allProductsResponse['Results'] as $Product ) {
-				if ( get_option( '_epim_update_running' ) == '' ) {
-					exit;
-				}
-				$categories = array();
-				$pictures   = array();
-				if ( array_key_exists( 'CategoryIds', $Product ) ) {
-					$categories = $Product['CategoryIds'];
-				}
-				if ( array_key_exists( 'PictureIds', $Product ) ) {
-					$pictures = $Product['PictureIds'];
-				}
-				if ( array_key_exists( 'VariationIds', $Product ) ) {
-					if ( is_array( $Product['VariationIds'] ) ) {
-						foreach ( $Product['VariationIds'] as $variation_id ) {
-							if ( get_option( '_epim_update_running' ) == '' ) {
-								exit;
-							}
-							$variation                      = array();
-							$variation['productID']         = $Product['Id'];
-							$variation['variationID']       = $variation_id;
-							$variation['productBulletText'] = $Product['BulletText'];
-							$variation['productName']       = $Product['Name'];
-							$variation['categoryIds']       = $categories;
-							$variation['pictureIds']        = $pictures;
-							$variations[]                   = $variation;
-						}
-					}
+        if(is_array($allProductsResponse)) {
+            if ( array_key_exists( 'Results', $allProductsResponse ) ) {
+                foreach ( $allProductsResponse['Results'] as $Product ) {
+                    if ( get_option( '_epim_update_running' ) == '' ) {
+                        exit;
+                    }
+                    $categories = array();
+                    $pictures   = array();
+                    if(is_array($Product)) {
+                        if ( array_key_exists( 'CategoryIds', $Product ) ) {
+                            $categories = $Product['CategoryIds'];
+                        }
+                        if ( array_key_exists( 'PictureIds', $Product ) ) {
+                            $pictures = $Product['PictureIds'];
+                        }
+                        if ( array_key_exists( 'VariationIds', $Product ) ) {
+                            if ( is_array( $Product['VariationIds'] ) ) {
+                                foreach ( $Product['VariationIds'] as $variation_id ) {
+                                    if ( get_option( '_epim_update_running' ) == '' ) {
+                                        exit;
+                                    }
+                                    $variation                      = array();
+                                    $variation['productID']         = $Product['Id'];
+                                    $variation['variationID']       = $variation_id;
+                                    $variation['productBulletText'] = $Product['BulletText'];
+                                    $variation['productName']       = $Product['Name'];
+                                    $variation['categoryIds']       = $categories;
+                                    $variation['pictureIds']        = $pictures;
+                                    $variations[]                   = $variation;
+                                }
+                            }
 
-				}
-			}
-		}
+                        }
+                    }
+                }
+            }
+        }
 	} else {
 		cron_log( 'ePim is not returning valid JSON, getting products.' );
 	}
