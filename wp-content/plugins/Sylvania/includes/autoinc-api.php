@@ -1,5 +1,9 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 function swp_make_api_call( $url ) {
     $response = wp_safe_remote_get( $url);
     if ( is_array( $response ) && ! is_wp_error( $response ) ) {
