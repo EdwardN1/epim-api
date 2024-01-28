@@ -12,7 +12,7 @@ function swp_make_api_call( $url ) {
         if ( is_wp_error( $response ) ) {
             error_log($response->get_error_message());
             error_log('URL called: '. $url);
-            $apiCall = $response->get_error_message();
+            $apiCall = false;
         }
     }
 
