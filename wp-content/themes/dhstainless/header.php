@@ -195,7 +195,7 @@
                               <ul>
                                 <li><div class="icon-chevron-right icon"></div><a href="<?php bloginfo('url'); ?>/sectors/renewable-energy/" class="underline">Renewable Energy</a></li>
                                 <li><div class="icon-chevron-right icon"></div><a href="<?php bloginfo('url'); ?>/sectors/nuclear/" class="underline">Nuclear</a></li>
-                                <li><div class="icon-chevron-right icon"></div><a href="<?php bloginfo('url'); ?>/sectors/building-services/" class="underline">Building Servcies</a></li>
+                                <li><div class="icon-chevron-right icon"></div><a href="<?php bloginfo('url'); ?>/sectors/building-services/" class="underline">Building Services</a></li>
                                 <li><div class="icon-chevron-right icon"></div><a href="<?php bloginfo('url'); ?>/sectors/food-drink/" class="underline">Food & Drink</a></li>
                                 <li><div class="icon-chevron-right icon"></div><a href="<?php bloginfo('url'); ?>/sectors/chemical-pharmaceutical/" class="underline">Chemcial Pharmaceutical</a></li>
                                 <li><div class="icon-chevron-right icon"></div><a href="<?php bloginfo('url'); ?>/sectors/water/" class="underline">Water</a></li>

@@ -13,6 +13,10 @@ function epim_taxonomy_add_new_meta_field() {
         <input type="text" name="epim_api_id" id="epim_api_id">
         <p class="description"><?php _e('Enter an API ID', 'epim'); ?></p>
 
+        <label for="epim_api_id"><?php _e('API Alias', 'epim'); ?></label>
+        <input type="text" name="epim_api_alias" id="epim_api_alias">
+        <p class="description"><?php _e('Enter an API Alias', 'epim'); ?></p>
+
         <label for="epim_api_parent_id"><?php _e('API PARENT ID', 'epim'); ?></label>
         <input type="text" name="epim_api_parent_id" id="epim_api_parent_id">
         <p class="description"><?php _e('Enter an API PARENT ID', 'epim'); ?></p>
@@ -65,6 +69,7 @@ function epim_taxonomy_edit_meta_field($term) {
 
     // retrieve the existing value(s) for this meta field.
     $epim_api_id = get_term_meta($term_id, 'epim_api_id', true);
+    $epim_api_alias = get_term_meta($term_id, 'epim_api_alias', true);
     $epim_api_parent_id = get_term_meta($term_id, 'epim_api_parent_id', true);
     $epim_api_picture_ids = get_term_meta($term_id, 'epim_api_picture_ids', true);
     $epim_api_picture_link = get_term_meta($term_id, 'epim_api_picture_link', true);
@@ -79,6 +84,14 @@ function epim_taxonomy_edit_meta_field($term) {
         <td>
             <input type="text" name="epim_api_id" id="epim_api_id" value="<?php echo esc_attr($epim_api_id) ? esc_attr($epim_api_id) : ''; ?>">
             <p class="description"><?php _e('Enter an API ID', 'epim'); ?></p>
+        </td>
+    </tr>
+
+    <tr class="form-field">
+        <th scope="row" valign="top"><label for="epim_api_alias"><?php _e('API Alias', 'epim'); ?></label></th>
+        <td>
+            <input type="text" name="epim_api_alias" id="epim_api_alias" value="<?php echo esc_attr($epim_api_alias) ? esc_attr($epim_api_alias) : ''; ?>">
+            <p class="description"><?php _e('Enter an API Alias', 'epim'); ?></p>
         </td>
     </tr>
 
@@ -123,12 +136,14 @@ add_action('product_cat_edit_form_fields', 'epim_taxonomy_edit_meta_field', 10, 
 function epim_save_taxonomy_custom_meta($term_id) {
 
     $epim_api_id = filter_input(INPUT_POST, 'epim_api_id');
+    $epim_api_alias = filter_input(INPUT_POST, 'epim_api_alias');
     $epim_api_parent_id = filter_input(INPUT_POST, 'epim_api_parent_id');
     $epim_api_picture_ids = filter_input(INPUT_POST, 'epim_api_picture_ids');
     $epim_api_picture_link = filter_input(INPUT_POST, 'epim_api_picture_link');
     $epim_api_exclude_from_category_menu = filter_input(INPUT_POST, 'epim_api_exclude_from_category_menu');
 
     update_term_meta($term_id, 'epim_api_id', $epim_api_id);
+    update_term_meta($term_id, 'epim_api_alias', $epim_api_alias);
     update_term_meta($term_id, 'epim_api_parent_id', $epim_api_parent_id);
     update_term_meta($term_id, 'epim_api_picture_ids', $epim_api_picture_ids);
     update_term_meta($term_id, 'epim_api_picture_link', $epim_api_picture_link);
@@ -148,6 +163,11 @@ add_action( 'rest_api_init', function () {
 			return get_term_meta( $post_arr['id'], 'epim_api_id', true );
 		},
 	) );
+    register_rest_field( 'product_cat', 'epim_api_alias', array(
+        'get_callback' => function( $post_arr ) {
+            return get_term_meta( $post_arr['id'], 'epim_api_alias', true );
+        },
+    ) );
 	register_rest_field( 'product_cat', 'epim_api_parent_id', array(
 		'get_callback' => function( $post_arr ) {
 			return get_term_meta( $post_arr['id'], 'epim_api_parent_id', true );
