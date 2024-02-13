@@ -27,7 +27,7 @@ function epim_clear_category_menu()
         }
         $res = $menu->term_id;
     }
-    error_log('epim_clear_category_menu completed');
+    //error_log('epim_clear_category_menu completed');
     return $res;
 }
 
@@ -49,7 +49,7 @@ function epim_generate_category_menu($max_parents = 10)
             $categories = array_slice($allcategories, 0, $max_parents);
         }
 
-        error_log('Number of categories to add to menu = ' . count($categories));
+        //error_log('Number of categories to add to menu = ' . count($categories));
 
         $l1 = array();
         $l2 = array();
@@ -148,11 +148,11 @@ function epim_generate_category_menu($max_parents = 10)
             }
         }
 
-        error_log('Menu Level 1 item count = '.count($l1));
-        error_log('Menu Level 2 item count = '.count($l2));
-        error_log('Menu Level 3 item count = '.count($l3));
-        error_log('Menu Level 4 item count = '.count($l4));
-        error_log('Menu Level 5 item count = '.count($l5));
+        //error_log('Menu Level 1 item count = '.count($l1));
+        //error_log('Menu Level 2 item count = '.count($l2));
+        //error_log('Menu Level 3 item count = '.count($l3));
+        //error_log('Menu Level 4 item count = '.count($l4));
+        //error_log('Menu Level 5 item count = '.count($l5));
 
         $l1_menu_items = array();
 
@@ -258,7 +258,7 @@ function epim_generate_category_menu($max_parents = 10)
             }
         }
 
-        error_log('Menu Created');
+        //error_log('Menu Created');
 
 
     }
