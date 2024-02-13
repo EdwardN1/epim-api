@@ -287,7 +287,7 @@ adminJQ(function ($) {
             let obj = this;
             let c = 0;
             $(categories).each(function (index, record) {
-                obj.queue(ajaxurl,{action: 'create_category', ID: record.Id, name: record.Name, ParentID: record.ParentId, picture_ids: record.PictureIds});
+                obj.queue(ajaxurl,{action: 'create_category', ID: record.Id, name: record.Name, ParentID: record.ParentId, picture_ids: record.PictureIds, alias: record.Alias});
                 if(debug) {
                     c++;
                     if (c >= cMax) {
@@ -332,7 +332,7 @@ adminJQ(function ($) {
             let obj = this;
             let c = 0;
             $(categories).each(function (index, record) {
-                obj.queue(ajaxurl,{action: 'create_category', ID: record.Id, name: record.Name, ParentID: record.ParentId, picture_ids: record.PictureIds});
+                obj.queue(ajaxurl,{action: 'create_category', ID: record.Id, name: record.Name, ParentID: record.ParentId, picture_ids: record.PictureIds, alias: record.Alias});
                 if(debug) {
                     c++;
                     if (c >= cMax) {

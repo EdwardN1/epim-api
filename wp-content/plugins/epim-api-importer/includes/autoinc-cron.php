@@ -124,7 +124,7 @@ function epimaapi_update_every_minute() {
 								$ParentID = $category['ParentId'];
 							}
                             cron_log('Importing Id:'.$category['Id'].' Name: '.$category['Name']);
-							epimaapi_create_category( $category['Id'], $category['Name'], $ParentID, $picture_webpath, $picture_ids );
+							epimaapi_create_category( $category['Id'], $category['Name'], $ParentID, $picture_webpath, $picture_ids, $category['Alias'] );
 						}
 					}
 					update_option( '_epim_background_current_index', $i-1 );

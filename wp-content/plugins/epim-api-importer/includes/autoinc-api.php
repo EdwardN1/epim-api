@@ -618,7 +618,7 @@ function epimaapi_getProductFromID( $productID, $variationID ) {
  * Create a Category
  *
  */
-function epimaapi_create_category( $id, $name, $ParentID, $picture_webpath, $picture_ids ) {
+function epimaapi_create_category( $id, $name, $ParentID, $picture_webpath, $picture_ids, $alias = '' ) {
 	$response = '';
 	$terms    = get_terms( [
 		'taxonomy'   => 'product_cat',
@@ -630,6 +630,7 @@ function epimaapi_create_category( $id, $name, $ParentID, $picture_webpath, $pic
 		update_term_meta( $term->term_id, 'epim_api_id', $id );
 		update_term_meta( $term->term_id, 'epim_api_picture_link', $picture_webpath );
 		update_term_meta( $term->term_id, 'epim_api_parent_id', $ParentID );
+        update_term_meta( $term->term_id, 'epim_api_alias', $alias );
 		$pSuffix = '';
 		$pField  = '';
 		if ( $picture_ids ) {

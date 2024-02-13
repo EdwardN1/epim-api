@@ -689,6 +689,8 @@ function ajax_epimaapi_create_category()
                     }
                 }
             }
+            $a = '';
+            if(!empty($_POST['alias'])) $a = sanitize_text_field($_POST['alias']);
             /*error_log('$_POST["picture_ids"] = '.print_r($_POST['picture_ids'],true));
             error_log('$Picture_ids = '.print_r($Picture_ids,true ));*/
             $response = epimaapi_create_category(
@@ -696,7 +698,7 @@ function ajax_epimaapi_create_category()
                 sanitize_text_field($_POST['name']),
                 sanitize_text_field($_POST['ParentID']),
                 $WebPath,
-                $Picture_ids);
+                $Picture_ids,$a);
         }
     }
     echo $response;
