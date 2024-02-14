@@ -131,9 +131,6 @@ function epimaapi_delete_variation( $variationID ) {
 
 function get_epimaapi_picture( $id ) {
 	$res = epimaapi_make_api_call( 'Pictures/' . $id );
-	if ( $id == '64746' ) {
-		//error_log($res);
-	}
 
 	return $res;
 }
@@ -325,8 +322,6 @@ function epimaapi_getCategoryImages( $id ) {
 		$api_picture_ids = get_term_meta( $term_id, 'epim_api_picture_ids', true );
 		$res             = str_getcsv( $api_picture_ids );
 		//error_log($term->name.': picture IDS - '.print_r($res,true));
-	} else {
-		//error_log('Term not found for ID: '.$id);
 	}
 
 	return json_encode( $res );
@@ -819,12 +814,17 @@ function epimaapi_import_url_Picture( $url ) {
  * Create a Product
  */
 
-function epimaapi_delete_attributes() {
+function epimaapi_delete_attributes($limit = 25) {
 	$attribute_taxonomies = wc_get_attribute_taxonomies();
+    $start = microtime(true);
 	foreach ( $attribute_taxonomies as $attribute_taxonomy ) {
 		$taxID = wc_attribute_taxonomy_id_by_name( $attribute_taxonomy->attribute_name );
 		wc_delete_attribute( $taxID );
+        if (microtime(true) - $start >= $limit) {
+            return false;
+        }
 	}
+    return 'Attributes Deleted';
 }
 
 function epimaapi_create_product( $productID, $variationID, $productBulletText, $productName, $categoryIds, $pictureIds ) {
@@ -1056,10 +1056,20 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 
         $variationPictureIds = array();
 
-        $PictureIdsGroupedImages = $variation->PictureIdsGrouped->Image;
-        if(is_array($PictureIdsGroupedImages)) {
-            foreach ($PictureIdsGroupedImages as $pictureIdsGroupedImage) {
-                $variationPictureIds[] = $pictureIdsGroupedImage;
+        $PictureIdsGrouped = $variation->PictureIdsGrouped;
+
+        if($PictureIdsGrouped&&(isset($variation->PictureIdsGrouped->Image))) {
+            $PictureIdsGroupedImages = $variation->PictureIdsGrouped->Image;
+            if(is_array($PictureIdsGroupedImages)) {
+                foreach ($PictureIdsGroupedImages as $pictureIdsGroupedImage) {
+                    $variationPictureIds[] = $pictureIdsGroupedImage;
+                }
+            } else {
+                if ( $variation->PictureIds ) {
+                    foreach ( $variation->PictureIds as $pictureId ) {
+                        $variationPictureIds[] = $pictureId;
+                    }
+                }
             }
         } else {
             if ( $variation->PictureIds ) {
@@ -1068,8 +1078,6 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
                 }
             }
         }
-
-        $PictureIdsGrouped = $variation->PictureIdsGrouped;
 
         if($PictureIdsGrouped) {
             if(is_object($PictureIdsGrouped)) {
@@ -1208,13 +1216,15 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 		    if($dataSheets) {
                 //error_log(print_r($dataSheets,true));
 		        update_post_meta($newProductID,'_epim_data_sheets',$dataSheets);
-            } else {
-                //error_log($newProductID.' no datasheets found');
+            }
+            $vname = 'Variation ';
+            if(property_exists($variation,'name')) {
+                $vname = $variation->name;
             }
             if(property_exists($variation,'SKU')) {
-                $res .= $variation->name . ' (' . $variation->SKU . ') Created<br>';
+                $res .= $vname . ' (' . $variation->SKU . ') Created<br>';
             } else {
-                $res .= $variation->name . ' Created<br>';
+                $res .= $vname . ' Created<br>';
             }
 
 		} else {
@@ -1227,13 +1237,16 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 		if ( epimaapi_wooUpdateProduct( $id, $productArray ) ) {
             if($dataSheets) {
                 update_post_meta($id,'_epim_data_sheets',$dataSheets);
-            } else {
+            }
+            $vname = 'Variation';
+            if(property_exists($variation,'name')) {
+                $vname = $variation->name;
             }
             if(property_exists($variation,'SKU')) {
 
-                $res .= $variation->name . ' (' . $variation->SKU . ') Created<br>';
+                $res .= $vname . ' (' . $variation->SKU . ') Created<br>';
             } else {
-                $res .= $variation->name . ' Created<br>';
+                $res .= $vname . ' Created<br>';
             }
 		} else {
 			$res .= 'There was a problem updating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';

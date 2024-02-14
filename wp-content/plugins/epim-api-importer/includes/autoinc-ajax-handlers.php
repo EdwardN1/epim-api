@@ -343,8 +343,22 @@ function ajax_epimaapi_delete_variation()
 function ajax_epimaapi_delete_attributes()
 {
     epimaapi_checkSecure();
-    epimaapi_delete_attributes();
-    echo 'All attributes removed';
+    if (!empty($_POST['limit'])) {
+        $limit = sanitize_text_field($_POST['limit']);
+        $res = epimaapi_delete_attributes($limit);
+        if(!$res) {
+            echo 'Timed Out';
+        } else {
+            echo $res;
+        }
+    } else {
+        $res = epimaapi_delete_attributes();
+        if(!$res) {
+            echo 'Timed Out';
+        } else {
+            echo $res;
+        }
+    }
     exit;
 }
 

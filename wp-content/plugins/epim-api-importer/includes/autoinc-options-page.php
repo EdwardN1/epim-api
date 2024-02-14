@@ -8,7 +8,6 @@ if (!defined('ABSPATH')) {
  * Creating an Options Page
  */
 
-
 function wpb_new_product_tab_content()
 {
     // The new tab content
@@ -76,7 +75,14 @@ function epim_register_settings()
     add_option('epim_use_qty_price_breaks', '0');
     register_setting('epim_divi_options_group', 'epim_use_qty_price_breaks');
 
-
+    add_option('epim_tabs_advanced', '0');
+    register_setting('epim_restricted_options_group', 'epim_tabs_advanced');
+    add_option('epim_tabs_settings', '0');
+    register_setting('epim_restricted_options_group', 'epim_tabs_settings');
+    add_option('epim_tabs_schedule', '0');
+    register_setting('epim_restricted_options_group', 'epim_tabs_schedule');
+    add_option('epim_tabs_divi', '0');
+    register_setting('epim_restricted_options_group', 'epim_tabs_divi');
 
     add_option('_epim_update_running', '');
     add_option('_epim_background_process_data', '');
@@ -85,7 +91,6 @@ function epim_register_settings()
 }
 
 add_action('admin_init', 'epim_register_settings');
-
 
 /**
  * Display Settings on Option’s Page
@@ -101,42 +106,186 @@ function epim_options_page()
         if (isset($_GET['tab'])) {
             $active_tab = sanitize_text_field($_GET['tab']);
         } else {
-            $active_tab = 'epim_management';
+            $active_tab = 'epim_dashboard';
         }
         ?>
         <h2 class="nav-tab-wrapper">
-            <a href="?page=epim&tab=epim_management"
-               class="nav-tab <?php echo $active_tab == 'epim_management' ? 'nav-tab-active' : ''; ?>">ePim
-                Management</a>
-            <a href="?page=epim&tab=epim_settings"
-               class="nav-tab <?php echo $active_tab == 'epim_settings' ? 'nav-tab-active' : ''; ?>">ePim Settings</a>
-            <a href="?page=epim&tab=epim_updates"
-               class="nav-tab <?php echo $active_tab == 'epim_updates' ? 'nav-tab-active' : ''; ?>">ePim Update
-                Schedule</a>
-            <a href="?page=epim&tab=epim_background_updates"
-               class="nav-tab <?php echo $active_tab == 'epim_background_updates' ? 'nav-tab-active' : ''; ?>">ePim
-                Background Updates</a>
+            <?php settings_fields('epim_restricted_options_group'); ?>
+
+            <a href="?page=epim&tab=epim_dashboard"
+               class="nav-tab <?php echo $active_tab == 'epim_dashboard' ? 'nav-tab-active' : ''; ?>">Dashboard</a>
+
+            <?php $epim_tabs_advanced = get_option('epim_tabs_advanced'); ?>
+            <?php $epim_tabs_advanced_show = false; ?>
+            <?php if (is_array($epim_tabs_advanced)) {
+                if ($epim_tabs_advanced['checkbox_value'] == '1') {
+                    $epim_tabs_advanced_show = true;
+                }
+            } ?>
+            <?php if ($epim_tabs_advanced_show): ?>
+                <a href="?page=epim&tab=epim_management"
+                   class="nav-tab <?php echo $active_tab == 'epim_management' ? 'nav-tab-active' : ''; ?>">Advanced</a>
+            <?php endif; ?>
+
+            <?php $epim_tabs_settings = get_option('epim_tabs_settings'); ?>
+            <?php $epim_tabs_settings_show = false; ?>
+            <?php if (is_array($epim_tabs_settings)) {
+                if ($epim_tabs_settings['checkbox_value'] == '1') {
+                    $epim_tabs_settings_show = true;
+                }
+            } ?>
+            <?php if ($epim_tabs_settings_show): ?>
+                <a href="?page=epim&tab=epim_settings"
+                   class="nav-tab <?php echo $active_tab == 'epim_settings' ? 'nav-tab-active' : ''; ?>">Settings</a>
+            <?php endif; ?>
+
+            <?php $epim_tabs_schedule = get_option('epim_tabs_schedule'); ?>
+            <?php $epim_tabs_schedule_show = false; ?>
+            <?php if (is_array($epim_tabs_schedule)) {
+                if ($epim_tabs_schedule['checkbox_value'] == '1') {
+                    $epim_tabs_schedule_show = true;
+                }
+            } ?>
+            <?php if ($epim_tabs_schedule_show): ?>
+                <a href="?page=epim&tab=epim_updates"
+                   class="nav-tab <?php echo $active_tab == 'epim_updates' ? 'nav-tab-active' : ''; ?>">Schedules</a>
+            <?php endif; ?>
+
+            <?php $epim_tabs_divi = get_option('epim_tabs_divi'); ?>
+            <?php $epim_tabs_divi_show = false; ?>
+            <?php if (is_array($epim_tabs_schedule)) {
+                if ($epim_tabs_divi['checkbox_value'] == '1') {
+                    $epim_tabs_divi_show = true;
+                }
+            } ?>
+            <?php if ($epim_tabs_divi_show): ?>
+                <a href="?page=epim&tab=epim_divi_settings"
+                   class="nav-tab <?php echo $active_tab == 'epim_divi_settings' ? 'nav-tab-active' : ''; ?>">Divi</a>
+            <?php endif; ?>
+
             <?php
             $current_user = wp_get_current_user();
             $email = (string)$current_user->user_email;
             $restrictedTab = $email === 'edward@technicks.com';
-            if(!$restrictedTab) {
+            if (!$restrictedTab) {
                 $length = strlen('@ng15.co.uk');
-	            $restrictedTab = substr($email,-$length) === '@ng15.co.uk';
+                $restrictedTab = substr($email, -$length) === '@ng15.co.uk';
             }
             if ($restrictedTab):?>
                 <a href="?page=epim&tab=epim_restricted_settings"
-                   class="nav-tab <?php echo $active_tab == 'epim_restricted_settings' ? 'nav-tab-active' : ''; ?>">ePim
-                    Restricted Settings</a>
-            <?php endif; ?>
-
-            <?php if ($is_divi) : ?>
-                <a href="?page=epim&tab=epim_divi_settings"
-                   class="nav-tab <?php echo $active_tab == 'epim_divi_settings' ? 'nav-tab-active' : ''; ?>">Divi
-                    options</a>
+                   class="nav-tab <?php echo $active_tab == 'epim_restricted_settings' ? 'nav-tab-active' : ''; ?>">Restricted
+                    Settings</a>
             <?php endif; ?>
 
         </h2>
+
+        <?php if ($active_tab == 'epim_dashboard'): ?>
+            <style>
+                .modal {
+                    display: none;
+                }
+
+                .modal.active {
+                    display: inline-block;
+                }
+
+                .modal img {
+                    max-height: 25px;
+                    width: auto;
+                }
+
+                input[type=text] {
+                    vertical-align: bottom;
+                }
+
+            </style>
+            <div class="wrap">
+                <h1>ePim Dashboard</h1>
+                <div><p>Start, stop or view an API update performed on the server.</p></div>
+                <style>
+                    table.form-table td, table td * {
+                        vertical-align: top;
+                    }
+                </style>
+                <table class="form-table" style="max-width: 750px;">
+                    <tr>
+                        <td>
+                            <button id="GetCurrentUpdateData" class="button">Get Status</button>&nbsp;
+                            &nbsp;<span class="modal GetCurrentUpdateData"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        </td>
+                        <td>
+                            <div id="ePimResult">
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button id="StopCurrentUpdate" class="button">Stop Current Update</button>&nbsp;
+                            &nbsp;<span class="modal StopCurrentUpdate"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        </td>
+                        <td>
+                            NB Stops and Cancels Current Background Update.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button id="BackgroundUpdateAll" class="button">Update all</button>&nbsp;
+                            &nbsp;<span class="modal BackgroundUpdateAll"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        </td>
+                        <td>
+                            NB restarts current background import if one is active.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-bottom: 0;">
+                            <label for="start_date" style="font-weight: bold;">Update by product changed since:</label>
+
+                        </td>
+                        <td style="padding-bottom: 0;">NB Only updates products which have already been imported.</td>
+
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="custom_date" name="start_date" id="start_date" value=""/></td>
+                        <td>
+                            <button id="BackgroundUpdateSince" class="button">Update</button>&nbsp; &nbsp;
+                            <span class="modal BackgroundUpdateSince"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button id="BackgroundUnfreezeQueue" class="button">Unfreeze Queue</button>&nbsp;
+                            &nbsp;<span class="modal BackgroundUnfreezeQueue"><img
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                        </td>
+                        <td>
+                            NB attempts to unfreeze the queue by reloading product data from the API, starting at the
+                            current background index.
+                        </td>
+                    </tr>
+                </table>
+
+                <h3>Activity on the server:</h3>
+                <div>
+                    <hr>
+                </div>
+                <script type="text/javascript"
+                        src="https://creativecouple.github.io/jquery-timing/jquery-timing.min.js"></script>
+                <style>
+                    #ePimTail {
+                        width: 80%;
+                        height: 65vh;
+                        overflow-y: scroll;
+                    }
+                </style>
+                <div id="ePimTail">
+
+                </div>
+            </div>
+        <?php endif; ?>
 
         <?php if ($active_tab == 'epim_divi_settings'): ?>
             <div class="wrap">
@@ -191,7 +340,8 @@ function epim_options_page()
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row"><label for="epim_use_qty_price_breaks">Use ePim Quantity Price Breaks</label>
+                            <th scope="row"><label for="epim_use_qty_price_breaks">Use ePim Quantity Price
+                                    Breaks</label>
                             </th>
                             <?php $options = get_option('epim_use_qty_price_breaks'); ?>
                             <td>
@@ -219,97 +369,6 @@ function epim_options_page()
             </script>
         <?php endif; ?>
 
-        <?php if ($active_tab == 'epim_background_updates'): ?>
-            <style>
-                .modal {
-                    display: none;
-                }
-
-                .modal.active {
-                    display: inline-block;
-                }
-
-                .modal img {
-                    max-height: 25px;
-                    width: auto;
-                }
-
-                input[type=text] {
-                    vertical-align: bottom;
-                }
-
-            </style>
-            <div class="wrap">
-                <h1>ePim Background Updater</h1>
-                <style>
-                    table.form-table td, table td * {
-                        vertical-align: top;
-                    }
-                </style>
-                <table class="form-table" style="max-width: 750px;">
-                    <tr>
-                        <td>
-                            <button id="GetCurrentUpdateData" class="button">Get Status</button>&nbsp;
-                            &nbsp;<span class="modal GetCurrentUpdateData"><img
-                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
-                        </td>
-                        <td>
-                            <button id="StopCurrentUpdate" class="button">Stop Current Update</button>&nbsp;
-                            &nbsp;<span class="modal StopCurrentUpdate"><img
-                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
-                            <br>
-                            NB Stops and Cancels Current Background Update.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button id="BackgroundUpdateAll" class="button">Update all</button>&nbsp;
-                            &nbsp;<span class="modal BackgroundUpdateAll"><img
-                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
-                        </td>
-                        <td>
-                            NB restarts current background import if one is active.
-                        </td>
-                    </tr>
-                    <tr>
-                        <th style="width: 250px;"><label for="start_date">Update by product changed since:</label></th>
-                        <td><input type="text" class="custom_date" name="start_date" id="start_date" value=""/>&nbsp;<button
-                                    id="BackgroundUpdateSince" class="button">Update
-                            </button>&nbsp; &nbsp;<span class="modal BackgroundUpdateSince"><img
-                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <button id="BackgroundUnfreezeQueue" class="button">Unfreeze Queue</button>&nbsp;
-                            &nbsp;<span class="modal BackgroundUnfreezeQueue"><img
-                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
-                        </td>
-                        <td>
-                            NB attempts to unfreeze the queue by reloading product data.
-                        </td>
-                    </tr>
-                </table>
-                <div id="ePimResult">
-
-                </div>
-                <div>
-                    <hr>
-                </div>
-                <script type="text/javascript"
-                        src="https://creativecouple.github.io/jquery-timing/jquery-timing.min.js"></script>
-                <style>
-                    #ePimTail {
-                        width: 80%;
-                        height: 65vh;
-                        overflow-y: scroll;
-                    }
-                </style>
-                <div id="ePimTail">
-
-                </div>
-            </div>
-        <?php endif; ?>
         <?php if ($active_tab == 'epim_management'): ?>
             <style>
                 .modal {
@@ -331,7 +390,10 @@ function epim_options_page()
 
             </style>
             <div class="wrap">
-                <h1>ePim Management</h1>
+                <h1>ePim Advanced Functions</h1>
+
+                <p>These functions do not run on the server and are not intended for day to day use. They are for
+                    diagnostic and setup purposes only.</p>
 
                 <table class="form-table">
                     <tr>
@@ -600,8 +662,10 @@ function epim_options_page()
                         </td>
                     </tr>
                     <tr class="visible-for-datasheets">
-                        <th scope="row"><label for="epim_dynamic_data_sheets_tab_name">Dynamic Data Sheets Tab Name</label></th>
-                        <td><input type="text" id="epim_dynamic_data_sheets_tab_name" name="epim_dynamic_data_sheets_tab_name"
+                        <th scope="row"><label for="epim_dynamic_data_sheets_tab_name">Dynamic Data Sheets Tab
+                                Name</label></th>
+                        <td><input type="text" id="epim_dynamic_data_sheets_tab_name"
+                                   name="epim_dynamic_data_sheets_tab_name"
                                    value="<?php echo get_option('epim_dynamic_data_sheets_tab_name'); ?>"
                                    class="regular-text"/></td>
                     </tr>
@@ -639,6 +703,7 @@ function epim_options_page()
                             <hr>
                         </td>
                     </tr>
+
 
                 </table>
                 <div id="ePimResult"></div>
@@ -736,42 +801,93 @@ function epim_options_page()
 
                 </style>
                 <h2>ePim Restricted Settings</h2>
-                <table class="form-table">
-                    <tr>
-                        <td colspan="2">
-                            <button id="deleteAttributes" class="button">Delete All Attributes</button> &nbsp;<span
-                                    class="modal deleteAttributes"><img
-                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <button id="deleteCategories" class="button">Delete All Categories</button> &nbsp;<span
-                                    class="modal deleteCategories"><img
-                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <button id="deleteImages" class="button">Delete All Images</button> &nbsp;<span
-                                    class="modal deleteImages"><img
-                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <button id="deleteOrphanedImages" class="button">Delete All Orphaned Images</button> &nbsp;<span
-                                    class="modal deleteOrphanedImages"><img
-                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <button id="deleteProducts" class="button">Delete All Products</button> &nbsp;<span
-                                    class="modal deleteProducts"><img
-                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
-                        </td>
-                    </tr>
+                <form method="post" action="options.php">
+                    <?php settings_fields('epim_restricted_options_group'); ?>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><label for="epim_tabs_advanced">Show Advanced Tab</label></th>
+                            <?php $options = get_option('epim_tabs_advanced'); ?>
+                            <td>
+                                <input type="checkbox" id="epim_tabs_advanced"
+                                       name="epim_tabs_advanced[checkbox_value]"
+                                       value="1" <?php if (is_array($options)) {
+                                    echo checked('1', $options['checkbox_value'], false);
+                                } ?>/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="epim_tabs_settings">Show Settings Tab</label></th>
+                            <?php $options = get_option('epim_tabs_settings'); ?>
+                            <td>
+                                <input type="checkbox" id="epim_tabs_settings"
+                                       name="epim_tabs_settings[checkbox_value]"
+                                       value="1" <?php if (is_array($options)) {
+                                    echo checked('1', $options['checkbox_value'], false);
+                                } ?>/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="epim_tabs_schedule">Show Schedule Tab</label></th>
+                            <?php $options = get_option('epim_tabs_schedule'); ?>
+                            <td>
+                                <input type="checkbox" id="epim_tabs_schedule"
+                                       name="epim_tabs_schedule[checkbox_value]"
+                                       value="1" <?php if (is_array($options)) {
+                                    echo checked('1', $options['checkbox_value'], false);
+                                } ?>/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="epim_tabs_divi">Show Divi Tab</label></th>
+                            <?php $options = get_option('epim_tabs_divi'); ?>
+                            <td>
+                                <input type="checkbox" id="epim_tabs_divi"
+                                       name="epim_tabs_divi[checkbox_value]"
+                                       value="1" <?php if (is_array($options)) {
+                                    echo checked('1', $options['checkbox_value'], false);
+                                } ?>/>
+                            </td>
+                        </tr>
+                    </table>
+                    <?php submit_button(); ?>
+                </form>
+                <table
+                <tr>
+                    <td colspan="2">
+                        <button id="deleteAttributes" class="button">Delete All Attributes</button> &nbsp;<span
+                                class="modal deleteAttributes"><img
+                                    src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button id="deleteCategories" class="button">Delete All Categories</button> &nbsp;<span
+                                class="modal deleteCategories"><img
+                                    src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button id="deleteImages" class="button">Delete All Images</button> &nbsp;<span
+                                class="modal deleteImages"><img
+                                    src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button id="deleteOrphanedImages" class="button">Delete All Orphaned Images</button>
+                        &nbsp;<span
+                                class="modal deleteOrphanedImages"><img
+                                    src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <button id="deleteProducts" class="button">Delete All Products</button> &nbsp;<span
+                                class="modal deleteProducts"><img
+                                    src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                    </td>
+                </tr>
                 </table>
 
                 <div id="ePimResult">
