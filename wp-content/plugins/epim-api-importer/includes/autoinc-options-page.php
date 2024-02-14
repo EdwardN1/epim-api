@@ -153,7 +153,7 @@ function epim_options_page()
 
             <?php $epim_tabs_divi = get_option('epim_tabs_divi'); ?>
             <?php $epim_tabs_divi_show = false; ?>
-            <?php if (is_array($epim_tabs_schedule)) {
+            <?php if (is_array($epim_tabs_divi)) {
                 if ($epim_tabs_divi['checkbox_value'] == '1') {
                     $epim_tabs_divi_show = true;
                 }
