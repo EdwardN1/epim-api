@@ -334,14 +334,15 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray)
                         //$attr = 'pa_' . $attr; // woocommerce prepend pa_ to each attribute name
                         if ($attribute["options"]) {
                             foreach ($attribute["options"] as $option) {
-                                //error_log('Attribute = '.$attr.' | Option = '.$option);
+                                error_log('Attribute = '.$attr[0].' | Option = '.$option);
                                 if (is_array($attr)) {
                                     if(is_wp_error($attr[0])) {
                                         error_log('epimaapi_wooCreateProduct_ex error: could not sanitize taxonomy name');
                                     } else {
-                                        $term_ids = wp_get_object_terms( $product_id, $attr, array( 'fields' => 'ids' ) );
+                                        $term_ids = wp_get_object_terms( $product_id, $attr[0], array( 'fields' => 'ids' ) );
                                         if(is_array($term_ids)) wp_delete_object_term_relationships($product_id, $attr);
-                                        wp_set_object_terms($product_id, $option, $attr, true); // save the possible option value for the attribute which will be used for variation later
+                                        $term_ids_set = wp_set_object_terms($product_id, $option, $attr[0], true); // save the possible option value for the attribute which will be used for variation later
+                                        //error_log(print_r($term_ids_set,true));
                                     }
 
                                 }
