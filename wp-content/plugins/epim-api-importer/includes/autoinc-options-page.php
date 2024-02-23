@@ -99,8 +99,20 @@ add_action('admin_init', 'epim_register_settings');
 function epim_options_page()
 {
     global $is_divi;
+
+    $dcurrent_user = wp_get_current_user();
+    $demail = (string)$dcurrent_user->user_email;
+    $drestricted = $demail === 'edward@technicks.com';
+    $drestricted = true;
     ?>
     <div class="wrap">
+        <?php         if(!$drestricted): ?>
+        <h2>Closed for development</h2>
+    </div>
+    <?php
+    return;
+    endif;
+    ?>
         <?php screen_icon(); ?>
         <?php
         if (isset($_GET['tab'])) {
