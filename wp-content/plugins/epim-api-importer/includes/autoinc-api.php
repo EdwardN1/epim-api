@@ -346,14 +346,21 @@ function epimaapi_getCategoryFromId( $id ) {
 
 function epimaapi_getTermFromID( $id, $terms ) {
 	$res = false;
+    //error_log('Looking for '.$id);
 	foreach ( $terms as $term ) {
 		$apiID = get_term_meta( $term->term_id, 'epim_api_id', true );
+        //error_log('$apiID = '.$apiID);
 		//$apiID = get_field('api_id', $term);
 		if ( $apiID == $id ) {
 			$res = $term;
+            //error_log('Found '.$id);
 			break;
 		}
 	}
+
+    /*if(!$res) {
+        error_log('Not Found '.$id);
+    }*/
 
 	return $res;
 }
@@ -889,7 +896,9 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 		'hide_empty' => false,
 	] );
 	$catIds = array();
+    //error_log(print_r($categoryIds,true));
 	foreach ( $categoryIds as $category_id ) {
+        //error_log('$category_id = '.$category_id);
 		$realCatID = epimaapi_getTermFromID( $category_id, $terms );
 		if ( $realCatID ) {
 			$catIds[] = $realCatID->term_id;

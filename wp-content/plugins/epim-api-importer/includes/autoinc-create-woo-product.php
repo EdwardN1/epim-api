@@ -319,68 +319,79 @@ function epimaapi_wooCreateProduct_ex( $pid, $productArray ) {
 
 		//error_log('Product saved with ID = '.$product_id);
 
+        /*$WC_attribute = stdClass Object,
+            (
+                [id] => 42838,
+                [name] => Width,
+                [slug] => pa_epim-width,
+                [type] => select,
+                [order_by] => menu_order,
+                [has_archives] => ,
+            )*/
+
+
 		if ( $attributes ) {
-			//error_log('Setting Attributes for '.$productTitle);
-			$productAttributes = array();
-			foreach ( $attributes as $attribute ) {
-				$attr = wc_sanitize_taxonomy_name( stripslashes( $attribute["name"] ) ); // remove any unwanted chars and return the valid string for taxonomy name
-				$attr = 'pa_' . $attr; // woocommerce prepend pa_ to each attribute name
-				if ( $attribute["options"] ) {
-                    if($pid != 0) {
-                        foreach ($attribute["options"] as $option) {
-                            if(taxonomy_exists($attr)) {
-                                $term_ids = wp_get_object_terms($product_id, $attr, array('fields' => 'ids'));
-                                if (is_wp_error($term_ids)) {
-                                    error_log('Error for taxonomy ' . $attr);
-                                    error_log($term_ids->get_error_message());
-                                } else {
-                                    if (is_array($term_ids)) {
-                                        $term_ids = array_map('intval', $term_ids);
-                                        wp_remove_object_terms( $product_id, $term_ids, $attr );
-                                    }
-                                }
-                            }
-                        }
+
+            //Create attributes and terms
+
+            $attr_data = array();
+
+            foreach ($attributes as $attribute) {
+                $a_slug = 'epim-'.stripslashes( str_replace(' ','-',$attribute["name"]));
+                if(strlen($a_slug) > 28) {
+                    $a_slug = substr($a_slug,0,27);
+                }
+                $WC_attribute = epim_createAttribute($attribute['name'],$a_slug);
+                if($WC_attribute) {
+                    $attr_rec = array();
+                    $attr_rec['slug'] = $WC_attribute->slug;
+                    $attr_rec['term_ids'] = array();
+                    $attr_rec['options'] = $attribute['options'];
+                    $attr_rec["position"] = $attribute["position"];
+                    $attr_rec["visible"] = $attribute["visible"];
+                    $attr_rec["variation"] = $attribute["variation"];
+                    $order = 0;
+                    foreach ($attribute['options'] as $option) {
+                        //error_log($WC_attribute->name.' ('.$WC_attribute->slug.') Options:-');
+                        //error_log(print_r($option,true));
+                        $termToAdd = epim_createTerm($option,'epim-'.$option,$a_slug,$order);
+                        $attr_rec['term_ids'][] = $termToAdd->term_id;
+                        $order++;
                     }
-                    foreach ( $attribute["options"] as $option ) {
-                        wp_set_object_terms( $product_id, $option, $attr, true ); // save the possible option value for the attribute which will be used for variation later
-                    }
-				}
-				$productAttributes[ sanitize_title( $attr ) ] = array(
-					'name'         => sanitize_title( $attr ),
-					'value'        => $attribute["options"],
-					'position'     => $attribute["position"],
-					'is_visible'   => $attribute["visible"],
-					'is_variation' => $attribute["variation"],
-					'is_taxonomy'  => '1'
-				);
-			}
-			update_post_meta( $product_id, '_product_attributes', $productAttributes ); // save the meta entry for product attributes
+                    $attr_data[] = $attr_rec;
+                }
+            }
+
+            //Clear current attribute relationships
+            foreach ($attr_data as $attr_datum) {
+                wp_remove_object_terms( $product_id, $attr_datum['term_ids'], $attr_datum['slug'] );
+            }
+
+            //Create New Attribute Relationships
+
+            foreach ($attr_data as $attr_datum) {
+                wp_set_object_terms( $product_id, $attr_datum['term_ids'], $attr_datum['slug'] );
+            }
+
+            //Set Product Meta
+
+            $productAttributes = array();
+
+            foreach ($attr_data as $attr_datum) {
+                $productAttributes[ $attr_datum['slug'] ] = array(
+                    'name'         => $attr_datum['slug'],
+                    'value'        => $attr_datum["options"],
+                    'position'     => $attr_datum["position"],
+                    'is_visible'   => $attr_datum["visible"],
+                    'is_variation' => $attr_datum["variation"],
+                    'is_taxonomy'  => '1'
+                );
+            }
+
+            update_post_meta( $product_id, '_product_attributes', $productAttributes );
+
 		}
 
-        if ($pid==0) {
-
-            $blank_attributes = array();
-            add_post_meta( $product_id, '_product_attributes', $blank_attributes);
-
-            if ( $attributes ) {
-                //error_log('Setting Attributes for '.$productTitle);
-                $productAttributes = array();
-                foreach ( $attributes as $attribute ) {
-                    $attr = wc_sanitize_taxonomy_name( stripslashes( $attribute["name"] ) ); // remove any unwanted chars and return the valid string for taxonomy name
-                    $attr = 'pa_' . $attr; // woocommerce prepend pa_ to each attribute name
-                    $productAttributes[ sanitize_title( $attr ) ] = array(
-                        'name'         => sanitize_title( $attr ),
-                        'value'        => $attribute["options"],
-                        'position'     => $attribute["position"],
-                        'is_visible'   => $attribute["visible"],
-                        'is_variation' => $attribute["variation"],
-                        'is_taxonomy'  => '1'
-                    );
-                }
-                update_post_meta( $product_id, '_product_attributes', $productAttributes ); // save the meta entry for product attributes
-            }
-        }
 
 		if ( $variations ) {
 			try {
@@ -406,7 +417,7 @@ function epimaapi_wooCreateProduct_ex( $pid, $productArray ) {
 				}
 			} catch ( Exception $e ) {
 				// handle exception here
-				error_log( 'epimaapi_wooCreateProduct_ex error: ' . $e->getMessage() );
+				error_log( 'line 474 epimaapi_wooCreateProduct_ex error: ' . $e->getMessage() );
 			}
 		}
 
@@ -423,10 +434,76 @@ function epimaapi_wooCreateProduct_ex( $pid, $productArray ) {
 			}
 		}
 	} catch ( Exception $e ) {
-		error_log( 'epimaapi_wooCreateProduct_ex error: ' . $e->getMessage() . ' for ' . $pid );
+		error_log( 'line 491 epimaapi_wooCreateProduct_ex error: ' . $e->getMessage() . ' for ' . $pid );
 	}
 
 	return $product_id;
 
 }
 
+function epim_createAttribute(string $attributeName, string $attributeSlug): ?\stdClass {
+    delete_transient('wc_attribute_taxonomies');
+    \WC_Cache_Helper::invalidate_cache_group('woocommerce-attributes');
+
+    $attributeLabels = wp_list_pluck(wc_get_attribute_taxonomies(), 'attribute_label', 'attribute_name');
+    $attributeWCName = array_search($attributeSlug, $attributeLabels, TRUE);
+
+    if (! $attributeWCName) {
+        $attributeWCName = wc_sanitize_taxonomy_name($attributeSlug);
+    }
+
+    $attributeId = wc_attribute_taxonomy_id_by_name($attributeWCName);
+    //error_log('$attributeId = '.$attributeId.' for slug '.$attributeSlug);
+    if (! $attributeId) {
+        $taxonomyName = wc_attribute_taxonomy_name($attributeWCName);
+        unregister_taxonomy($taxonomyName);
+        $attributeId = wc_create_attribute(array(
+            'name' => $attributeName,
+            'slug' => $attributeSlug,
+            'type' => 'select',
+            'order_by' => 'menu_order',
+            'has_archives' => 0,
+        ));
+
+        register_taxonomy($taxonomyName, apply_filters('woocommerce_taxonomy_objects_' . $taxonomyName, array(
+            'product'
+        )), apply_filters('woocommerce_taxonomy_args_' . $taxonomyName, array(
+            'labels' => array(
+                'name' => $attributeSlug,
+            ),
+            'hierarchical' => FALSE,
+            'show_ui' => FALSE,
+            'query_var' => TRUE,
+            'rewrite' => FALSE,
+        )));
+    }
+
+    if(is_wp_error($attributeId)) {
+        error_log($attributeId->get_error_message());
+        return null;
+    } else {
+        return wc_get_attribute($attributeId);
+    }
+
+
+}
+
+function epim_createTerm(string $termName, string $termSlug, string $taxonomy, int $order = 0): ?\WP_Term {
+    $taxonomy = wc_attribute_taxonomy_name($taxonomy);
+
+    if (! $term = get_term_by('slug', $termSlug, $taxonomy)) {
+        $term = wp_insert_term($termName, $taxonomy, array(
+            'slug' => $termSlug,
+        ));
+        if(is_wp_error($term)) {
+            error_log('Error creating term: '.$termName.' ¦ $termSlug = '.$termSlug. ' ¦ $taxonomy = '.$taxonomy. ' ¦ msg = '.$term->get_error_message());
+        } else {
+            $term = get_term_by('id', $term['term_id'], $taxonomy);
+            if ($term) {
+                update_term_meta($term->term_id, 'order', $order);
+            }
+        }
+    }
+
+    return $term;
+}
