@@ -990,10 +990,18 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 			if ( $atName == 'Product' ) {
 				$atName = 'Product Name';
 			}
+            if ( $atName == 'Category' ) {
+                $atName = 'Category Name';
+            }
 			if ( $atName ) {
 				//error_log($atName);
-				$slugName = substr( $atName, 0, 27 );
-				if ( ! wc_check_if_attribute_name_is_reserved( $atName ) ) {
+				$slugName = sanitize_title(substr( $atName, 0, 27 ));
+                $WCAttribute = epim_createAttribute($atName,$slugName);
+                if($WCAttribute) {
+                    $productAttributes[] = array( "name" => $atName, "slug" => $slugName, "options" => array( $attribute_value->Value ), "position" => $aCounter, "visible" => 1, "variation" => 1 );
+                    $aCounter ++;
+                }
+				/*if ( ! wc_check_if_attribute_name_is_reserved( $atName ) ) {
 					if ( ! in_array( $atName, $currentAttributes ) ) {
 						$attribute_id = wc_attribute_taxonomy_id_by_name( $atName );
 						if ( ! $attribute_id ) {
@@ -1008,16 +1016,16 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 									$error_string = $attribute_id->get_error_message();
 									error_log( $error_string );
 								} else {
-									$productAttributes[] = array( "name" => $atName, "options" => array( $attribute_value->Value ), "position" => $aCounter, "visible" => 1, "variation" => 1 );
+									$productAttributes[] = array( "name" => $atName, "slug" => $slugName, "options" => array( $attribute_value->Value ), "position" => $aCounter, "visible" => 1, "variation" => 1 );
 									$aCounter ++;
 								}
 							}
 						}
 					} else {
-						$productAttributes[] = array( "name" => $atName, "options" => array( $attribute_value->Value ), "position" => $aCounter, "visible" => 1, "variation" => 1 );
+						$productAttributes[] = array( "name" => $atName, "slug" => $slugName,  "options" => array( $attribute_value->Value ), "position" => $aCounter, "visible" => 1, "variation" => 1 );
 						$aCounter ++;
 					}
-				}
+				}*/
 			} else {
 				error_log('No $atName');
 			}
