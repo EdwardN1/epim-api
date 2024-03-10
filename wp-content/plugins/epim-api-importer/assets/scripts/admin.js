@@ -287,7 +287,7 @@ adminJQ(function ($) {
             let obj = this;
             let c = 0;
             $(categories).each(function (index, record) {
-                obj.queue(ajaxurl,{action: 'create_category', ID: record.Id, name: record.Name, ParentID: record.ParentId, picture_ids: record.PictureIds, alias: record.Alias});
+                obj.queue(ajaxurl,{action: 'create_category', ID: record.Id, name: record.Name, ParentID: record.ParentId, picture_ids: record.PictureIds});
                 if(debug) {
                     c++;
                     if (c >= cMax) {
@@ -332,7 +332,7 @@ adminJQ(function ($) {
             let obj = this;
             let c = 0;
             $(categories).each(function (index, record) {
-                obj.queue(ajaxurl,{action: 'create_category', ID: record.Id, name: record.Name, ParentID: record.ParentId, picture_ids: record.PictureIds, alias: record.Alias});
+                obj.queue(ajaxurl,{action: 'create_category', ID: record.Id, name: record.Name, ParentID: record.ParentId, picture_ids: record.PictureIds});
                 if(debug) {
                     c++;
                     if (c >= cMax) {
@@ -376,32 +376,11 @@ adminJQ(function ($) {
         $('.modal.deleteImages').removeClass('active');
         $('.modal.deleteProducts').removeClass('active');
         $('.modal.ClearProducts').removeClass('active');
-        $('.modal.deleteOrphanedImages').removeClass('active');
         $('#ClearProducts').prop('disabled',false);
     }, function (action, request, data) {
         _o('Action Completed: ' + action);
         _o('Request: ' + request);
         _o('<br>Data: ' + data);
-    });
-
-    let attributesQueue = new ts_execute_queue('#ePimResult', function () {
-        _o('finished');
-        $('.modal.deleteAttributes').removeClass('active');
-        $('.modal.deleteCategories').removeClass('active');
-        $('.modal.deleteImages').removeClass('active');
-        $('.modal.deleteProducts').removeClass('active');
-        $('.modal.ClearProducts').removeClass('active');
-        $('.modal.deleteOrphanedImages').removeClass('active');
-        $('#ClearProducts').prop('disabled',false);
-    }, function (action, request, data) {
-        _o('Action Completed: ' + action);
-        //_o('Request: ' + request);
-        _o('<br>Data: ' + data);
-        if(data=='Timed Out') {
-            _o('<br>Still working...Please wait');
-            let obj = this;
-            obj.queue(ajaxurl,{action: 'delete_attributes'});
-        }
     });
 
     let branchesQueue = new ts_execute_queue('#ePimResult', function () {
@@ -641,9 +620,9 @@ adminJQ(function ($) {
     $('#deleteAttributes').on('click',function(){
         _o('Deleting Attributes..');
         $('.modal.deleteAttributes').addClass('active');
-        attributesQueue.reset();
-        attributesQueue.queue(ajaxurl, {action: 'delete_attributes'});
-        attributesQueue.process();
+        customQueue.reset();
+        customQueue.queue(ajaxurl, {action: 'delete_attributes'});
+        customQueue.process();
     });
 
     $('#deleteCategories').on('click',function(){
@@ -659,14 +638,6 @@ adminJQ(function ($) {
         $('.modal.deleteImages').addClass('active');
         customQueue.reset();
         customQueue.queue(ajaxurl, {action: 'delete_epim_images'});
-        customQueue.process();
-    });
-
-    $('#deleteOrphanedImages').on('click',function(){
-        _o('Deleting Orphaned Images..');
-        $('.modal.deleteOrphanedImages').addClass('active');
-        customQueue.reset();
-        customQueue.queue(ajaxurl, {action: 'delete_epim_orphaned_images'});
         customQueue.process();
     });
 

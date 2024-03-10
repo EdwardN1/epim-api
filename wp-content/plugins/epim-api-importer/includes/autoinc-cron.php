@@ -129,8 +129,8 @@ function epimaapi_update_every_minute()
                             if ($category['ParentId']) {
                                 $ParentID = $category['ParentId'];
                             }
-                            cron_log('Importing Id:' . $category['Id'] . ' Name: ' . $category['Name'] . ' Alias: ' . $category['Alias']);
-                            epimaapi_create_category($category['Id'], $category['Name'], $ParentID, $picture_webpath, $picture_ids, $category['Alias']);
+                            cron_log('Importing Id:' . $category['Id'] . ' Name: ' . $category['Name']);
+                            epimaapi_create_category($category['Id'], $category['Name'], $ParentID, $picture_webpath, $picture_ids);
                         }
                     }
                     update_option('_epim_background_current_index', $i - 1);
@@ -172,7 +172,6 @@ function epimaapi_update_every_minute()
                         $term_id = $term->term_id;
 
                         $epim_api_id = get_term_meta($term_id, 'epim_api_id', true);
-                        $epim_api_alias = get_term_meta($term_id, 'epim_api_alias', true);
                         $epim_api_parent_id = get_term_meta($term_id, 'epim_api_parent_id', true);
                         $epim_api_picture_ids = get_term_meta($term_id, 'epim_api_picture_ids', true);
                         $epim_api_picture_link = get_term_meta($term_id, 'epim_api_picture_link', true);
@@ -180,7 +179,6 @@ function epimaapi_update_every_minute()
                         wp_update_term($term_id, 'product_cat', array('parent' => $parent->term_id));
 
                         update_term_meta($term_id, 'epim_api_id', $epim_api_id);
-                        update_term_meta($term_id, 'epim_api_alias', $epim_api_alias);
                         update_term_meta($term_id, 'epim_api_parent_id', $epim_api_parent_id);
                         update_term_meta($term_id, 'epim_api_picture_ids', $epim_api_picture_ids);
                         update_term_meta($term_id, 'epim_api_picture_link', $epim_api_picture_link);
@@ -209,38 +207,36 @@ function epimaapi_update_every_minute()
         $allProductsResponse = json_decode(get_epimaapi_all_products(), true);
         $variations = array();
         if (json_last_error() == JSON_ERROR_NONE) {
-            if (is_array($allProductsResponse)) {
-                if (array_key_exists('Results', $allProductsResponse)) {
-                    foreach ($allProductsResponse['Results'] as $Product) {
-                        if (get_option('_epim_update_running') == '') {
-                            return;
-                        }
-                        $categories = array();
-                        $pictures = array();
-                        if (array_key_exists('CategoryIds', $Product)) {
-                            $categories = $Product['CategoryIds'];
-                        }
-                        if (array_key_exists('PictureIds', $Product)) {
-                            $pictures = $Product['PictureIds'];
-                        }
-                        if (array_key_exists('VariationIds', $Product)) {
-                            if (is_array($Product['VariationIds'])) {
-                                foreach ($Product['VariationIds'] as $variation_id) {
-                                    if ($epim_update_running == '') {
-                                        return;
-                                    }
-                                    $variation = array();
-                                    $variation['productID'] = $Product['Id'];
-                                    $variation['variationID'] = $variation_id;
-                                    $variation['productBulletText'] = $Product['BulletText'];
-                                    $variation['productName'] = $Product['Name'];
-                                    $variation['categoryIds'] = $categories;
-                                    $variation['pictureIds'] = $pictures;
-                                    $variations[] = $variation;
+            if (array_key_exists('Results', $allProductsResponse)) {
+                foreach ($allProductsResponse['Results'] as $Product) {
+                    if (get_option('_epim_update_running') == '') {
+                        return;
+                    }
+                    $categories = array();
+                    $pictures = array();
+                    if (array_key_exists('CategoryIds', $Product)) {
+                        $categories = $Product['CategoryIds'];
+                    }
+                    if (array_key_exists('PictureIds', $Product)) {
+                        $pictures = $Product['PictureIds'];
+                    }
+                    if (array_key_exists('VariationIds', $Product)) {
+                        if (is_array($Product['VariationIds'])) {
+                            foreach ($Product['VariationIds'] as $variation_id) {
+                                if ($epim_update_running == '') {
+                                    return;
                                 }
+                                $variation = array();
+                                $variation['productID'] = $Product['Id'];
+                                $variation['variationID'] = $variation_id;
+                                $variation['productBulletText'] = $Product['BulletText'];
+                                $variation['productName'] = $Product['Name'];
+                                $variation['categoryIds'] = $categories;
+                                $variation['pictureIds'] = $pictures;
+                                $variations[] = $variation;
                             }
-
                         }
+
                     }
                 }
             }
@@ -266,7 +262,6 @@ function epimaapi_update_every_minute()
             $cLeft = count($variations);
             cron_log('Restarting at index: ' . $i . ' There are ' . $cLeft . ' variations still to process');
         }
-
         update_option('_epim_update_running', 'Importing ' . $c . ' Products');
         cron_log('Importing ' . $c . ' Products');
         if (is_array($variations)) {
