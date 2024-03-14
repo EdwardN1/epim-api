@@ -53,6 +53,7 @@ add_action('wp_ajax_get_deleted_entities_variations', 'ajax_get_epimaapi_deleted
 add_action('wp_ajax_delete_variation', 'ajax_epimaapi_delete_variation');
 add_action('wp_ajax_delete_categories', 'ajax_epimaapi_delete_categories');
 add_action('wp_ajax_delete_epim_images', 'ajax_epimaapi_delete_epim_images');
+add_action('wp_ajax_delete_epim_orphaned_images', 'ajax_epimaapi_delete_epim_orphaned_images');
 add_action('wp_ajax_delete_products', 'ajax_epimaapi_delete_products');
 add_action('wp_ajax_clear_woo_down', 'ajax_epimaapi_clear_woo_down');
 
@@ -156,6 +157,22 @@ function ajax_epimaapi_force_background_update()
     exit;
 }
 
+function ajax_epimapi_background_remove_epim_images() {
+    epimaapi_checkSecure();
+    update_option('_epim_update_running', '');
+    update_option('_epim_background_process_data', '');
+    update_option('_epim_background_current_index', 0);
+    session_start();
+    $_SESSION['offset'] = 0;
+    $f = @fopen(WP_PLUGIN_DIR . '/epim-api-importer/cron-log.log', "r+");
+    if ($f !== false) {
+        ftruncate($f, 0);
+        fclose($f);
+    }
+    echo epim_api_background_remove_epim_images_start();
+    exit;
+}
+
 function ajax_get_epimaapi_background_changed_products_since()
 {
     epimaapi_checkSecure();
@@ -198,6 +215,7 @@ function ajax_epimaapi_stop_background_update()
     epimaapi_checkSecure();
 
     update_option('_epim_update_running', '');
+    update_option('_epim_background_stop_update',1);
     update_option('_epim_background_current_index', 0);
 
     echo 'Current Update Stopped';
@@ -238,6 +256,39 @@ function ajax_epimaapi_delete_epim_images()
             if(get_post_meta($post->ID,'epim_api_id',true)||get_post_meta($post->ID,'epim_luckins_path',true)) {
                 if(wp_delete_attachment($post->ID,true)) {
                     $epI++;
+                }
+            }
+        }
+    }
+    echo ' Number of imported images deleted = '.$epI;
+    exit;
+}
+
+function ajax_epimaapi_delete_epim_orphaned_images()
+{
+    epimaapi_checkSecure();
+    $args = array(
+        'post_type' => 'attachment',
+        'numberposts' => -1,
+        'post_status' => null,
+        'post_parent' => null, // any parent
+    );
+    $attachments = get_posts($args);
+    $i = 0;
+    $epI = 0;
+    if ($attachments) {
+        foreach ($attachments as $post) {
+            $i++;
+            /*setup_postdata($post);
+            the_title();
+            the_attachment_link($post->ID, false);
+            the_excerpt();*/
+            if(get_post_meta($post->ID,'epim_api_id',true)||get_post_meta($post->ID,'epim_luckins_path',true)) {
+                $file=get_attached_file($post->ID);
+                if(!file_exists($file)) {
+                    if(wp_delete_attachment($post->ID,true)) {
+                        $epI++;
+                    }
                 }
             }
         }
@@ -293,8 +344,22 @@ function ajax_epimaapi_delete_variation()
 function ajax_epimaapi_delete_attributes()
 {
     epimaapi_checkSecure();
-    epimaapi_delete_attributes();
-    echo 'All attributes removed';
+    if (!empty($_POST['limit'])) {
+        $limit = sanitize_text_field($_POST['limit']);
+        $res = epimaapi_delete_attributes($limit);
+        if(!$res) {
+            echo 'Timed Out';
+        } else {
+            echo $res;
+        }
+    } else {
+        $res = epimaapi_delete_attributes();
+        if(!$res) {
+            echo 'Timed Out';
+        } else {
+            echo $res;
+        }
+    }
     exit;
 }
 
@@ -639,6 +704,8 @@ function ajax_epimaapi_create_category()
                     }
                 }
             }
+            $a = '';
+            if(!empty($_POST['alias'])) $a = sanitize_text_field($_POST['alias']);
             /*error_log('$_POST["picture_ids"] = '.print_r($_POST['picture_ids'],true));
             error_log('$Picture_ids = '.print_r($Picture_ids,true ));*/
             $response = epimaapi_create_category(
@@ -646,7 +713,7 @@ function ajax_epimaapi_create_category()
                 sanitize_text_field($_POST['name']),
                 sanitize_text_field($_POST['ParentID']),
                 $WebPath,
-                $Picture_ids);
+                $Picture_ids,$a);
         }
     }
     echo $response;

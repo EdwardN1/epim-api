@@ -45,16 +45,12 @@ function uploadMedia($image_url)
 
 function epimaapi_wooUpdateProduct($pid, $productArray)
 {
-    $res = epimaapi_wooCreateProduct_ex($pid, $productArray);
-    epim_set_product_attributes($pid,$productArray['attributes']);
-    return $res;
+    return epimaapi_wooCreateProduct_ex($pid, $productArray);
 }
 
 function epimaapi_wooCreateProduct($productArray)
 {
-    $pid =  epimaapi_wooCreateProduct_ex(0, $productArray);
-    epim_set_product_attributes($pid,$productArray['attributes']);
-    return epimaapi_wooCreateProduct_ex($pid, $productArray);
+    return epimaapi_wooCreateProduct_ex(0, $productArray);
 }
 
 function epimaapi_wooCreateProduct_ex($pid, $productArray)
@@ -253,21 +249,19 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray)
             $objProduct->set_image_id(null);
             $objProduct->set_gallery_image_ids(null);
         } else {
-            $objProduct = new WC_Product();
-            /*if ($isVariable) {
+            if ($isVariable) {
                 $objProduct = new WC_Product_Variable();
             } else {
                 $objProduct = new WC_Product();
-            }*/
+            }
         }
 
         if (!$objProduct) {
-            $objProduct = new WC_Product();
-            /*if ($isVariable) {
+            if ($isVariable) {
                 $objProduct = new WC_Product_Variable();
             } else {
                 $objProduct = new WC_Product();
-            }*/
+            }
         }
 
         $objProduct->set_name($productTitle);
@@ -340,37 +334,21 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray)
                         //$attr = 'pa_' . $attr; // woocommerce prepend pa_ to each attribute name
                         if ($attribute["options"]) {
                             foreach ($attribute["options"] as $option) {
-                                //error_log('Attribute = '.$attr[0].' | Option = '.$option);
+                                //error_log('Attribute = '.$attr.' | Option = '.$option);
                                 if (is_array($attr)) {
                                     if(is_wp_error($attr[0])) {
                                         error_log('epimaapi_wooCreateProduct_ex error: could not sanitize taxonomy name');
                                     } else {
-                                        $term_ids = wp_get_object_terms( $product_id, $attr[0], array( 'fields' => 'ids' ) );
-                                        if(is_array($term_ids)) wp_delete_object_term_relationships($product_id, $attr);
-                                        $term_ids_set = wp_set_object_terms($product_id, $option, $attr[0], true); // save the possible option value for the attribute which will be used for variation later
-                                        //error_log(print_r($term_ids_set,true));
-                                    }
-
-                                } else {
-                                    if(is_string($attr)) {
                                         $term_ids = wp_get_object_terms( $product_id, $attr, array( 'fields' => 'ids' ) );
                                         if(is_array($term_ids)) wp_delete_object_term_relationships($product_id, $attr);
-                                        $term_ids_set = wp_set_object_terms($product_id, $option, $attr, true); // save the possible option value for the attribute which will be used for variation later
-                                        //error_log(print_r($term_ids_set,true));
+                                        wp_set_object_terms($product_id, $option, $attr, true); // save the possible option value for the attribute which will be used for variation later
                                     }
 
                                 }
                             }
                         }
-                        if(is_array($attr)) {
-                            $pa_name = $attr[0];
-                        } else {
-                            if(is_string($attr)) {
-                                $pa_name=$attr;
-                            }
-                        }
-                        $productAttributes[sanitize_title($pa_name)] = array(
-                            'name' => sanitize_title($pa_name),
+                        $productAttributes[sanitize_title($attr[0])] = array(
+                            'name' => sanitize_title($attr[0]),
                             'value' => $attribute["options"],
                             'position' => $attribute["position"],
                             'is_visible' => $attribute["visible"],
@@ -383,9 +361,6 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray)
                 }
 
             }
-            $current_attributes = get_post_meta($product_id,'_product_attributes',true);
-            error_log('Current Attributes for '.$product_id.':');
-            error_log(print_r($current_attributes));
             update_post_meta($product_id, '_product_attributes', $productAttributes); // save the meta entry for product attributes
         }
 
@@ -435,64 +410,5 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray)
 
     return $product_id;
 
-}
-
-function epim_set_product_attributes($product_id,$attributes) {
-    if ($attributes) {
-        //error_log('Setting Attributes for '.$productTitle);
-        $productAttributes = array();
-        foreach ($attributes as $attribute) {
-            try {
-                $attr = array();
-                $attrStr = wc_sanitize_taxonomy_name(stripslashes($attribute["name"])); // remove any unwanted chars and return the valid string for taxonomy name;
-                if(is_wp_error($attrStr)) {
-                    error_log('$attrStr is wp_error');
-                }
-                if (is_string($attrStr)) {
-                    $attr[] = 'pa_' . $attrStr;
-                    //$attr = 'pa_' . $attr; // woocommerce prepend pa_ to each attribute name
-                    if ($attribute["options"]) {
-                        foreach ($attribute["options"] as $option) {
-                            error_log('Attribute = '.$attr[0].' | Option = '.$option);
-                            if (is_array($attr)) {
-                                if(is_wp_error($attr[0])) {
-                                    error_log('epim_set_product_attributes error: could not sanitize taxonomy name');
-                                } else {
-                                    wp_set_object_terms($product_id, $option, $attr[0], true); // save the possible option value for the attribute which will be used for variation later
-                                }
-
-                            } else {
-                                if(is_string($attr)) {
-                                    wp_set_object_terms($product_id, $option, $attr, true); // save the possible option value for the attribute which will be used for variation later
-                                }
-
-                            }
-                        }
-                    }
-                    if(is_array($attr)) {
-                        $pa_name = $attr[0];
-                    } else {
-                        if(is_string($attr)) {
-                            $pa_name=$attr;
-                        }
-                    }
-                    $productAttributes[sanitize_title($pa_name)] = array(
-                        'name' => sanitize_title($pa_name),
-                        'value' => $attribute["options"],
-                        'position' => $attribute["position"],
-                        'is_visible' => $attribute["visible"],
-                        'is_variation' => $attribute["variation"],
-                        'is_taxonomy' => '1'
-                    );
-                }
-            } catch (Exception $e) {
-                error_log('epim_set_product_attributes error: ' . $e->getMessage());
-            }
-
-        }
-        update_post_meta($product_id, '_product_attributes', $productAttributes); // save the meta entry for product attributes
-        //error_log(print_r($productAttributes));
-        error_log('epim_set_product_attributes for '.$product_id);
-    }
 }
 

@@ -372,14 +372,16 @@ function epimaapi_wooCreateProduct_ex( $pid, $productArray ) {
 
             $productAttributes = array();
 
-            //Clear current attribute relationships
+            //Clear current term relationships
             foreach ($attr_data as $attr_datum) {
                 //error_log(print_r($attr_datum,true));
                 wp_remove_object_terms( $product_id, $attr_datum['term_ids'], $attr_datum['slug'] );
             }
+
+            //Update Product Attributes
             update_post_meta( $product_id, '_product_attributes', $productAttributes );
 
-            //Create New Attribute Relationships
+            //Create New Term Relationships
 
             foreach ($attr_data as $attr_datum) {
                 wp_set_object_terms( $product_id, $attr_datum['term_ids'], 'pa_'.$attr_datum['slug'] );
@@ -403,7 +405,7 @@ function epimaapi_wooCreateProduct_ex( $pid, $productArray ) {
         }
 
 
-        if ( $variations ) {
+        /*if ( $variations ) {
             try {
                 foreach ( $variations as $variation ) {
                     $objVariation = new WC_Product_Variation();
@@ -426,10 +428,9 @@ function epimaapi_wooCreateProduct_ex( $pid, $productArray ) {
                     $objVariation->save();
                 }
             } catch ( Exception $e ) {
-                // handle exception here
                 error_log( 'line 474 epimaapi_wooCreateProduct_ex error: ' . $e->getMessage() );
             }
-        }
+        }*/
 
         if ( $metaData ) {
             foreach ( $metaData as $data ) {
