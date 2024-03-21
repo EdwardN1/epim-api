@@ -392,7 +392,7 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray, $batchAttributes = fa
                 update_post_meta($product_id, '_product_attributes', $productAttributes);
             }
         } else {
-            error_log('Not batching attributes');
+            //error_log('Batching attributes');
         }
 
 
@@ -440,6 +440,8 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray, $batchAttributes = fa
         error_log('epimaapi_wooCreateProduct_ex error: ' . $e->getMessage() . ' for ' . $pid);
     }
 
+    //error_log('$product_id = '.$product_id.' ¦ $batchAttributes = '.$batchAttributes);
+
     if ($product_id && $batchAttributes) {
         if ($attributes) {
             $attribute_data = get_option('_epim_background_attribute_data');
@@ -450,19 +452,19 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray, $batchAttributes = fa
             $products_to_sort = array();
             foreach ($attributes as $attribute) {
                 $attribute_slug = sanitize_title(substr($attribute['name'], 0, 27));
-                $product_to_sort = array();
-                $product_to_sort['id'] = $product_id;
-                $product_to_sort['attribute_slug'] = $attribute_slug;
-                foreach ($attribute_data as $attribute_datum) {
-                    $terms = array();
+                //error_log('adding attribute '.$attribute_slug.' used by product '.$product_id);
+                $terms = array();
+                if(is_array($attribute_data)) {
+                    $attribute_datum = epim_in_array($attribute_data,'slug',$attribute_slug);
                     $new_attribute_datum = array();
-                    if ($attribute_datum['slug'] === $attribute_slug) {
+                    if($attribute_datum) {
                         $new_attribute_datum['slug'] = $attribute_slug;
                         $a_name = $attribute['name'];
                         if (strlen($a_name) > 200) {
                             $a_name = substr($a_name, 0, 199);
                         }
                         $new_attribute_datum['name'] = $a_name;
+
                         if (is_array($attribute_datum['terms'])) {
                             $terms = $attribute_datum['terms'];
                         }
@@ -476,13 +478,7 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray, $batchAttributes = fa
                                 if (strlen($term_slug) > 28) {
                                     $term_slug = substr($term_slug, 0, 27);
                                 }
-                                $term_exists = false;
-                                foreach ($terms as $term) {
-                                    if ($term['slug'] === $term_slug) {
-                                        $term_exists = true;
-                                        break;
-                                    }
-                                }
+                                $term_exists = epim_in_array($terms,'slug',$term_slug);
                                 if (!$term_exists) {
                                     $new_term = array();
                                     $new_term['name'] = $t_name;
@@ -492,7 +488,10 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray, $batchAttributes = fa
                             }
                         }
                         $new_attribute_datum['terms'] = $terms;
-                        break;
+                        $product_to_sort = array();
+                        $product_to_sort['id'] = $product_id;
+                        $product_to_sort['attributes'] = $new_attribute_datum;
+                        $products_to_sort[] = $product_to_sort;
                     } else {
                         $new_attribute_datum['slug'] = $attribute_slug;
                         $new_attribute_datum['name'] = $attribute['name'];
@@ -517,106 +516,100 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray, $batchAttributes = fa
                             }
                         }
                         $new_attribute_datum['terms'] = $terms;
-                        $product_to_sort['terms'] = $terms;
                     }
-                    $new_attribute_data[] = $new_attribute_datum;
-                    $products_to_sort[] = $product_to_sort;
+                    if(array_key_exists('slug',$new_attribute_datum)) {
+                        $new_attribute_data[] = $new_attribute_datum;
+                        $product_to_sort = array();
+                        $product_to_sort['id'] = $product_id;
+                        $product_to_sort['attributes'] = $new_attribute_datum;
+                        $products_to_sort[] = $product_to_sort;
+                    }
                 }
             }
 
-            $new_product_attribute_data = array();
+            foreach ($attribute_data as $attribute_datum_ex) {
+                $in_new_attribute_data = epim_in_array($new_attribute_data,'slug',$attribute_datum_ex['slug']);
+                if(!$in_new_attribute_data) {
+                    $new_attribute_data[] = $attribute_datum_ex;
+                }
+            }
+
+            //error_log('Products to Sort:');
+            //error_log(print_r($products_to_sort,true));
+
+            //$new_product_attribute_data = array();
 
             $products_sorted = array();
 
-            foreach ($products_to_sort as $p_item) {
+            $product_sorted = array();
+
+            $product_sorted['id'] = $product_id;
+
+            $product_sorted_attributes = array();
+
+            foreach ($products_to_sort as $products_to_sort_item) {
+                $product_sorted_attributes[] = $products_to_sort_item['attributes'];
+            }
+
+            $product_sorted['attributes'] = $product_sorted_attributes;
+
+            $products_sorted[] = $product_sorted;
+
+            /*foreach ($products_to_sort as $p_item) {
                 $sorting_product = epim_in_array($products_sorted,'id',$p_item['id']);
                 if(is_array($sorting_product)) {
                     $product_sorted_record = array();
                     $product_sorted_record['id'] = $p_item['id'];
-                    $current_attribute_record = epim_in_array($sorting_product['attributes'],'slug',$p_item['attribute_slug']);
-                    if(is_array($current_attribute_record)) {
-                        $updated_attribute_records = array();
-                        foreach ($sorting_product['attributes'] as $sp_attribute) {
-                            if($sp_attribute['slug']==$p_item['attribute_slug']) {
-                                $updated_terms = array();
-                                foreach ($p_item['terms'] as $p_term) {
-                                    $new_p_term = epim_in_array($sp_attribute['terms'],'slug',$p_term['slug']);
-                                    if(!is_array($new_p_term)) {
-                                        $updated_terms[] = $p_term;
+                    foreach ($p_item['attributes'] as $p_item_attribute) {
+                        $current_attribute_record = epim_in_array($sorting_product['attributes'],'slug',$p_item_attribute['slug']);
+                        if(is_array($current_attribute_record)) {
+                            $updated_attribute_records = array();
+                            foreach ($sorting_product['attributes'] as $sp_attribute) {
+                                if($sp_attribute['slug']==$p_item_attribute['slug']) {
+                                    $updated_terms = array();
+                                    foreach ($p_item_attribute['terms'] as $p_term) {
+                                        $new_p_term = epim_in_array($sp_attribute['terms'],'slug',$p_item_attribute['slug']);
+                                        if(!is_array($new_p_term)) {
+                                            $updated_terms[] = $p_term;
+                                        }
                                     }
+                                    $updated_attribute_record = array();
+                                    $updated_attribute_record['slug'] = $sp_attribute['slug'];
+                                    $updated_attribute_record['terms'] = $updated_terms;
+                                    $updated_attribute_records[] = $updated_attribute_record;
+                                } else {
+                                    $updated_attribute_records[] = $sp_attribute;
                                 }
-                                $updated_attribute_record = array();
-                                $updated_attribute_record['slug'] = $sp_attribute['slug'];
-                                $updated_attribute_record['terms'] = $updated_terms;
-                                $updated_attribute_records[] = $updated_attribute_record;
-                            } else {
-                                $updated_attribute_records[] = $sp_attribute;
                             }
+                            $product_sorted_record['attributes'] = $updated_attribute_records;
+                            $products_sorted[] = $product_sorted_record;
+                        } else {
+                            $product_sorted_record_attribute_record = array();
+                            $product_sorted_record_attribute_record['slug'] = $p_item_attribute['slug'];
+                            $product_sorted_record_attribute_record['terms'] = $p_item_attribute['terms'];
+                            $product_sorted_record['attributes'][] = $product_sorted_record_attribute_record;
+                            $products_sorted[] = $product_sorted_record;
                         }
-                        $product_sorted_record['attributes'] = $updated_attribute_records;
-                        $products_sorted[] = $product_sorted_record;
-                    } else {
-                        $product_sorted_record_attribute_record = array();
-                        $product_sorted_record_attribute_record['slug'] = $p_item['attribute_slug'];
-                        $product_sorted_record_attribute_record['terms'] = $p_item['terms'];
-                        $product_sorted_record['attributes'][] = $product_sorted_record_attribute_record;
-                        $products_sorted[] = $product_sorted_record;
                     }
+
+
                 } else {
-                    $product_sorted_record = array();
-                    $product_sorted_record['id'] = $p_item['id'];
-                    $product_sorted_record['attributes'] = array();
-                    $product_sorted_record_attribute_record = array();
-                    $product_sorted_record_attribute_record['slug'] = $p_item['attribute_slug'];
-                    $product_sorted_record_attribute_record['terms'] = $p_item['terms'];
-                    $product_sorted_record['attributes'][] = $product_sorted_record_attribute_record;
-                    $products_sorted[] = $product_sorted_record;
+                    $products_sorted[] = $p_item;
                 }
-            }
+            }*/
 
             //$products_sorted = should have unique id, attribute slugs and term slugs.....
 
-            foreach ($products_sorted as $p_item) {
-                $current_product_record = epim_in_array($product_attribute_data, 'id', $p_item['id']);
-                if(is_array($current_product_record)) {
-                    $new_product_record = array();
-                    $new_product_record['id'] = $p_item['id'];
-                    $new_product_record['attributes'] = array();
-                    foreach ($p_item['attributes'] as $a_item) {
-                        $current_attribute_record = epim_in_array($current_product_record['attributes'],'slug',$a_item['slug']);
-                        if(is_array($current_attribute_record)) {
-                            foreach ($current_product_record['attributes'] as $current_attribute) {
-                                if($current_attribute['slug']==$a_item['slug']) {
-                                    $new_product_terms = array();
-                                    foreach ($current_attribute['terms'] as $c_term) {
-                                        $new_product_terms[] = $c_term;
-                                        foreach ($a_item['terms'] as $a_term) {
-                                            $ft = epim_in_array($current_attribute['terms'],'slug',$a_term['slug']);
-                                            if(!is_array($ft)) {
-                                                $new_product_terms[] = $a_term;
-                                            }
-                                        }
-                                    }
-                                    $new_product_record_attribute = array();
-                                    $new_product_record_attribute['slug'] = $a_item['slug'];
-                                    $new_product_record_attribute['terms'] = $new_product_terms;
-                                    $new_product_record['attributes'][] = $new_product_record_attribute;
-                                } else {
-                                    $new_product_record['attributes'][] = $a_item;
-                                }
-                            }
-                        } else {
-                            $new_product_record['attributes'] = $current_product_record['attributes'];
-                            $new_product_record['attributes'][] = $a_item;
-                        }
-                    }
-                    $new_product_attribute_data[] = $new_product_record;
-                } else {
-                    $new_product_attribute_data[] = $p_item;
-                }
-            }
+            //error_log('Sorted Products:');
+            //error_log(print_r($products_sorted,true));
 
-            update_option('_epim_background_product_attribute_data', $new_product_attribute_data);
+            $product_attribute_data[] = $products_sorted;
+
+
+            /*error_log('Product ID = '. $product_id);
+            error_log(print_r($new_product_attribute_data,true));*/
+
+            update_option('_epim_background_product_attribute_data', $product_attribute_data);
             update_option('_epim_background_attribute_data', $new_attribute_data);
         }
     }
@@ -678,7 +671,7 @@ function epim_createAttribute(string $attributeName, string $attributeSlug): ?\s
 
     if (is_wp_error($attributeId)) {
         error_log($attributeId->get_error_message());
-        return null;
+        return $attributeId;
     } else {
         return wc_get_attribute($attributeId);
     }

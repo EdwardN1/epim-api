@@ -988,7 +988,7 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
                 if(!$batchAttributes) {
                     $slugName = sanitize_title(substr( $atName, 0, 27 ));
                     $WCAttribute = epim_createAttribute($atName,$slugName);
-                    if($WCAttribute) {
+                    if(!is_wp_error($WCAttribute)) {
                         $productAttributes[] = array( "name" => $atName, "slug" => $slugName, "options" => array( $attribute_value->Value ), "position" => $aCounter, "visible" => 1, "variation" => 1 );
                         $aCounter ++;
                     }
