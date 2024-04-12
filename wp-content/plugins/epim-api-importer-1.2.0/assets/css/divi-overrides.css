@@ -1,0 +1,142 @@
+/* ======================= Primary Color Elements =====================*/
+
+.epim-divi .primary-background {background-color: #9dc133;}
+.epim-divi.et-db #et-boc .primary-background {background-color: #9dc133;}
+.epim-divi .primary-colour {color: #9dc133;}
+.epim-divi .primary-border {border-color: #9dc133;}
+.epim-divi.et-db #et-boc .primary-border {border-color: #9dc133;}
+
+#top-header {background-color: #9dc133;}
+#et-secondary-nav li ul {background-color: #9dc133;}
+.footer-widget h4 {color: #9dc133;}
+#main-footer .widget_block h1 {color: #9dc133;}
+#main-footer .widget_block h2 {color: #9dc133;}
+#main-footer .widget_block h3 {color: #9dc133;}
+#main-footer .widget_block h4 {color: #9dc133;}
+#main-footer .widget_block h5 {color: #9dc133;}
+#main-footer .widget_block h6 {color: #9dc133;}
+.footer-widget li:before {border-color: #9dc133;}
+.bottom-nav li.current-menu-item>a {color: #9dc133;}
+#et_search_icon:hover {color: #9dc133;}
+.et-social-icon a:hover {color: #9dc133;}
+.et_password_protected_form .et_submit_button {color: #9dc133;}
+.form-submit .et_pb_buttontton.alt.disabled {color: #9dc133;}
+.nav-single a {color: #9dc133;}
+#main-footer .posted_in a {color: #9dc133;}
+.et_mobile_menu { border-color: #9dc133;}
+ul.epsm.accordion li a.toggle-menu {border-top: 7px solid #9dc133;}
+
+
+
+/* ======================= Secondary Color Elements =====================*/
+a {color: #056631;}
+.epim-divi .secondary-background {background-color: #056631;}
+.epim-divi.et-db #et-boc .secondary-background {background-color: #056631;}
+.epim-divi .secondary-colour {color: #056631;}
+.epim-divi .secondary-border {border-color: #056631;}
+
+.entry-summary p.price ins {color: #056631;}
+.et-db #et-boc .et-l .nav li ul {border-color: #056631;}
+
+.epim-divi .et_pb_menu_0_tb_header .mobile_nav .mobile_menu_bar:before {color: #056631;}
+.epim-divi .et_pb_menu_0_tb_header .et_pb_menu__icon.et_pb_menu__search-button {color: #056631;}
+.epim-divi .et_pb_menu_0_tb_header .et_pb_menu__icon.et_pb_menu__close-search-button {color: #056631;}
+.epim-divi .et_pb_menu_0_tb_header .et_pb_menu__icon.et_pb_menu__cart-button {color: #056631;}
+
+.woocommerce div.product span.price {color: #056631;}
+.woocommerce-page div.product span.price {color: #056631;}
+.woocommerce #content div.product span.price {color: #056631;}
+.woocommerce-page #content div.product span.price {color: #056631;}
+.woocommerce div.product p.price {color: #056631;}
+.woocommerce-page div.product p.price {color: #056631;}
+.woocommerce #content div.product p.price {color: #056631;}
+.woocommerce-page #content div.product p.price {color: #056631;}
+.woocommerce .star-rating span:before {color: #056631;}
+.woocommerce-page .star-rating span:before {color: #056631;}
+.woocommerce a.button.alt {color: #056631;}
+.woocommerce-page a.button.alt {color: #056631;}
+.woocommerce button.button.alt {color: #056631;}
+.woocommerce button.button.alt.disabled {color: #056631;}
+.woocommerce-page button.button.alt {color: #056631;}
+.woocommerce-page button.button.alt.disabled {color: #056631;}
+.woocommerce input.button.alt {color: #056631;}
+.woocommerce-page input.button.alt {color: #056631;}
+.woocommerce #respond input#submit.alt {color: #056631;}
+.woocommerce-page #respond input#submit.alt {color: #056631;}
+.woocommerce #content input.button.alt {color: #056631;}
+.woocommerce-page #content input.button.alt {color: #056631;}
+.woocommerce a.button {color: #056631;}
+.woocommerce-page a.button {color: #056631;}
+.woocommerce button.button {color: #056631;}
+.woocommerce-page button.button {color: #056631;}
+.woocommerce input.button {color: #056631;}
+.woocommerce-page input.button {color: #056631;}
+.woocommerce #respond input#submit {color: #056631;}
+.woocommerce-page #respond input#submit {color: #056631;}
+.woocommerce #content input.button {color: #056631;}
+.woocommerce-page #content input.button {color: #056631;}
+.woocommerce a.button.alt:hover {color: #056631;}
+.woocommerce-page a.button.alt:hover {color: #056631;}
+.woocommerce button.button.alt:hover {color: #056631;}
+.woocommerce button.button.alt.disabled:hover {color: #056631;}
+.woocommerce-page button.button.alt:hover {color: #056631;}
+.woocommerce-page button.button.alt.disabled:hover {color: #056631;}
+.woocommerce input.button.alt:hover {color: #056631;}
+.woocommerce-page input.button.alt:hover {color: #056631;}
+.woocommerce #respond input#submit.alt:hover {color: #056631;}
+.woocommerce-page #respond input#submit.alt:hover {color: #056631;}
+.woocommerce #content input.button.alt:hover {color: #056631;}
+.woocommerce-page #content input.button.alt:hover {color: #056631;}
+.woocommerce a.button:hover {color: #056631;}
+.woocommerce-page a.button:hover {color: #056631;}
+.woocommerce button.button {color: #056631;}
+.woocommerce-page button.button:hover {color: #056631;}
+.woocommerce input.button:hover {color: #056631;}
+.woocommerce-page input.button:hover {color: #056631;}
+.woocommerce #respond input#submit:hover {color: #056631;}
+.woocommerce-page #respond input#submit:hover {color: #056631;}
+.woocommerce #content input.button:hover {color: #056631;}
+.woocommerce a.button.alt, .woocommerce-page a.button.alt {border-color: #056631;}
+.posted_in a {color: #056631;}
+.tagged_as a {color: #056631;}
+.mobile_menu_bar:before {color: #056631;}
+.mobile_menu_bar:after {color: #056631;}
+#top-menu li.current-menu-ancestor>a {color: #056631;}
+#top-menu li.current-menu-item>a {color: #056631;}
+.woocommerce .woocommerce-error {background-color: #056631;}
+.woocommerce .woocommerce-info {background-color: #056631;}
+.woocommerce .woocommerce-message {background-color: #056631;}
+
+.woocommerce div.product div.images img,
+.woocommerce-page div.product div.images img,
+.woocommerce #content div.product div.images img,
+.woocommerce-page #content div.product div.images img {
+    max-height: 400px;
+    max-width: 100%;
+    height: auto;
+    width: auto;
+}
+
+/* ================================ media queries ==============================*/
+@media screen and (max-device-width: 1440px) {
+    .padded-row {
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+    }
+}
+@media screen and (max-device-width: 1200px) {
+    .epim-divi.et-db #page-container #et-boc #desktop-header-phone {
+        font-size: 26px;
+    }
+
+    .epim-divi.et-db #page-container #et-boc #desktop-header-email {
+        font-size: 20px;
+        padding-left: 1em !important;
+        padding-right: 1em !important;
+        padding-top: 12px !important;
+    }
+
+    .epim-divi.et-db #page-container #et-boc #desktop-site-logo {
+        max-width: 190px;
+    }
+}

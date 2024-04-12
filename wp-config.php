@@ -20,16 +20,16 @@
 
 // ** Database settings - You can get this info from your web host ** //
 /** The name of the database for WordPress */
-define( 'DB_NAME', 'c76epimdivi' );
+define( 'DB_NAME', "c76forumlive" );
 
 /** Database username */
-define( 'DB_USER', 'c76epimdivi' );
+define( 'DB_USER', "c76forumlive" );
 
 /** Database password */
-define( 'DB_PASSWORD', 'ED?841241ed' );
+define( 'DB_PASSWORD', "FO?841241ed" );
 
 /** Database hostname */
-define( 'DB_HOST', '127.0.0.1' );
+define( 'DB_HOST', "127.0.0.1" );
 
 /** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8mb4' );
@@ -88,9 +88,10 @@ define( 'DISABLE_WP_CRON', true );
 define( 'DUPLICATOR_AUTH_KEY', '7;Tz<)*.|+[9e5@FsnS!4/.}SR?1];O`t8SU{:o^cQrC)t,.tY9xF1Unx7Us0pIs' );
 /* That's all, stop editing! Happy publishing. */
 
+
 /** Absolute path to the WordPress directory. */
 if ( ! defined( 'ABSPATH' ) ) {
-	define( 'ABSPATH', __DIR__ . '/' );
+	define( 'ABSPATH', dirname(__FILE__) . '/' );
 }
 
 /** Sets up WordPress vars and included files. */
