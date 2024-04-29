@@ -86,12 +86,8 @@ function epim_register_settings()
 
     add_option('_epim_update_running', '');
     add_option('_epim_background_process_data', '');
-    add_option('_epim_background_attribute_data', '');
-    add_option('_epim_background_product_attribute_data', '');
     add_option('_epim_background_last_process_data', '');
     add_option('_epim_background_current_index', 0);
-    add_option('_epim_background_last_index', 0);
-    add_option('_epim_background_stop_update', 0);
 }
 
 add_action('admin_init', 'epim_register_settings');

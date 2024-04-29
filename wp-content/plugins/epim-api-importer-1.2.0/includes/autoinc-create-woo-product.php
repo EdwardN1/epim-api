@@ -9,7 +9,7 @@ function uploadMedia( $image_url ) {
     require_once( ABSPATH . 'wp-admin/includes/image.php' );
     require_once( ABSPATH . 'wp-admin/includes/file.php' );
     require_once( ABSPATH . 'wp-admin/includes/media.php' );
-    //error_log('Downloading - '.$image_url);
+    error_log('Downloading - '.$image_url);
     try {
         $tmp  = download_url( $image_url );
         $url_path     = parse_url( $image_url, PHP_URL_PATH );
@@ -176,6 +176,7 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray, $batchAttributes = fa
         }
         if (array_key_exists('imageAttachmentIDS', $productArray)) {
             $imageAttachmentIDS = $productArray['imageAttachmentIDS'];
+            //error_log(print_r($productArray['imageAttachmentIDS'],true));
         } else {
             $imageAttachmentIDS = array();
         }
@@ -448,6 +449,7 @@ function epimaapi_wooCreateProduct_ex($pid, $productArray, $batchAttributes = fa
     //error_log('$product_id = '.$product_id.' ¦ $batchAttributes = '.$batchAttributes);
 
     if ($product_id && $batchAttributes) {
+        //error_log(print_r($attributes,true));
         if ($attributes) {
             $attribute_data = get_option('_epim_background_attribute_data');
             $product_attribute_data = get_option('_epim_background_product_attribute_data');

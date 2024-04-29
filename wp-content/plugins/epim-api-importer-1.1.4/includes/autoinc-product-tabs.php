@@ -70,17 +70,8 @@ function epimaapi_product_tab_content()
 
     if ($udds) {
         $dynamic_data_sheets_url = get_option('epim_dynamic_data_sheets_url');
-        $epim_dynamic_data_sheets_templates = get_option('epim_dynamic_data_sheets_templates');
-        $epim_dynamic_data_sheets_names = get_option('epim_dynamic_data_sheets_names');
-        $dynamic_data_sheets_templates = false;
-        $dynamic_data_sheets_names = false;
-        if($epim_dynamic_data_sheets_templates) {
-            $dynamic_data_sheets_templates = preg_split('/\r\n|[\r\n]/', $epim_dynamic_data_sheets_templates);
-        }
-        if ($epim_dynamic_data_sheets_names) {
-            $dynamic_data_sheets_names = preg_split('/\r\n|[\r\n]/', $epim_dynamic_data_sheets_names);
-        }
-
+        $dynamic_data_sheets_templates = preg_split('/\r\n|[\r\n]/', get_option('epim_dynamic_data_sheets_templates'));
+        $dynamic_data_sheets_names = preg_split('/\r\n|[\r\n]/', get_option('epim_dynamic_data_sheets_names'));
         if ($dynamic_data_sheets_url && $dynamic_data_sheets_templates && $dynamic_data_sheets_names) {
             ?>
             <table class="woocommerce-product-attributes shop_attributes">

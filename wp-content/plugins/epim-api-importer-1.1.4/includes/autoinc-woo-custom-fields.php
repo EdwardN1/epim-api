@@ -276,15 +276,7 @@ function add_epim_product_data_fields($post_id) {
 			'desc_tip'      => false,
 		) );
 
-        $epim_api_variation_data = false;
-        $wc_metaData = get_post_meta($post->ID,'',true);
-        if($wc_metaData) $epim_api_variation_data = $wc_metaData['epim_api_variation_data'][0];
-        if($epim_api_variation_data) {
-            $struct_json = json_decode($epim_api_variation_data, true);
-            echo '<p>ePim API Variation data:<br><pre>'.json_encode($struct_json,JSON_PRETTY_PRINT).'</pre></p>';
-        }
-
-		$datasheets = get_post_meta($post->ID,'epim_data_sheets',true);
+		$datasheets = get_post_meta($post_id,'epim_data_sheets',true);
 		if($datasheets) {
 		    if(is_array($datasheets)) {
 		        echo '<p class="form-field show-if-simple">';
@@ -298,7 +290,6 @@ function add_epim_product_data_fields($post_id) {
         } else {
 		    //error_log($post->ID.' no datasheets found');
         }
-
 		?>
     </div>
 	<?php
@@ -325,6 +316,4 @@ function woocommerce_process_product_meta_fields_save( $post_id ){
 	update_post_meta( $post_id, 'epim_Qty_Break_3', $epim_Qty_Break_3 );
 	$epim_Qty_Price_3 =  sanitize_text_field($_POST['epim_Qty_Price_3']);
 	update_post_meta( $post_id, 'epim_Qty_Price_3', $epim_Qty_Price_3 );
-    $epim_api_variation_data =  sanitize_text_field($_POST['epim_api_variation_data']);
-    update_post_meta( $post_id, 'epim_api_variation_data', $epim_api_variation_data );
 }
