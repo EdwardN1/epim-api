@@ -84,8 +84,15 @@ function cron_log($log)
     $log_dir = WP_PLUGIN_DIR . '/epim-api-importer';
     if (is_dir($log_dir)) {
         $log_file = $log_dir . '/cron-log.log';
+        $log_file_size = filesize($log_file);
+
         ini_set("log_errors", 1);
         ini_set("error_log", $log_file);
+
+        if($log_file_size > 3000000) {
+            file_put_contents($log_file,'');
+            error_log('Log file reset');
+        }
         error_log($log);
     }
 }
