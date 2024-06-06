@@ -17,7 +17,7 @@ define('swp_FUNCTIONSPATH', plugin_dir_path( __FILE__ ) . '/includes/');
 define('swp_PLUGINPATH', plugin_dir_path( __FILE__ ) );
 define('swp_PLUGINURI', plugin_dir_url(__FILE__));
 define('swp_PLUGINFILE',__FILE__);
-define('swp_EN_API','https://uat-product.sylvania-group.com/en-int/CategoriesAPI');
+define('swp_EN_API','https://product.sylvania-group.com/en-int/categoryAPI');
 define('swp_FR_API','https://uat-product.sylvania-group.com/fr-fr/CategoriesAPI');
 define('swp_ENG_ROOT_URI','https://www.sylvania-lighting.com/product/en-int/');
 define('swp_FR_ROOT_URI','https://www.sylvania-lighting.com/product/fr-fr/');

@@ -86,7 +86,7 @@ function epimaapi_product_tab_content()
                         ?>
                         <tr>
                             <td>
-                                <a href="<?php echo $dynamic_data_sheets_url . '?part=' . get_post_meta( $product->get_id(), '_sku', true ) . '&template=' . $data_sheets_template; ?>"
+                                <a href="<?php echo $dynamic_data_sheets_url . '?part=' . $product->get_sku() . '&template=' . $data_sheets_template; ?>"
                                    target="_blank"><?php echo $data_sheet_name; ?></a></td>
                         </tr>
                         <?php

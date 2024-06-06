@@ -910,6 +910,7 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 	$Qty_Break_1                             = $variation->Qty_Break_1;
 	$Qty_Break_2                             = $variation->Qty_Break_2;
 	$Qty_Break_3                             = $variation->Qty_Break_3;
+    $Part_Code = $variation->Part_Code;
 	$productArray['productDescription']      = (string)$variation->Table_Heading;
 	$productArray['productShortDescription'] = (string)$productBulletText;
 
@@ -944,6 +945,7 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 	$epim_Qty_Price_2        = array( "meta_key" => "epim_Qty_Price_2", "meta_data" => $Qty_Price_2 );
 	$epim_Qty_Price_3        = array( "meta_key" => "epim_Qty_Price_3", "meta_data" => $Qty_Price_3 );
     $epim_api_variation_data = array("meta_key" => "epim_api_variation_data","meta_data" => $jsonVariation);
+    $epim_Part_Code = array("meta_key" => "epim_Part_Code", "meta_data" => $Part_Code);
 
 	$productArray['metaData'] = array(
 		$epim_API_ID,
@@ -955,6 +957,7 @@ function epimaapi_create_product( $productID, $variationID, $productBulletText, 
 		$epim_Qty_Price_1,
 		$epim_Qty_Price_2,
 		$epim_Qty_Price_3,
+        $epim_Part_Code,
         $epim_api_variation_data
 	);
 

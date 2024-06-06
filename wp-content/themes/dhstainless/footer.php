@@ -45,7 +45,7 @@
                 </a>
             </div>
             <div>
-          <img src="<?php bloginfo('template_directory'); ?>/img/accreditations.png" alt="">
+          <img src="<?php bloginfo('template_directory'); ?>/img/accreditations.jpg" alt="">
             </div>
         </div>
       </div>

@@ -26,7 +26,7 @@ function swp_daily()
     //error_log(print_r($fr_meta,true));
     error_log('Current Language is: '.swp_current_language);
     $ENGjson = swp_make_api_call(swp_EN_API);
-    $FRjson = swp_make_api_call(swp_FR_API);
+    //$FRjson = swp_make_api_call(swp_FR_API);
 
     $primary_menu_name = false;
 
@@ -34,7 +34,8 @@ function swp_daily()
 
         $eng_menu_array = json_decode($ENGjson, true);
 
-        //error_log(print_r($eng_menu_array,true));
+        error_log(print_r($eng_menu_array,true));
+        return;
 
         $menu_name = 'primary-menu';
         $locations = get_nav_menu_locations();

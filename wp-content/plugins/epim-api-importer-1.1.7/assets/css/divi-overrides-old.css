@@ -1,0 +1,45 @@
+/*---------------------------------------------------------------*/
+/*------Replace the Search Button with an Icon------*/
+/*---------------------------------------------------------------*/
+/*Hide the search button*/
+.ds-icon-search input.et_pb_searchsubmit,
+.widget_search input#searchsubmit {
+    background: transparent;
+    color: transparent;
+    border: none;
+    width: 55px;
+    z-index: 2;
+}
+/*Add padding to the search input field*/
+.ds-icon-search input.et_pb_s,
+.widget_search input#s {
+    padding-right: 55px !important;
+}
+/*Add the icon*/
+.ds-icon-search .et_pb_searchform:before,
+.widget_search::before {
+    content: '\55';
+    position: absolute;
+    font-family: 'ETModules';
+    z-index: 1;
+    right: 0;
+    font-size: 20px;
+    padding-top: 0.85em;
+    padding-right: 1em;
+}
+/*---------------------------------------------------------------*/
+/*---End - Replace the Search Button with an Icon---*/
+/*---------------------------------------------------------------*/
+
+/*
+.entry-summary p.price ins, .woocommerce div.product span.price, .woocommerce-page div.product span.price, .woocommerce #content div.product span.price, .woocommerce-page #content div.product span.price, .woocommerce div.product p.price, .woocommerce-page div.product p.price, .woocommerce #content div.product p.price, .woocommerce-page #content div.product p.price, .woocommerce .star-rating span:before, .woocommerce-page .star-rating span:before, .woocommerce a.button.alt, .woocommerce-page a.button.alt, .woocommerce button.button.alt, .woocommerce button.button.alt.disabled, .woocommerce-page button.button.alt, .woocommerce-page button.button.alt.disabled, .woocommerce input.button.alt, .woocommerce-page input.button.alt, .woocommerce #respond input#submit.alt, .woocommerce-page #respond input#submit.alt, .woocommerce #content input.button.alt, .woocommerce-page #content input.button.alt, .woocommerce a.button, .woocommerce-page a.button, .woocommerce button.button, .woocommerce-page button.button, .woocommerce input.button, .woocommerce-page input.button, .woocommerce #respond input#submit, .woocommerce-page #respond input#submit, .woocommerce #content input.button, .woocommerce-page #content input.button, .woocommerce a.button.alt:hover, .woocommerce-page a.button.alt:hover, .woocommerce button.button.alt:hover, .woocommerce button.button.alt.disabled:hover, .woocommerce-page button.button.alt:hover, .woocommerce-page button.button.alt.disabled:hover, .woocommerce input.button.alt:hover, .woocommerce-page input.button.alt:hover, .woocommerce #respond input#submit.alt:hover, .woocommerce-page #respond input#submit.alt:hover, .woocommerce #content input.button.alt:hover, .woocommerce-page #content input.button.alt:hover, .woocommerce a.button:hover, .woocommerce-page a.button:hover, .woocommerce button.button, .woocommerce-page button.button:hover, .woocommerce input.button:hover, .woocommerce-page input.button:hover, .woocommerce #respond input#submit:hover, .woocommerce-page #respond input#submit:hover, .woocommerce #content input.button:hover {
+    color: #056631;
+}
+
+.posted_in a, .tagged_as a {
+    color: #056631;
+}*/
+
+#top-header, #et-secondary-nav li ul {
+    background-color: #056631;
+}

@@ -9,8 +9,14 @@ function epsm_search_by_sku( $search, $query_vars ) {
             'posts_per_page'  => -1,
             'post_type'       => 'product',
             'meta_query' => array(
+                'relation' => 'OR',
                 array(
                     'key' => '_sku',
+                    'value' => $query_vars->query['s'],
+                    'compare' => 'LIKE'
+                ),
+                array(
+                    'key' => 'epim_Part_Code',
                     'value' => $query_vars->query['s'],
                     'compare' => 'LIKE'
                 )

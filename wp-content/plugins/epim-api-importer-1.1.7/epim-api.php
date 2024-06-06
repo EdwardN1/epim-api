@@ -1,7 +1,7 @@
 <?php
 /**
  * @package epim_api
- * @version 1.0.8
+ * @version 1.0.9
  */
 /*
 Plugin Name: ePim API importer
@@ -9,7 +9,7 @@ Plugin URI: https://e-pim.co.uk
 Description: This plugin requires you to have an account at https://epim.online and an activated epim api. You wil then be able to import your product data from multiple print and digital sources straight into WooCommerce for an instant online shop.
 Author: Edward Nickerson
 License: GPLv2 or later
-Version: 1.1.8
+Version: 1.1.7
 Author URI: https://www.technicks.com
 */
 

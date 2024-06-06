@@ -275,6 +275,14 @@ function add_epim_product_data_fields($post_id) {
 			'default'       => '',
 			'desc_tip'      => false,
 		) );
+        woocommerce_wp_text_input( array(
+            'id'            => 'epim_Part_Code',
+            'wrapper_class' => 'show_if_simple',
+            'label'         => __( 'Part_Code', 'my_text_domain' ),
+            'description'   => __( 'ePim Part_Code', 'my_text_domain' ),
+            'default'       => '',
+            'desc_tip'      => false,
+        ) );
 
         $epim_api_variation_data = false;
         $wc_metaData = get_post_meta($post->ID,'',true);
@@ -327,4 +335,6 @@ function woocommerce_process_product_meta_fields_save( $post_id ){
 	update_post_meta( $post_id, 'epim_Qty_Price_3', $epim_Qty_Price_3 );
     $epim_api_variation_data =  sanitize_text_field($_POST['epim_api_variation_data']);
     update_post_meta( $post_id, 'epim_api_variation_data', $epim_api_variation_data );
+    $epim_Part_Code =  sanitize_text_field($_POST['epim_Part_Code']);
+    update_post_meta( $post_id, 'epim_Part_Code', $epim_Part_Code );
 }
