@@ -33,6 +33,9 @@ function isDeveloper() {
 function cpt_ui_remove_menu_items() {
     if( !isDeveloper() ):
         remove_menu_page('cptui_main_menu');
+        remove_menu_page('edit.php?post_type=api_product');
+        remove_menu_page('edit.php?post_type=api_application');
+        remove_menu_page('admin.php?page=meowapps-main-menu');
     endif;
 }
 add_action( 'admin_init', 'cpt_ui_remove_menu_items' );

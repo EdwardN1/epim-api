@@ -21,10 +21,42 @@ add_action('swp_daily_action', 'swp_daily');
 
 function swp_daily()
 {
-    //swp_daily_menus();
-    //swp_daily_applications();
-    //swp_daily_products();
-    swp_test_stuff();
+    swp_daily_menus();
+    swp_daily_applications();
+    //swp_delete_all_images();
+    swp_delete_all_products();
+    swp_daily_products();
+    //swp_get_current_media();
+    //swp_test_stuff();
+}
+
+function swp_get_current_media()
+{
+    $all_media = array();
+    $current_media = array();
+    $att_args = array(
+        'post_type' => 'attachment',
+        'numberposts' => -1,
+        'post_status' => null,
+        'post_parent' => null, // any parent
+    );
+    $attachments = get_posts($att_args);
+
+    foreach ($attachments as $attachment) {
+        $this_media = array(
+            'id' => $attachment->ID,
+            'post_name' => $attachment->post_title,
+            'post_status' => $attachment->post_status,
+            'guid' => $attachment->guid,
+
+        );
+        $all_media[] = $this_media;
+        if(get_field('sylvania_import',$attachment->ID)==1) $current_media[] = $this_media;
+    }
+    //error_log(print_r($current_media,true));
+    //error_log('number of current media = '.count($current_media));
+    //error_log('number of all media = '.count($all_media));
+    return $current_media;
 }
 
 function swp_test_stuff()
@@ -40,7 +72,7 @@ function swp_test_stuff()
         $new_term = wp_insert_term('test' . uniqid(), 'applications');
         error_log(print_r($new_term, true));
     }*/
-    $p_args = array(
+    /*$p_args = array(
         'numberposts' => -1,
         'post_type' => 'products'
     );
@@ -52,7 +84,66 @@ function swp_test_stuff()
     foreach ($ptd as $value) {
         wp_delete_post($value,true);
     }
-    error_log('Test Stuff Finished');
+    error_log('Test Stuff Finished');*/
+    /*$url = 'https://media.sylvania-group.com/assets/8796388479436/ProductInsaverSlim1653998843513_ProductImages_3.jpg';
+    $path = parse_url($url, PHP_URL_PATH);
+    error_log(pathinfo(basename($path), PATHINFO_FILENAME));*/
+    $att_args = array(
+        'post_type' => 'attachment',
+        'numberposts' => -1,
+        'post_status' => null,
+        'post_parent' => null, // any parent
+    );
+    $attachments = get_posts($att_args);
+    error_log(print_r($attachments, true));
+}
+
+function swp_delete_all_products()
+{
+    $p_args = array(
+        'numberposts' => -1,
+        'post_type' => 'products'
+    );
+    $p = get_posts($p_args);
+    $ptd = array();
+    foreach ($p as $item) {
+        $ptd[] = $item->ID;
+    }
+    foreach ($ptd as $value) {
+        wp_delete_post($value, true);
+    }
+    error_log('Products deleted');
+}
+
+function swp_delete_all_images()
+{
+    $args = array(
+        'post_type' => 'attachment',
+        'numberposts' => -1,
+        'post_status' => null,
+        'post_parent' => null, // any parent
+    );
+    $attachments = get_posts($args);
+    $epI = 0;
+
+    if ($attachments) {
+        $a_ids = array();
+        $a_names = array();
+        foreach ($attachments as $attachment) {
+            if (get_field('sylvania_import', $attachment->ID) == 1) {
+                $a_names[] = $attachment->post_title;
+            }
+        }
+        foreach ($attachments as $attachment) {
+            if (in_array($attachment->post_title, $a_names)) $a_ids[] = $attachment->ID;
+        }
+        foreach ($a_ids as $a_id) {
+            if (wp_delete_attachment($a_id, true)) {
+                $epI++;
+            }
+        }
+    }
+    error_log(' Number of imported images deleted = ' . $epI);
 }
 
 function swp_daily_products()
@@ -63,8 +154,11 @@ function swp_daily_products()
     );
     $applications = get_posts($a_args);
     foreach ($applications as $application) {
-        if (!term_exists($application->post_title, 'application')) {
-            wp_insert_term($application->post_title, 'application');
+        if (!term_exists($application->post_title, 'applications')) {
+            $new_term_id = wp_insert_term($application->post_title, 'applications');
+            if (!is_wp_error($new_term_id)) {
+
+            }
         }
     }
 
@@ -82,9 +176,18 @@ function swp_daily_products()
     foreach ($products as $product) {
         $current_products[] = get_field('productid', $product->ID);
     }
+
+    $current_media = swp_get_current_media();
+
     foreach ($api_products as $api_product) {
         $cron_user = get_user_by('email', get_bloginfo('admin_email'));
         $cron_user_id = $cron_user->ID;
+        $cat_ids = array();
+        if (have_rows('applications', $api_product->ID)):
+            while (have_rows('applications', $api_product->ID)): the_row();
+                $cat_ids[] = get_sub_field('applicationhybrispk');
+            endwhile;
+        endif;
         if (have_rows('product_data', $api_product->ID)):
             while (have_rows('product_data', $api_product->ID)): the_row();
                 $productid = get_sub_field('productid');
@@ -92,12 +195,7 @@ function swp_daily_products()
                 $productpath = get_sub_field('productpath');
                 $productname = get_sub_field(('productname'));
                 if (!in_array($productid, $current_products)) {
-                    $cat_ids = array();
-                    if (have_rows('applications' . $api_product->ID)):
-                        while (have_rows('applications', $api_product->ID)): the_row();
-                            $cat_ids[] = get_sub_field('wp_id');
-                        endwhile;
-                    endif;
+
 
                     $newProduct_args = array(
                         'post_title' => $productname,
@@ -105,17 +203,57 @@ function swp_daily_products()
                         'post_status' => 'publish',
                         'post_author' => $cron_user_id,
                         'post_content' => $productname,
-                        'post_category' => $cat_ids
+                        //'post_category' => $cat_ids
                     );
                     $new_product_id = wp_insert_post($newProduct_args);
-                    /*if(!is_wp_error($new_product_id)) {
+                    if (!is_wp_error($new_product_id)) {
+                        //error_log('===========================$cat_ids========================');
+                        //error_log(print_r($cat_ids,true));
+                        $terms_set = wp_set_object_terms($new_product_id, $cat_ids, 'applications');
+                        //error_log('===========================$terms_set========================');
+                        //error_log(print_r($terms_set,true));
                         $current_products[] = $productid;
-                        update_field('sylvania_link',$productpath,$new_product_id);
-                        $f_imageID = swp_uploadMedia($productmainassetpath);
-                        if($f_imageID) {
-                            set_post_thumbnail($new_product_id,$f_imageID);
+                        update_field('productid', $productid, $new_product_id);
+                        update_field('sylvania_link', $productpath, $new_product_id);
+                    }
+                    if (!is_wp_error($new_product_id)) {
+                        $current_products[] = $productid;
+                        update_field('sylvania_link', $productpath, $new_product_id);
+
+                        if ($productmainassetpath != '/img/no-image-available.jpg') {
+                            $f_imageID = 0;
+                            $media_path = parse_url($productmainassetpath, PHP_URL_PATH);
+                            $media_title = pathinfo(basename($media_path), PATHINFO_FILENAME);
+                            foreach ($current_media as $media_item) {
+                                if ($media_item['post_name'] == $media_title) $f_imageID = $media_item['id'];
+                            }
+                            //error_log($media_title.' - $f_imageID = '.$f_imageID);
+                            if ($f_imageID == 0) {
+                                $f_imageID = swp_uploadMedia($productmainassetpath);
+                                if ($f_imageID) $current_media[] = array(
+                                    'id' => $f_imageID,
+                                    'post_name' => $media_title
+                                );
+                            }
+                            //$f_imageID = swp_uploadMedia($productmainassetpath);
+                            if ($f_imageID) {
+                                set_post_thumbnail($new_product_id, $f_imageID);
+                                update_field('sylvania_import', 1, $f_imageID);
+                                $row = array(
+                                    'type' => 'product',
+                                    'id' => $productid
+                                );
+                                $pid_added = false;
+                                if (have_rows('used_by', $f_imageID)) {
+                                    while (have_rows('used_by', $f_imageID)): the_row();
+                                        if (get_sub_field('id') == $productid) $pid_added = true;
+                                    endwhile;
+                                }
+                                if (!$pid_added) add_row('used_by', $row, $f_imageID);
+                            }
                         }
-                    }*/
+
+                    }
                 }
             endwhile;
         endif;
@@ -189,12 +327,12 @@ function swp_daily_applications()
                                 error_log($a_post_id->get_error_message());
                             } else {
                                 if ($a_post_id > 0) {
+                                    update_field('applicationmainassetpath', $ApplicationMainAssetPath, $a_post_id);
+                                    update_field('applicationhybrispk', $ApplicationHybrisPK, $a_post_id);
                                     $a_row = array(
                                         'language' => $wpml_extension,
                                         'applicationname' => $ApplicationName,
-                                        'applicationkey' => $ApplicationKey,
-                                        'applicationmainassetpath' => $ApplicationMainAssetPath,
-                                        'applicationhybrispk' => $ApplicationHybrisPK,
+                                        'applicationkey' => $ApplicationKey
                                     );
                                     $app_language_found = false;
                                     if (have_rows('application_data', $a_post_id)):
