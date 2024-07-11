@@ -148,16 +148,58 @@ function swp_delete_all_images()
 
 function swp_daily_products()
 {
+
+    $current_media = swp_get_current_media();
+
     $a_args = array(
         'numberposts' => -1,
         'post_type' => 'api_application'
     );
     $applications = get_posts($a_args);
     foreach ($applications as $application) {
-        if (!term_exists($application->post_title, 'applications')) {
+        $applicationmainassetpath = get_field('applicationmainassetpath',$application->ID);
+        $application_term = term_exists($application->post_title, 'applications');
+        if (!$application_term) {
             $new_term_id = wp_insert_term($application->post_title, 'applications');
             if (!is_wp_error($new_term_id)) {
-
+                $application_term = $new_term_id;
+            }
+        } else {
+            if(is_array($application_term)) {
+                $application_term = $application_term['term_id'];
+            }
+        }
+        if($application_term) {
+            //$applicationmainassetpath = get_field('applicationmainassetpath',$application->ID);
+            if ($applicationmainassetpath != '/img/no-image-available.jpg') {
+                $f_imageID = 0;
+                $media_path = parse_url($applicationmainassetpath, PHP_URL_PATH);
+                $media_title = pathinfo(basename($media_path), PATHINFO_FILENAME);
+                foreach ($current_media as $media_item) {
+                    if ($media_item['post_name'] == $media_title) $f_imageID = $media_item['id'];
+                }
+                if ($f_imageID == 0) {
+                    $f_imageID = swp_uploadMedia($applicationmainassetpath);
+                    if ($f_imageID) $current_media[] = array(
+                        'id' => $f_imageID,
+                        'post_name' => $media_title
+                    );
+                }
+                if ($f_imageID) {
+                    update_field('image',$f_imageID,'applications_'.$application_term);
+                    update_field('sylvania_import', 1, $f_imageID);
+                    $row = array(
+                        'type' => 'application',
+                        'id' => $application->post_title,
+                    );
+                    $pid_added = false;
+                    if (have_rows('used_by', $f_imageID)) {
+                        while (have_rows('used_by', $f_imageID)): the_row();
+                            if (get_sub_field('id') == $application->post_title) $pid_added = true;
+                        endwhile;
+                    }
+                    if (!$pid_added) add_row('used_by', $row, $f_imageID);
+                }
             }
         }
     }
@@ -177,7 +219,6 @@ function swp_daily_products()
         $current_products[] = get_field('productid', $product->ID);
     }
 
-    $current_media = swp_get_current_media();
 
     foreach ($api_products as $api_product) {
         $cron_user = get_user_by('email', get_bloginfo('admin_email'));
