@@ -21,11 +21,13 @@ add_action('swp_daily_action', 'swp_daily');
 
 function swp_daily()
 {
-    swp_daily_menus();
-    swp_daily_applications();
+    //swp_daily_menus();
+    //swp_daily_applications();
+    //swp_delete_all_products();
+    //swp_daily_products();
+    swp_daily_menu_files();
+
     //swp_delete_all_images();
-    swp_delete_all_products();
-    swp_daily_products();
     //swp_get_current_media();
     //swp_test_stuff();
 }
@@ -51,7 +53,7 @@ function swp_get_current_media()
 
         );
         $all_media[] = $this_media;
-        if(get_field('sylvania_import',$attachment->ID)==1) $current_media[] = $this_media;
+        if (get_field('sylvania_import', $attachment->ID) == 1) $current_media[] = $this_media;
     }
     //error_log(print_r($current_media,true));
     //error_log('number of current media = '.count($current_media));
@@ -88,14 +90,14 @@ function swp_test_stuff()
     /*$url = 'https://media.sylvania-group.com/assets/8796388479436/ProductInsaverSlim1653998843513_ProductImages_3.jpg';
     $path = parse_url($url, PHP_URL_PATH);
     error_log(pathinfo(basename($path), PATHINFO_FILENAME));*/
-    $att_args = array(
+    /*$att_args = array(
         'post_type' => 'attachment',
         'numberposts' => -1,
         'post_status' => null,
         'post_parent' => null, // any parent
     );
     $attachments = get_posts($att_args);
-    error_log(print_r($attachments, true));
+    error_log(print_r($attachments, true));*/
 }
 
 function swp_delete_all_products()
@@ -157,7 +159,7 @@ function swp_daily_products()
     );
     $applications = get_posts($a_args);
     foreach ($applications as $application) {
-        $applicationmainassetpath = get_field('applicationmainassetpath',$application->ID);
+        $applicationmainassetpath = get_field('applicationmainassetpath', $application->ID);
         $application_term = term_exists($application->post_title, 'applications');
         if (!$application_term) {
             $new_term_id = wp_insert_term($application->post_title, 'applications');
@@ -165,11 +167,11 @@ function swp_daily_products()
                 $application_term = $new_term_id;
             }
         } else {
-            if(is_array($application_term)) {
+            if (is_array($application_term)) {
                 $application_term = $application_term['term_id'];
             }
         }
-        if($application_term) {
+        if ($application_term) {
             //$applicationmainassetpath = get_field('applicationmainassetpath',$application->ID);
             if ($applicationmainassetpath != '/img/no-image-available.jpg') {
                 $f_imageID = 0;
@@ -186,7 +188,7 @@ function swp_daily_products()
                     );
                 }
                 if ($f_imageID) {
-                    update_field('image',$f_imageID,'applications_'.$application_term);
+                    update_field('image', $f_imageID, 'applications_' . $application_term);
                     update_field('sylvania_import', 1, $f_imageID);
                     $row = array(
                         'type' => 'application',
@@ -453,6 +455,96 @@ function swp_daily_applications()
     }
 }
 
+function swp_daily_menu_files()
+{
+    $current_language = apply_filters('wpml_current_language', NULL);
+    $wpml_languages = apply_filters('wpml_active_languages', NULL, 'orderby=id&order=desc');
+    $avail_languages = array();
+    foreach ($wpml_languages as $wpml_language) {
+        $avail_languages[] = $wpml_language['code'];
+    }
+    if (have_rows('available_languages', 'option')) {
+
+        while (have_rows('available_languages', 'option')) : the_row();
+            $wpml_extension = get_sub_field('wpml_extension');
+            if (in_array($wpml_extension, $avail_languages)) {
+                if (!is_dir(swp_PLUGINPATH . 'menu/' . $wpml_extension)) mkdir(swp_PLUGINPATH . 'menu/' . $wpml_extension, 0755, true);
+                do_action('wpml_switch_language', $wpml_extension);
+                $menu_name = 'primary-menu';
+                $locations = get_nav_menu_locations();
+                $menu_id = $locations[$menu_name];
+                $menu = wp_get_nav_menu_object($menu_id);
+                $menu_items = wp_get_nav_menu_items($menu);
+                $zero_level = array();
+                $first_level = array();
+                $second_level = array();
+                $all_items = array();
+                foreach ($menu_items as $menu_item) {
+                    $ID = $menu_item->ID;
+                    $post_title = $menu_item->post_title;
+                    $url = $menu_item->url;
+                    $menu_item_parent = $menu_item->menu_item_parent;
+                    $this_item = array(
+                        'ID' => $ID,
+                        'Title' => $post_title,
+                        'url' => $url,
+                        'parent' => $menu_item_parent
+                    );
+                    $all_items[] = $this_item;
+                }
+                foreach ($all_items as $an_item) {
+                    if($an_item['parent']==0) {
+                        $zero_level[] = $an_item;
+                    }
+                }
+                //error_log(print_r($all_items,true));
+                foreach ($zero_level as $parent) {
+                    foreach ($all_items as $an_item) {
+                        if($an_item['parent']==$parent['ID']) {
+                            $first_level[] = $an_item;
+                        }
+                    }
+                }
+                //error_log(print_r($all_items,true));
+                foreach ($first_level as $parent) {
+                    foreach ($all_items as $an_item) {
+                        if($an_item['parent']==$parent['ID']) {
+                            $second_level[] = $an_item;
+                        }
+                    }
+                }
+                $export = array();
+                foreach ($zero_level as $zl) {
+                    $e_item = $zl;
+                    $e_item['children'] = array();
+                    foreach ($first_level as $fl) {
+                        if($fl['parent']==$zl['ID']) {
+                            $z_child = $fl;
+                            $z_child['children'] = array();
+                            foreach ($second_level as $sl) {
+                                if($sl['parent']==$fl['ID']) {
+                                    $fl_child = $sl;
+                                    $z_child['children'][] = $fl_child;
+                                }
+                            }
+                            $e_item['children'][] = $z_child;
+                        }
+                    }
+                    $export[] = $e_item;
+                }
+                $menu_json = json_encode($export,JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE);
+                if($menu_json) {
+                    $menu_file = fopen(swp_PLUGINPATH . 'menu/' . $wpml_extension.'/main-menu.json',"w");
+                    fwrite($menu_file,$menu_json);
+                    fclose($menu_file);
+                }
+                //error_log(print_r(json_encode($export),true));
+            }
+        endwhile;
+    }
+}
+
+
 function swp_daily_menus()
 {
 
@@ -470,10 +562,9 @@ function swp_daily_menus()
             $api_root = get_sub_field('api_root');
             $product_link_root = get_sub_field('product_link_root');
             $products_name = get_sub_field('products_name');
-
             $JSON = swp_make_api_call($api_root);
             $primary_menu_name = false;
-            error_log($language . ' - ' . $wpml_extension);
+            //error_log($language . ' - ' . $wpml_extension);
             if (in_array($wpml_extension, $avail_languages)) {
                 if ($JSON) {
                     do_action('wpml_switch_language', $wpml_extension);
@@ -575,98 +666,6 @@ function swp_daily_menus()
         endwhile;
         do_action('wpml_switch_language', $current_language);
     }
-
-    /*$primary_menu_name = false;
-
-    if ($ENGjson) {
-
-        $eng_menu_array = json_decode($ENGjson, true);
-
-        $menu_name = 'primary-menu';
-        $locations = get_nav_menu_locations();
-        $menu_id = $locations[$menu_name];
-        $menu = wp_get_nav_menu_object($menu_id);
-        $menu_items = wp_get_nav_menu_items($menu);
-
-        $primary_menu_name = $menu->name;
-
-        $productsID = -1;
-
-        if (!empty($menu_items)) {
-            foreach ($menu_items as $item) {
-                if ($item->title == "Products") {
-                    $productsID = $item->ID;
-                }
-            }
-            if ($productsID < 0) {
-                $productsID = wp_update_nav_menu_item($menu->term_id, 0, array(
-                    'menu-item-title' => __('Products'),
-                    'menu-item-classes' => 'swp_product_menu_item',
-                    'menu-item-url' => swp_ENG_ROOT_URI . 'categories/',
-                    'menu-item-status' => 'publish'
-                ));
-            }
-
-            $categories_to_delete = array();
-
-            $menu_items = wp_get_nav_menu_items($menu);
-            if ($productsID > 0) {
-
-                foreach ($menu_items as $item) {
-                    if ($item->menu_item_parent == $productsID) {
-                        $categories_to_delete[] = $item->ID;
-                    }
-
-                }
-
-                foreach ($categories_to_delete as $cm_item) {
-                    foreach ($menu_items as $item) {
-                        if ($cm_item == $item->menu_item_parent) {
-                            wp_delete_post($item->ID);
-                        }
-                    }
-                }
-
-                foreach ($categories_to_delete as $cm_item) {
-                    wp_delete_post($cm_item);
-                }
-
-                $eng_menu_products = $eng_menu_array['Children'][0]['Children'][0]['Children'];
-
-                foreach ($eng_menu_products as $eng_menu_product) {
-                    $eng_menu_name = $eng_menu_product['Name'];
-                    $cat_slug = $eng_menu_product['URL'];
-                    if ($cat_slug) {
-                        $cat_menu_id = wp_update_nav_menu_item($menu->term_id, 0, array(
-                            'menu-item-title' => __($eng_menu_name),
-                            'menu-item-classes' => 'swp_product_menu_item',
-                            'menu-item-url' => swp_ENG_ROOT_URI . 'category/' . $cat_slug,
-                            'menu-item-parent-id' => $productsID,
-                            'menu-item-status' => 'publish'
-                        ));
-                        $eng_menu_items = $eng_menu_product['Children'];
-                        foreach ($eng_menu_items as $eng_menu_item) {
-                            wp_update_nav_menu_item($menu->term_id, 0, array(
-                                'menu-item-title' => __($eng_menu_item['Name']),
-                                'menu-item-classes' => 'swp_product_menu_item',
-                                'menu-item-url' => swp_ENG_ROOT_URI . 'category/' . $cat_slug . '/' . $eng_menu_item['URL'] . '/families',
-                                'menu-item-parent-id' => $cat_menu_id,
-                                'menu-item-status' => 'publish'
-                            ));
-                        }
-
-                    }
-                }
-
-            }
-
-        }
-        error_log('English Menu Processed');
-    } else {
-        error_log('No menu retreived');
-    }
-
-    $primary_menu_name = false;*/
 
 
 }
