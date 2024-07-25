@@ -21,10 +21,10 @@ add_action('swp_daily_action', 'swp_daily');
 
 function swp_daily()
 {
-    //swp_daily_menus();
-    //swp_daily_applications();
+    swp_daily_menus();
+    swp_daily_applications();
     //swp_delete_all_products();
-    //swp_daily_products();
+    swp_daily_products();
     swp_daily_menu_files();
 
     //swp_delete_all_images();
