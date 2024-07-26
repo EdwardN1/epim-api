@@ -113,20 +113,10 @@ function epimaapi_update_every_minute()
     set_time_limit(0);
     $epim_update_running = get_option('_epim_update_running');
 
-    //skip to...
-    /*if (($epim_update_running == 'Preparing to process ePim categories')) {
-        $epim_update_running = 'Preparing to Import Images';
-    }*/
-
-    //error_log('_epim_update_running: '.$epim_update_running);
     if ($epim_update_running == '') {
         return;
     }
-    /*if ($epim_update_running != 'Categories Updated and Sorted') {
-        if ($epim_update_running != 'Getting All Products to Import') {
-            epimapi_is_update_stuck();
-        }
-    }*/
+
     $epim_background_stop_update = get_option('_epim_background_stop_update');
     if ($epim_background_stop_update == 1) {
         update_option('_epim_update_running', '');
@@ -139,155 +129,64 @@ function epimaapi_update_every_minute()
         update_option('_epim_background_product_attribute_data', '');
         return;
     }
-    $epim_background_updates_max_run_time = get_option('epim_background_updates_max_run_time');
+
     if (($epim_update_running == 'Preparing to process ePim categories') || (substr($epim_update_running, 0, 44) === "Processing categories - Restarting at Index:")) {
         cron_log('Starting or resuming process ePim categories');
-        $epim_background_process_data = get_option('_epim_background_process_data');
-        if (is_array($epim_background_process_data)) {
-            $i = 1;
-            $c = count($epim_background_process_data);
-            $time_start = microtime(true);
-            foreach ($epim_background_process_data as $category) {
-                if (get_option('_epim_update_running') == '') {
-                    return;
-                }
-                $epim_update_running = 'Process category ' . $i . '/' . $c;
-                if ($i >= get_option('_epim_background_current_index')) {
-                    if (array_key_exists('Id', $category)) {
-                        if (array_key_exists('Name', $category)) {
-                            $ParentID = null;
-                            $picture_webpath = '';
-                            $picture_ids = array();
-                            if ($category['ParentId']) {
-                                $ParentID = $category['ParentId'];
-                            }
-                            cron_log('Importing Id:' . $category['Id'] . ' Name: ' . $category['Name'] . ' Alias: ' . $category['Alias']);
-                            epimaapi_create_category($category['Id'], $category['Name'], $ParentID, $picture_webpath, $picture_ids, $category['Alias']);
-                        }
-                    }
-                    update_option('_epim_background_current_index', $i - 1);
-                }
-                $i++;
-                $time_now = microtime(true);
-                if (($time_now - $time_start >= $epim_background_updates_max_run_time)) {
-                    update_option('_epim_update_running', 'Processing categories - Restarting at Index: ' . $i . '/' . $c);
-                    return;
-                }
-                update_option('_epim_update_running', $epim_update_running);
-            }
-            update_option('_epim_update_running', 'Preparing to Sort Categories');
-            update_option('_epim_background_current_index', 0);
-        } else {
-            update_option('_epim_update_running', '');
-            update_option('_epim_background_process_data', '');
+        switch (epimapi_process_categories()) {
+            case 1:
+                cron_log(get_option('_epim_update_running'));
+                break;
+            case 2:
+                update_option('_epim_update_running', 'Preparing to Sort Categories');
+                update_option('_epim_background_current_index', 0);
+                break;
+            default:
+                update_option('_epim_update_running', '');
+                update_option('_epim_background_process_data', '');
         }
+        return;
     }
 
     if (($epim_update_running == 'Preparing to Sort Categories') || (substr($epim_update_running, 0, 41) === "Sorting categories - Restarting at Index:")) {
-        $time_start = microtime(true);
-        $terms = get_terms([
-            'taxonomy' => 'product_cat',
-            'hide_empty' => false,
-        ]);
-        $i = 1;
-        $c = count($terms);
-        foreach ($terms as $term) {
-            if (get_option('_epim_update_running') == '') {
-                return;
-            }
-            $epim_update_running = 'Sorting Category ' . $i . '/' . $c;
-            if ($i >= get_option('_epim_background_current_index')) {
-                $api_parents = get_term_meta($term->term_id, 'epim_api_parent_id', true);
-                if ($api_parents != '') {
-                    $parent = epimaapi_getTermFromID($api_parents, $terms);
-                    if ($parent) {
-                        $term_id = $term->term_id;
-
-                        $epim_api_id = get_term_meta($term_id, 'epim_api_id', true);
-                        $epim_api_alias = get_term_meta($term_id, 'epim_api_alias', true);
-                        $epim_api_parent_id = get_term_meta($term_id, 'epim_api_parent_id', true);
-                        $epim_api_picture_ids = get_term_meta($term_id, 'epim_api_picture_ids', true);
-                        $epim_api_picture_link = get_term_meta($term_id, 'epim_api_picture_link', true);
-
-                        wp_update_term($term_id, 'product_cat', array('parent' => $parent->term_id));
-
-                        update_term_meta($term_id, 'epim_api_id', $epim_api_id);
-                        update_term_meta($term_id, 'epim_api_alias', $epim_api_alias);
-                        update_term_meta($term_id, 'epim_api_parent_id', $epim_api_parent_id);
-                        update_term_meta($term_id, 'epim_api_picture_ids', $epim_api_picture_ids);
-                        update_term_meta($term_id, 'epim_api_picture_link', $epim_api_picture_link);
-                    }
-                }
-                update_option('_epim_background_current_index', $i - 1);
-            }
-            $i++;
-            $time_now = microtime(true);
-            if (($time_now - $time_start >= $epim_background_updates_max_run_time)) {
-                cron_log('Sorting categories - Restarting at Index: ' . $i . '/' . $c);
-                update_option('_epim_update_running', 'Sorting categories - Restarting at Index: ' . $i . '/' . $c);
-                return;
-            }
-            cron_log($epim_update_running);
-            update_option('_epim_update_running', $epim_update_running);
+        cron_log('Sorting Categories');
+        switch (epimapi_sort_categories()) {
+            case 1:
+                cron_log(get_option('_epim_update_running'));
+                break;
+            case 2:
+                update_option('_epim_update_running', 'Categories Updated and Sorted');
+                update_option('_epim_background_current_index', 0);
+                break;
+            default:
+                update_option('_epim_update_running', '');
+                update_option('_epim_background_process_data', '');
         }
-        cron_log('Categories Updated and Sorted');
-        update_option('_epim_update_running', 'Categories Updated and Sorted');
-        update_option('_epim_background_current_index', 0);
+        return;
     }
 
-    if ($epim_update_running == 'Categories Updated and Sorted') {
-        update_option('_epim_update_running', 'Getting All Products to Import');
-        cron_log('Getting All Products to Import');
-        $allProductsResponse = json_decode(get_epimaapi_all_products(), true);
-        $variations = array();
-        if (json_last_error() == JSON_ERROR_NONE) {
-            if (is_array($allProductsResponse)) {
-                if (array_key_exists('Results', $allProductsResponse)) {
-                    foreach ($allProductsResponse['Results'] as $Product) {
-                        //error_log(print_r($Product,true));
-                        if (get_option('_epim_update_running') == '') {
-                            return;
-                        }
-                        $categories = array();
-                        $pictures = array();
-                        if (array_key_exists('CategoryIds', $Product)) {
-                            $categories = $Product['CategoryIds'];
-                        }
-                        if (array_key_exists('PictureIds', $Product)) {
-                            $pictures = $Product['PictureIds'];
-                        }
-                        if (array_key_exists('VariationIds', $Product)) {
-                            if (is_array($Product['VariationIds'])) {
-                                foreach ($Product['VariationIds'] as $variation_id) {
-                                    if ($epim_update_running == '') {
-                                        return;
-                                    }
-                                    $variation = array();
-                                    $variation['productID'] = $Product['Id'];
-                                    $variation['variationID'] = $variation_id;
-                                    $variation['productBulletText'] = $Product['BulletText'];
-                                    $variation['productName'] = $Product['Name'];
-                                    $variation['categoryIds'] = $categories;
-                                    $variation['pictureIds'] = $pictures;
-                                    $variations[] = $variation;
-                                }
-                            }
+    $time_start = microtime(true);
+    $epim_background_updates_max_run_time = get_option('epim_background_updates_max_run_time');
 
-                        }
-                    }
-                }
-            }
-        } else {
-            cron_log('ePim is not returning valid JSON, getting all products.');
+    if ($epim_update_running == 'Categories Updated and Sorted') {
+        cron_log('Getting All Products to Import');
+
+        switch (epimapi_get_all_products()) {
+            case 1:
+                cron_log(get_option('_epim_update_running'));
+                break;
+            case 2:
+                update_option('_epim_update_running', 'Preparing to import products');
+                cron_log('Preparing to import products');
+                break;
+            default:
+                update_option('_epim_update_running', '');
+                update_option('_epim_background_process_data', '');
         }
-        update_option('_epim_background_process_data', $variations);
-        update_option('_epim_update_running', 'Preparing to import products');
-        cron_log('Found ' . count($variations) . ' products to import');
-        cron_log('Preparing to import products');
+        return;
     }
 
     if (($epim_update_running == 'Preparing to import products') || (substr($epim_update_running, 0, 41) === "Importing Products - Restarting at Index:")) {
-        $time_start = microtime(true);
+
         $all_variations = get_option('_epim_background_process_data');
         $i = 1;
         $c = count($all_variations);
@@ -589,7 +488,7 @@ function epimaapi_update_every_minute()
         update_option('_epim_update_running', 'Linking attributes to products');
         $product_link_data = get_option('_epim_background_process_data');
         $product_set_data = $product_link_data;
-        $time_start = microtime(true);
+
         $i = 0;
         if ($product_link_data != '') {
             $cld = count($product_link_data);
@@ -739,7 +638,7 @@ function epimaapi_update_every_minute()
 
     if (($epim_update_running == 'Preparing to Import Images') || ($epim_update_running == 'Restarting Import of Images')) {
 
-        $time_start = microtime(true);
+
         $i = 0;
         if ($epim_update_running == 'Preparing to Import Images') {
             $args = array('post_type' => 'product', 'posts_per_page' => -1, 'fields' => 'ids');
