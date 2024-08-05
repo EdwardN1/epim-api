@@ -187,64 +187,24 @@ function epimaapi_update_every_minute()
 
     if (($epim_update_running == 'Preparing to import products') || (substr($epim_update_running, 0, 41) === "Importing Products - Restarting at Index:")) {
 
-        $all_variations = get_option('_epim_background_process_data');
-        $i = 1;
-        $c = count($all_variations);
-        if ($epim_update_running == 'Preparing to import products') {
-            $variations = $all_variations;
-        } else {
-            $i = get_option('_epim_background_current_index') - 1;
-            $variations = array_slice($all_variations, $i);
-            $cLeft = count($variations);
-            cron_log('Restarting at index: ' . $i . ' There are ' . $cLeft . ' variations still to process');
+        cron_log('Importing Products');
+
+        switch (epimapi_import_products()) {
+            case 1:
+                cron_log(get_option('_epim_update_running'));
+                break;
+            case 2:
+                update_option('_epim_update_running', 'Preparing to Sort attributes');
+                cron_log('Preparing to Sort attributes');
+                break;
+            default:
+                update_option('_epim_update_running', '');
+                update_option('_epim_background_process_data', '');
         }
-
-        update_option('_epim_update_running', 'Importing ' . $c . ' Products');
-        cron_log('Importing ' . $c . ' Products');
-
-        if (is_array($variations)) {
-            $limit_loop = 0;
-            foreach ($variations as $variation) {
-                if (get_option('_epim_update_running') == '') {
-                    return;
-                }
-                update_option('_epim_update_running', 'Importing product ' . $i . '/' . $c);
-                if ($i >= get_option('_epim_background_current_index')) {
-                    if (is_array($variation)) {
-                        if (array_key_exists('variationID', $variation)) {
-                            cron_log('Importing variation ID: ' . $variation['variationID']);
-                            try {
-                                cron_log(epimaapi_create_basic_product($variation['productID'], $variation['variationID'], $variation['productBulletText'], $variation['productName'], $variation['categoryIds']));
-                            } catch (SomeException $ignored) {
-                                cron_log($ignored->getMessage());
-                                //error_log('Exception Caught: '.$ignored->getMessage());
-                            }
-
-                        }
-                    }
-                    update_option('_epim_background_current_index', $i - 1);
-                }
-
-                $i++;
-                $time_now = microtime(true);
-                if (($time_now - $time_start >= $epim_background_updates_max_run_time)) {
-                    cron_log('Importing Products - Restarting at Index: ' . $i . '/' . $c);
-                    update_option('_epim_update_running', 'Importing Products - Restarting at Index: ' . $i . '/' . $c);
-                    return;
-                }
-                /*$limit_loop++;
-                if($limit_loop>10) break;*/
-            }
-        }
-
-        cron_log('Products Imported. Processing Attributes');
-        update_option('_epim_update_running', 'Preparing to Sort attributes');
-        update_option('_epim_background_process_data', '');
-        update_option('_epim_background_current_index', 0);
+        return;
 
     }
 
-    //if ($epim_update_running == 'Preparing to process ePim categories') {
     if ($epim_update_running == 'Preparing to Sort attributes') {
         update_option('_epim_update_running', 'Sorting Attributes');
 

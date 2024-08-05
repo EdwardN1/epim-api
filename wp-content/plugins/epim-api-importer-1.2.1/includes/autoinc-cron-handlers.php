@@ -161,10 +161,14 @@ function epimapi_import_products() {
     $epim_background_updates_max_run_time = get_option('epim_background_updates_max_run_time');
     $all_variations = get_option('_epim_background_process_data');
     $i = 1;
+
+    if(!is_array($all_variations)) {
+        return 0;
+    }
+
     $c = count($all_variations);
-    if ($epim_update_running == 'Preparing to import products') {
-        $variations = $all_variations;
-    } else {
+    $variations = $all_variations;
+    if ($epim_update_running != 'Preparing to import products') {
         $i = get_option('_epim_background_current_index') - 1;
         $variations = array_slice($all_variations, $i);
         $cLeft = count($variations);
@@ -202,15 +206,258 @@ function epimapi_import_products() {
             if (($time_now - $time_start >= $epim_background_updates_max_run_time)) {
                 cron_log('Importing Products - Restarting at Index: ' . $i . '/' . $c);
                 update_option('_epim_update_running', 'Importing Products - Restarting at Index: ' . $i . '/' . $c);
-                return;
+                return 1;
             }
             /*$limit_loop++;
             if($limit_loop>10) break;*/
         }
+    } else {
+        return 0;
     }
-
-    cron_log('Products Imported. Processing Attributes');
-    update_option('_epim_update_running', 'Preparing to Sort attributes');
+    cron_log('Products Imported.');
     update_option('_epim_background_process_data', '');
     update_option('_epim_background_current_index', 0);
+    return 2;
+
+
+}
+
+//0: Failed/Stopped/Nothing to do | 1: Still running | 2: Finished
+function epimapi_sort_attributes() {
+    update_option('_epim_update_running', 'Sorting Attributes');
+
+    $args = array('post_type' => 'product', 'posts_per_page' => -1);
+    $product_posts = get_posts($args);
+    $product_link_data = array();
+    cron_log('Setting Attributes for ' . count($product_posts) . ' products');
+    if (!empty($product_posts)) {
+        $i = 0;
+        $attribute_taxonomies = wc_get_attribute_taxonomies();
+        $current_attribute_slugs = array();
+        foreach ($attribute_taxonomies as $attribute_taxonomy) {
+
+            $watName = $attribute_taxonomy->attribute_name;
+            if (!in_array($watName, $current_attribute_slugs)) {
+                //error_log($atName);
+                $current_attribute_slugs[] = $watName;
+            } else {
+                cron_log('Attribute ' . $watName . ' is duplicated - deleting');
+                wc_delete_attribute($attribute_taxonomy->attribute_id);
+            }
+        }
+        foreach ($product_posts as $product_post) {
+            $wc_metaData = get_post_meta($product_post->ID, '', true);
+            if ($wc_metaData) $epim_api_variation_data = $wc_metaData['epim_api_variation_data'][0];
+            $variation = json_decode($epim_api_variation_data);
+            $product_attributes = array();
+            if ($variation) {
+                $i++;
+                //cron_log('Importing Attributes for SKU: ' . $variation->SKU);
+                $product_attribute = array();
+                foreach ($variation->AttributeValues as $attribute_value) {
+                    $atName = $attribute_value->AttributeHeaderName;
+                    if ($atName == 'Type') {
+                        $atName = 'Type Name';
+                    }
+                    if ($atName == 'type') {
+                        $atName = 'Type Name';
+                    }
+                    if ($atName == 'Product') {
+                        $atName = 'Product Name';
+                    }
+                    if ($atName == 'product') {
+                        $atName = 'Product Name';
+                    }
+                    if ($atName == 'Category') {
+                        $atName = 'Category Name';
+                    }
+                    if ($atName == 'category') {
+                        $atName = 'Category Name';
+                    }
+                    if ($atName) {
+                        $slugName = sanitize_title(substr($atName, 0, 27));
+                        $attributeWCslug = wc_sanitize_taxonomy_name($slugName);
+                        if ($attributeWCslug == 'type') {
+                            $attributeWCslug == 'type-name';
+                        }
+                        $attributeIndex = epim_in_flat_array($attributeWCslug, $current_attribute_slugs);
+                        //cron_log($attributeWCName);
+                        $WCAttribute = false;
+                        if (!$attributeIndex) {
+                            $WCAttribute = epim_createAttribute($atName, $attributeWCslug);
+                            if (is_wp_error($WCAttribute)) {
+                                cron_log('SKU: ' . $variation->SKU);
+                                cron_log($WCAttribute->get_error_message());
+                            }
+                        }
+                        if ((!$WCAttribute) || (is_wp_error($WCAttribute))) {
+                            $WCAttributeID = wc_attribute_taxonomy_id_by_name(wc_sanitize_taxonomy_name($attributeWCslug));
+                            if ($WCAttributeID) $WCAttribute = wc_get_attribute($WCAttributeID);
+                        }
+                        if ($WCAttribute) {
+                            if (!property_exists($WCAttribute, 'id')) {
+                                cron_log('SKU: ' . $variation->SKU);
+                                cron_log('Attribute not added : ' . $attributeWCslug);
+                                //cron_log(print_r($WCAttribute, true));
+                            } else {
+                                $product_attribute = array();
+                                $product_attribute['taxonomy_name'] = wc_attribute_taxonomy_name($attributeWCslug);
+                                $product_attribute['slug'] = $attributeWCslug;
+                                $product_terms = array();
+                                $current_attribute_slugs[] = $attributeWCslug;
+                                //cron_log('Processing Attribute ' . $attributeWCslug . ' with ID: ' . $WCAttribute->id);
+                                $current_terms = get_terms(array('object_ids' => $WCAttribute->id));
+                                if (is_wp_error(($current_terms))) {
+                                    cron_log('SKU: ' . $variation->SKU);
+                                    cron_log('Error getting terms for ' . $attributeWCslug);
+                                    cron_log($current_terms->get_error_message());
+                                } else {
+                                    $term_name = $attribute_value->Value;
+                                    $term_slug = sanitize_title(stripslashes(str_replace(' ', '-', $term_name)));
+                                    if (strlen($term_name) > 100) {
+                                        $term_name = substr($term_name, 0, 99);
+                                    }
+                                    if (strlen($term_slug) > 28) {
+                                        $term_slug = substr($term_slug, 0, 27);
+                                    }
+
+                                    if ($term_slug == 'Type') {
+                                        $term_slug = 'type-name';
+                                    }
+                                    if ($term_slug == 'type') {
+                                        $term_slug = 'type-name';
+                                    }
+                                    if ($term_slug == 'Product') {
+                                        $term_slug = 'product-name';
+                                    }
+                                    if ($term_slug == 'product') {
+                                        $term_slug = 'product-name';
+                                    }
+                                    if ($term_slug == 'Category') {
+                                        $term_slug = 'category-name';
+                                    }
+                                    if ($term_slug == 'category') {
+                                        $term_slug = 'category-name';
+                                    }
+                                    if (!empty($current_terms)) {
+                                        $current_term_slugs = array();
+                                        foreach ($current_terms as $current_term) {
+                                            $current_term_slugs[] = $current_term->slug;
+                                        }
+                                        $termIndex = epim_in_flat_array($term_slug, $current_terms);
+                                        if (!$termIndex) {
+                                            //cron_log('creating term ' . $term_name . ' with slug ' . $term_slug . ' for attribute ' . $attributeWCslug);
+                                            $WCTerm = epim_createTerm($term_name, $term_slug, $attributeWCslug, 0);
+                                            if (is_wp_error($WCTerm)) {
+                                                cron_log('SKU: ' . $variation->SKU);
+                                                cron_log('Error creating term ' . $term_slug . ' in Attribute ' . $attributeWCslug);
+                                            } else {
+                                                //cron_log('Term ' . $term_slug . ' added to attribute ' . $WCTerm->taxonomy);
+                                            }
+                                        }
+                                    } else {
+                                        //cron_log('creating term ' . $term_name . ' with slug ' . $term_slug . ' for attribute ' . $attributeWCslug);
+                                        $WCTerm = epim_createTerm($term_name, $term_slug, $attributeWCslug, $variation->SKU, 0);
+                                        if (is_wp_error($WCTerm)) {
+                                            cron_log('SKU: ' . $variation->SKU);
+                                            cron_log('Error creating term ' . $term_slug . ' in Attribute ' . $attributeWCslug);
+                                        } else {
+                                            //cron_log('Term ' . $term_slug . ' added to attribute ' . $attributeWCslug);
+                                        }
+                                    }
+                                    $wc_taxonomy_name_terms = get_terms(array(
+                                        'taxonomy' => $product_attribute['taxonomy_name'],
+                                        'hide_empty' => false
+                                    ));
+                                    if (is_wp_error($wc_taxonomy_name_terms)) {
+                                        cron_log($product_attribute['taxonomy_name'] . ' is not an attribute taxonomy');
+                                        cron_log($wc_taxonomy_name_terms->get_error_message());
+                                    } else {
+                                        if (is_array($wc_taxonomy_name_terms)) {
+                                            foreach ($wc_taxonomy_name_terms as $term) {
+                                                if ($term->slug == $term_slug) {
+                                                    $product_term = array();
+                                                    $product_term['id'] = $term->term_id;
+                                                    $product_term['name'] = $term_name;
+                                                    $product_term['slug'] = $term_slug;
+                                                    $product_terms[] = $product_term;
+                                                }
+                                            }
+                                        }
+
+                                    }
+                                }
+                                if (!empty($product_attribute)) {
+                                    if (!empty($product_terms)) $product_attribute['terms'] = $product_terms;
+                                    $product_attributes[] = $product_attribute;
+                                }
+                            }
+                        } else {
+                            cron_log('SKU: ' . $variation->SKU);
+                            cron_log('Attribute not added or found: ' . $attributeWCslug);
+                        }
+
+                    }
+
+                }
+            }
+            /*if ($i > 1000) {
+                break;
+            }*/
+            //cron_log(print_r($product_attributes,true));
+
+            if (!empty($product_attributes)) {
+                //cron_log(print_r($product_attributes,true));
+                $product_link_datum = array();
+                $product_link_datum['id'] = $product_post->ID;
+                $product_link_datum['attributes'] = $product_attributes;
+                $product_link_data[] = $product_link_datum;
+            }
+            //cron_log($variation->SKU);
+            if (($i % 10) == 0) {
+                cron_log($i . ' products processed');
+            }
+        }
+    }
+
+    if (!empty($product_link_data)) {
+        if (count($product_link_data) > 3000) {
+            $product_link_data_1 = array_slice($product_link_data, 0, 3000);
+            if (count($product_link_data) > 6000) {
+                $product_link_data_2 = array_slice($product_link_data, 3000, 3000);
+                $product_link_data_3 = array_slice($product_link_data, 6000);
+                update_option('_epim_background_current_index', 0);
+                cron_log('Preparing to link Products to attributes');
+                update_option('_epim_background_process_data', $product_link_data_1);
+                update_option('_epim_background_attribute_data', $product_link_data_2);
+                update_option('_epim_background_product_attribute_data', $product_link_data_3);
+                update_option('_epim_update_running', 'Preparing to link attributes to products');
+            } else {
+                $product_link_data_2 = array_slice($product_link_data, 3000);
+                update_option('_epim_background_current_index', 0);
+                cron_log('Preparing to link Products to attributes');
+                update_option('_epim_background_process_data', $product_link_data_1);
+                update_option('_epim_background_attribute_data', $product_link_data_2);
+                update_option('_epim_background_product_attribute_data', '');
+                update_option('_epim_update_running', 'Preparing to link attributes to products');
+            }
+
+        } else {
+            update_option('_epim_background_current_index', 0);
+            cron_log('Preparing to link Products to attributes');
+            update_option('_epim_background_process_data', $product_link_data);
+            update_option('_epim_background_attribute_data', '');
+            update_option('_epim_background_product_attribute_data', '');
+            update_option('_epim_update_running', 'Preparing to link attributes to products');
+        }
+    } else {
+        update_option('_epim_background_current_index', 0);
+        cron_log('Import Finished');
+        update_option('_epim_background_process_data', '');
+        update_option('_epim_background_attribute_data', '');
+        update_option('_epim_background_product_attribute_data', '');
+        update_option('_epim_update_running', '');
+    }
+
+
 }
