@@ -429,12 +429,12 @@ function epim_options_page()
                             <hr>
                         </td>
                     </tr>
-                    <tr>
+                    <!--<tr>
                         <th style="width: 250px;"><label for="start_date">Update by product changed since:</label></th>
                         <td><input type="text" class="custom_date" name="start_date" id="start_date" value=""/>&nbsp;<button
                                     id="UpdateSince" class="button">Update
                             </button>&nbsp; &nbsp;<span class="modal UpdateSince"><img
-                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                                        src="<?php /*echo epimaapi_PLUGINURI; */?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
                     <tr>
@@ -447,7 +447,7 @@ function epim_options_page()
                         <td colspan="2">
                             <button id="CreateCategories" class="button">Create and Update Categories</button>&nbsp;
                             &nbsp;<span class="modal CreateCategories"><img
-                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                                        src="<?php /*echo epimaapi_PLUGINURI; */?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
                     <tr>
@@ -461,7 +461,7 @@ function epim_options_page()
                         <td colspan="2">
                             <button id="CreateAllProducts" class="button">Create and Update all Products</button>&nbsp;
                             &nbsp;<span class="modal CreateAllProducts"><img
-                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                                        src="<?php /*echo epimaapi_PLUGINURI; */?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
                     <tr>
@@ -475,7 +475,7 @@ function epim_options_page()
                         <td colspan="2">
                             <button id="CreateAll" class="button">Create and Update all Categories and Products</button>&nbsp;
                             &nbsp;<span class="modal CreateAll"><img
-                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                                        src="<?php /*echo epimaapi_PLUGINURI; */?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
                     <tr>
@@ -483,7 +483,7 @@ function epim_options_page()
                             all products. If you have a lot of products this will take a long time to complete.
                             <hr>
                         </td>
-                    </tr>
+                    </tr>-->
                     <tr>
                         <td colspan="2">
                             <button id="DeletedStock" class="button">Check for Deleted Stock</button>&nbsp;

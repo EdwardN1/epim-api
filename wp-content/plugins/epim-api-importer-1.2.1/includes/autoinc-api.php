@@ -260,10 +260,15 @@ function epimaapi_background_import_products_from( $timecode ) {
 	} else {
 		cron_log( 'ePim is not returning valid JSON, getting products.' );
 	}
-	update_option( '_epim_background_process_data', $variations );
-	update_option( '_epim_update_running', 'Preparing to import products' );
-	cron_log( 'Found ' . count( $variations ) . ' products to import' );
-	cron_log( 'Preparing to import products' );
+    if(count($variations )>0) {
+        update_option( '_epim_background_process_data', $variations );
+        update_option( '_epim_update_running', 'Preparing to import products' );
+        cron_log( 'Found ' . count( $variations ) . ' products to import' );
+        cron_log( 'Preparing to import products' );
+    } else {
+        cron_log('No products to update');
+    }
+
 }
 
 function epimaapi_background_import_all_start() {

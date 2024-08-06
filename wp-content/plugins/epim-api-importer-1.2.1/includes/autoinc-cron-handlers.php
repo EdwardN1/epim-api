@@ -225,7 +225,6 @@ function epimapi_import_products() {
 //0: Failed/Stopped/Nothing to do | 1: Still running | 2: Finished
 function epimapi_sort_attributes() {
     update_option('_epim_update_running', 'Sorting Attributes');
-
     $args = array('post_type' => 'product', 'posts_per_page' => -1);
     $product_posts = get_posts($args);
     $product_link_data = array();
@@ -278,7 +277,7 @@ function epimapi_sort_attributes() {
                         $slugName = sanitize_title(substr($atName, 0, 27));
                         $attributeWCslug = wc_sanitize_taxonomy_name($slugName);
                         if ($attributeWCslug == 'type') {
-                            $attributeWCslug == 'type-name';
+                            $attributeWCslug = 'type-name';
                         }
                         $attributeIndex = epim_in_flat_array($attributeWCslug, $current_attribute_slugs);
                         //cron_log($attributeWCName);
@@ -418,7 +417,18 @@ function epimapi_sort_attributes() {
                 cron_log($i . ' products processed');
             }
         }
+    } else {
+        update_option('_epim_background_current_index', 0);
+        cron_log('No Attribute Data');
+        update_option('_epim_background_process_data', '');
+        update_option('_epim_background_attribute_data', '');
+        update_option('_epim_background_product_attribute_data', '');
+        return 0;
     }
+
+    update_option('_epim_background_process_data', '');
+    update_option('_epim_background_attribute_data', '');
+    update_option('_epim_background_product_attribute_data', '');
 
     if (!empty($product_link_data)) {
         if (count($product_link_data) > 3000) {
@@ -431,7 +441,6 @@ function epimapi_sort_attributes() {
                 update_option('_epim_background_process_data', $product_link_data_1);
                 update_option('_epim_background_attribute_data', $product_link_data_2);
                 update_option('_epim_background_product_attribute_data', $product_link_data_3);
-                update_option('_epim_update_running', 'Preparing to link attributes to products');
             } else {
                 $product_link_data_2 = array_slice($product_link_data, 3000);
                 update_option('_epim_background_current_index', 0);
@@ -439,7 +448,6 @@ function epimapi_sort_attributes() {
                 update_option('_epim_background_process_data', $product_link_data_1);
                 update_option('_epim_background_attribute_data', $product_link_data_2);
                 update_option('_epim_background_product_attribute_data', '');
-                update_option('_epim_update_running', 'Preparing to link attributes to products');
             }
 
         } else {
@@ -448,16 +456,322 @@ function epimapi_sort_attributes() {
             update_option('_epim_background_process_data', $product_link_data);
             update_option('_epim_background_attribute_data', '');
             update_option('_epim_background_product_attribute_data', '');
-            update_option('_epim_update_running', 'Preparing to link attributes to products');
         }
+        return 2;
     } else {
         update_option('_epim_background_current_index', 0);
-        cron_log('Import Finished');
+        cron_log('No Attribute Data');
         update_option('_epim_background_process_data', '');
         update_option('_epim_background_attribute_data', '');
         update_option('_epim_background_product_attribute_data', '');
-        update_option('_epim_update_running', '');
+        return 0;
+    }
+
+}
+
+//0: Failed/Stopped/Nothing to do | 1: Still running | 2: Finished
+function epimapi_link_attributes() {
+    update_option('_epim_update_running', 'Linking attributes to products');
+    $time_start = microtime(true);
+    $epim_background_updates_max_run_time = get_option('epim_background_updates_max_run_time');
+    $product_link_data = get_option('_epim_background_process_data');
+    $product_link_data_2 = get_option('_epim_background_attribute_data');
+    $product_link_data_3 = get_option('_epim_background_product_attribute_data');
+
+    if(($product_link_data=='')&&($product_link_data_2=='')&&($product_link_data_3=='')) return 0;
+
+    $product_set_data = $product_link_data;
+    $i = 0;
+    if ($product_link_data != '') {
+        $cld = count($product_link_data);
+        cron_log('Linking attributes to ' . $cld . ' products');
+        foreach ($product_link_data as $product_link_datum) {
+            $product_meta = array();
+            $product_attributes = $product_link_datum['attributes'];
+            foreach ($product_attributes as $product_attribute) {
+                wp_set_object_terms($product_link_datum['id'], array(), $product_attribute['taxonomy_name']);
+                $attribute_terms = array();
+                $attribute_term_names = array();
+                if (!empty($product_attribute['terms'])) {
+                    foreach ($product_attribute['terms'] as $term) {
+                        $attribute_terms[] = $term['id'];
+                        $attribute_term_names = $term['name'];
+                    }
+                }
+                if (!empty($attribute_terms)) wp_set_object_terms($product_link_datum['id'], $attribute_terms, $product_attribute['taxonomy_name']);
+
+                $product_meta[$product_attribute['slug']] = array(
+                    'name' => $product_attribute['taxonomy_name'],
+                    'value' => $attribute_term_names,
+                    'position' => 0,
+                    'is_visible' => 1,
+                    'is_variation' => 1,
+                    'is_taxonomy' => '1'
+                );
+            }
+            update_post_meta($product_link_datum['id'], '_product_attributes', $product_meta);
+            array_shift($product_set_data);
+            $time_now = microtime(true);
+            if (($time_now - $time_start >= $epim_background_updates_max_run_time)) {
+                update_option('_epim_background_process_data', $product_set_data);
+                return 1;
+            }
+            $i++;
+            if (($i % 10) == 0) {
+                cron_log($i . ' products linked');
+            }
+        }
+        update_option('_epim_background_process_data', '');
     }
 
 
+    $product_set_data = $product_link_data_2;
+    if ($product_link_data_2 != '') {
+        $cld = count($product_link_data_2);
+        cron_log('Linking attributes to ' . $cld . ' additional products');
+        foreach ($product_link_data_2 as $product_link_datum) {
+            $product_meta = array();
+            $product_attributes = $product_link_datum['attributes'];
+            foreach ($product_attributes as $product_attribute) {
+                wp_set_object_terms($product_link_datum['id'], array(), $product_attribute['taxonomy_name']);
+                $attribute_terms = array();
+                $attribute_term_names = array();
+                if (!empty($product_attribute['terms'])) {
+                    foreach ($product_attribute['terms'] as $term) {
+                        $attribute_terms[] = $term['id'];
+                        $attribute_term_names = $term['name'];
+                    }
+                }
+                if (!empty($attribute_terms)) wp_set_object_terms($product_link_datum['id'], $attribute_terms, $product_attribute['taxonomy_name']);
+
+                $product_meta[$product_attribute['slug']] = array(
+                    'name' => $product_attribute['taxonomy_name'],
+                    'value' => $attribute_term_names,
+                    'position' => 0,
+                    'is_visible' => 1,
+                    'is_variation' => 1,
+                    'is_taxonomy' => '1'
+                );
+            }
+            update_post_meta($product_link_datum['id'], '_product_attributes', $product_meta);
+            array_shift($product_set_data);
+            $time_now = microtime(true);
+            if (($time_now - $time_start >= $epim_background_updates_max_run_time)) {
+                update_option('_epim_background_attribute_data', $product_set_data);
+                return 1;
+            }
+            $i++;
+            if (($i % 10) == 0) {
+                cron_log($i . ' products linked');
+            }
+        }
+        update_option('_epim_background_attribute_data', '');
+    }
+
+
+    $product_set_data = $product_link_data_3;
+    if ($product_link_data_3 != '') {
+        $cld = count($product_link_data_3);
+        cron_log('Linking attributes to ' . $cld . ' more additional products');
+        foreach ($product_link_data_3 as $product_link_datum) {
+            $product_meta = array();
+            $product_attributes = $product_link_datum['attributes'];
+            foreach ($product_attributes as $product_attribute) {
+                wp_set_object_terms($product_link_datum['id'], array(), $product_attribute['taxonomy_name']);
+                $attribute_terms = array();
+                $attribute_term_names = array();
+                if (!empty($product_attribute['terms'])) {
+                    foreach ($product_attribute['terms'] as $term) {
+                        $attribute_terms[] = $term['id'];
+                        $attribute_term_names = $term['name'];
+                    }
+                }
+                if (!empty($attribute_terms)) wp_set_object_terms($product_link_datum['id'], $attribute_terms, $product_attribute['taxonomy_name']);
+
+                $product_meta[$product_attribute['slug']] = array(
+                    'name' => $product_attribute['taxonomy_name'],
+                    'value' => $attribute_term_names,
+                    'position' => 0,
+                    'is_visible' => 1,
+                    'is_variation' => 1,
+                    'is_taxonomy' => '1'
+                );
+            }
+            update_post_meta($product_link_datum['id'], '_product_attributes', $product_meta);
+            array_shift($product_set_data);
+            $time_now = microtime(true);
+            if (($time_now - $time_start >= $epim_background_updates_max_run_time)) {
+                update_option('_epim_background_product_attribute_data', $product_set_data);
+                return 1;
+            }
+            $i++;
+            if (($i % 10) == 0) {
+                cron_log($i . ' products linked');
+            }
+        }
+        update_option('_epim_background_product_attribute_data', '');
+    }
+
+    update_option('_epim_background_current_index', 0);
+    update_option('_epim_background_process_data', '');
+    update_option('_epim_background_attribute_data', '');
+    update_option('_epim_background_product_attribute_data', '');
+    return 2;
+}
+
+//0: Failed/Stopped/Nothing to do | 1: Still running | 2: Finished
+function epimapi_import_images() {
+
+    $epim_update_running = get_option('_epim_update_running');
+    $time_start = microtime(true);
+    $epim_background_updates_max_run_time = get_option('epim_background_updates_max_run_time');
+
+    if ($epim_update_running == 'Preparing to Import Images') {
+        $args = array('post_type' => 'product', 'posts_per_page' => -1, 'fields' => 'ids');
+        $product_posts = get_posts($args);
+        $product_set_data = $product_posts;
+    } else {
+        $product_posts = get_option('_epim_background_process_data');
+        $product_set_data = $product_posts;
+    }
+
+    update_option('_epim_update_running', 'Importing Images');
+
+    cron_log('Synchonising  Images for ' . count($product_posts) . ' products');
+    if (!empty($product_posts)) {
+        foreach ($product_posts as $product_post) {
+            $wc_metaData = get_post_meta($product_post, '', true);
+            if ($wc_metaData) $epim_api_variation_data = $wc_metaData['epim_api_variation_data'][0];
+            $variation = json_decode($epim_api_variation_data, true);
+            if ($variation) {
+                $epim_images = array();
+                $luckins_images = array();
+
+                //epim images
+                if ($variation['PictureIds']) {
+                    if (is_array($variation['PictureIds'])) {
+                        foreach ($variation['PictureIds'] as $pictureId) {
+                            $jsonPicture = get_epimaapi_picture($pictureId);
+                            $picture = json_decode($jsonPicture);
+
+                            try {
+                                $attachment_ID = epimaapi_imageIDfromAPIID($picture->Id);
+                                if (!$attachment_ID) {
+                                    $attachment_ID = uploadMedia($picture->WebPath . '?w=600&h=600');
+                                    if ($attachment_ID) {
+                                        cron_log('Uploading image - ' . $picture->WebPath);
+                                        update_post_meta($attachment_ID, 'epim_api_id', $picture->Id);
+                                    }
+                                }
+                            } catch (Exception $e) {
+                                cron_log($e->getMessage());
+                            }
+
+                            if ($attachment_ID) {
+                                if (!in_array($attachment_ID, $epim_images)) {
+                                    $epim_images[] = $attachment_ID;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                //luckins images
+                if ($variation['LuckinsAssets']) {
+                    if (is_array($variation['LuckinsAssets'])) {
+                        foreach ($variation['LuckinsAssets'] as $luckinsAsset) {
+                            if (is_array($luckinsAsset)) {
+                                if (array_key_exists('Tag', $luckinsAsset)) {
+                                    if (array_key_exists('URL', $luckinsAsset)) {
+                                        if ($luckinsAsset['Tag'] == 'hi-res') {
+                                            try {
+                                                $attachment_ID = epimaapi_imageIDfromAPIID($luckinsAsset['URL']);
+                                                if (!$attachment_ID) {
+                                                    cron_log('Uploading image - ' . $luckinsAsset['URL']);
+                                                    $attachment_ID = uploadMedia($luckinsAsset['URL']);
+                                                    if ($attachment_ID) {
+                                                        update_post_meta($attachment_ID, 'epim_api_id', $luckinsAsset['URL']);
+                                                    }
+                                                }
+                                            } catch (Exception $e) {
+                                                cron_log($e->getMessage());
+                                            }
+
+                                            if ($attachment_ID) {
+                                                if (!in_array($attachment_ID, $luckins_images)) {
+                                                    $luckins_images[] = $attachment_ID;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                //Sort images...
+                $epimFirst = false;
+                $epim_prioritise_epim_images = get_option('epim_prioritise_epim_images');
+                if (is_array($epim_prioritise_epim_images)) {
+                    if ($epim_prioritise_epim_images['checkbox_value'] == 1) {
+                        $epimFirst = true;
+                    }
+                }
+                if ($epimFirst) {
+                    $image_attachment_ids = array_merge($epim_images, $luckins_images);
+                } else {
+                    $image_attachment_ids = array_merge($luckins_images, $epim_images);
+                }
+
+                //cron_log(print_r($image_attachment_ids,true));;
+
+                //Link images....
+                if (is_array($image_attachment_ids)) {
+                    if (count($image_attachment_ids) > 0) {
+                        $objProduct = wc_get_product($product_post);
+
+                        if ($objProduct) {
+                            if (is_wp_error($objProduct)) {
+                                cron_log($objProduct->get_error_message());
+                            } else {
+                                $objProduct->set_image_id(null);
+                                $objProduct->set_gallery_image_ids(null);
+                                $objProduct->set_image_id($image_attachment_ids[0]);
+                                if (count($image_attachment_ids) > 1) {
+                                    $p_count = 0;
+                                    $productGallery = array();
+                                    foreach ($image_attachment_ids as $image_attachment_id) {
+                                        if ($p_count != 0) {
+                                            $productGallery[] = $image_attachment_id;
+                                        }
+                                        $p_count++;
+                                    }
+                                    $objProduct->set_gallery_image_ids($productGallery);
+                                }
+                                $product_id = $objProduct->save();
+                                cron_log('Product ID: '.$product_id . ' images linked.');
+                            }
+                        }
+                    }
+
+                }
+            } else {
+                cron_log('wc_get_product return false or null for Post ID: ' . $product_post);
+            }
+
+            array_shift($product_set_data);
+            $time_now = microtime(true);
+            if (($time_now - $time_start >= $epim_background_updates_max_run_time)) {
+                update_option('_epim_background_process_data', $product_set_data);
+                return 1;
+            }
+        }
+    }
+    update_option('_epim_background_current_index', 0);
+    update_option('_epim_background_process_data', '');
+    update_option('_epim_background_attribute_data', '');
+    update_option('_epim_background_product_attribute_data', '');
+
+    return 2;
 }
