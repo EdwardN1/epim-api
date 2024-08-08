@@ -144,7 +144,7 @@ function epimapi_get_all_products()
         cron_log('ePim is not returning valid JSON, trying to get all products.');
         return 0;
     }
-    if(count($variations)>0) {
+    if (count($variations) > 0) {
         cron_log('Found ' . count($variations) . ' products to import');
         update_option('_epim_background_process_data', $variations);
         return 2;
@@ -155,14 +155,15 @@ function epimapi_get_all_products()
 }
 
 //0: Failed/Stopped/Nothing to do | 1: Still running | 2: Finished
-function epimapi_import_products() {
+function epimapi_import_products()
+{
     $epim_update_running = get_option('_epim_update_running');
     $time_start = microtime(true);
     $epim_background_updates_max_run_time = get_option('epim_background_updates_max_run_time');
     $all_variations = get_option('_epim_background_process_data');
     $i = 1;
 
-    if(!is_array($all_variations)) {
+    if (!is_array($all_variations)) {
         return 0;
     }
 
@@ -223,7 +224,8 @@ function epimapi_import_products() {
 }
 
 //0: Failed/Stopped/Nothing to do | 1: Still running | 2: Finished
-function epimapi_sort_attributes() {
+function epimapi_sort_attributes()
+{
     update_option('_epim_update_running', 'Sorting Attributes');
     $args = array('post_type' => 'product', 'posts_per_page' => -1);
     $product_posts = get_posts($args);
@@ -470,7 +472,8 @@ function epimapi_sort_attributes() {
 }
 
 //0: Failed/Stopped/Nothing to do | 1: Still running | 2: Finished
-function epimapi_link_attributes() {
+function epimapi_link_attributes()
+{
     update_option('_epim_update_running', 'Linking attributes to products');
     $time_start = microtime(true);
     $epim_background_updates_max_run_time = get_option('epim_background_updates_max_run_time');
@@ -478,7 +481,7 @@ function epimapi_link_attributes() {
     $product_link_data_2 = get_option('_epim_background_attribute_data');
     $product_link_data_3 = get_option('_epim_background_product_attribute_data');
 
-    if(($product_link_data=='')&&($product_link_data_2=='')&&($product_link_data_3=='')) return 0;
+    if (($product_link_data == '') && ($product_link_data_2 == '') && ($product_link_data_3 == '')) return 0;
 
     $product_set_data = $product_link_data;
     $i = 0;
@@ -620,7 +623,8 @@ function epimapi_link_attributes() {
 }
 
 //0: Failed/Stopped/Nothing to do | 1: Still running | 2: Finished
-function epimapi_import_images() {
+function epimapi_import_images()
+{
 
     $epim_update_running = get_option('_epim_update_running');
     $time_start = microtime(true);
@@ -679,6 +683,7 @@ function epimapi_import_images() {
                 //luckins images
                 if ($variation['LuckinsAssets']) {
                     if (is_array($variation['LuckinsAssets'])) {
+                        $datasheets = array();
                         foreach ($variation['LuckinsAssets'] as $luckinsAsset) {
                             if (is_array($luckinsAsset)) {
                                 if (array_key_exists('Tag', $luckinsAsset)) {
@@ -702,10 +707,22 @@ function epimapi_import_images() {
                                                     $luckins_images[] = $attachment_ID;
                                                 }
                                             }
+                                        } else {
+                                            if ($luckinsAsset['FileType'] == 'FILETYPE_PDF') {
+                                                cron_log('Adding datasheet - ' . $luckinsAsset['URL']);
+                                                $dataSheet = array();
+                                                $dataSheet['Name'] = $luckinsAsset['AdditionalInfo'];
+                                                $dataSheet['URL'] = $luckinsAsset['URL'];
+                                                $datasheets[] = $dataSheet;
+                                            }
+
                                         }
                                     }
                                 }
                             }
+                        }
+                        if(count($datasheets)>0) {
+                            update_post_meta($product_post,'_epim_data_sheets',$datasheets);
                         }
                     }
                 }
@@ -750,7 +767,7 @@ function epimapi_import_images() {
                                     $objProduct->set_gallery_image_ids($productGallery);
                                 }
                                 $product_id = $objProduct->save();
-                                cron_log('Product ID: '.$product_id . ' images linked.');
+                                cron_log('Product ID: ' . $product_id . ' images linked.');
                             }
                         }
                     }

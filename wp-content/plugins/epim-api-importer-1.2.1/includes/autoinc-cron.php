@@ -133,7 +133,7 @@ function epimaapi_update_every_minute()
     if (($epim_update_running == 'Preparing to process ePim categories') || (substr($epim_update_running, 0, 44) === "Processing categories - Restarting at Index:")) {
         cron_log('Starting or resuming process ePim categories');
 
-        /*update_option('_epim_update_running', 'Preparing to Import Images');
+       /* update_option('_epim_update_running', 'Preparing to Import Images');
         return;*/
 
         switch (epimapi_process_categories()) {

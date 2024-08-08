@@ -261,7 +261,8 @@ function epim_options_page()
                             <label for="start_date" style="font-weight: bold;">Update by product changed since:</label>
 
                         </td>
-                        <td style="padding-bottom: 0;">NB Only updates products which have already been imported.</td>
+                        <!--<td style="padding-bottom: 0;">NB Only updates products which have already been imported.</td>-->
+                        <td></td>
 
                     </tr>
                     <tr>
@@ -422,10 +423,8 @@ function epim_options_page()
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="padding-left: 0; padding-top: 0;">This will only update existing
-                            products. If you have added new products in ePim then you need to Create them using either
-                            of the
-                            two options below first.
+                        <td colspan="2" style="padding-left: 0; padding-top: 0;">This will only update
+                            products, not import new ones.
                             <hr>
                         </td>
                     </tr>
@@ -442,22 +441,20 @@ function epim_options_page()
                             ePim, Create and Update those first as per below.
                             <hr>
                         </td>
-                    </tr>
+                    </tr>-->
                     <tr>
                         <td colspan="2">
                             <button id="CreateCategories" class="button">Create and Update Categories</button>&nbsp;
                             &nbsp;<span class="modal CreateCategories"><img
-                                        src="<?php /*echo epimaapi_PLUGINURI; */?>/assets/img/FhHRx.gif"></span>
+                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="padding-left: 0; padding-top: 0;">Creates and Updates All Categories. You
-                            should run this before the above 2 options if you have added or updated any category
-                            information.
+                        <td colspan="2" style="padding-left: 0; padding-top: 0;">Creates and Updates All Categories.
                             <hr>
                         </td>
                     </tr>
-                    <tr>
+                    <!--<tr>
                         <td colspan="2">
                             <button id="CreateAllProducts" class="button">Create and Update all Products</button>&nbsp;
                             &nbsp;<span class="modal CreateAllProducts"><img
