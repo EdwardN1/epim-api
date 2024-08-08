@@ -92,6 +92,8 @@ function epim_register_settings()
     add_option('_epim_background_current_index', 0);
     add_option('_epim_background_last_index', 0);
     add_option('_epim_background_stop_update', 0);
+    add_option('_epim_products_to_process','');
+    add_option('_epim_cron_busy','');
 }
 
 add_action('admin_init', 'epim_register_settings');
@@ -702,11 +704,11 @@ function epim_options_page()
                                    class="regular-text"/>
                             <p>Maximum recommended setting 450</p></td>
                     </tr>
-                    <tr>
+                   <!-- <tr>
                         <td colspan="2">
                             <button id="ClearProducts" class="button">Clear Products</button>&nbsp;
                             &nbsp;<span class="modal ClearProducts"><img
-                                        src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                                        src="<?php /*echo epimaapi_PLUGINURI; */?>/assets/img/FhHRx.gif"></span>
                         </td>
                     </tr>
                     <tr>
@@ -715,7 +717,7 @@ function epim_options_page()
                             WooCommerce.
                             <hr>
                         </td>
-                    </tr>
+                    </tr>-->
 
 
                 </table>
