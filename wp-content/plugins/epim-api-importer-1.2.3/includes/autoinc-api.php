@@ -1397,6 +1397,10 @@ function epimaapi_create_basic_product( $productID, $variationID, $productBullet
                 $res .= $vname . ' Created<br>';
             }
             $products_to_process = get_option('_epim_products_to_process');
+            if($products_to_process == '') $products_to_process = array();
+            if(!is_array($products_to_process)) $products_to_process = array();
+            $products_to_process[] = $newProductID;
+            update_option('_epim_products_to_process', $products_to_process);
         } else {
             $res .= 'There was a problem creating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
         }
@@ -1414,6 +1418,11 @@ function epimaapi_create_basic_product( $productID, $variationID, $productBullet
             } else {
                 $res .= $vname . ' Updated<br>';
             }
+            $products_to_process = get_option('_epim_products_to_process');
+            if($products_to_process == '') $products_to_process = array();
+            if(!is_array($products_to_process)) $products_to_process = array();
+            $products_to_process[] = $id;
+            update_option('_epim_products_to_process', $products_to_process);
         } else {
             $res .= 'There was a problem updating productID: ' . $productID . ' variationID: ' . $variationID . '<br>';
         }

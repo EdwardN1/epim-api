@@ -174,6 +174,8 @@ function epimapi_import_products()
         $variations = array_slice($all_variations, $i);
         $cLeft = count($variations);
         cron_log('Restarting at index: ' . $i . ' There are ' . $cLeft . ' variations still to process');
+    } else {
+        update_option('_epim_products_to_process','');
     }
 
     update_option('_epim_update_running', 'Importing ' . $c . ' Products');
@@ -228,7 +230,7 @@ function epimapi_sort_attributes()
 {
     update_option('_epim_update_running', 'Sorting Attributes');
     $args = array('post_type' => 'product', 'posts_per_page' => -1);
-    $product_posts = get_posts($args);
+    $product_posts = get_option('_epim_products_to_process');
     $product_link_data = array();
     cron_log('Setting Attributes for ' . count($product_posts) . ' products');
     if (!empty($product_posts)) {
@@ -247,7 +249,7 @@ function epimapi_sort_attributes()
             }
         }
         foreach ($product_posts as $product_post) {
-            $wc_metaData = get_post_meta($product_post->ID, '', true);
+            $wc_metaData = get_post_meta($product_post, '', true);
             if ($wc_metaData) $epim_api_variation_data = $wc_metaData['epim_api_variation_data'][0];
             $variation = json_decode($epim_api_variation_data);
             $product_attributes = array();
@@ -410,7 +412,7 @@ function epimapi_sort_attributes()
             if (!empty($product_attributes)) {
                 //cron_log(print_r($product_attributes,true));
                 $product_link_datum = array();
-                $product_link_datum['id'] = $product_post->ID;
+                $product_link_datum['id'] = $product_post;
                 $product_link_datum['attributes'] = $product_attributes;
                 $product_link_data[] = $product_link_datum;
             }
@@ -632,7 +634,7 @@ function epimapi_import_images()
 
     if ($epim_update_running == 'Preparing to Import Images') {
         $args = array('post_type' => 'product', 'posts_per_page' => -1, 'fields' => 'ids');
-        $product_posts = get_posts($args);
+        $product_posts = get_option('_epim_products_to_process');
         $product_set_data = $product_posts;
     } else {
         $product_posts = get_option('_epim_background_process_data');

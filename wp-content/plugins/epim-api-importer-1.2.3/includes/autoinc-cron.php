@@ -143,7 +143,7 @@ function epimaapi_update_every_minute()
         return;
     }
 
-    cron_log('Running epimaapi_update_every_minute');
+    //cron_log('Running epimaapi_update_every_minute');
 
     $epim_background_stop_update = get_option('_epim_background_stop_update');
     if ($epim_background_stop_update == 1) {
@@ -321,11 +321,11 @@ function epimaapi_update_every_minute()
                 update_option('_epim_background_current_index', 0);
         }
         update_option('_epim_cron_busy', '');
+        update_option('_epim_products_to_process','');
         return;
 
     }
 
-    //update_option('_epim_cron_busy', '');
 
 }
 
