@@ -128,28 +128,28 @@ function epimaapi_update_every_minute()
         wp_schedule_event(strtotime('04:00:00'), 'daily', 'epimaapi_update_luckins_daily_action');
     }*/
 
+    //update_option('_epim_cron_busy', '');
+
     if (!wp_next_scheduled('epimaapi_update_daily_action')) {
         wp_schedule_event(strtotime('22:20:00'), 'daily', 'epimaapi_update_daily_action');
     }
 
-    //cron_log(print_r(_get_cron_array(),true));
 
-    if(get_option('_epim_cron_busy') == '1') return;
 
     set_time_limit(0);
     $epim_update_running = get_option('_epim_update_running');
 
     if ($epim_update_running == '') {
         update_option('_epim_cron_busy', '');
+        cron_log('No updates to run');
         return;
     }
 
     cron_log('Running epimaapi_update_every_minute');
 
-    update_option('_epim_cron_busy', '1');
-
     $epim_background_stop_update = get_option('_epim_background_stop_update');
     if ($epim_background_stop_update == 1) {
+        cron_log('Stopping updates');
         update_option('_epim_update_running', '');
         update_option('_epim_background_stop_update', 0);
         update_option('_epim_background_current_index', 0);
@@ -162,11 +162,18 @@ function epimaapi_update_every_minute()
         return;
     }
 
+    if(get_option('_epim_cron_busy') == '1') {
+        cron_log('Currently '.$epim_update_running);
+        return;
+    }
+
     if (($epim_update_running == 'Preparing to process ePim categories') || (substr($epim_update_running, 0, 44) === "Processing categories - Restarting at Index:")) {
         cron_log('Starting or resuming process ePim categories');
 
        /* update_option('_epim_update_running', 'Preparing to Import Images');
         return;*/
+
+        update_option('_epim_cron_busy', '1');
 
         switch (epimapi_process_categories()) {
             case 1:
@@ -186,6 +193,7 @@ function epimaapi_update_every_minute()
     }
 
     if (($epim_update_running == 'Preparing to Sort Categories') || (substr($epim_update_running, 0, 41) === "Sorting categories - Restarting at Index:")) {
+        update_option('_epim_cron_busy', '1');
         cron_log('Sorting Categories');
         switch (epimapi_sort_categories()) {
             case 1:
@@ -204,10 +212,8 @@ function epimaapi_update_every_minute()
         return;
     }
 
-    $time_start = microtime(true);
-    $epim_background_updates_max_run_time = get_option('epim_background_updates_max_run_time');
-
     if ($epim_update_running == 'Categories Updated and Sorted') {
+        update_option('_epim_cron_busy', '1');
         cron_log('Getting All Products to Import');
 
         switch (epimapi_get_all_products()) {
@@ -228,6 +234,8 @@ function epimaapi_update_every_minute()
     }
 
     if (($epim_update_running == 'Preparing to import products') || (substr($epim_update_running, 0, 41) === "Importing Products - Restarting at Index:")) {
+
+        update_option('_epim_cron_busy', '1');
 
         cron_log('Importing Products');
 
@@ -251,6 +259,8 @@ function epimaapi_update_every_minute()
 
     if ($epim_update_running == 'Preparing to Sort attributes') {
 
+        update_option('_epim_cron_busy', '1');
+
         switch (epimapi_sort_attributes()) {
             case 1:
                 cron_log(get_option('_epim_update_running'));
@@ -270,6 +280,8 @@ function epimaapi_update_every_minute()
     }
 
     if (($epim_update_running == 'Preparing to link attributes to products') || ($epim_update_running == 'Restarting linking attributes to products')) {
+
+        update_option('_epim_cron_busy', '1');
 
         update_option('_epim_update_running', 'Linking attributes to products');
 
@@ -294,6 +306,7 @@ function epimaapi_update_every_minute()
 
     if (($epim_update_running == 'Preparing to Import Images') || ($epim_update_running == 'Restarting Import of Images')) {
 
+        update_option('_epim_cron_busy', '1');
 
         switch (epimapi_import_images()) {
             case 1:
@@ -314,6 +327,7 @@ function epimaapi_update_every_minute()
 
     }
 
+    //update_option('_epim_cron_busy', '');
 
 }
 
