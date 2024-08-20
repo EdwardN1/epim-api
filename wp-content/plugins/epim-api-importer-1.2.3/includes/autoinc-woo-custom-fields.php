@@ -333,8 +333,8 @@ function woocommerce_process_product_meta_fields_save( $post_id ){
 	update_post_meta( $post_id, 'epim_Qty_Break_3', $epim_Qty_Break_3 );
 	$epim_Qty_Price_3 =  sanitize_text_field($_POST['epim_Qty_Price_3']);
 	update_post_meta( $post_id, 'epim_Qty_Price_3', $epim_Qty_Price_3 );
-    $epim_api_variation_data =  sanitize_text_field($_POST['epim_api_variation_data']);
-    update_post_meta( $post_id, 'epim_api_variation_data', $epim_api_variation_data );
+    /*$epim_api_variation_data =  sanitize_text_field($_POST['epim_api_variation_data']);
+    update_post_meta( $post_id, 'epim_api_variation_data', $epim_api_variation_data );*/
     $epim_Part_Code =  sanitize_text_field($_POST['epim_Part_Code']);
     update_post_meta( $post_id, 'epim_Part_Code', $epim_Part_Code );
 }

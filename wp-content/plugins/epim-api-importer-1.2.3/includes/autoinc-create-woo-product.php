@@ -381,7 +381,12 @@ function epimaapi_wooCreateProduct_ex( $pid, $productArray ) {
 				if ( is_array( $data ) ) {
 					if ( array_key_exists( 'meta_key', $data ) ) {
 						if ( array_key_exists( 'meta_data', $data ) ) {
-							update_post_meta( $product_id, $data['meta_key'], $data['meta_data'] );
+                            if($data['meta_key']=='epim_api_variation_data') {
+                                update_post_meta( $product_id, $data['meta_key'], wp_slash($data['meta_data']));
+                            } else {
+                                update_post_meta( $product_id, $data['meta_key'], $data['meta_data'] );
+                            }
+
 						}
 					}
 				}

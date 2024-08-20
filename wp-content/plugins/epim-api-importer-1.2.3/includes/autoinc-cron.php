@@ -139,7 +139,7 @@ function epimaapi_update_every_minute()
 
     if ($epim_update_running == '') {
         update_option('_epim_cron_busy', '');
-        cron_log('No updates to run');
+        cron_log('Checking for Updates - No updates to run');
         return;
     }
 

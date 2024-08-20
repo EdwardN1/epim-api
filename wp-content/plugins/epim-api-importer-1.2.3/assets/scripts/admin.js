@@ -305,6 +305,7 @@ adminJQ(function ($) {
         $('.modal.StopCurrentUpdate').removeClass('active');
         $('.modal.BackgroundUpdateSince').removeClass('active');
         $('.modal.BackgroundUnfreezeQueue').removeClass('active');
+        $('.modal.BackgroundImportByID').removeClass('active');
     }, function (action, request, data) {
         _o(data);
     });
@@ -634,6 +635,14 @@ adminJQ(function ($) {
         let iso = dateUtc.toISOString();
         $('.modal.BackgroundUpdateSince').addClass('active');
         backgroundUpdateQueue.queue(ajaxurl,{action: 'get_background_changed_products_since', timeCode: iso});
+        backgroundUpdateQueue.process();
+
+    });
+
+    $('#BackgroundImportByID').on('click',function () {
+        backgroundUpdateQueue.reset();
+        $('.modal.BackgroundImportByID').addClass('active');
+        backgroundUpdateQueue.queue(ajaxurl,{action: 'import_by_variation_id', variation_id: $('#variation_id').val()});
         backgroundUpdateQueue.process();
 
     });

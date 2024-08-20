@@ -154,6 +154,68 @@ function epimapi_get_all_products()
     }
 }
 
+function epimapi_get_one_variation($variation_id) {
+    $api_variation = json_decode(get_epimaapi_variation($variation_id),true);
+    if (json_last_error() == JSON_ERROR_NONE) {
+        if (is_array($api_variation)) {
+            cron_log(print_r($api_variation, true));
+            if (array_key_exists('Id', $api_variation)) {
+                if(array_key_exists('ProductId',$api_variation)) {
+                    $api_product = json_decode(get_epimaapi_product($api_variation['ProductId']),true);
+                    if (json_last_error() == JSON_ERROR_NONE) {
+                        if(is_array($api_product)) {
+                            if (array_key_exists('Id', $api_product)) {
+                                $variations = array();
+                                $categories = array();
+                                $pictures = array();
+                                if (array_key_exists('CategoryIds', $api_product)) {
+                                    $categories = $api_product['CategoryIds'];
+                                }
+                                if (array_key_exists('PictureIds', $api_product)) {
+                                    $pictures = $api_product['PictureIds'];
+                                }
+                                $variation = array();
+                                $variation['productID'] = $api_product['Id'];
+                                $variation['variationID'] = $variation_id;
+                                $variation['productBulletText'] = $api_product['BulletText'];
+                                $variation['productName'] = $api_product['Name'];
+                                $variation['categoryIds'] = $categories;
+                                $variation['pictureIds'] = $pictures;
+                                $variations[] = $variation;
+                                cron_log('Found ' . count($variations) . ' products to import');
+                                update_option('_epim_background_process_data', $variations);
+                                return 2;
+                            } else {
+                                cron_log('Cannot get product group for (Product group lookup failed) '.$variation_id);
+                                return 0;
+                            }
+                        } else {
+                            cron_log('Product Group '.$api_variation['ProductId'] . ' not found');
+                            return 0;
+                        }
+                    } else {
+                        cron_log('Cannot get product group for '.$api_variation['ProductId']. ' API call failed');
+                        return 0;
+                    }
+                } else {
+                    cron_log('Cannot get product group for '.$variation_id);
+                    return 0;
+                }
+            } else {
+                cron_log('Variation: '.$variation_id . ' API request failed');
+                return 0;
+            }
+        } else {
+            cron_log($variation_id . ' not found');
+            return 0;
+        }
+    } else {
+        cron_log('ePim is not returning valid JSON, trying to get all products.');
+        return 0;
+    }
+
+}
+
 //0: Failed/Stopped/Nothing to do | 1: Still running | 2: Finished
 function epimapi_import_products()
 {

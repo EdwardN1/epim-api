@@ -62,12 +62,28 @@ add_action('wp_ajax_stop_background_update', 'ajax_epimaapi_stop_background_upda
 add_action('wp_ajax_get_background_changed_products_since', 'ajax_get_epimaapi_background_changed_products_since');
 add_action('wp_ajax_force_background_update', 'ajax_epimaapi_force_background_update');
 add_action('wp_ajax_unfreeze_queue', 'ajax_epimaapi_unfreeze_queue');
+add_action('wp_ajax_import_by_variation_id', 'ajax_epimaapi_import_by_variation_id');
 
 add_action('wp_ajax_divi_write_css_file', 'ajax_epimaapi_divi_write_css_file');
 add_action('wp_ajax_divi_build_category_menu', 'ajax_epimaapi_divi_build_category_menu');
 
 
 add_action('wp_ajax_cron_tail', 'ajax_epimaapi_cron_tail');
+
+
+function ajax_epimaapi_import_by_variation_id() {
+    epimaapi_checkSecure();
+    if($_POST['variation_id']) {
+        if(epimapi_get_one_variation($_POST['variation_id'])==2) {
+            update_option('_epim_update_running', 'Preparing to import products');
+            cron_log('Preparing to import products');
+        }
+    } else {
+        cron_log('ID not entered');
+    }
+    exit;
+}
+
 
 function ajax_epimaapi_divi_build_category_menu() {
     epimaapi_checkSecure();
