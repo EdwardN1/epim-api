@@ -562,6 +562,7 @@ function swp_daily_menus()
             $api_root = get_sub_field('api_root');
             $product_link_root = get_sub_field('product_link_root');
             $products_name = get_sub_field('products_name');
+            $products_translation = strtolower(get_sub_field('products_name'));
             $JSON = swp_make_api_call($api_root);
             $primary_menu_name = false;
             //error_log($language . ' - ' . $wpml_extension);
@@ -575,6 +576,7 @@ function swp_daily_menus()
                     $menu_id = $locations[$menu_name];
                     $menu = wp_get_nav_menu_object($menu_id);
                     $menu_items = wp_get_nav_menu_items($menu);
+
 
                     $primary_menu_name = $menu->name;
 
@@ -590,7 +592,7 @@ function swp_daily_menus()
                             $productsID = wp_update_nav_menu_item($menu->term_id, 0, array(
                                 'menu-item-title' => __($products_name),
                                 'menu-item-classes' => 'swp_product_menu_item',
-                                'menu-item-url' => $product_link_root . 'professional/products/',
+                                'menu-item-url' => $product_link_root . 'professional/'.$products_translation.'/',
                                 'menu-item-status' => 'publish'
                             ));
                         }
@@ -628,7 +630,7 @@ function swp_daily_menus()
                                     $cat_menu_id = wp_update_nav_menu_item($menu->term_id, 0, array(
                                         'menu-item-title' => __($menu_name),
                                         'menu-item-classes' => 'swp_product_menu_item',
-                                        'menu-item-url' => $product_link_root . 'professional/products/' . $cat_slug,
+                                        'menu-item-url' => $product_link_root . 'professional/'.$products_translation.'/' . $cat_slug,
                                         'menu-item-parent-id' => $productsID,
                                         'menu-item-status' => 'publish'
                                     ));
@@ -637,7 +639,7 @@ function swp_daily_menus()
                                         wp_update_nav_menu_item($menu->term_id, 0, array(
                                             'menu-item-title' => __($menu_item['Name']),
                                             'menu-item-classes' => 'swp_product_menu_item',
-                                            'menu-item-url' => $product_link_root . 'professional/products/' . $cat_slug . '/' . $menu_item['URL'] . '/',
+                                            'menu-item-url' => $product_link_root . 'professional/'.$products_translation.'/' . $cat_slug . '/' . $menu_item['URL'] . '/',
                                             'menu-item-parent-id' => $cat_menu_id,
                                             'menu-item-status' => 'publish'
                                         ));
