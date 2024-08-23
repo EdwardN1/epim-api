@@ -263,9 +263,13 @@ function epimaapi_background_import_products_from( $timecode ) {
 	}
     if(count($variations )>0) {
         update_option( '_epim_background_process_data', $variations );
-        update_option( '_epim_update_running', 'Preparing to import products' );
-        cron_log( 'Found ' . count( $variations ) . ' products to import' );
-        cron_log( 'Preparing to import products' );
+        if(epimaapi_load_category_data()) {
+            update_option('_epim_update_running', 'Preparing to process ePim categories');
+            cron_log( 'Found ' . count( $variations ) . ' products to import' );
+            cron_log('Checking Category Data');
+        } else {
+            cron_log('Failed to load Category Data');
+        }
     } else {
         update_option( '_epim_update_running', '' );
         cron_log('No products to update');
@@ -274,17 +278,24 @@ function epimaapi_background_import_products_from( $timecode ) {
 }
 
 function epimaapi_background_import_all_start() {
-	$jsonResponse = get_epimaapi_all_categories();
-	$response     = json_decode( $jsonResponse, true );
-	if ( json_last_error() == JSON_ERROR_NONE ) {
-		$epim_update_running = 'Preparing to process ePim categories';
-		update_option( '_epim_update_running', $epim_update_running );
-		update_option( '_epim_background_process_data', $response );
+    if(epimaapi_load_category_data()) {
+        $epim_update_running = 'Getting All Products to Import';
+        update_option( '_epim_update_running', $epim_update_running );
+        return $epim_update_running;
+    } else {
+        return 'ePim is not returning valid JSON, getting all categories.';
+    }
+}
 
-		return $epim_update_running;
-	} else {
-		return 'ePim is not returning valid JSON, getting all categories.';
-	}
+function epimaapi_load_category_data() {
+    $jsonResponse = get_epimaapi_all_categories();
+    $response     = json_decode( $jsonResponse, true );
+    if ( json_last_error() == JSON_ERROR_NONE ) {
+        update_option( '_epim_background_category_data', $response );
+        return true;
+    } else {
+        return false;
+    }
 }
 
 function epim_api_background_remove_epim_images_start() {

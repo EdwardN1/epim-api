@@ -75,8 +75,13 @@ function ajax_epimaapi_import_by_variation_id() {
     epimaapi_checkSecure();
     if($_POST['variation_id']) {
         if(epimapi_get_one_variation($_POST['variation_id'])==2) {
-            update_option('_epim_update_running', 'Preparing to import products');
-            cron_log('Preparing to import products');
+            if(epimaapi_load_category_data()) {
+                update_option('_epim_update_running', 'Preparing to process ePim categories');
+                cron_log('Checking Category Data');
+            } else {
+                cron_log('Failed to load Category Data');
+            }
+
         }
     } else {
         cron_log('ID not entered');
@@ -169,6 +174,7 @@ function ajax_epimaapi_force_background_update()
         ftruncate($f, 0);
         fclose($f);
     }
+    cron_log('Getting all products to import');
     echo epimaapi_background_import_all_start();
     exit;
 }
@@ -231,8 +237,16 @@ function ajax_epimaapi_stop_background_update()
     epimaapi_checkSecure();
 
     update_option('_epim_update_running', '');
-    update_option('_epim_background_stop_update',1);
+    update_option('_epim_background_stop_update', 1);
     update_option('_epim_background_current_index', 0);
+    update_option('_epim_background_last_index', 0);
+    update_option('_epim_background_product_attribute_data', '');
+    update_option('_epim_background_process_data', '');
+    update_option('_epim_background_attribute_data', '');
+    update_option('_epim_background_product_attribute_data', '');
+    update_option('_epim_background_category_data','');
+    update_option('_epim_products_to_process','');
+    update_option('_epim_cron_busy', '');
 
     echo 'Current Update Stopped';
     exit;

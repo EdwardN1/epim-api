@@ -3,12 +3,12 @@
 //0: Failed/Stopped/Nothing to do | 1: Still running | 2: Finished
 function epimapi_process_categories()
 {
-    $epim_background_process_data = get_option('_epim_background_process_data');
+    $epim_background_process_data = get_option('_epim_background_category_data');
 
     if (is_array($epim_background_process_data)) {
 
-        $time_start = microtime(true);
-        $epim_background_updates_max_run_time = get_option('epim_background_updates_max_run_time');
+        //$time_start = microtime(true);
+        //$epim_background_updates_max_run_time = get_option('epim_background_updates_max_run_time');
         $i = 1;
         $c = count($epim_background_process_data);
 
@@ -34,10 +34,10 @@ function epimapi_process_categories()
             }
             $i++;
             $time_now = microtime(true);
-            if (($time_now - $time_start >= $epim_background_updates_max_run_time)) {
+            /*if (($time_now - $time_start >= $epim_background_updates_max_run_time)) {
                 update_option('_epim_update_running', 'Processing categories - Restarting at Index: ' . $i . '/' . $c);
                 return 1;
-            }
+            }*/
             update_option('_epim_update_running', $epim_update_running);
         }
         return 2;
@@ -56,7 +56,7 @@ function epimapi_sort_categories()
     ]);
     $i = 1;
     $c = count($terms);
-    $time_start = microtime(true);
+    //$time_start = microtime(true);
     $epim_background_updates_max_run_time = get_option('epim_background_updates_max_run_time');
     foreach ($terms as $term) {
         if (get_option('_epim_update_running') == '') {
@@ -88,12 +88,12 @@ function epimapi_sort_categories()
             update_option('_epim_background_current_index', $i - 1);
         }
         $i++;
-        $time_now = microtime(true);
+        /*$time_now = microtime(true);
         if (($time_now - $time_start >= $epim_background_updates_max_run_time)) {
             cron_log('Sorting categories - Restarting at Index: ' . $i . '/' . $c);
             update_option('_epim_update_running', 'Sorting categories - Restarting at Index: ' . $i . '/' . $c);
             return 1;
-        }
+        }*/
         cron_log($epim_update_running);
         update_option('_epim_update_running', $epim_update_running);
     }
@@ -158,7 +158,7 @@ function epimapi_get_one_variation($variation_id) {
     $api_variation = json_decode(get_epimaapi_variation($variation_id),true);
     if (json_last_error() == JSON_ERROR_NONE) {
         if (is_array($api_variation)) {
-            cron_log(print_r($api_variation, true));
+            //cron_log(print_r($api_variation, true));
             if (array_key_exists('Id', $api_variation)) {
                 if(array_key_exists('ProductId',$api_variation)) {
                     $api_product = json_decode(get_epimaapi_product($api_variation['ProductId']),true);
@@ -247,7 +247,10 @@ function epimapi_import_products()
         $limit_loop = 0;
         foreach ($variations as $variation) {
             if (get_option('_epim_update_running') == '') {
-                return;
+                break;
+            }
+            if (get_option('_epim_background_stop_update')=='1') {
+                break;
             }
             update_option('_epim_update_running', 'Importing product ' . $i . '/' . $c);
             if ($i >= get_option('_epim_background_current_index')) {
@@ -280,6 +283,8 @@ function epimapi_import_products()
         return 0;
     }
     cron_log('Products Imported.');
+    if(get_option('_epim_update_running') == '') return 0;
+    if (get_option('_epim_background_stop_update')=='1') return 0;
     update_option('_epim_background_process_data', '');
     update_option('_epim_background_current_index', 0);
     return 2;

@@ -139,7 +139,17 @@ function epimaapi_update_every_minute()
 
     if ($epim_update_running == '') {
         update_option('_epim_cron_busy', '');
-        cron_log('Checking for Updates - No updates to run');
+        update_option('_epim_background_stop_update', 0);
+        update_option('_epim_background_current_index', 0);
+        update_option('_epim_background_last_index', 0);
+        update_option('_epim_background_product_attribute_data', '');
+        update_option('_epim_background_process_data', '');
+        update_option('_epim_background_attribute_data', '');
+        update_option('_epim_background_product_attribute_data', '');
+        update_option('_epim_background_category_data','');
+        update_option('_epim_products_to_process','');
+        update_option('_epim_cron_busy', '');
+        //cron_log('Checking for Updates - No updates to run');
         return;
     }
 
@@ -156,6 +166,8 @@ function epimaapi_update_every_minute()
         update_option('_epim_background_process_data', '');
         update_option('_epim_background_attribute_data', '');
         update_option('_epim_background_product_attribute_data', '');
+        update_option('_epim_background_category_data','');
+        update_option('_epim_products_to_process','');
         update_option('_epim_cron_busy', '');
         return;
     }
@@ -165,8 +177,8 @@ function epimaapi_update_every_minute()
         return;
     }
 
-    if (($epim_update_running == 'Preparing to process ePim categories') || (substr($epim_update_running, 0, 44) === "Processing categories - Restarting at Index:")) {
-        cron_log('Starting or resuming process ePim categories');
+    if (($epim_update_running == 'Preparing to process ePim categories') /*|| (substr($epim_update_running, 0, 44) === "Processing categories - Restarting at Index:")*/) {
+        cron_log('Processing ePim categories');
 
        /* update_option('_epim_update_running', 'Preparing to Import Images');
         return;*/
@@ -179,18 +191,21 @@ function epimaapi_update_every_minute()
                 break;
             case 2:
                 update_option('_epim_update_running', 'Preparing to Sort Categories');
+                cron_log('Preparing to sort categories');
                 update_option('_epim_background_current_index', 0);
                 break;
             default:
                 update_option('_epim_update_running', '');
-                update_option('_epim_background_process_data', '');
+                update_option('_epim_background_category_data','');
                 update_option('_epim_background_current_index', 0);
         }
         update_option('_epim_cron_busy', '');
         return;
     }
 
-    if (($epim_update_running == 'Preparing to Sort Categories') || (substr($epim_update_running, 0, 41) === "Sorting categories - Restarting at Index:")) {
+
+
+    if (($epim_update_running == 'Preparing to Sort Categories') /*|| (substr($epim_update_running, 0, 41) === "Sorting categories - Restarting at Index:")*/) {
         update_option('_epim_cron_busy', '1');
         cron_log('Sorting Categories');
         switch (epimapi_sort_categories()) {
@@ -198,19 +213,21 @@ function epimaapi_update_every_minute()
                 cron_log(get_option('_epim_update_running'));
                 break;
             case 2:
-                update_option('_epim_update_running', 'Categories Updated and Sorted');
+                update_option('_epim_update_running', 'Preparing to import products');
+                cron_log('Preparing to import products');
+                update_option('_epim_background_category_data','');
                 update_option('_epim_background_current_index', 0);
                 break;
             default:
                 update_option('_epim_update_running', '');
-                update_option('_epim_background_process_data', '');
+                update_option('_epim_background_category_data','');
                 update_option('_epim_background_current_index', 0);
         }
         update_option('_epim_cron_busy', '');
         return;
     }
 
-    if ($epim_update_running == 'Categories Updated and Sorted') {
+    if ($epim_update_running == 'Getting All Products to Import') {
         update_option('_epim_cron_busy', '1');
         cron_log('Getting All Products to Import');
 
@@ -219,8 +236,8 @@ function epimaapi_update_every_minute()
                 cron_log(get_option('_epim_update_running'));
                 break;
             case 2:
-                update_option('_epim_update_running', 'Preparing to import products');
-                cron_log('Preparing to import products');
+                update_option('_epim_update_running', 'Preparing to process ePim categories');
+                cron_log('Preparing to process ePim categories');
                 break;
             default:
                 update_option('_epim_update_running', '');

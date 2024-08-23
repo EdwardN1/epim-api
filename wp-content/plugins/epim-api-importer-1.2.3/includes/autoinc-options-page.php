@@ -86,6 +86,7 @@ function epim_register_settings()
 
     add_option('_epim_update_running', '');
     add_option('_epim_background_process_data', '');
+    add_option('_epim_background_category_data', '');
     add_option('_epim_background_attribute_data', '');
     add_option('_epim_background_product_attribute_data', '');
     add_option('_epim_background_last_process_data', '');
@@ -223,6 +224,7 @@ endif;
                 <td><strong>_epim_background_current_index</strong></td>
                 <td><?php echo print_r(get_option('_epim_background_current_index'),true);?></td>
             </tr>
+
             <tr>
                 <td><strong>_epim_background_last_index</strong></td>
                 <td><?php echo print_r(get_option('_epim_background_last_index'),true);?></td>
@@ -232,10 +234,13 @@ endif;
                 <td><?php echo print_r(get_option('_epim_background_stop_update'),true);?></td>
             </tr>
             <tr>
+                <td><strong>_epim_background_category_data</strong></td>
+                <td><?php echo print_r(get_option('_epim_background_category_data'),true);?></td>
+            </tr>
+            <tr>
                 <td><strong>_epim_products_to_process</strong></td>
                 <td><?php echo print_r(get_option('_epim_products_to_process'),true);?></td>
             </tr>
-
             <tr>
                 <td><strong>_epim_background_process_data</strong></td>
                 <td><?php echo print_r(get_option('_epim_background_process_data'),true);?></td>
