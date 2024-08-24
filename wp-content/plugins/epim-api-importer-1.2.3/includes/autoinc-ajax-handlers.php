@@ -174,7 +174,7 @@ function ajax_epimaapi_force_background_update()
         ftruncate($f, 0);
         fclose($f);
     }
-    cron_log('Getting all products to import');
+    cron_log('Starting Update All..');
     echo epimaapi_background_import_all_start();
     exit;
 }

@@ -666,7 +666,12 @@ function epimaapi_create_category( $id, $name, $ParentID, $picture_webpath, $pic
 		update_term_meta( $term->term_id, 'epim_api_picture_ids', $pField );
 		$response .= $name . ' Category Updated ';
 	} else {
-		$newTerm = wp_insert_term( $name, 'product_cat' );
+		$newTerm = wp_insert_term( $name, 'product_cat', array('name' => $name, 'slug' => $name.'-'.$id) );
+        if(is_wp_error( $newTerm ) ) {
+            $name .= ' - '.$id;
+            $response .= 'error creating term, renaming to: '.$name.' ';
+            $newTerm = wp_insert_term( $name, 'product_cat', array('name' => $name.'-'.$id, 'slug' => $name.'-'.$id) );
+        }
 		if ( is_wp_error( $newTerm ) ) {
 			$response = $newTerm->get_error_message() . ' Creating API_ID=' . $id . ' Name=' . $name;
 		} else {

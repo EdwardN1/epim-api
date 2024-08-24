@@ -267,6 +267,12 @@ function epimaapi_wooCreateProduct_ex( $pid, $productArray ) {
 			}
 		}
 
+        if($productSKU != '') {
+            if(wc_get_product_id_by_sku($productSKU)) {
+                $productSKU .= '/'.uniqid();
+            }
+        }
+
 		$objProduct->set_name( $productTitle );
 		$objProduct->set_status( $status );  // can be publish,draft or any wordpress post status
 		$objProduct->set_catalog_visibility( $catalogueVisibility ); // add the product visibility status

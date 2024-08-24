@@ -27,7 +27,7 @@ function epimapi_process_categories()
                             $ParentID = $category['ParentId'];
                         }
                         cron_log('Importing Id:' . $category['Id'] . ' Name: ' . $category['Name'] . ' Alias: ' . $category['Alias']);
-                        epimaapi_create_category($category['Id'], $category['Name'], $ParentID, $picture_webpath, $picture_ids, $category['Alias']);
+                        cron_log(print_r(epimaapi_create_category($category['Id'], $category['Name'], $ParentID, $picture_webpath, $picture_ids, $category['Alias']),true));
                     }
                 }
                 update_option('_epim_background_current_index', $i - 1);
@@ -57,13 +57,36 @@ function epimapi_sort_categories()
     $i = 1;
     $c = count($terms);
     //$time_start = microtime(true);
-    $epim_background_updates_max_run_time = get_option('epim_background_updates_max_run_time');
+    //$epim_background_updates_max_run_time = get_option('epim_background_updates_max_run_time');
     foreach ($terms as $term) {
         if (get_option('_epim_update_running') == '') {
             return 0;
         }
-        $epim_update_running = 'Sorting Category ' . $i . '/' . $c;
-        if ($i >= get_option('_epim_background_current_index')) {
+        $api_parents = get_term_meta($term->term_id, 'epim_api_parent_id', true);
+        $epim_update_running = 'Sorting Category ' . $i . '/' . $c. ' API ID: '.get_term_meta($term->term_id, 'epim_api_id', true).' | API PARENT ID: '.$api_parents;
+        if ($api_parents != '') {
+            $parent = epimaapi_getTermFromID($api_parents, $terms);
+            if ($parent) {
+                $epim_update_running .= ' | parent term_id: '.$parent->term_id;
+                $term_id = $term->term_id;
+
+                $epim_api_id = get_term_meta($term_id, 'epim_api_id', true);
+                $epim_api_alias = get_term_meta($term_id, 'epim_api_alias', true);
+                $epim_api_parent_id = get_term_meta($term_id, 'epim_api_parent_id', true);
+                $epim_api_picture_ids = get_term_meta($term_id, 'epim_api_picture_ids', true);
+                $epim_api_picture_link = get_term_meta($term_id, 'epim_api_picture_link', true);
+
+                wp_update_term($term_id, 'product_cat', array('parent' => $parent->term_id));
+
+                update_term_meta($term_id, 'epim_api_id', $epim_api_id);
+                update_term_meta($term_id, 'epim_api_alias', $epim_api_alias);
+                update_term_meta($term_id, 'epim_api_parent_id', $epim_api_parent_id);
+                update_term_meta($term_id, 'epim_api_picture_ids', $epim_api_picture_ids);
+                update_term_meta($term_id, 'epim_api_picture_link', $epim_api_picture_link);
+            }
+        }
+        $i++;
+        /*if ($i >= get_option('_epim_background_current_index')) {
             $api_parents = get_term_meta($term->term_id, 'epim_api_parent_id', true);
             if ($api_parents != '') {
                 $parent = epimaapi_getTermFromID($api_parents, $terms);
@@ -87,7 +110,7 @@ function epimapi_sort_categories()
             }
             update_option('_epim_background_current_index', $i - 1);
         }
-        $i++;
+        $i++;*/
         /*$time_now = microtime(true);
         if (($time_now - $time_start >= $epim_background_updates_max_run_time)) {
             cron_log('Sorting categories - Restarting at Index: ' . $i . '/' . $c);
@@ -383,7 +406,8 @@ function epimapi_sort_attributes()
                                     cron_log($current_terms->get_error_message());
                                 } else {
                                     $term_name = $attribute_value->Value;
-                                    $term_slug = sanitize_title(stripslashes(str_replace(' ', '-', $term_name)));
+                                    //$term_slug = sanitize_title(stripslashes(str_replace(' ', '-', $term_name)));
+                                    $term_slug = $attribute_value->AttributeId;
                                     if (strlen($term_name) > 100) {
                                         $term_name = substr($term_name, 0, 99);
                                     }

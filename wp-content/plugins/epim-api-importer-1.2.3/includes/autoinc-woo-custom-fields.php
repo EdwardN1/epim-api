@@ -126,6 +126,39 @@ function epim_taxonomy_edit_meta_field($term) {
             <p class="description"><?php _e('Choose if this category shows in the category menu', 'epim'); ?></p>
         </td>
     </tr>
+
+    <tr class="form-field">
+        <th scope="row" valign="top"><label><?php _e('Category Hierarchy:', 'epim'); ?></label></th>
+        <td>
+    <!--        <?php
+/*            $parent_categories = get_terms(['taxonomy' => 'product_cat', 'hide_empty' => true, 'child_of' => $term_id ]);
+            foreach ($parent_categories as $parent_category) {
+                $parent_name = $parent_category->name;
+                $parent_URL = get_category_link($parent_category->term_id);
+                */?>
+                <p class="description"><a href="/wp-admin/term.php?taxonomy=product_cat&tag_ID=<?php /*_e($parent_category->term_id,'epim');*/?>&post_type=product"><?php /*_e($parent_name,'epim');*/?></a> <a href="<?php /*_e($parent_URL,'epim');*/?>" target="_blank">(view)</a> </p>
+                --><?php
+/*            }
+            */?>
+            <?php _e(get_term_parents_list($term_id,'product_cat'))?>
+        </td>
+    </tr>
+
+    <tr class="form-field">
+        <th scope="row" valign="top"><label><?php _e('Child Categories:', 'epim'); ?></label></th>
+        <td>
+            <?php
+            $child_categories = get_terms(['taxonomy' => 'product_cat', 'hide_empty' => false, 'parent' => $term_id ]);
+            foreach ($child_categories as $child_category) {
+                $child_name = $child_category->name;
+                $child_URL = get_category_link($child_category->term_id);
+                ?>
+                <p class="description"><a href="/wp-admin/term.php?taxonomy=product_cat&tag_ID=<?php _e($child_category->term_id,'epim');?>&post_type=product"><?php _e($child_name,'epim');?></a> <a href="<?php _e($child_URL,'epim');?>" target="_blank">(view)</a> </p>
+                <?php
+            }
+            ?>
+        </td>
+    </tr>
     <?php
 }
 

@@ -659,7 +659,7 @@ function epimaapi_create_category($id, $name, $ParentID, $picture_webpath, $pict
             }
         }
         update_term_meta($term->term_id, 'epim_api_picture_ids', $pField);
-        $response .= $name . ' Category Updated ';
+        $response .= $name . ' Category Updated Term ID: '.$term->term_id;
     } else {
         $newTerm = wp_insert_term($name, 'product_cat');
         if (is_wp_error($newTerm)) {
@@ -686,7 +686,7 @@ function epimaapi_create_category($id, $name, $ParentID, $picture_webpath, $pict
                 }
             }
             update_term_meta($newTerm['term_id'], 'epim_api_picture_ids', $pField);
-            $response .= $name . ' Category Created';
+            $response .= $name . ' Category Created Term ID: '.$newTerm['term_id'];
         }
     }
 
