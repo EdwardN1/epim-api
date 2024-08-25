@@ -321,6 +321,14 @@ function epimapi_sort_attributes()
     update_option('_epim_update_running', 'Sorting Attributes');
     $args = array('post_type' => 'product', 'posts_per_page' => -1);
     $product_posts = get_option('_epim_products_to_process');
+    if(!$product_posts) {
+        cron_log('No products to be processed');
+        update_option('_epim_background_current_index', 0);
+        update_option('_epim_background_process_data', '');
+        update_option('_epim_background_attribute_data', '');
+        update_option('_epim_background_product_attribute_data', '');
+        return 0;
+    }
     $product_link_data = array();
     cron_log('Setting Attributes for ' . count($product_posts) . ' products');
     if (!empty($product_posts)) {
@@ -509,7 +517,7 @@ function epimapi_sort_attributes()
             }
             //cron_log($variation->SKU);
             if (($i % 10) == 0) {
-                cron_log($i . ' products processed');
+                cron_log($i . ' products processed for attributes');
             }
         }
     } else {
@@ -580,6 +588,7 @@ function epimapi_link_attributes()
     $i = 0;
     if ($product_link_data != '') {
         $cld = count($product_link_data);
+        cron_log('Finished processing attributes');
         cron_log('Linking attributes to ' . $cld . ' products');
         foreach ($product_link_data as $product_link_datum) {
             $product_meta = array();
@@ -708,6 +717,7 @@ function epimapi_link_attributes()
         update_option('_epim_background_product_attribute_data', '');
     }
 
+    cron_log('Finished linking attributes');
     update_option('_epim_background_current_index', 0);
     update_option('_epim_background_process_data', '');
     update_option('_epim_background_attribute_data', '');
@@ -730,6 +740,15 @@ function epimapi_import_images()
     } else {
         $product_posts = get_option('_epim_background_process_data');
         $product_set_data = $product_posts;
+    }
+
+    if (!$product_posts) {
+        update_option('_epim_background_current_index', 0);
+        update_option('_epim_background_process_data', '');
+        update_option('_epim_background_attribute_data', '');
+        update_option('_epim_background_product_attribute_data', '');
+        cron_log('Import Finished');
+        return 0;
     }
 
     update_option('_epim_update_running', 'Importing Images');
