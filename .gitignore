@@ -7,3 +7,4 @@ package-lock.json
 yarn.lock
 /wp-content/themes/Divi/
 /wp-content/plugins/advanced-custom-fields-pro/
+/wp-content/plugins/acf-theme-code-pro/
