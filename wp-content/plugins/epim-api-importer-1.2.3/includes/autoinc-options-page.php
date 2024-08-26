@@ -50,6 +50,8 @@ function epim_register_settings()
     register_setting('epim_options_group', 'epim_background_updates_max_run_time');
     add_option('epim_use_dynamic_data_sheets', '0');
     register_setting('epim_options_group', 'epim_use_dynamic_data_sheets');
+    add_option('epim_use_pay_on_account_gateway', '0');
+    register_setting('epim_options_group', 'epim_use_pay_on_account_gateway');
     add_option('epim_dynamic_data_sheets_url', '');
     register_setting('epim_options_group', 'epim_dynamic_data_sheets_url');
     add_option('epim_dynamic_data_sheets_templates', '');
@@ -294,6 +296,11 @@ endif;
                 <td><strong>epim_use_dynamic_data_sheets</strong></td>
                 <td><?php echo print_r(get_option('epim_use_dynamic_data_sheets'),true);?></td>
             </tr>
+            <tr>
+                <td><strong>epim_use_pay_on_account_gateway</strong></td>
+                <td><?php echo print_r(get_option('epim_use_pay_on_account_gateway'),true);?></td>
+            </tr>
+
             <tr>
                 <td><strong>epim_dynamic_data_sheets_url</strong></td>
                 <td><?php echo print_r(get_option('epim_dynamic_data_sheets_url'),true);?></td>
@@ -829,12 +836,24 @@ endif;
                     display: table-row;
                 }
             </style>
+
             <tr>
                 <th scope="row"><label for="epim_use_dynamic_data_sheets">Use Dynamic Data Sheets</label></th>
                 <?php $options = get_option('epim_use_dynamic_data_sheets'); ?>
                 <td>
                     <input type="checkbox" id="epim_use_dynamic_data_sheets"
                            name="epim_use_dynamic_data_sheets[checkbox_value]"
+                           value="1" <?php if (is_array($options)) {
+                        echo checked('1', $options['checkbox_value'], false);
+                    } ?>/>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row"><label for="epim_use_pay_on_account_gateway">Use Payment on Account Gateway</label></th>
+                <?php $options = get_option('epim_use_pay_on_account_gateway'); ?>
+                <td>
+                    <input type="checkbox" id="epim_use_pay_on_account_gateway"
+                           name="epim_use_pay_on_account_gateway[checkbox_value]"
                            value="1" <?php if (is_array($options)) {
                         echo checked('1', $options['checkbox_value'], false);
                     } ?>/>
