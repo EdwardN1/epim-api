@@ -2,6 +2,15 @@
 
 defined( 'ABSPATH' ) or exit;
 
+$epim_use_pay_on_account_gateway = get_option('epim_use_pay_on_account_gateway');
+if(is_array($epim_use_pay_on_account_gateway)) {
+    if (array_key_exists('checkbox_value', $epim_use_pay_on_account_gateway)) {
+        if ($epim_use_pay_on_account_gateway['checkbox_value'] != '1') {
+            exit;
+        }
+    }
+}
+
 /**
  * Adds plugin page links
  *
