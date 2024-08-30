@@ -61,6 +61,7 @@ add_action('wp_ajax_fast_create', 'ajax_epimaapi_fast_create');
 add_action('wp_ajax_stop_background_update', 'ajax_epimaapi_stop_background_update');
 add_action('wp_ajax_get_background_changed_products_since', 'ajax_get_epimaapi_background_changed_products_since');
 add_action('wp_ajax_force_background_update', 'ajax_epimaapi_force_background_update');
+add_action('wp_ajax_attribute_update', 'ajax_epimaapi_attribute_update');
 add_action('wp_ajax_unfreeze_queue', 'ajax_epimaapi_unfreeze_queue');
 add_action('wp_ajax_import_by_variation_id', 'ajax_epimaapi_import_by_variation_id');
 
@@ -166,7 +167,15 @@ function ajax_epimaapi_force_background_update()
     epimaapi_checkSecure();
     update_option('_epim_update_running', '');
     update_option('_epim_background_process_data', '');
+    update_option('_epim_products_processed', '');
+    update_option('_epim_products_to_process', '');
+    update_option('_epim_background_process_data', '');
+    update_option('_epim_background_attribute_data', '');
+    update_option('_epim_background_product_attribute_data', '');
+    update_option('_epim_background_last_process_data', '');
+    update_option('_epim_background_category_data', '');
     update_option('_epim_background_current_index', 0);
+
     session_start();
     $_SESSION['offset'] = 0;
     $f = @fopen(WP_PLUGIN_DIR . '/epim-api-importer/cron-log.log', "r+");
@@ -176,6 +185,30 @@ function ajax_epimaapi_force_background_update()
     }
     cron_log('Starting Update All..');
     echo epimaapi_background_import_all_start();
+    exit;
+}
+
+function ajax_epimaapi_attribute_update() {
+    epimaapi_checkSecure();
+    update_option('_epim_update_running', '');
+    update_option('_epim_background_process_data', '');
+    update_option('_epim_background_current_index', 0);
+    update_option('_epim_products_processed', '');
+    update_option('_epim_products_to_process', '');
+    update_option('_epim_background_process_data', '');
+    update_option('_epim_background_attribute_data', '');
+    update_option('_epim_background_product_attribute_data', '');
+    update_option('_epim_background_last_process_data', '');
+    update_option('_epim_background_category_data', '');
+    session_start();
+    $_SESSION['offset'] = 0;
+    $f = @fopen(WP_PLUGIN_DIR . '/epim-api-importer/cron-log.log', "r+");
+    if ($f !== false) {
+        ftruncate($f, 0);
+        fclose($f);
+    }
+    cron_log('Starting Attribute Update..');
+    echo epimaapi_background_attribute_update_start();
     exit;
 }
 

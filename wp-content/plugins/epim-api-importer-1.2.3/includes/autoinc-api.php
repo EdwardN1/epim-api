@@ -287,6 +287,17 @@ function epimaapi_background_import_all_start() {
     }
 }
 
+function epimaapi_background_attribute_update_start()
+{
+    $args = array(
+        'limit' => -1,
+        'return' => 'ids'
+    );
+     $products_to_process = wc_get_products( $args );
+     update_option( '_epim_products_to_process', $products_to_process );
+     update_option( '_epim_update_running', 'Preparing to Sort attributes' );
+}
+
 function epimaapi_load_category_data() {
     $jsonResponse = get_epimaapi_all_categories();
     $response     = json_decode( $jsonResponse, true );

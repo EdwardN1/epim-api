@@ -268,9 +268,22 @@ function epimaapi_wooCreateProduct_ex( $pid, $productArray ) {
 		}
 
         if($productSKU != '') {
-            if(wc_get_product_id_by_sku($productSKU)) {
+
+            $sku_args = array('sku' => 'ABC');
+            $sku_products = wc_get_products($sku_args);
+
+            $sku_exact = false;
+
+            foreach ($sku_products as $sku_product) {
+                if($sku_product->get_sku() == $productSKU) {
+                    $sku_exact = true;
+                }
+            }
+
+            if($sku_exact) {
                 $productSKU .= '/'.uniqid();
             }
+
         }
 
 		$objProduct->set_name( $productTitle );

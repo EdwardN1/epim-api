@@ -306,6 +306,7 @@ adminJQ(function ($) {
         $('.modal.BackgroundUpdateSince').removeClass('active');
         $('.modal.BackgroundUnfreezeQueue').removeClass('active');
         $('.modal.BackgroundImportByID').removeClass('active');
+        $('.modal.BackgroundUpdateAttributes').removeClass('active');
     }, function (action, request, data) {
         _o(data);
     });
@@ -580,6 +581,16 @@ adminJQ(function ($) {
         backgroundUpdateQueue.reset();
         $('#ePimTail').html('');
         backgroundUpdateQueue.queue(ajaxurl,{action: 'force_background_update'});
+        backgroundUpdateQueue.process();
+    });
+
+    $('#BackgroundUpdateAttributes').on('click', function (){
+        $('#ePimResult').html('');
+        _o('Starting Attribute Update....');
+        $('.modal.BackgroundUpdateAttributes').addClass('active');
+        backgroundUpdateQueue.reset();
+        $('#ePimTail').html('');
+        backgroundUpdateQueue.queue(ajaxurl,{action: 'attribute_update'});
         backgroundUpdateQueue.process();
     });
 

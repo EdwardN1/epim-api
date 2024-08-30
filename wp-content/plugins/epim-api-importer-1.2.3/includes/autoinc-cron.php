@@ -148,6 +148,7 @@ function epimaapi_update_every_minute()
         update_option('_epim_background_product_attribute_data', '');
         update_option('_epim_background_category_data','');
         update_option('_epim_products_to_process','');
+        update_option('_epim_products_processed','');
         update_option('_epim_cron_busy', '');
         //cron_log('Checking for Updates - No updates to run');
         return;
@@ -168,6 +169,7 @@ function epimaapi_update_every_minute()
         update_option('_epim_background_product_attribute_data', '');
         update_option('_epim_background_category_data','');
         update_option('_epim_products_to_process','');
+        update_option('_epim_products_processed','');
         update_option('_epim_cron_busy', '');
         return;
     }
@@ -260,6 +262,7 @@ function epimaapi_update_every_minute()
                 break;
             case 2:
                 update_option('_epim_update_running', 'Preparing to Sort attributes');
+                update_option('_epim_background_process_data', '');
                 cron_log('Preparing to Sort attributes');
                 break;
             default:
@@ -278,11 +281,14 @@ function epimaapi_update_every_minute()
 
         switch (epimapi_sort_attributes()) {
             case 1:
-                cron_log(get_option('_epim_update_running'));
+                cron_log('Restarting Sorting attributes');
+                update_option('_epim_cron_busy', '0');
+                update_option('_epim_update_running', 'Preparing to Sort attributes');
                 break;
             case 2:
                 update_option('_epim_update_running', 'Preparing to link attributes to products');
                 cron_log('Preparing to link attributes to products');
+                update_option('_epim_products_processed','');
                 break;
             default:
                 update_option('_epim_update_running', 'Preparing to Import Images');
@@ -339,6 +345,7 @@ function epimaapi_update_every_minute()
         }
         update_option('_epim_cron_busy', '');
         update_option('_epim_products_to_process','');
+        update_option('_epim_products_processed','');
         return;
 
     }
@@ -348,12 +355,14 @@ function epimaapi_update_every_minute()
 
 function epim_in_flat_array($array, $value)
 {
+    $x = 0;
     if (is_array($array)) {
         foreach ($array as $item) {
-            if ($item === $value) return true;
+            if ($item === $value) return $x;
+            $x++;
         }
     }
-    return false;
+    return -1;
 }
 
 function epim_in_array($array, $key, $value)

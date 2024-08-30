@@ -97,7 +97,7 @@ function epim_register_settings()
     add_option('_epim_background_stop_update', 0);
     add_option('_epim_products_to_process', '');
     add_option('_epim_cron_busy', '');
-    add_option('_epim_products_to_process', '');
+    add_option('_epim_products_processed', '');
 }
 
 add_action('admin_init', 'epim_register_settings');
@@ -238,6 +238,10 @@ endif;
             <tr>
                 <td><strong>_epim_background_category_data</strong></td>
                 <td><?php echo print_r(get_option('_epim_background_category_data'),true);?></td>
+            </tr>
+            <tr>
+                <td><strong>_epim_products_processed</strong></td>
+                <td><?php echo print_r(get_option('_epim_products_processed'),true);?></td>
             </tr>
             <tr>
                 <td><strong>_epim_products_to_process</strong></td>
@@ -433,6 +437,16 @@ endif;
                 </td>
                 <td>
                     NB restarts current background import if one is active.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <button id="BackgroundUpdateAttributes" class="button">Update Attributes</button>&nbsp;
+                    &nbsp;<span class="modal BackgroundUpdateAttributes"><img
+                                src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                </td>
+                <td>
+                    Processes stored ePim Data for product attributes and images. NB restarts current background import if one is active.
                 </td>
             </tr>
             <tr>
@@ -721,11 +735,11 @@ endif;
                 <?php
             } else {
                 ?>
-                <tr>
+               <!-- <tr>
                     <td colspan="2">
                         <button id="CreateBranches" class="button">Create and Update Branches</button>&nbsp;
                         &nbsp;<span class="modal CreateBranches"><img
-                                    src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                                    src="<?php /*echo epimaapi_PLUGINURI; */?>/assets/img/FhHRx.gif"></span>
                     </td>
                 </tr>
                 <tr>
@@ -737,7 +751,7 @@ endif;
                     <td colspan="2">
                         <button id="UpdateBranchStock" class="button">Update Branch Stock Levels</button>&nbsp;
                         &nbsp;<span class="modal UpdateBranchStock"><img
-                                    src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
+                                    src="<?php /*echo epimaapi_PLUGINURI; */?>/assets/img/FhHRx.gif"></span>
                     </td>
                 </tr>
                 <tr>
@@ -745,7 +759,7 @@ endif;
                         updates imported product stock levels - does not import products.
                         <hr>
                     </td>
-                </tr>
+                </tr>-->
                 <?php
             }
             ?>
