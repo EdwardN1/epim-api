@@ -98,6 +98,15 @@ function epim_register_settings()
     add_option('_epim_products_to_process', '');
     add_option('_epim_cron_busy', '');
     add_option('_epim_products_processed', '');
+    add_option('_epim_product_link_data_1000', '');
+    add_option('_epim_product_link_data_2000', '');
+    add_option('_epim_product_link_data_3000', '');
+    add_option('_epim_product_link_data_4000', '');
+    add_option('_epim_product_link_data_5000', '');
+    add_option('_epim_product_link_data_6000', '');
+    add_option('_epim_product_link_data_7000', '');
+    add_option('_epim_product_link_data_8000', '');
+    add_option('_epim_product_link_data_9000', '');
 }
 
 add_action('admin_init', 'epim_register_settings');
@@ -216,162 +225,178 @@ endif;
         <table class="form-table" style="max-width: 750px;">
             <tr>
                 <td><strong>_epim_cron_busy</strong></td>
-                <td><?php echo print_r(get_option('_epim_cron_busy'),true);?></td>
+                <td><?php echo print_r(get_option('_epim_cron_busy'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>_epim_update_running</strong></td>
-                <td><?php echo print_r(get_option('_epim_update_running'),true);?></td>
+                <td><?php echo print_r(get_option('_epim_update_running'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>_epim_background_current_index</strong></td>
-                <td><?php echo print_r(get_option('_epim_background_current_index'),true);?></td>
+                <td><?php echo print_r(get_option('_epim_background_current_index'), true); ?></td>
             </tr>
 
             <tr>
                 <td><strong>_epim_background_last_index</strong></td>
-                <td><?php echo print_r(get_option('_epim_background_last_index'),true);?></td>
+                <td><?php echo print_r(get_option('_epim_background_last_index'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>_epim_background_stop_update</strong></td>
-                <td><?php echo print_r(get_option('_epim_background_stop_update'),true);?></td>
+                <td><?php echo print_r(get_option('_epim_background_stop_update'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>_epim_background_category_data</strong></td>
-                <td><?php echo print_r(get_option('_epim_background_category_data'),true);?></td>
+                <td><?php echo print_r(get_option('_epim_background_category_data'), true); ?></td>
             </tr>
+
+            <?php
+            for ($p = 1; $p <= 9; $p++) {
+                $o = $p * 1000;
+                $pld = get_option('_epim_product_link_data_' . $o);
+                if (is_array($pld)) {
+                    ?>
+                    <tr>
+                        <td><strong>_epim_product_link_data_<?php echo $o; ?></strong></td>
+                        <td><?php echo print_r($pld, true); ?></td>
+                    </tr>
+                    <?php
+                }
+
+            }
+            ?>
             <tr>
                 <td><strong>_epim_products_processed</strong></td>
-                <td><?php echo print_r(get_option('_epim_products_processed'),true);?></td>
+                <td><?php echo print_r(get_option('_epim_products_processed'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>_epim_products_to_process</strong></td>
-                <td><?php echo print_r(get_option('_epim_products_to_process'),true);?></td>
+                <td><?php echo print_r(get_option('_epim_products_to_process'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>_epim_background_process_data</strong></td>
-                <td><?php echo print_r(get_option('_epim_background_process_data'),true);?></td>
+                <td><?php echo print_r(get_option('_epim_background_process_data'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>_epim_background_attribute_data</strong></td>
-                <td><?php echo print_r(get_option('_epim_background_attribute_data'),true);?></td>
+                <td><?php echo print_r(get_option('_epim_background_attribute_data'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>_epim_background_product_attribute_data</strong></td>
-                <td><?php echo print_r(get_option('_epim_background_product_attribute_data'),true);?></td>
+                <td><?php echo print_r(get_option('_epim_background_product_attribute_data'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>_epim_background_last_process_data</strong></td>
-                <td><?php echo print_r(get_option('_epim_background_last_process_data'),true);?></td>
+                <td><?php echo print_r(get_option('_epim_background_last_process_data'), true); ?></td>
             </tr>
 
             <tr>
                 <td><strong>epim_url</strong></td>
-                <td><?php echo print_r(get_option('epim_url'),true);?></td>
+                <td><?php echo print_r(get_option('epim_url'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_key</strong></td>
-                <td><?php echo print_r(get_option('epim_key'),true);?></td>
+                <td><?php echo print_r(get_option('epim_key'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_api_retrieval_method</strong></td>
-                <td><?php echo print_r(get_option('epim_api_retrieval_method'),true);?></td>
+                <td><?php echo print_r(get_option('epim_api_retrieval_method'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_no_price_or_stocks</strong></td>
-                <td><?php echo print_r(get_option('epim_no_price_or_stocks'),true);?></td>
+                <td><?php echo print_r(get_option('epim_no_price_or_stocks'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_always_include_epim_attributes</strong></td>
-                <td><?php echo print_r(get_option('epim_always_include_epim_attributes'),true);?></td>
+                <td><?php echo print_r(get_option('epim_always_include_epim_attributes'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_exclude_luckins_data</strong></td>
-                <td><?php echo print_r(get_option('epim_exclude_luckins_data'),true);?></td>
+                <td><?php echo print_r(get_option('epim_exclude_luckins_data'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_prioritise_epim_images</strong></td>
-                <td><?php echo print_r(get_option('epim_prioritise_epim_images'),true);?></td>
+                <td><?php echo print_r(get_option('epim_prioritise_epim_images'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_background_updates_max_run_time</strong></td>
-                <td><?php echo print_r(get_option('epim_background_updates_max_run_time'),true);?></td>
+                <td><?php echo print_r(get_option('epim_background_updates_max_run_time'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_use_dynamic_data_sheets</strong></td>
-                <td><?php echo print_r(get_option('epim_use_dynamic_data_sheets'),true);?></td>
+                <td><?php echo print_r(get_option('epim_use_dynamic_data_sheets'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_use_pay_on_account_gateway</strong></td>
-                <td><?php echo print_r(get_option('epim_use_pay_on_account_gateway'),true);?></td>
+                <td><?php echo print_r(get_option('epim_use_pay_on_account_gateway'), true); ?></td>
             </tr>
 
             <tr>
                 <td><strong>epim_dynamic_data_sheets_url</strong></td>
-                <td><?php echo print_r(get_option('epim_dynamic_data_sheets_url'),true);?></td>
+                <td><?php echo print_r(get_option('epim_dynamic_data_sheets_url'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_dynamic_data_sheets_templates</strong></td>
-                <td><?php echo print_r(get_option('epim_dynamic_data_sheets_templates'),true);?></td>
+                <td><?php echo print_r(get_option('epim_dynamic_data_sheets_templates'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_dynamic_data_sheets_names</strong></td>
-                <td><?php echo print_r(get_option('epim_dynamic_data_sheets_names'),true);?></td>
+                <td><?php echo print_r(get_option('epim_dynamic_data_sheets_names'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_dynamic_data_sheets_tab_name</strong></td>
-                <td><?php echo print_r(get_option('epim_dynamic_data_sheets_tab_name'),true);?></td>
+                <td><?php echo print_r(get_option('epim_dynamic_data_sheets_tab_name'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_enable_scheduled_updates</strong></td>
-                <td><?php echo print_r(get_option('epim_enable_scheduled_updates'),true);?></td>
+                <td><?php echo print_r(get_option('epim_enable_scheduled_updates'), true); ?></td>
             </tr>
             <tr>
                 <td><strong></strong></td>
-                <td><?php echo print_r(get_option(''),true);?></td>
+                <td><?php echo print_r(get_option(''), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_update_schedule</strong></td>
-                <td><?php echo print_r(get_option('epim_update_schedule'),true);?></td>
+                <td><?php echo print_r(get_option('epim_update_schedule'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_schedule_log</strong></td>
-                <td><?php echo print_r(get_option('epim_schedule_log'),true);?></td>
+                <td><?php echo print_r(get_option('epim_schedule_log'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_divi_primary_color</strong></td>
-                <td><?php echo print_r(get_option('epim_divi_primary_color'),true);?></td>
+                <td><?php echo print_r(get_option('epim_divi_primary_color'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_divi_secondary_color</strong></td>
-                <td><?php echo print_r(get_option('epim_divi_secondary_color'),true);?></td>
+                <td><?php echo print_r(get_option('epim_divi_secondary_color'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_divi_number_menu_items</strong></td>
-                <td><?php echo print_r(get_option('epim_divi_number_menu_items'),true);?></td>
+                <td><?php echo print_r(get_option('epim_divi_number_menu_items'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_use_qty_price_breaks</strong></td>
-                <td><?php echo print_r(get_option('epim_use_qty_price_breaks'),true);?></td>
+                <td><?php echo print_r(get_option('epim_use_qty_price_breaks'), true); ?></td>
             </tr>
             <tr>
                 <td><strong></strong></td>
-                <td><?php echo print_r(get_option(''),true);?></td>
+                <td><?php echo print_r(get_option(''), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_tabs_advanced</strong></td>
-                <td><?php echo print_r(get_option('epim_tabs_advanced'),true);?></td>
+                <td><?php echo print_r(get_option('epim_tabs_advanced'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_tabs_settings</strong></td>
-                <td><?php echo print_r(get_option('epim_tabs_settings'),true);?></td>
+                <td><?php echo print_r(get_option('epim_tabs_settings'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_tabs_schedule</strong></td>
-                <td><?php echo print_r(get_option('epim_tabs_schedule'),true);?></td>
+                <td><?php echo print_r(get_option('epim_tabs_schedule'), true); ?></td>
             </tr>
             <tr>
                 <td><strong>epim_tabs_divi</strong></td>
-                <td><?php echo print_r(get_option('epim_tabs_divi'),true);?></td>
+                <td><?php echo print_r(get_option('epim_tabs_divi'), true); ?></td>
             </tr>
 
         </table>
@@ -446,7 +471,8 @@ endif;
                                 src="<?php echo epimaapi_PLUGINURI; ?>/assets/img/FhHRx.gif"></span>
                 </td>
                 <td>
-                    Processes stored ePim Data for product attributes and images. NB restarts current background import if one is active.
+                    Processes stored ePim Data for product attributes and images. NB restarts current background import
+                    if one is active.
                 </td>
             </tr>
             <tr>
@@ -485,7 +511,7 @@ endif;
                 <td>
                     <button id="BackgroundUnfreezeQueue" class="button">Unfreeze Queue</button>&nbsp;
                     &nbsp;<span class="modal BackgroundUnfreezeQueue"><img
-                                src="<?php /*echo epimaapi_PLUGINURI; */?>/assets/img/FhHRx.gif"></span>
+                                src="<?php /*echo epimaapi_PLUGINURI; */ ?>/assets/img/FhHRx.gif"></span>
                 </td>
                 <td>
                     NB attempts to unfreeze the queue by reloading product data from the API, starting at the
@@ -735,11 +761,11 @@ endif;
                 <?php
             } else {
                 ?>
-               <!-- <tr>
+                <!-- <tr>
                     <td colspan="2">
                         <button id="CreateBranches" class="button">Create and Update Branches</button>&nbsp;
                         &nbsp;<span class="modal CreateBranches"><img
-                                    src="<?php /*echo epimaapi_PLUGINURI; */?>/assets/img/FhHRx.gif"></span>
+                                    src="<?php /*echo epimaapi_PLUGINURI; */ ?>/assets/img/FhHRx.gif"></span>
                     </td>
                 </tr>
                 <tr>
@@ -751,7 +777,7 @@ endif;
                     <td colspan="2">
                         <button id="UpdateBranchStock" class="button">Update Branch Stock Levels</button>&nbsp;
                         &nbsp;<span class="modal UpdateBranchStock"><img
-                                    src="<?php /*echo epimaapi_PLUGINURI; */?>/assets/img/FhHRx.gif"></span>
+                                    src="<?php /*echo epimaapi_PLUGINURI; */ ?>/assets/img/FhHRx.gif"></span>
                     </td>
                 </tr>
                 <tr>

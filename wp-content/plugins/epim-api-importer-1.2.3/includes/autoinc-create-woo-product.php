@@ -283,7 +283,7 @@ function epimaapi_wooCreateProduct_ex( $pid, $productArray ) {
             if($sku_exact) {
                 $productSKU .= '/'.uniqid();
             }
-
+            
         }
 
 		$objProduct->set_name( $productTitle );

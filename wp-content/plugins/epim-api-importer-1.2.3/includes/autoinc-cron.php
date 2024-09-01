@@ -147,9 +147,12 @@ function epimaapi_update_every_minute()
         update_option('_epim_background_attribute_data', '');
         update_option('_epim_background_product_attribute_data', '');
         update_option('_epim_background_category_data','');
-        update_option('_epim_products_to_process','');
+        //update_option('_epim_products_to_process','');
         update_option('_epim_products_processed','');
         update_option('_epim_cron_busy', '');
+        for($p = 1; $p <=9; $p++){
+            update_option('_epim_product_link_data_'.$p.'000', '');
+        }
         //cron_log('Checking for Updates - No updates to run');
         return;
     }
@@ -171,6 +174,9 @@ function epimaapi_update_every_minute()
         update_option('_epim_products_to_process','');
         update_option('_epim_products_processed','');
         update_option('_epim_cron_busy', '');
+        for($p = 1; $p <=9; $p++){
+            update_option('_epim_product_link_data_'.$p.'000', '');
+        }
         return;
     }
 
@@ -319,6 +325,7 @@ function epimaapi_update_every_minute()
                 update_option('_epim_update_running', '');
                 update_option('_epim_background_process_data', '');
                 update_option('_epim_background_current_index', 0);
+
         }
         update_option('_epim_cron_busy', '');
         return;

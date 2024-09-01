@@ -175,6 +175,9 @@ function ajax_epimaapi_force_background_update()
     update_option('_epim_background_last_process_data', '');
     update_option('_epim_background_category_data', '');
     update_option('_epim_background_current_index', 0);
+    for($p = 1; $p <=9; $p++){
+        update_option('_epim_product_link_data_'.$p.'000', '');
+    }
 
     session_start();
     $_SESSION['offset'] = 0;
@@ -200,6 +203,9 @@ function ajax_epimaapi_attribute_update() {
     update_option('_epim_background_product_attribute_data', '');
     update_option('_epim_background_last_process_data', '');
     update_option('_epim_background_category_data', '');
+    for($p = 1; $p <=9; $p++){
+        update_option('_epim_product_link_data_'.$p.'000', '');
+    }
     session_start();
     $_SESSION['offset'] = 0;
     $f = @fopen(WP_PLUGIN_DIR . '/epim-api-importer/cron-log.log', "r+");
@@ -280,6 +286,9 @@ function ajax_epimaapi_stop_background_update()
     update_option('_epim_background_category_data','');
     update_option('_epim_products_to_process','');
     update_option('_epim_cron_busy', '');
+    for($p = 1; $p <=9; $p++){
+        update_option('_epim_product_link_data_'.$p.'000', '');
+    }
 
     echo 'Current Update Stopped';
     exit;
