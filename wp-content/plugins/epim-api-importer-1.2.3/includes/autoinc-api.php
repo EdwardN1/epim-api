@@ -295,8 +295,8 @@ function epimaapi_background_attribute_update_start()
     );
      $products_to_process = wc_get_products( $args );
      update_option( '_epim_products_to_process', $products_to_process );
-     //update_option( '_epim_update_running', 'Preparing to Sort attributes' );
-    update_option( '_epim_update_running', 'Preparing to link attributes to products' );
+     update_option( '_epim_update_running', 'Preparing to Sort attributes' );
+    //update_option( '_epim_update_running', 'Preparing to link attributes to products' );
 }
 
 function epimaapi_load_category_data() {
