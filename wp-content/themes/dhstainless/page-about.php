@@ -148,9 +148,9 @@
       <div class="line-break"></div>
 
       <ul>
-        <li><a href="<?php bloginfo('template_directory'); ?>/pdfs/ISO-9001-2024.pdf" target="_blank"><img src="<?php bloginfo('template_directory'); ?>/img/certificates/ISO-9001-2024.jpg" alt="ISO 9001:2024"></a></li>
-        <li><a href="<?php bloginfo('template_directory'); ?>/pdfs/ISO-14001-2024.pdf" target="_blank"><img src="<?php bloginfo('template_directory'); ?>/img/certificates/ISO-14001-2024.jpg" alt="ISO 14001:2024"></a></li>
-        <li><a href="<?php bloginfo('template_directory'); ?>/pdfs/ISO-45001-2024.pdf" target="_blank"><img src="<?php bloginfo('template_directory'); ?>/img/certificates/ISO-45001-2024.jpg" alt="ISO 45001:2024"></a></li>
+        <li><a href="<?php bloginfo('template_directory'); ?>/pdfs/ISO-9001-2025.pdf" target="_blank"><img src="<?php bloginfo('template_directory'); ?>/img/certificates/ISO-9001-2024.jpg" alt="ISO 9001:2024"></a></li>
+        <li><a href="<?php bloginfo('template_directory'); ?>/pdfs/ISO-14001-2025.pdf" target="_blank"><img src="<?php bloginfo('template_directory'); ?>/img/certificates/ISO-14001-2024.jpg" alt="ISO 14001:2024"></a></li>
+        <li><a href="<?php bloginfo('template_directory'); ?>/pdfs/ISO-45001-2025.pdf" target="_blank"><img src="<?php bloginfo('template_directory'); ?>/img/certificates/ISO-45001-2024.jpg" alt="ISO 45001:2024"></a></li>
       </ul>
 
     </div>
