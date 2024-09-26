@@ -387,25 +387,10 @@ function epim_in_array($array, $key, $value)
 
 function epim_createAttribute(string $attributeName, string $attributeSlug)
 {
-    /*delete_transient('wc_attribute_taxonomies');
-    \WC_Cache_Helper::invalidate_cache_group('woocommerce-attributes');*/
 
-    /*$attributeLabels = wp_list_pluck(wc_get_attribute_taxonomies(), 'attribute_label', 'attribute_name');
-    $attributeWCName = array_search($attributeSlug, $attributeLabels, TRUE);
-
-    if (!$attributeWCName) {
-        $attributeWCName = wc_sanitize_taxonomy_name($attributeSlug);
-    }*/
-
-    /*$attributeLabels = wp_list_pluck(wc_get_attribute_taxonomies(), 'attribute_label', 'attribute_name');
-    $attributeWCName = array_search($attributeSlug, $attributeLabels, TRUE);
-
-    if (!$attributeWCName) {
-        $attributeWCName = wc_sanitize_taxonomy_name($attributeSlug);
-    }*/
+    $attributeSlug = apply_filters( 'epim_custom_attribute_slug', $attributeSlug, $attributeName );
 
     $attributeId = wc_attribute_taxonomy_id_by_name($attributeSlug);
-    //error_log('$attributeId = '.$attributeId.' for slug '.$attributeSlug);
     if (!$attributeId) {
         $taxonomyName = wc_attribute_taxonomy_name($attributeSlug);
         unregister_taxonomy($taxonomyName);
