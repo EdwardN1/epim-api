@@ -1,0 +1,411 @@
+[
+    {
+        "ID": 25148733,
+        "Title": "Trends",
+        "url": "#",
+        "parent": "0",
+        "children": [
+            {
+                "ID": 25957915,
+                "Title": "SylSmart Home",
+                "url": "https://sylvania-group.com/sylsmart-home/",
+                "parent": "25148733",
+                "children": []
+            },
+            {
+                "ID": 25964141,
+                "Title": "Solar",
+                "url": "https://sylvania-group.com/solar/",
+                "parent": "25148733",
+                "children": []
+            },
+            {
+                "ID": 25964140,
+                "Title": "Decorative Lighting",
+                "url": "https://sylvania-group.com/decorative-lighting/",
+                "parent": "25148733",
+                "children": []
+            },
+            {
+                "ID": 25957863,
+                "Title": "Applications",
+                "url": "/",
+                "parent": "25148733",
+                "children": [
+                    {
+                        "ID": 25964137,
+                        "Title": "Your Home Office",
+                        "url": "https://sylvania-group.com/yourhome-office/",
+                        "parent": "25957863"
+                    },
+                    {
+                        "ID": 25964133,
+                        "Title": "Your Kitchen",
+                        "url": "https://sylvania-group.com/yourhome-kitchen/",
+                        "parent": "25957863"
+                    },
+                    {
+                        "ID": 25964138,
+                        "Title": "Your Bathroom",
+                        "url": "https://sylvania-group.com/yourhome-bathroom/",
+                        "parent": "25957863"
+                    },
+                    {
+                        "ID": 25964132,
+                        "Title": "Your Living Room",
+                        "url": "https://sylvania-group.com/yourhome-living-room/",
+                        "parent": "25957863"
+                    },
+                    {
+                        "ID": 25964136,
+                        "Title": "Your Bedroom",
+                        "url": "https://sylvania-group.com/yourhome-bedroom/",
+                        "parent": "25957863"
+                    },
+                    {
+                        "ID": 25964134,
+                        "Title": "Your Hallway",
+                        "url": "https://sylvania-group.com/yourhome-hallway/",
+                        "parent": "25957863"
+                    },
+                    {
+                        "ID": 25964135,
+                        "Title": "Your Garage and Cellar",
+                        "url": "https://sylvania-group.com/yourhome-garage-and-cellar/",
+                        "parent": "25957863"
+                    },
+                    {
+                        "ID": 25964139,
+                        "Title": "Your Outdoor and Garden",
+                        "url": "https://sylvania-group.com/yourhome-outdoor-and-garden/",
+                        "parent": "25957863"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "ID": 25957871,
+        "Title": "Products",
+        "url": "/",
+        "parent": "0",
+        "children": [
+            {
+                "ID": 25969826,
+                "Title": "YourHome",
+                "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/yourhome",
+                "parent": "25957871",
+                "children": [
+                    {
+                        "ID": 25969827,
+                        "Title": "Wall and Ceiling",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/yourhome/wall-and-ceiling/",
+                        "parent": "25969826"
+                    },
+                    {
+                        "ID": 25969828,
+                        "Title": "Spotlights",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/yourhome/spotlights/",
+                        "parent": "25969826"
+                    },
+                    {
+                        "ID": 25969829,
+                        "Title": "Downlights",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/yourhome/downlight-consumer/",
+                        "parent": "25969826"
+                    },
+                    {
+                        "ID": 25969830,
+                        "Title": "Battens",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/yourhome/battens-consumer/",
+                        "parent": "25969826"
+                    },
+                    {
+                        "ID": 25969831,
+                        "Title": "WaterProofs",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/yourhome/waterproofs/",
+                        "parent": "25969826"
+                    },
+                    {
+                        "ID": 25969832,
+                        "Title": "Outdoor",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/yourhome/outdoor/",
+                        "parent": "25969826"
+                    },
+                    {
+                        "ID": 25969833,
+                        "Title": "Worklights",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/yourhome/worklights/",
+                        "parent": "25969826"
+                    },
+                    {
+                        "ID": 25969834,
+                        "Title": "Solar",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/yourhome/solar/",
+                        "parent": "25969826"
+                    }
+                ]
+            },
+            {
+                "ID": 25969835,
+                "Title": "SylSmart Home",
+                "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/sylsmart-home",
+                "parent": "25957871",
+                "children": [
+                    {
+                        "ID": 25969836,
+                        "Title": "Smart Downlights",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/sylsmart-home/smart-downlights/",
+                        "parent": "25969835"
+                    },
+                    {
+                        "ID": 25969837,
+                        "Title": "Smart Spotlights",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/sylsmart-home/smart-spotlights/",
+                        "parent": "25969835"
+                    },
+                    {
+                        "ID": 25969838,
+                        "Title": "Smart Wall and Ceiling Lights",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/sylsmart-home/smart-wall-and-ceiling-lights/",
+                        "parent": "25969835"
+                    },
+                    {
+                        "ID": 25969839,
+                        "Title": "Smart Strip Lights",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/sylsmart-home/smart-strip-lights/",
+                        "parent": "25969835"
+                    },
+                    {
+                        "ID": 25969840,
+                        "Title": "Smart Lamps",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/sylsmart-home/smart-lamps/",
+                        "parent": "25969835"
+                    },
+                    {
+                        "ID": 25969841,
+                        "Title": "Smart Accessories",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/sylsmart-home/smart-accessories/",
+                        "parent": "25969835"
+                    }
+                ]
+            },
+            {
+                "ID": 25969842,
+                "Title": "Solar",
+                "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/solar",
+                "parent": "25957871",
+                "children": [
+                    {
+                        "ID": 25969843,
+                        "Title": "Solar Floodlights",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/solar/solar-panels/",
+                        "parent": "25969842"
+                    },
+                    {
+                        "ID": 25969844,
+                        "Title": "Solar Wall Lights",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/solar/solar-luminaires/",
+                        "parent": "25969842"
+                    },
+                    {
+                        "ID": 25969845,
+                        "Title": "Solar Bollards",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/solar/solar-bollards/",
+                        "parent": "25969842"
+                    },
+                    {
+                        "ID": 25969846,
+                        "Title": "Solar Ground Lights",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/solar/solar-ground-lights-/",
+                        "parent": "25969842"
+                    }
+                ]
+            },
+            {
+                "ID": 25969847,
+                "Title": "Lamps",
+                "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/lamps-consumer",
+                "parent": "25957871",
+                "children": [
+                    {
+                        "ID": 25969848,
+                        "Title": "Reflectors",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/lamps-consumer/reflectors-consumer/",
+                        "parent": "25969847"
+                    },
+                    {
+                        "ID": 25969849,
+                        "Title": "Bulbs",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/lamps-consumer/bulbs-consumer/",
+                        "parent": "25969847"
+                    },
+                    {
+                        "ID": 25969850,
+                        "Title": "Tubes",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/lamps-consumer/tubes-consumer/",
+                        "parent": "25969847"
+                    },
+                    {
+                        "ID": 25969851,
+                        "Title": "Smart",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/lamps-consumer/smart-consumer/",
+                        "parent": "25969847"
+                    },
+                    {
+                        "ID": 25969852,
+                        "Title": "Specials",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/lamps-consumer/specials-consumer/",
+                        "parent": "25969847"
+                    },
+                    {
+                        "ID": 25969853,
+                        "Title": "Decorative",
+                        "url": "https://product.sylvania-group.com/en-int/consumer/products-consumer/lamps-consumer/decorative-consumer/",
+                        "parent": "25969847"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "ID": 25957872,
+        "Title": "Sustainability",
+        "url": "/",
+        "parent": "0",
+        "children": [
+            {
+                "ID": 25957927,
+                "Title": "Our ESG Vision",
+                "url": "https://sylvania-group.com/sustainability/",
+                "parent": "25957872",
+                "children": []
+            },
+            {
+                "ID": 25957928,
+                "Title": "Our Strategy and Plan",
+                "url": "https://sylvania-group.com/sustainability/sustainability-strategy/",
+                "parent": "25957872",
+                "children": []
+            },
+            {
+                "ID": 25957875,
+                "Title": "Our 4 Pillars",
+                "url": "/",
+                "parent": "25957872",
+                "children": [
+                    {
+                        "ID": 25957913,
+                        "Title": "4 pillar – Products",
+                        "url": "https://sylvania-group.com/sustainability/sustainability-strategy/4-pillar-products/",
+                        "parent": "25957875"
+                    },
+                    {
+                        "ID": 25957912,
+                        "Title": "4 pillar – Production",
+                        "url": "https://sylvania-group.com/sustainability/sustainability-strategy/4-pillar-production/",
+                        "parent": "25957875"
+                    },
+                    {
+                        "ID": 25957911,
+                        "Title": "4 pillar – Packaging",
+                        "url": "https://sylvania-group.com/sustainability/sustainability-strategy/4-pillar-packaging/",
+                        "parent": "25957875"
+                    },
+                    {
+                        "ID": 25957910,
+                        "Title": "4 pillar – Human resources",
+                        "url": "https://sylvania-group.com/sustainability/sustainability-strategy/4-pillar-human-resources/",
+                        "parent": "25957875"
+                    }
+                ]
+            },
+            {
+                "ID": 25957929,
+                "Title": "Reporting and Certificate",
+                "url": "https://sylvania-group.com/sustainability/reporting-and-certificate/",
+                "parent": "25957872",
+                "children": []
+            },
+            {
+                "ID": 25959650,
+                "Title": "Activities",
+                "url": "https://sylvania-group.com/activities/",
+                "parent": "25957872",
+                "children": []
+            }
+        ]
+    },
+    {
+        "ID": 25957882,
+        "Title": "Company",
+        "url": "/",
+        "parent": "0",
+        "children": [
+            {
+                "ID": 25957916,
+                "Title": "About Us",
+                "url": "https://sylvania-group.com/about-us-2/",
+                "parent": "25957882",
+                "children": []
+            },
+            {
+                "ID": 25957918,
+                "Title": "Vision, Mission &#038; Values",
+                "url": "https://sylvania-group.com/vision-mission-values/",
+                "parent": "25957882",
+                "children": []
+            },
+            {
+                "ID": 25960737,
+                "Title": "Brands & Ranges – Consumer",
+                "url": "https://sylvania-group.com/brands-ranges-consumer/",
+                "parent": "25957882",
+                "children": []
+            },
+            {
+                "ID": 25957919,
+                "Title": "Career",
+                "url": "https://sylvania-group.com/career/",
+                "parent": "25957882",
+                "children": []
+            }
+        ]
+    },
+    {
+        "ID": 25957887,
+        "Title": "Support",
+        "url": "/",
+        "parent": "0",
+        "children": [
+            {
+                "ID": 25957888,
+                "Title": "Library",
+                "url": "/",
+                "parent": "25957887",
+                "children": []
+            },
+            {
+                "ID": 25957889,
+                "Title": "Contact us",
+                "url": "/",
+                "parent": "25957887",
+                "children": []
+            },
+            {
+                "ID": 25958486,
+                "Title": "Warranty Made Easy",
+                "url": "https://sylvania-group.com/warranty-made-easy/",
+                "parent": "25957887",
+                "children": []
+            },
+            {
+                "ID": 25957920,
+                "Title": "Technical Assistance",
+                "url": "https://sylvania-group.com/technical-assistance/",
+                "parent": "25957887",
+                "children": []
+            }
+        ]
+    }
+]

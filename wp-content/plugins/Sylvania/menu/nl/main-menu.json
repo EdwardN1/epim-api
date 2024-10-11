@@ -1,0 +1,689 @@
+[
+    {
+        "ID": 25150475,
+        "Title": "Inspiraties",
+        "url": "https://sylvania-group.com/nl/video-header-page",
+        "parent": "0",
+        "children": [
+            {
+                "ID": 25150476,
+                "Title": "Innovaties",
+                "url": "#",
+                "parent": "25150475",
+                "children": [
+                    {
+                        "ID": 25150478,
+                        "Title": "Helios",
+                        "url": "https://sylvania-group.com/nl/luminatuur-sjabloon-2/",
+                        "parent": "25150476"
+                    },
+                    {
+                        "ID": 25150479,
+                        "Title": "Equinox",
+                        "url": "https://sylvania-group.com/nl/equinox/",
+                        "parent": "25150476"
+                    },
+                    {
+                        "ID": 25150480,
+                        "Title": "Helios",
+                        "url": "/",
+                        "parent": "25150476"
+                    },
+                    {
+                        "ID": 25150481,
+                        "Title": "Digitale Oplossingen en Diensten",
+                        "url": "/",
+                        "parent": "25150476"
+                    },
+                    {
+                        "ID": 25150482,
+                        "Title": "Sylsmart Energy",
+                        "url": "/",
+                        "parent": "25150476"
+                    },
+                    {
+                        "ID": 25150483,
+                        "Title": "Sylsmart Connected Pro",
+                        "url": "/",
+                        "parent": "25150476"
+                    }
+                ]
+            },
+            {
+                "ID": 25150484,
+                "Title": "Applicatie",
+                "url": "https://sylvania-group.com/nl/applicatie/",
+                "parent": "25150475",
+                "children": [
+                    {
+                        "ID": 25150485,
+                        "Title": "Kantoor",
+                        "url": "https://sylvania-group.com/nl/kantoor/",
+                        "parent": "25150484"
+                    },
+                    {
+                        "ID": 25150486,
+                        "Title": "Onderwijs",
+                        "url": "https://sylvania-group.com/nl/onderwijs/",
+                        "parent": "25150484"
+                    },
+                    {
+                        "ID": 25150487,
+                        "Title": "Logistiek  Industrie",
+                        "url": "https://sylvania-group.com/nl/logistiek-en-industrie/",
+                        "parent": "25150484"
+                    },
+                    {
+                        "ID": 25150488,
+                        "Title": "Musea en galerieën",
+                        "url": "https://sylvania-group.com/nl/musea-en-galerieen/",
+                        "parent": "25150484"
+                    },
+                    {
+                        "ID": 25150489,
+                        "Title": "Detailhandel &amp; display",
+                        "url": "https://sylvania-group.com/nl/detailhandel-display/",
+                        "parent": "25150484"
+                    },
+                    {
+                        "ID": 25150490,
+                        "Title": "Gezondheidszorg",
+                        "url": "https://sylvania-group.com/nl/gezondheidszorg/",
+                        "parent": "25150484"
+                    },
+                    {
+                        "ID": 25150491,
+                        "Title": "Horeca",
+                        "url": "https://sylvania-group.com/nl/gastvrijheid/",
+                        "parent": "25150484"
+                    },
+                    {
+                        "ID": 25150492,
+                        "Title": "Landschap",
+                        "url": "https://sylvania-group.com/nl/landschap/",
+                        "parent": "25150484"
+                    },
+                    {
+                        "ID": 25150493,
+                        "Title": "Residentieel",
+                        "url": "https://sylvania-group.com/nl/residentieel/",
+                        "parent": "25150484"
+                    }
+                ]
+            },
+            {
+                "ID": 25150494,
+                "Title": "Specifieke Applicaties",
+                "url": "/",
+                "parent": "25150475",
+                "children": [
+                    {
+                        "ID": 25150495,
+                        "Title": "Groeilampen",
+                        "url": "https://sylvania-group.com/nl/kweeklampen/",
+                        "parent": "25150494"
+                    },
+                    {
+                        "ID": 25150496,
+                        "Title": "Insectenbestrijding",
+                        "url": "https://sylvania-group.com/nl/insectenbestrijding/",
+                        "parent": "25150494"
+                    },
+                    {
+                        "ID": 25150497,
+                        "Title": "Zwembad Verlichting",
+                        "url": "/",
+                        "parent": "25150494"
+                    },
+                    {
+                        "ID": 25150498,
+                        "Title": "Industriële oplossingen",
+                        "url": "/",
+                        "parent": "25150494"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "ID": 25150477,
+        "Title": "Luminatuur Sjabloon",
+        "url": "https://sylvania-group.com/nl/luminatuur-sjabloon/",
+        "parent": "0",
+        "children": []
+    },
+    {
+        "ID": 25150499,
+        "Title": "Digitale Oplossingen",
+        "url": "#",
+        "parent": "0",
+        "children": [
+            {
+                "ID": 25150500,
+                "Title": "SylSmart Overview",
+                "url": "#",
+                "parent": "25150499",
+                "children": []
+            },
+            {
+                "ID": 25150501,
+                "Title": "SylSmart Standalone",
+                "url": "#",
+                "parent": "25150499",
+                "children": []
+            },
+            {
+                "ID": 25150502,
+                "Title": "Sylsmart Connected",
+                "url": "#",
+                "parent": "25150499",
+                "children": []
+            },
+            {
+                "ID": 25150503,
+                "Title": "Syslmart Connected Pro",
+                "url": "#",
+                "parent": "25150499",
+                "children": []
+            },
+            {
+                "ID": 25150504,
+                "Title": "Sylsmart Energy",
+                "url": "#",
+                "parent": "25150499",
+                "children": []
+            },
+            {
+                "ID": 25150505,
+                "Title": "Sylsmart Supporting Products",
+                "url": "#",
+                "parent": "25150499",
+                "children": []
+            },
+            {
+                "ID": 25150506,
+                "Title": "Sylsmart Emergency Solutions",
+                "url": "#",
+                "parent": "25150499",
+                "children": []
+            }
+        ]
+    },
+    {
+        "ID": 25150507,
+        "Title": "Diensten",
+        "url": "#",
+        "parent": "0",
+        "children": [
+            {
+                "ID": 25150509,
+                "Title": "360 Diensten",
+                "url": "https://sylvania-group.com/nl/360-diensten/",
+                "parent": "25150507",
+                "children": []
+            },
+            {
+                "ID": 25150510,
+                "Title": "beoordelen",
+                "url": "https://sylvania-group.com/nl/beoordelen/",
+                "parent": "25150507",
+                "children": [
+                    {
+                        "ID": 25150511,
+                        "Title": "Energy Audit",
+                        "url": "/",
+                        "parent": "25150510"
+                    },
+                    {
+                        "ID": 25150512,
+                        "Title": "Lighting studies",
+                        "url": "/",
+                        "parent": "25150510"
+                    },
+                    {
+                        "ID": 25150513,
+                        "Title": "Plan and ROI",
+                        "url": "/",
+                        "parent": "25150510"
+                    }
+                ]
+            },
+            {
+                "ID": 25150514,
+                "Title": "Manage",
+                "url": "#",
+                "parent": "25150507",
+                "children": [
+                    {
+                        "ID": 25150515,
+                        "Title": "Administrative Help & Subventions",
+                        "url": "/",
+                        "parent": "25150514"
+                    },
+                    {
+                        "ID": 25150516,
+                        "Title": "Smarter Finance",
+                        "url": "/",
+                        "parent": "25150514"
+                    }
+                ]
+            },
+            {
+                "ID": 25150517,
+                "Title": "Implement",
+                "url": "#",
+                "parent": "25150507",
+                "children": [
+                    {
+                        "ID": 25150518,
+                        "Title": "SylSmart Energy",
+                        "url": "/",
+                        "parent": "25150517"
+                    },
+                    {
+                        "ID": 25150519,
+                        "Title": "Turnkey Services",
+                        "url": "/",
+                        "parent": "25150517"
+                    },
+                    {
+                        "ID": 25150520,
+                        "Title": "Customised Logistic",
+                        "url": "/",
+                        "parent": "25150517"
+                    }
+                ]
+            },
+            {
+                "ID": 25150521,
+                "Title": "Aftercare",
+                "url": "#",
+                "parent": "25150507",
+                "children": [
+                    {
+                        "ID": 25150522,
+                        "Title": "Training Services",
+                        "url": "/",
+                        "parent": "25150521"
+                    },
+                    {
+                        "ID": 25150523,
+                        "Title": "Maintenance",
+                        "url": "/",
+                        "parent": "25150521"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "ID": 25150524,
+        "Title": "Producten",
+        "url": "https://www.sylvania-lighting.com/product/en-int/categories/",
+        "parent": "0",
+        "children": [
+            {
+                "ID": 25969744,
+                "Title": "Armaturen",
+                "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor",
+                "parent": "25150524",
+                "children": [
+                    {
+                        "ID": 25969745,
+                        "Title": "Inbouwarmaturen",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor/recessed-modular/",
+                        "parent": "25969744"
+                    },
+                    {
+                        "ID": 25969746,
+                        "Title": "Opbouw- en pendelarmaturen",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor/opbouw-en-pendel/",
+                        "parent": "25969744"
+                    },
+                    {
+                        "ID": 25969747,
+                        "Title": "Vrijstaande armaturen",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor/vrijstaande-armaturen/",
+                        "parent": "25969744"
+                    },
+                    {
+                        "ID": 25969748,
+                        "Title": "LIneaire armaturen",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor/continuous-linear-lights/",
+                        "parent": "25969744"
+                    },
+                    {
+                        "ID": 25969749,
+                        "Title": "Downlights",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor/downlights/",
+                        "parent": "25969744"
+                    },
+                    {
+                        "ID": 25969750,
+                        "Title": "Accentspots",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor/recessed-spotlights/",
+                        "parent": "25969744"
+                    },
+                    {
+                        "ID": 25969751,
+                        "Title": "Opbouw wand- en plafondarmaturen",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor/surface-wall-and-ceiling/",
+                        "parent": "25969744"
+                    },
+                    {
+                        "ID": 25969752,
+                        "Title": "Pendelarmaturen",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor/decorative-pendants/",
+                        "parent": "25969744"
+                    },
+                    {
+                        "ID": 25969753,
+                        "Title": "Flexibele ledsystemen",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor/flexible-systems/",
+                        "parent": "25969744"
+                    },
+                    {
+                        "ID": 25969754,
+                        "Title": "Railspots en rails",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor/tracklights-and-tracks/",
+                        "parent": "25969744"
+                    },
+                    {
+                        "ID": 25969755,
+                        "Title": "Tracks",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor/tracks/",
+                        "parent": "25969744"
+                    },
+                    {
+                        "ID": 25969756,
+                        "Title": "Waterdichte armaturen",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor/weatherproof/",
+                        "parent": "25969744"
+                    },
+                    {
+                        "ID": 25969757,
+                        "Title": "Montagebalken",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor/batten/",
+                        "parent": "25969744"
+                    },
+                    {
+                        "ID": 25969758,
+                        "Title": "HighBay armaturen",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor/highbays/",
+                        "parent": "25969744"
+                    },
+                    {
+                        "ID": 25969759,
+                        "Title": "Lichtlijnsystemen",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor/trunking-systems/",
+                        "parent": "25969744"
+                    },
+                    {
+                        "ID": 25969760,
+                        "Title": "Schijnwerpers",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor/floodlights/",
+                        "parent": "25969744"
+                    },
+                    {
+                        "ID": 25969761,
+                        "Title": "Masttoparmaturen",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor/road-and-post-top/",
+                        "parent": "25969744"
+                    },
+                    {
+                        "ID": 25969762,
+                        "Title": "Landschapverlichting",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/indoor/landscape/",
+                        "parent": "25969744"
+                    }
+                ]
+            },
+            {
+                "ID": 25969763,
+                "Title": "Lichtbronnen",
+                "url": "https://product.sylvania-group.com/nl-nl/professional/producten/led-lamps",
+                "parent": "25150524",
+                "children": [
+                    {
+                        "ID": 25969764,
+                        "Title": "Directionele ledlampen",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/led-lamps/reflectors/",
+                        "parent": "25969763"
+                    },
+                    {
+                        "ID": 25969765,
+                        "Title": "Niet-directionele ledlampen",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/led-lamps/bulbs/",
+                        "parent": "25969763"
+                    },
+                    {
+                        "ID": 25969766,
+                        "Title": "Ledbuizen",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/led-lamps/tubes/",
+                        "parent": "25969763"
+                    },
+                    {
+                        "ID": 25969767,
+                        "Title": "Slimme ledlampen",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/led-lamps/smart/",
+                        "parent": "25969763"
+                    },
+                    {
+                        "ID": 25969768,
+                        "Title": "Ledlampen voor speciale toepassingen",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/led-lamps/specials/",
+                        "parent": "25969763"
+                    },
+                    {
+                        "ID": 25969769,
+                        "Title": "Decorative",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/led-lamps/decorative-ambient/",
+                        "parent": "25969763"
+                    }
+                ]
+            },
+            {
+                "ID": 25969770,
+                "Title": "Digitale oplossingen",
+                "url": "https://product.sylvania-group.com/nl-nl/professional/producten/digitale-oplossingen",
+                "parent": "25150524",
+                "children": [
+                    {
+                        "ID": 25969771,
+                        "Title": "SylSmart Accessoires",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/digitale-oplossingen/sylsmart-components/",
+                        "parent": "25969770"
+                    },
+                    {
+                        "ID": 25969772,
+                        "Title": "SylSmart Standalone",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/digitale-oplossingen/sylsmart-standalone-products/",
+                        "parent": "25969770"
+                    },
+                    {
+                        "ID": 25969773,
+                        "Title": "SylSmart Connected",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/digitale-oplossingen/sylsmart-connected-products/",
+                        "parent": "25969770"
+                    }
+                ]
+            },
+            {
+                "ID": 25969774,
+                "Title": "Noodverlichting",
+                "url": "https://product.sylvania-group.com/nl-nl/professional/producten/emergency",
+                "parent": "25150524",
+                "children": [
+                    {
+                        "ID": 25969775,
+                        "Title": "Exit Signs",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/emergency/exit-signs/",
+                        "parent": "25969774"
+                    },
+                    {
+                        "ID": 25969776,
+                        "Title": "Standalone Emergency",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/emergency/standalone-emergency/",
+                        "parent": "25969774"
+                    },
+                    {
+                        "ID": 25969777,
+                        "Title": "LiFeSafe Conversion Kits",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/emergency/conversion-kits/",
+                        "parent": "25969774"
+                    }
+                ]
+            },
+            {
+                "ID": 25969778,
+                "Title": "Speciale toepassingen",
+                "url": "https://product.sylvania-group.com/nl-nl/professional/producten/special-lighting",
+                "parent": "25150524",
+                "children": [
+                    {
+                        "ID": 25969779,
+                        "Title": "Assimilatieverlichting",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/special-lighting/grow-lights/",
+                        "parent": "25969778"
+                    },
+                    {
+                        "ID": 25969780,
+                        "Title": "Insecten-aantrekkingslampen",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/special-lighting/insect-control/",
+                        "parent": "25969778"
+                    },
+                    {
+                        "ID": 25969781,
+                        "Title": "Lampen voor huisdieren (Petcare)",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/special-lighting/petcare/",
+                        "parent": "25969778"
+                    },
+                    {
+                        "ID": 25969782,
+                        "Title": "Zwembadverlichting",
+                        "url": "https://product.sylvania-group.com/nl-nl/professional/producten/special-lighting/swimming-pool/",
+                        "parent": "25969778"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "ID": 25150580,
+        "Title": "Company",
+        "url": "#",
+        "parent": "0",
+        "children": [
+            {
+                "ID": 25150581,
+                "Title": "Over Ons",
+                "url": "https://sylvania-group.com/nl/over-ons/",
+                "parent": "25150580",
+                "children": []
+            },
+            {
+                "ID": 25150582,
+                "Title": "Mission & Values",
+                "url": "https://sylvania-group.com/vision-mission-values/",
+                "parent": "25150580",
+                "children": []
+            },
+            {
+                "ID": 25150583,
+                "Title": "Brands & Ranges",
+                "url": "https://sylvania-group.com/brands-ranges/",
+                "parent": "25150580",
+                "children": []
+            },
+            {
+                "ID": 25150584,
+                "Title": "Carrière",
+                "url": "https://sylvania-group.com/nl/carriere/",
+                "parent": "25150580",
+                "children": []
+            }
+        ]
+    },
+    {
+        "ID": 25150585,
+        "Title": "Support",
+        "url": "#",
+        "parent": "0",
+        "children": [
+            {
+                "ID": 25150586,
+                "Title": "Library",
+                "url": "https://sylvania-group.com/document-library/",
+                "parent": "25150585",
+                "children": []
+            },
+            {
+                "ID": 25150587,
+                "Title": "Contact Us",
+                "url": "https://sylvania-group.com/contact-us/",
+                "parent": "25150585",
+                "children": []
+            },
+            {
+                "ID": 25150588,
+                "Title": "Technical Assistance",
+                "url": "#",
+                "parent": "25150585",
+                "children": []
+            },
+            {
+                "ID": 25150571,
+                "Title": "Onze ESG visie",
+                "url": "https://sylvania-group.com/nl/duurzaamheid/",
+                "parent": "25150585",
+                "children": []
+            },
+            {
+                "ID": 25150572,
+                "Title": "Duurzaamheidsstrategie",
+                "url": "https://sylvania-group.com/nl/duurzaamheid/duurzaamheidsstrategie/",
+                "parent": "25150585",
+                "children": []
+            },
+            {
+                "ID": 25150579,
+                "Title": "Reporting and Certificate",
+                "url": "https://sylvania-group.com/sustainability/reporting-and-certificate/",
+                "parent": "25150585",
+                "children": []
+            },
+            {
+                "ID": 25150578,
+                "Title": "Onze 4 pijlers",
+                "url": "https://sylvania-group.com/nl/onze-4-pijlers/",
+                "parent": "25150585",
+                "children": [
+                    {
+                        "ID": 25150574,
+                        "Title": "4 pijler – Producten",
+                        "url": "https://sylvania-group.com/nl/duurzaamheid/duurzaamheidsstrategie/4-pijler-producten/",
+                        "parent": "25150578"
+                    },
+                    {
+                        "ID": 25150575,
+                        "Title": "4 pijler – Productie",
+                        "url": "https://sylvania-group.com/nl/duurzaamheid/duurzaamheidsstrategie/4-pijler-productie/",
+                        "parent": "25150578"
+                    },
+                    {
+                        "ID": 25150576,
+                        "Title": "4 pijler – Verpakking",
+                        "url": "https://sylvania-group.com/nl/duurzaamheid/duurzaamheidsstrategie/4-pijler-verpakking/",
+                        "parent": "25150578"
+                    },
+                    {
+                        "ID": 25150573,
+                        "Title": "4 pijler – Personeel",
+                        "url": "https://sylvania-group.com/nl/duurzaamheid/duurzaamheidsstrategie/4-pijler-personeel/",
+                        "parent": "25150578"
+                    }
+                ]
+            }
+        ]
+    }
+]

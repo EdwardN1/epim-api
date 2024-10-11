@@ -1,0 +1,629 @@
+[
+    {
+        "ID": 519096,
+        "Title": "Inspirations",
+        "url": "https://sylvania-group.com/video-header-page",
+        "parent": "0",
+        "children": [
+            {
+                "ID": 519097,
+                "Title": "Innovations",
+                "url": "#",
+                "parent": "519096",
+                "children": [
+                    {
+                        "ID": 25150589,
+                        "Title": "Luminature",
+                        "url": "https://sylvania-group.com/fr/modele-luminature/",
+                        "parent": "519097"
+                    },
+                    {
+                        "ID": 25150590,
+                        "Title": "Equinox",
+                        "url": "https://sylvania-group.com/fr/equinox/",
+                        "parent": "519097"
+                    },
+                    {
+                        "ID": 25150591,
+                        "Title": "Helio",
+                        "url": "/",
+                        "parent": "519097"
+                    },
+                    {
+                        "ID": 25150592,
+                        "Title": "Digital Solutions and Services",
+                        "url": "/",
+                        "parent": "519097"
+                    },
+                    {
+                        "ID": 25150593,
+                        "Title": "Sylsmart Energy",
+                        "url": "/",
+                        "parent": "519097"
+                    },
+                    {
+                        "ID": 25150594,
+                        "Title": "Sylsmart Connected Pro",
+                        "url": "/",
+                        "parent": "519097"
+                    }
+                ]
+            },
+            {
+                "ID": 25150595,
+                "Title": "Application",
+                "url": "https://sylvania-group.com/application/",
+                "parent": "519096",
+                "children": [
+                    {
+                        "ID": 25150596,
+                        "Title": "Bureaux",
+                        "url": "https://sylvania-group.com/fr/bureaux/",
+                        "parent": "25150595"
+                    },
+                    {
+                        "ID": 25150597,
+                        "Title": "L’éducation",
+                        "url": "https://sylvania-group.com/fr/leducation/",
+                        "parent": "25150595"
+                    },
+                    {
+                        "ID": 25150598,
+                        "Title": "Logistique et industrie",
+                        "url": "https://sylvania-group.com/fr/logistique-et-industrie/",
+                        "parent": "25150595"
+                    },
+                    {
+                        "ID": 25150599,
+                        "Title": "Musées et galeries",
+                        "url": "https://sylvania-group.com/fr/musees-et-galeries/",
+                        "parent": "25150595"
+                    },
+                    {
+                        "ID": 25150600,
+                        "Title": "Vente au détail et étalage",
+                        "url": "https://sylvania-group.com/fr/vente-au-detail-et-etalage/",
+                        "parent": "25150595"
+                    },
+                    {
+                        "ID": 25150602,
+                        "Title": "Soins de santé",
+                        "url": "https://sylvania-group.com/fr/soins-de-sante/",
+                        "parent": "25150595"
+                    },
+                    {
+                        "ID": 25150601,
+                        "Title": "L’hospitalité",
+                        "url": "https://sylvania-group.com/fr/lhospitalite/",
+                        "parent": "25150595"
+                    },
+                    {
+                        "ID": 25150603,
+                        "Title": "Paysage",
+                        "url": "https://sylvania-group.com/fr/paysage/",
+                        "parent": "25150595"
+                    },
+                    {
+                        "ID": 25150604,
+                        "Title": "Residential",
+                        "url": "https://sylvania-group.com/residential/",
+                        "parent": "25150595"
+                    }
+                ]
+            },
+            {
+                "ID": 25150605,
+                "Title": "Specific Applications",
+                "url": "/",
+                "parent": "519096",
+                "children": [
+                    {
+                        "ID": 25150606,
+                        "Title": "Lampes de culture",
+                        "url": "https://sylvania-group.com/fr/lampes-de-culture/",
+                        "parent": "25150605"
+                    },
+                    {
+                        "ID": 25150607,
+                        "Title": "Lutte contre les insectes",
+                        "url": "https://sylvania-group.com/fr/lutte-contre-les-insectes/",
+                        "parent": "25150605"
+                    },
+                    {
+                        "ID": 25150608,
+                        "Title": "Swimming Pool Lighting",
+                        "url": "/",
+                        "parent": "25150605"
+                    },
+                    {
+                        "ID": 25150609,
+                        "Title": "Industrial Solutions",
+                        "url": "/",
+                        "parent": "25150605"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "ID": 519099,
+        "Title": "Digital Solutions",
+        "url": "#",
+        "parent": "0",
+        "children": [
+            {
+                "ID": 25150643,
+                "Title": "SylSmart Connecté",
+                "url": "https://sylvania-group.com/fr/sylsmart-connecte/",
+                "parent": "519099",
+                "children": []
+            },
+            {
+                "ID": 25150644,
+                "Title": "SylSmart Connected Pro",
+                "url": "https://sylvania-group.com/fr/sylsmart-connected-pro/",
+                "parent": "519099",
+                "children": []
+            },
+            {
+                "ID": 519107,
+                "Title": "Sylsmart Emergency Solutions",
+                "url": "#",
+                "parent": "519099",
+                "children": []
+            }
+        ]
+    },
+    {
+        "ID": 519109,
+        "Title": "Services",
+        "url": "#",
+        "parent": "0",
+        "children": [
+            {
+                "ID": 25150610,
+                "Title": "360 Services",
+                "url": "https://sylvania-group.com/fr/360-services/",
+                "parent": "519109",
+                "children": []
+            },
+            {
+                "ID": 25150611,
+                "Title": "Identifier",
+                "url": "https://sylvania-group.com/fr/identifier/",
+                "parent": "519109",
+                "children": [
+                    {
+                        "ID": 25150612,
+                        "Title": "Energy Audit",
+                        "url": "/",
+                        "parent": "25150611"
+                    },
+                    {
+                        "ID": 25150613,
+                        "Title": "Lighting studies",
+                        "url": "/",
+                        "parent": "25150611"
+                    },
+                    {
+                        "ID": 25150614,
+                        "Title": "Plan and ROI",
+                        "url": "/",
+                        "parent": "25150611"
+                    }
+                ]
+            },
+            {
+                "ID": 25150615,
+                "Title": "Manage",
+                "url": "#",
+                "parent": "519109",
+                "children": [
+                    {
+                        "ID": 25150616,
+                        "Title": "Administrative Help & Subventions",
+                        "url": "/",
+                        "parent": "25150615"
+                    },
+                    {
+                        "ID": 25150617,
+                        "Title": "Smarter Finance",
+                        "url": "/",
+                        "parent": "25150615"
+                    }
+                ]
+            },
+            {
+                "ID": 25150618,
+                "Title": "Implement",
+                "url": "#",
+                "parent": "519109",
+                "children": [
+                    {
+                        "ID": 25150619,
+                        "Title": "SylSmart Energy",
+                        "url": "/",
+                        "parent": "25150618"
+                    },
+                    {
+                        "ID": 25150620,
+                        "Title": "Turnkey Services",
+                        "url": "/",
+                        "parent": "25150618"
+                    },
+                    {
+                        "ID": 25150621,
+                        "Title": "Customised Logistic",
+                        "url": "/",
+                        "parent": "25150618"
+                    }
+                ]
+            },
+            {
+                "ID": 25150622,
+                "Title": "Aftercare",
+                "url": "#",
+                "parent": "519109",
+                "children": [
+                    {
+                        "ID": 25150623,
+                        "Title": "Training Services",
+                        "url": "/",
+                        "parent": "25150622"
+                    },
+                    {
+                        "ID": 25150624,
+                        "Title": "Maintenance",
+                        "url": "/",
+                        "parent": "25150622"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "ID": 25095074,
+        "Title": "Produits",
+        "url": "https://www.sylvania-lighting.com/product/fr-fr/categories/",
+        "parent": "0",
+        "children": [
+            {
+                "ID": 25969708,
+                "Title": "Luminaires",
+                "url": "https://product.sylvania-group.com/fr-fr/professional/produits/luminaires",
+                "parent": "25095074",
+                "children": [
+                    {
+                        "ID": 25969709,
+                        "Title": "Luminaires encastrés fonctionnels",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/luminaires/luminaires-encastres-fonctionnels/",
+                        "parent": "25969708"
+                    },
+                    {
+                        "ID": 25969710,
+                        "Title": "Luminaires en saillie et suspendus",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/luminaires/luminaires-en-saillie-et-suspendus/",
+                        "parent": "25969708"
+                    },
+                    {
+                        "ID": 25969711,
+                        "Title": "Luminaires sur pied",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/luminaires/luminaires-sur-pied-led/",
+                        "parent": "25969708"
+                    },
+                    {
+                        "ID": 25969712,
+                        "Title": "Luminaires linéaires",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/luminaires/luminaires-lineaires/",
+                        "parent": "25969708"
+                    },
+                    {
+                        "ID": 25969713,
+                        "Title": "Downlights",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/luminaires/downlights/",
+                        "parent": "25969708"
+                    },
+                    {
+                        "ID": 25969714,
+                        "Title": "Spots encastrés",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/luminaires/spots-encastres/",
+                        "parent": "25969708"
+                    },
+                    {
+                        "ID": 25969715,
+                        "Title": "Appliques et plafonniers",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/luminaires/appliques-et-plafonniers/",
+                        "parent": "25969708"
+                    },
+                    {
+                        "ID": 25969716,
+                        "Title": "Suspensions lumineuses",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/luminaires/suspensions-lumineuses/",
+                        "parent": "25969708"
+                    },
+                    {
+                        "ID": 25969717,
+                        "Title": "Rubans lumineux LED",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/luminaires/rubans-lumineux-led/",
+                        "parent": "25969708"
+                    },
+                    {
+                        "ID": 25969718,
+                        "Title": "Projecteurs",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/luminaires/projecteurs-et-rails/",
+                        "parent": "25969708"
+                    },
+                    {
+                        "ID": 25969719,
+                        "Title": "Rails",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/luminaires/rails/",
+                        "parent": "25969708"
+                    },
+                    {
+                        "ID": 25969720,
+                        "Title": "Etanches",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/luminaires/etanches/",
+                        "parent": "25969708"
+                    },
+                    {
+                        "ID": 25969721,
+                        "Title": "Réglettes",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/luminaires/reglettes-led/",
+                        "parent": "25969708"
+                    },
+                    {
+                        "ID": 25969722,
+                        "Title": "Armatures industrielles",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/luminaires/armatures-industrielles/",
+                        "parent": "25969708"
+                    },
+                    {
+                        "ID": 25969723,
+                        "Title": "Lignes continues",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/luminaires/lignes-continues/",
+                        "parent": "25969708"
+                    },
+                    {
+                        "ID": 25969724,
+                        "Title": "Projecteurs extérieurs",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/luminaires/projecteurs-exterieurs/",
+                        "parent": "25969708"
+                    }
+                ]
+            },
+            {
+                "ID": 25969725,
+                "Title": "Lampes",
+                "url": "https://product.sylvania-group.com/fr-fr/professional/produits/lampes",
+                "parent": "25095074",
+                "children": [
+                    {
+                        "ID": 25969726,
+                        "Title": "Lampes LED à réflecteur",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/lampes/lampes-led-a-reflecteur/",
+                        "parent": "25969725"
+                    },
+                    {
+                        "ID": 25969727,
+                        "Title": "Bulbs",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/lampes/bulbs/",
+                        "parent": "25969725"
+                    },
+                    {
+                        "ID": 25969728,
+                        "Title": "Tubes LED",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/lampes/tubes-led/",
+                        "parent": "25969725"
+                    },
+                    {
+                        "ID": 25969729,
+                        "Title": "Smart",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/lampes/smart/",
+                        "parent": "25969725"
+                    },
+                    {
+                        "ID": 25969730,
+                        "Title": "Specials",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/lampes/specials/",
+                        "parent": "25969725"
+                    },
+                    {
+                        "ID": 25969731,
+                        "Title": "Decorative",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/lampes/decorative-ambient/",
+                        "parent": "25969725"
+                    }
+                ]
+            },
+            {
+                "ID": 25969732,
+                "Title": "Produits SylSmart",
+                "url": "https://product.sylvania-group.com/fr-fr/professional/produits/produits-sylsmart",
+                "parent": "25095074",
+                "children": [
+                    {
+                        "ID": 25969733,
+                        "Title": "Accessoires SylSmart",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/produits-sylsmart/accessoires-sylsmart/",
+                        "parent": "25969732"
+                    },
+                    {
+                        "ID": 25969734,
+                        "Title": "SylSmart Standalone",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/produits-sylsmart/accessoires-sylsmart-standalone/",
+                        "parent": "25969732"
+                    },
+                    {
+                        "ID": 25969735,
+                        "Title": "SylSmart Connected",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/produits-sylsmart/sylsmart-connected/",
+                        "parent": "25969732"
+                    }
+                ]
+            },
+            {
+                "ID": 25969736,
+                "Title": "Standalone Emergency",
+                "url": "https://product.sylvania-group.com/fr-fr/professional/produits/emergency",
+                "parent": "25095074",
+                "children": [
+                    {
+                        "ID": 25969737,
+                        "Title": "Urgence sans fil",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/emergency/wireless/",
+                        "parent": "25969736"
+                    }
+                ]
+            },
+            {
+                "ID": 25969738,
+                "Title": "Applications spéciales",
+                "url": "https://product.sylvania-group.com/fr-fr/professional/produits/applications-speciales",
+                "parent": "25095074",
+                "children": [
+                    {
+                        "ID": 25969739,
+                        "Title": "Eclairage horticole",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/applications-speciales/eclairage-horticole/",
+                        "parent": "25969738"
+                    },
+                    {
+                        "ID": 25969740,
+                        "Title": "Pièges à insectes",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/applications-speciales/pieges-a-insectes/",
+                        "parent": "25969738"
+                    },
+                    {
+                        "ID": 25969741,
+                        "Title": "Infrarouge",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/applications-speciales/lampes-infrarouges/",
+                        "parent": "25969738"
+                    },
+                    {
+                        "ID": 25969742,
+                        "Title": "Animaux",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/applications-speciales/soin-des-animaux/",
+                        "parent": "25969738"
+                    },
+                    {
+                        "ID": 25969743,
+                        "Title": "Eclairage pour piscines",
+                        "url": "https://product.sylvania-group.com/fr-fr/professional/produits/applications-speciales/eclairage-pour-piscines/",
+                        "parent": "25969738"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "ID": 519111,
+        "Title": "Company",
+        "url": "#",
+        "parent": "0",
+        "children": [
+            {
+                "ID": 25150627,
+                "Title": "Mission & Values",
+                "url": "https://sylvania-group.com/vision-mission-values/",
+                "parent": "519111",
+                "children": []
+            },
+            {
+                "ID": 25966203,
+                "Title": "Marques et gammes",
+                "url": "https://sylvania-group.com/fr/marques-et-gammes-2/",
+                "parent": "519111",
+                "children": []
+            },
+            {
+                "ID": 25150629,
+                "Title": "Carrière",
+                "url": "https://sylvania-group.com/fr/carriere/",
+                "parent": "519111",
+                "children": []
+            }
+        ]
+    },
+    {
+        "ID": 519112,
+        "Title": "Support",
+        "url": "#",
+        "parent": "0",
+        "children": [
+            {
+                "ID": 25150639,
+                "Title": "Library",
+                "url": "https://sylvania-group.com/document-library/",
+                "parent": "519112",
+                "children": []
+            },
+            {
+                "ID": 25150640,
+                "Title": "Contact Us",
+                "url": "https://sylvania-group.com/contact-us/",
+                "parent": "519112",
+                "children": []
+            },
+            {
+                "ID": 25150641,
+                "Title": "Technical Assistance",
+                "url": "#",
+                "parent": "519112",
+                "children": []
+            },
+            {
+                "ID": 25150638,
+                "Title": "Reporting and Certificate",
+                "url": "https://sylvania-group.com/sustainability/reporting-and-certificate/",
+                "parent": "519112",
+                "children": []
+            },
+            {
+                "ID": 25150636,
+                "Title": "Our ESG Vision",
+                "url": "https://sylvania-group.com/fr/developpement-durable/",
+                "parent": "519112",
+                "children": []
+            },
+            {
+                "ID": 25150631,
+                "Title": "Stratégie de développement durable",
+                "url": "https://sylvania-group.com/fr/developpement-durable/strategie-de-developpement-durable/",
+                "parent": "519112",
+                "children": []
+            },
+            {
+                "ID": 25150637,
+                "Title": "Nos 4 piliers",
+                "url": "https://sylvania-group.com/fr/nos-4-piliers/",
+                "parent": "519112",
+                "children": [
+                    {
+                        "ID": 25150633,
+                        "Title": "4 piliers – Emballage",
+                        "url": "https://sylvania-group.com/fr/developpement-durable/strategie-de-developpement-durable/nos-4-piliers-emballage/",
+                        "parent": "25150637"
+                    },
+                    {
+                        "ID": 25150632,
+                        "Title": "4 pilier – Ressources humaines",
+                        "url": "https://sylvania-group.com/fr/developpement-durable/strategie-de-developpement-durable/4-piliers-ressources-humaines/",
+                        "parent": "25150637"
+                    },
+                    {
+                        "ID": 25150635,
+                        "Title": "4 piliers – Produits",
+                        "url": "https://sylvania-group.com/fr/developpement-durable/strategie-de-developpement-durable/nos-4-piliers-produits/",
+                        "parent": "25150637"
+                    },
+                    {
+                        "ID": 25150634,
+                        "Title": "4 piliers – Production",
+                        "url": "https://sylvania-group.com/fr/developpement-durable/strategie-de-developpement-durable/nos-4-piliers-production/",
+                        "parent": "25150637"
+                    }
+                ]
+            }
+        ]
+    }
+]
