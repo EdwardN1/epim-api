@@ -388,7 +388,7 @@ function epimaapi_getTermFromID( $id, $terms ) {
 	return $res;
 }
 
-function epimaapi_getAttributeNameFromID( $id, $attributes ) {
+function epimaapi_getputeNameFromID( $id, $attributes ) {
 	$res = 'Name Not Found';
 	foreach ( $attributes as $attribute ) {
 		if ( $attribute->Id == $id ) {

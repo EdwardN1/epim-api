@@ -1,7 +1,7 @@
 <?php
 /**
  * @package sylvania_wp
- * @version 1.0.0
+ * @version 1.0.1
  */
 /*
 Plugin Name: Sylvania WP plugin
@@ -9,7 +9,7 @@ Plugin URI: https://e-pim.co.uk
 Description: Custom API for Sylvania Lighting
 Author: Edward Nickerson
 License: GPLv2 or later
-Version: 1.0.0
+Version: 1.0.1
 Author URI: https://www.technicks.com
 */
 

@@ -484,6 +484,9 @@ function swp_daily_menu_files()
                 foreach ($menu_items as $menu_item) {
                     $ID = $menu_item->ID;
                     $post_title = $menu_item->post_title;
+                    if($post_title =='') {
+                        $post_title = $menu_item->title;
+                    }
                     $url = $menu_item->url;
                     $menu_item_parent = $menu_item->menu_item_parent;
                     $this_item = array(
